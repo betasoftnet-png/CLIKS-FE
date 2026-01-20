@@ -1,0 +1,195 @@
+import React, { useState } from 'react';
+import {
+    PiggyBank,
+    Plus,
+    Target,
+    TrendingUp,
+    Calendar,
+    DollarSign,
+    Edit2,
+    Trash2,
+    Plane,
+    Home,
+    Car,
+    Shield
+} from 'lucide-react';
+import '../App.css';
+
+const SavingsStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
+    <div className="savings-stat-card">
+        <div className="flex justify-between items-start">
+            <div>
+                <p className="stat-label">{label}</p>
+                <h3 className="stat-value">{value}</h3>
+            </div>
+            <div className={`stat-icon-wrapper ${colorClass}`}>
+                <Icon size={20} />
+            </div>
+        </div>
+        <p className="stat-subtext">{subtext}</p>
+    </div>
+);
+
+const Savings = () => {
+    const [savingsGoals] = useState([
+        { id: 1, name: 'Emergency Fund', target: 10000, current: 7500, deadline: '2026-12-31', color: 'blue', priority: 'High', icon: Shield },
+        { id: 2, name: 'Vacation to Europe', target: 5000, current: 2800, deadline: '2026-06-30', color: 'purple', priority: 'Medium', icon: Plane },
+        { id: 3, name: 'New Car Down Payment', target: 15000, current: 4200, deadline: '2027-03-31', color: 'green', priority: 'Medium', icon: Car },
+        { id: 4, name: 'Home Renovation', target: 20000, current: 8500, deadline: '2026-09-30', color: 'orange', priority: 'Low', icon: Home },
+    ]);
+
+    const totalTarget = savingsGoals.reduce((sum, g) => sum + g.target, 0);
+    const totalSaved = savingsGoals.reduce((sum, g) => sum + g.current, 0);
+    const overallProgress = (totalSaved / totalTarget) * 100;
+
+    return (
+        <div className="page-fade-in">
+            <div className="dashboard-header">
+                <div>
+                    <h1 className="page-title">Savings</h1>
+                    <p className="text-muted text-sm mt-1">Track your financial goals and progress</p>
+                </div>
+                <button className="btn-primary">
+                    <Plus size={18} />
+                    <span>New Goal</span>
+                </button>
+            </div>
+
+            <div className="content-wrapper">
+                {/* Stats */}
+                <div className="savings-stats-grid">
+                    <SavingsStat
+                        label="Total Saved"
+                        value={`$${totalSaved.toLocaleString()}`}
+                        subtext="+12% vs last month"
+                        icon={PiggyBank}
+                        colorClass="icon-green"
+                    />
+                    <SavingsStat
+                        label="Total Target"
+                        value={`$${totalTarget.toLocaleString()}`}
+                        subtext={`${savingsGoals.length} active goals`}
+                        icon={Target}
+                        colorClass="icon-blue"
+                    />
+                    <SavingsStat
+                        label="Overall Progress"
+                        value={`${overallProgress.toFixed(1)}%`}
+                        subtext="On track to completion"
+                        icon={TrendingUp}
+                        colorClass="icon-purple"
+                    />
+                </div>
+
+                {/* Goals Grid */}
+                <div className="goals-grid">
+                    {savingsGoals.map((goal) => {
+                        const progress = (goal.current / goal.target) * 100;
+                        return (
+                            <div key={goal.id} className="goal-card">
+                                <div className="goal-header">
+                                    <div className={`goal-icon-box bg-${goal.color}`}>
+                                        <goal.icon size={24} />
+                                    </div>
+                                    <span className={`priority-badge priority-${goal.priority}`}>
+                                        {goal.priority} Priority
+                                    </span>
+                                </div>
+
+                                <div className="goal-body">
+                                    <h3 className="goal-title">{goal.name}</h3>
+                                    <div className="goal-dates">
+                                        <Calendar size={14} />
+                                        Target: {new Date(goal.deadline).toLocaleDateString()}
+                                    </div>
+                                </div>
+
+                                <div className="goal-footer">
+                                    <div className="progress-info">
+                                        <span className="current-amt">${goal.current.toLocaleString()}</span>
+                                        <span className="target-amt">of ${goal.target.toLocaleString()}</span>
+                                    </div>
+                                    <div className="progress-bar-bg">
+                                        <div
+                                            className={`progress-bar-fill bg-${goal.color}`}
+                                            style={{ width: `${progress}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className="pct-text">{progress.toFixed(0)}%</div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <style>{`
+                .page-fade-in { animation: fadeIn 0.4s ease-in-out; }
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+                .savings-stats-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 1.5rem;
+                    margin-bottom: 2rem;
+                }
+
+                .savings-stat-card {
+                    background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+                }
+
+                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
+                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
+                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                
+                .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+                .icon-blue { background: #DBEAFE; color: #2563EB; }
+                .icon-green { background: #DCFCE7; color: #16A34A; }
+                .icon-purple { background: #F3E8FF; color: #9333EA; }
+
+                /* Goals Grid */
+                .goals-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                    gap: 1.5rem;
+                }
+
+                .goal-card {
+                    background: white; border-radius: 16px; border: 1px solid var(--border-color);
+                    padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex; flex-direction: column; gap: 1rem;
+                }
+                .goal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+
+                .goal-header { display: flex; justify-content: space-between; align-items: flex-start; }
+                .goal-icon-box { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
+                
+                .priority-badge { font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 99px; border: 1px solid; font-weight: 500; }
+                .priority-High { background: #FEE2E2; color: #DC2626; border-color: #FECACA; }
+                .priority-Medium { background: #FEF3C7; color: #D97706; border-color: #FDE68A; }
+                .priority-Low { background: #F1F5F9; color: #64748B; border-color: #E2E8F0; }
+
+                .bg-blue { background: #3B82F6; }
+                .bg-purple { background: #A855F7; }
+                .bg-green { background: #22C55E; }
+                .bg-orange { background: #F97316; }
+
+                .goal-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.25rem; }
+                .goal-dates { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); }
+
+                /* Progress Section */
+                .progress-info { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 0.5rem; }
+                .current-amt { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
+                .target-amt { font-size: 0.9rem; color: var(--text-muted); }
+
+                .progress-bar-bg { width: 100%; height: 8px; background: #F1F5F9; border-radius: 99px; overflow: hidden; margin-bottom: 0.5rem; }
+                .progress-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease-out; }
+                
+                .pct-text { text-align: right; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+            `}</style>
+        </div>
+    );
+};
+
+export default Savings;
