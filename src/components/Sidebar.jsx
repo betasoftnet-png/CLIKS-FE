@@ -328,7 +328,7 @@ const Sidebar = ({ isOpen }) => {
                         </button>
                         <button
                             className={`sidebar-item ${activeItem === 'Segregation' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Segregation')}
+                            onClick={() => handleItemClick('Segregation', '/books/segregation')}
                         >
                             <div className="flex items-center gap-3">
                                 <Layers size={20} style={{ color: '#195BAC' }} />
@@ -337,7 +337,7 @@ const Sidebar = ({ isOpen }) => {
                         </button>
                         <button
                             className={`sidebar-item ${activeItem === 'Split Expense' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Split Expense')}
+                            onClick={() => handleItemClick('Split Expense', '/books/split-expense')}
                         >
                             <div className="flex items-center gap-3">
                                 <Split size={20} style={{ color: '#195BAC' }} />

@@ -247,32 +247,23 @@ const FinancialContacts = () => {
                         <div className="column-content">
                             {column.items.map((item) => (
                                 <div key={item.id} className="contact-card">
-                                    <div className="card-header-row">
-                                        <h4 className="contact-name">{item.name}</h4>
-                                        {item.tag && (
-                                            <span
-                                                className="status-tag"
-                                                style={{ background: item.tagBg, color: item.tagColor }}
-                                            >
-                                                {item.tag}
-                                            </span>
-                                        )}
+                                    <div
+                                        className="avatar-large"
+                                        style={{ background: item.avatarBg, color: 'white' }}
+                                    >
+                                        <span>{item.initials}</span>
                                     </div>
 
-                                    <p className="contact-time">{item.time}</p>
+                                    <h4 className="contact-name">{item.name}</h4>
 
                                     <div className="contact-details">
                                         <div className="detail-row">
-                                            <Phone size={14} className="detail-icon" />
+                                            <Phone className="detail-icon" />
                                             <span>{item.phone}</span>
                                         </div>
                                         <div className="detail-row">
-                                            <Mail size={14} className="detail-icon" />
-                                            <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{item.email}</span>
-                                        </div>
-                                        <div className="detail-row">
-                                            <Globe size={14} className="detail-icon" />
-                                            <span className="website-link">{item.website}</span>
+                                            <Mail className="detail-icon" />
+                                            <span style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '100%' }}>{item.email}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -367,43 +358,6 @@ const FinancialContacts = () => {
                     border-right: none;
                 }
 
-                .column-header {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 8px 2px 16px 2px;
-                    background: transparent;
-                    margin-bottom: 0;
-                }
-
-                .column-title-group {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-
-                .status-dot {
-                    width: 6px;
-                    height: 6px;
-                    border-radius: 50%;
-                }
-
-                .column-header h3 {
-                    margin: 0;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #334155;
-                }
-
-                .count-badge {
-                    background: #E2E8F0;
-                    color: #64748B;
-                    font-size: 11px;
-                    padding: 1px 6px;
-                    border-radius: 10px;
-                    font-weight: 600;
-                }
-
                 .column-content {
                     flex: 1;
                     display: flex;
@@ -413,60 +367,56 @@ const FinancialContacts = () => {
 
                 .contact-card {
                     background: white;
-                    border-radius: 8px;
-                    padding: 20px;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    border-radius: 12px;
+                    padding: 24px;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
                     border: 1px solid transparent;
                     transition: all 0.2s ease;
                     display: flex;
                     flex-direction: column;
+                    align-items: center; /* Center content */
+                    text-align: center;
                 }
 
                 .contact-card:hover {
-                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-                    transform: translateY(-1px);
+                    box-shadow: 0 8px 12px -3px rgba(0,0,0,0.1);
+                    transform: translateY(-2px);
                     border-color: #E2E8F0;
                 }
 
-                .card-header-row {
+                .avatar-large {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
                     display: flex;
-                    justify-content: space-between;
-                    align-items: flex-start;
-                    margin-bottom: 4px;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin-bottom: 16px;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
                 }
 
                 .contact-name {
-                    margin: 0;
-                    font-size: 15px;
+                    margin: 0 0 16px 0;
+                    font-size: 16px;
                     font-weight: 700;
                     color: #1E293B;
-                }
-
-                .status-tag {
-                    font-size: 10px;
-                    font-weight: 600;
-                    padding: 2px 8px;
-                    border-radius: 4px;
-                    white-space: nowrap;
-                    margin-left: 12px;
-                }
-
-                .contact-time {
-                    margin: 0 0 16px 0;
-                    font-size: 12px;
-                    color: #64748B;
                 }
 
                 .contact-details {
                     display: flex;
                     flex-direction: column;
                     gap: 8px;
+                    width: 100%;
+                    align-items: center;
                 }
 
                 .detail-row {
                     display: flex;
                     align-items: center;
-                    gap: 10px;
+                    justify-content: center;
+                    gap: 8px;
                     font-size: 13px;
                     color: #475569;
                     min-width: 0;
@@ -474,20 +424,9 @@ const FinancialContacts = () => {
 
                 .detail-icon {
                     color: #94A3B8;
-                    width: 15px;
-                    height: 15px;
+                    width: 16px;
+                    height: 16px;
                     flex-shrink: 0;
-                }
-
-                .truncate {
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-
-                .website-link {
-                    color: #0F172A;
-                    font-weight: 600;
                 }
             `}</style>
         </div>

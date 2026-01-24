@@ -26,6 +26,8 @@ import PeopleTransactions from './pages/people/PeopleTransactions';
 import PeopleReminders from './pages/people/PeopleReminders';
 import PeopleRecords from './pages/people/PeopleRecords';
 import FinancialContacts from './pages/FinancialContacts';
+import Segregation from './pages/Segregation';
+import SplitExpense from './pages/SplitExpense';
 import Profile from './pages/Profile';
 import './App.css';
 
@@ -64,6 +66,8 @@ function App() {
               <Route path="/books/people/reminders" element={<PeopleReminders />} />
               <Route path="/books/people/records" element={<PeopleRecords />} />
               <Route path="/books/contacts" element={<FinancialContacts />} />
+              <Route path="/books/segregation" element={<Segregation />} />
+              <Route path="/books/split-expense" element={<SplitExpense />} />
               <Route path="/finance" element={<Finance />} />
               <Route path="/public" element={<Public />} />
             </Routes>

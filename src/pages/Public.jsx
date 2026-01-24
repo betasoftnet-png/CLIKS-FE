@@ -773,118 +773,417 @@ export default function Public() {
 
     // Investors Page
     const InvestorsPage = () => (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Investors Network</h1>
-                    <p className="text-gray-600 mt-1">Connect with experienced investors and learn from the community</p>
-                </div>
-                <button className="px-6 py-3 rounded-lg text-white font-medium hover:opacity-90 transition-opacity flex items-center gap-2" style={{ backgroundColor: '#195BAC' }}>
-                    <UserPlus className="w-5 h-5" />
-                    Follow Investor
-                </button>
+        <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '600px',
+            textAlign: 'center',
+            gap: '2rem',
+            padding: '4rem 2rem',
+            background: 'white',
+            borderRadius: '24px',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+            marginTop: '1rem'
+        }}>
+            <div style={{
+                width: '100px',
+                height: '100px',
+                background: 'linear-gradient(135deg, #195BAC 0%, #3B82F6 100%)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 20px 25px -5px rgba(25, 91, 172, 0.3)',
+                marginBottom: '1rem'
+            }}>
+                <Briefcase size={48} color="white" strokeWidth={1.5} />
             </div>
 
-            {/* Featured Investors */}
-            <div className="grid grid-cols-3 gap-6">
-                {[1, 2, 3].map((item) => (
-                    <div key={item} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-                        {/* Header */}
-                        <div className="flex items-start justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xl font-bold">
-                                    JD
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-gray-800">John Doe</h3>
-                                    <p className="text-sm text-gray-500">@johndoe</p>
-                                </div>
-                            </div>
-                            <span className="px-2 py-1 bg-yellow-50 text-yellow-700 text-xs rounded-full flex items-center gap-1">
-                                <Trophy className="w-3 h-3" />
-                                Pro
-                            </span>
-                        </div>
+            <div style={{ maxWidth: '640px' }}>
+                <h1 style={{
+                    fontSize: '3rem',
+                    fontWeight: '800',
+                    color: '#1E293B',
+                    marginBottom: '1.25rem',
+                    letterSpacing: '-0.02em',
+                    lineHeight: '1.2'
+                }}>
+                    Do you want to become a Investor?
+                </h1>
+                <p style={{
+                    fontSize: '1.25rem',
+                    color: '#64748B',
+                    lineHeight: '1.6',
+                    marginBottom: '2rem'
+                }}>
+                    Unlock exclusive access to premium high-growth investment opportunities, connect with industry leaders in our private network, and grow your portfolio with expert-led insights.
+                </p>
+            </div>
 
-                        {/* Bio */}
-                        <p className="text-sm text-gray-600 mb-4">
-                            Long-term equity investor focused on value stocks and steady growth.
-                        </p>
-
-                        {/* Metrics */}
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                            <div className="text-center">
-                                <p className="text-sm text-gray-500">Followers</p>
-                                <p className="font-semibold text-gray-800">12.4K</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-sm text-gray-500">Avg Returns</p>
-                                <p className="font-semibold text-green-600">+18%</p>
-                            </div>
-                            <div className="text-center">
-                                <p className="text-sm text-gray-500">Experience</p>
-                                <p className="font-semibold text-gray-800">8Y</p>
-                            </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex gap-3">
-                            <button className="flex-1 py-2 rounded-lg text-white text-sm font-medium" style={{ backgroundColor: '#195BAC' }}>
-                                Follow
-                            </button>
-                            <button className="flex-1 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50">
-                                View Profile
-                            </button>
-                        </div>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '3rem',
+                width: '100%',
+                maxWidth: '800px',
+                margin: '1rem 0 3rem 0'
+            }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{
+                        width: '56px',
+                        height: '56px',
+                        background: '#EFF6FF',
+                        borderRadius: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#195BAC'
+                    }}>
+                        <TrendingUp size={28} strokeWidth={2} />
                     </div>
-                ))}
+                    <div>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>High Returns</h3>
+                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Access vetted deals with potential for exponential growth.</p>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{
+                        width: '56px',
+                        height: '56px',
+                        background: '#F0FDF4',
+                        borderRadius: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#16A34A'
+                    }}>
+                        <Users size={28} strokeWidth={2} />
+                    </div>
+                    <div>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>Elite Network</h3>
+                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Connect with successful founders and fellow investors.</p>
+                    </div>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{
+                        width: '56px',
+                        height: '56px',
+                        background: '#FAF5FF',
+                        borderRadius: '16px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#9333EA'
+                    }}>
+                        <Sparkles size={28} strokeWidth={2} />
+                    </div>
+                    <div>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>Early Access</h3>
+                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Get in on the ground floor of the next big thing.</p>
+                    </div>
+                </div>
             </div>
+
+            <button style={{
+                background: '#195BAC',
+                color: 'white',
+                padding: '1.25rem 3.5rem',
+                borderRadius: '99px',
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 10px 15px -3px rgba(25, 91, 172, 0.3), 0 4px 6px -2px rgba(25, 91, 172, 0.1)',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px'
+            }}
+                onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(25, 91, 172, 0.4), 0 10px 10px -5px rgba(25, 91, 172, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(25, 91, 172, 0.3), 0 4px 6px -2px rgba(25, 91, 172, 0.1)';
+                }}
+            >
+                Start Investing Now
+                <ArrowUpRight size={24} />
+            </button>
+            <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#94A3B8' }}>
+                No hidden fees. Cancel anytime.
+            </p>
         </div>
     );
 
     // Games Page
     const GamesPage = () => (
-        <div className="space-y-6">
-            <div>
-                <h1 className="text-3xl font-bold text-gray-800">Games & Challenges</h1>
-                <p className="text-gray-600 mt-1">Learn finance through interactive games and competitions</p>
-            </div>
-
-            <div className="grid grid-cols-3 gap-6">
-                {[
-                    { title: 'Stock Market Quiz', desc: 'Test your market knowledge', tag: 'Quiz' },
-                    { title: 'Trading Simulator', desc: 'Practice trading without risk', tag: 'Simulator' },
-                    { title: 'Finance Puzzle', desc: 'Solve real finance scenarios', tag: 'Puzzle' }
-                ].map((game) => (
-                    <div key={game.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">{game.tag}</span>
-                            <Gamepad2 className="w-6 h-6 text-gray-400" />
-                        </div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{game.title}</h3>
-                        <p className="text-gray-600 text-sm mb-4">{game.desc}</p>
-                        <button className="w-full py-2 rounded-lg text-white font-medium" style={{ backgroundColor: '#195BAC' }}>
-                            Play Now
+        <div style={{ padding: '0 0 2rem 0', fontFamily: "'Inter', sans-serif" }}>
+            {/* Unique Header Banner */}
+            <div style={{
+                background: 'linear-gradient(120deg, #1e3a8a 0%, #3b82f6 100%)',
+                borderRadius: '24px',
+                padding: '3rem 2rem',
+                color: 'white',
+                marginBottom: '2.5rem',
+                position: 'relative',
+                overflow: 'hidden',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                boxShadow: '0 10px 30px rgba(30, 58, 138, 0.3)'
+            }}>
+                <div style={{ position: 'relative', zIndex: 1, maxWidth: '60%' }}>
+                    <span style={{
+                        background: 'rgba(255,255,255,0.2)',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '99px',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        backdropFilter: 'blur(10px)',
+                        marginBottom: '1rem',
+                        display: 'inline-block'
+                    }}>
+                        Level 5 • Pro Gamer
+                    </span>
+                    <h1 style={{ fontSize: '2.5rem', fontWeight: '800', lineHeight: '1.2', marginBottom: '1rem' }}>
+                        Ready to level up your <br /> Financial Skills?
+                    </h1>
+                    <p style={{ fontSize: '1.1rem', opacity: '0.9', marginBottom: '2rem', maxWidth: '500px' }}>
+                        Compete in real-time trading battles, solve complex puzzles, and climb the global leaderboards to win exclusive rewards.
+                    </p>
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <button style={{
+                            background: 'white',
+                            color: '#1e3a8a',
+                            border: 'none',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '12px',
+                            fontWeight: '700',
+                            fontSize: '1rem',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+                        }}>
+                            Daily Challenge
+                        </button>
+                        <button style={{
+                            background: 'rgba(255,255,255,0.1)',
+                            color: 'white',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '12px',
+                            fontWeight: '600',
+                            fontSize: '1rem',
+                            cursor: 'pointer'
+                        }}>
+                            View Rewards
                         </button>
                     </div>
-                ))}
+                </div>
+
+                {/* Abstract Decorative elements */}
+                <div style={{ position: 'relative', height: '200px', width: '300px' }}>
+                    <Gamepad2 size={180} color="white" style={{ opacity: 0.1, position: 'absolute', right: '-20px', top: '-20px', transform: 'rotate(15deg)' }} />
+                    <Trophy size={120} color="#fbbf24" style={{ position: 'absolute', right: '40px', bottom: '0', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))' }} />
+                </div>
             </div>
 
-            {/* Leaderboard */}
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-800 mb-4">Leaderboard</h2>
-                <div className="space-y-3">
-                    {['Adhi', 'Rahul', 'Sneha', 'Amit'].map((name, idx) => (
-                        <div key={name} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                            <div className="flex items-center gap-3">
-                                <span className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-700 font-semibold">
-                                    {idx + 1}
-                                </span>
-                                <span className="font-medium text-gray-800">{name}</span>
+            <div style={{ display: 'flex', gap: '2rem' }}>
+                {/* Main Game Grid */}
+                <div style={{ flex: 1 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>Featured Games</h2>
+                        <a href="#" style={{ color: '#2563eb', fontWeight: '600', textDecoration: 'none', fontSize: '0.9rem' }}>View All</a>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                        {/* Large Featured Card */}
+                        <div style={{
+                            gridColumn: 'span 2',
+                            background: 'white',
+                            borderRadius: '20px',
+                            padding: '2rem',
+                            display: 'flex',
+                            gap: '2rem',
+                            alignItems: 'center',
+                            border: '1px solid #e5e7eb',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}>
+                            <div style={{
+                                width: '120px',
+                                height: '120px',
+                                background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+                                borderRadius: '24px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 10px 20px rgba(109, 40, 217, 0.25)'
+                            }}>
+                                <TrendingUp size={60} color="white" />
                             </div>
-                            <span className="text-gray-600">Score: {1200 - idx * 120}</span>
+                            <div style={{ flex: 1 }}>
+                                <span style={{ color: '#7c3aed', fontWeight: '700', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Trending Now</span>
+                                <h3 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827', margin: '0.5rem 0' }}>Ultimate Trading Simulator</h3>
+                                <p style={{ color: '#6b7280', marginBottom: '1.5rem', lineHeight: '1.5' }}>Experience the thrill of the stock market without the risk. Trade with virtual currency and compete.</p>
+                                <button style={{
+                                    background: '#195BAC',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '0.75rem 2rem',
+                                    borderRadius: '12px',
+                                    fontWeight: '600',
+                                    cursor: 'pointer',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                }}>
+                                    Play Now <ChevronRight size={18} />
+                                </button>
+                            </div>
                         </div>
-                    ))}
+
+                        {[
+                            { title: 'Crypto Quiz', color: '#10b981', icon: Bitcoin, level: 'Beginner', bg: '#ecfdf5', text: '#059669' },
+                            { title: 'Budget Master', color: '#f59e0b', icon: PiggyBank, level: 'Intermediate', bg: '#fffbeb', text: '#d97706' },
+                            { title: 'Risk Analyst', color: '#ef4444', icon: LineChart, level: 'Advanced', bg: '#fef2f2', text: '#dc2626' },
+                            { title: 'Market Puzzle', color: '#3b82f6', icon: Gamepad2, level: 'Fun', bg: '#eff6ff', text: '#2563eb' }
+                        ].map((game, i) => (
+                            <div key={i} style={{
+                                background: 'white',
+                                borderRadius: '20px',
+                                padding: '1.5rem',
+                                border: '1px solid #e5e7eb',
+                                transition: 'all 0.2s',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1rem',
+                                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                            }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(-4px)';
+                                    e.currentTarget.style.boxShadow = '0 12px 20px -8px rgba(0, 0, 0, 0.1)';
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.transform = 'translateY(0)';
+                                    e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)';
+                                }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <div style={{
+                                        width: '56px',
+                                        height: '56px',
+                                        borderRadius: '16px',
+                                        background: game.bg,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        <game.icon size={28} color={game.text} />
+                                    </div>
+                                    <span style={{
+                                        background: '#f3f4f6',
+                                        padding: '0.25rem 0.75rem',
+                                        borderRadius: '99px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: '600',
+                                        color: '#4b5563'
+                                    }}>
+                                        {game.level}
+                                    </span>
+                                </div>
+                                <div>
+                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>{game.title}</h3>
+                                    <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>2.5k Players Online</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Sidebar Leaderboard */}
+                <div style={{ width: '340px' }}>
+                    <div style={{
+                        background: 'white',
+                        borderRadius: '24px',
+                        padding: '1.5rem',
+                        border: '1px solid #e5e7eb',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
+                        position: 'sticky',
+                        top: '24px'
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937' }}>Top Players</h3>
+                            <button style={{ background: 'none', border: 'none', color: '#2563eb', fontWeight: '600', cursor: 'pointer', fontSize: '0.9rem' }}>
+                                This Week
+                            </button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {[
+                                { name: 'Aditya S', score: '9,850', rank: 1, avatar: 'AV' },
+                                { name: 'Rahul K', score: '8,400', rank: 2, avatar: 'RK' },
+                                { name: 'Sneha M', score: '7,200', rank: 3, avatar: 'SM' },
+                                { name: 'Amit J', score: '6,900', rank: 4, avatar: 'AJ' },
+                                { name: 'Priya R', score: '5,540', rank: 5, avatar: 'PR' }
+                            ].map((player, index) => (
+                                <div key={player.rank} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem', borderRadius: '12px', background: index === 0 ? '#f0f9ff' : 'transparent' }}>
+                                    <div style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontWeight: '700',
+                                        color: index < 3 ? '#eab308' : '#9ca3af',
+                                        fontSize: '0.9rem'
+                                    }}>
+                                        {player.rank}
+                                    </div>
+                                    <div style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '50%',
+                                        background: '#e0e7ff',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: '#3730a3',
+                                        fontWeight: '700',
+                                        fontSize: '0.9rem'
+                                    }}>
+                                        {player.avatar}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <h4 style={{ fontSize: '0.95rem', fontWeight: '600', color: '#1f2937', margin: 0 }}>{player.name}</h4>
+                                        <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0 }}>{player.score} XP</p>
+                                    </div>
+                                    {index === 0 && <Trophy size={16} color="#eab308" />}
+                                </div>
+                            ))}
+                        </div>
+
+                        <button style={{
+                            width: '100%',
+                            marginTop: '1.5rem',
+                            padding: '0.75rem',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '12px',
+                            background: 'white',
+                            color: '#4b5563',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem'
+                        }}>
+                            View Global Rankings
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

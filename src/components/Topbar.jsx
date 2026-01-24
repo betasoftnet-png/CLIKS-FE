@@ -34,10 +34,10 @@ const Topbar = ({ onToggleSidebar }) => {
                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                     title="Toggle Sidebar"
                 >
-                    <div className="brand-logo-small">
-                        <Wallet size={18} color="white" />
+                    <div className="brand-logo-small" style={{ backgroundColor: 'white' }}>
+                        <Wallet size={18} color="#195BAC" />
                     </div>
-                    <span style={{ color: '#195BAC', fontSize: '1.25rem', fontWeight: '700' }}>
+                    <span style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: '700' }}>
                         Books & Finance
                     </span>
                 </div>
