@@ -170,8 +170,8 @@ export default function Public() {
                     { label: 'Portfolio Value', value: '₹8.2L', icon: Briefcase, color: 'orange' }
                 ].map((stat) => (
                     <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-                        <div className={`w - 12 h - 12 bg - ${stat.color} -50 rounded - lg flex items - center justify - center mb - 3`}>
-                            <stat.icon className={`w - 6 h - 6 text - ${stat.color} -600`} />
+                        <div className={`w-12 h-12 bg-${stat.color}-50 rounded-lg flex items-center justify-center mb-3`}>
+                            <stat.icon className={`w-6 h-6 text-${stat.color}-600`} />
                         </div>
                         <p className="text-gray-600 text-sm mb-1">{stat.label}</p>
                         <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
@@ -353,7 +353,7 @@ export default function Public() {
                                     </td>
                                     <td className="px-6 py-4 text-right font-semibold text-gray-800">{crypto.price}</td>
                                     <td className="px-6 py-4 text-right">
-                                        <span className={`font - semibold ${crypto.positive ? 'text-green-600' : 'text-red-600'} `}>
+                                        <span className={`font-semibold ${crypto.positive ? 'text-green-600' : 'text-red-600'} `}>
                                             {crypto.change}
                                         </span>
                                     </td>
@@ -461,7 +461,7 @@ export default function Public() {
                     <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                         <p className="text-gray-600 text-sm mb-2">{stat.label}</p>
                         <p className="text-2xl font-bold text-gray-800 mb-1">{stat.value}</p>
-                        <p className={`text - sm font - medium ${stat.positive === true ? 'text-green-600' : stat.positive === false ? 'text-red-600' : 'text-gray-500'} `}>
+                        <p className={`text-sm font-medium ${stat.positive === true ? 'text-green-600' : stat.positive === false ? 'text-red-600' : 'text-gray-500'} `}>
                             {stat.change}
                         </p>
                     </div>
@@ -486,7 +486,7 @@ export default function Public() {
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <div
-                                        className={`h - full bg - ${asset.color} -500 rounded - full`}
+                                        className={`h-full bg-${asset.color}-500 rounded-full`}
                                         style={{ width: `${asset.percentage}% ` }}
                                     />
                                 </div>
@@ -507,15 +507,15 @@ export default function Public() {
                         ].map((txn, idx) => (
                             <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <div className="flex items-center gap-3">
-                                    <div className={`w - 10 h - 10 rounded - lg ${txn.positive ? 'bg-green-100' : 'bg-blue-100'} flex items - center justify - center`}>
-                                        <ArrowUpRight className={`w - 5 h - 5 ${txn.positive ? 'text-green-600 rotate-180' : 'text-blue-600'} `} />
+                                    <div className={`w-10 h-10 rounded-lg ${txn.positive ? 'bg-green-100' : 'bg-blue-100'} flex items-center justify-center`}>
+                                        <ArrowUpRight className={`w-5 h-5 ${txn.positive ? 'text-green-600 rotate-180' : 'text-blue-600'} `} />
                                     </div>
                                     <div>
                                         <p className="font-medium text-gray-800">{txn.type} {txn.asset}</p>
                                         <p className="text-sm text-gray-500">{txn.time}</p>
                                     </div>
                                 </div>
-                                <p className={`font - semibold ${txn.positive ? 'text-green-600' : 'text-gray-800'} `}>
+                                <p className={`font-semibold ${txn.positive ? 'text-green-600' : 'text-gray-800'} `}>
                                     {txn.positive ? '+' : ''}{txn.amount}
                                 </p>
                             </div>
