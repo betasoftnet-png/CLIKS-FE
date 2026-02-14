@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Tooltip } from './common';
 import {
     Home,
     LayoutDashboard,
@@ -45,7 +46,8 @@ import {
     Gamepad2,
     UsersRound,
     Handshake,
-    Bitcoin
+    Bitcoin,
+    Bot
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../App.css';
@@ -63,29 +65,18 @@ const Sidebar = ({ isOpen }) => {
 
     // Determine active item based on path
     const getActiveItemFromPath = (path) => {
-        if (path === '/' || path === '/home') return 'Dashboard';
-        if (path === '/home/reports') return 'Reports';
-        if (path === '/home/statistics') return 'Statistics';
-        if (path === '/home/income') return 'Income';
-        if (path === '/home/expenses') return 'Expenses';
-        if (path === '/home/budgets') return 'Budgets';
-        if (path === '/home/accounts') return 'Accounts';
-        if (path === '/home/planned-payments') return 'Planned payments';
-        if (path === '/home/savings') return 'Savings';
-        if (path === '/home/investments') return 'Investments';
-        if (path === '/home/debts') return 'Debts';
+        if (path === '/' || path === '/finance') return 'Dashboard';
+        if (path === '/finance/transactions') return 'Transactions';
+        if (path === '/finance/budgets') return 'Budgets';
+        if (path === '/finance/accounts') return 'Accounts';
+        if (path === '/finance/planned-payments') return 'Planned payments';
+
+        if (path.includes('/books/dashboard')) return 'Books Dashboard';
         if (path.includes('/books/stock')) return 'Stock';
-        if (path.includes('/books/plan/budget')) return 'Budget';
-        if (path.includes('/books/plan/income')) return 'Income';
-        if (path.includes('/books/plan/expense')) return 'Expense';
-        if (path.includes('/books/plan/calendar')) return 'Financial Calendar';
-        if (path.includes('/books/plan/goals')) return 'Savings & Goals';
-        if (path.includes('/books/plan/reminders')) return 'Reminders';
-        if (path.includes('/books/plan/analysis')) return 'Analysis';
-        if (path.includes('/books/people/overview')) return 'Overview';
-        if (path.includes('/books/people/transactions')) return 'Transactions';
-        if (path.includes('/books/people/reminders')) return 'PeopleReminders';
-        if (path.includes('/books/people/records')) return 'Records';
+        if (path.includes('/books/financial-plan') || path.includes('/books/plan/')) return 'Financial Plan';
+        if (path.includes('/books/people')) return 'People';
+        if (path === '/auditor') return 'Audit';
+
         return 'Dashboard';
     };
 
@@ -131,9 +122,16 @@ const Sidebar = ({ isOpen }) => {
         if (path) navigate(path);
     };
 
-    const showHomeSidebar = location.pathname === '/' || location.pathname.startsWith('/home');
-    const showBooksSidebar = location.pathname.startsWith('/books') && location.pathname !== '/books/profile';
-    const showFinanceSidebar = location.pathname.startsWith('/finance');
+    const handleKeyDown = (e, callback) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            callback();
+        }
+    };
+
+    // Show Finance sidebar for root, home (redirect), and finance paths
+    const showFinanceSidebar = location.pathname === '/' || location.pathname.startsWith('/home') || location.pathname.startsWith('/finance');
+    const showBooksSidebar = (location.pathname.startsWith('/books') && location.pathname !== '/books/profile') || location.pathname === '/auditor';
     const showPublicSidebar = location.pathname.startsWith('/public');
 
     return (
@@ -146,51 +144,25 @@ const Sidebar = ({ isOpen }) => {
             </div>
 
             <nav className="sidebar-nav">
-                {showHomeSidebar && (
+                {showFinanceSidebar && (
                     <>
-                        {/* Home Section (Dropdown) */}
-                        <div className={`sidebar-item ${expandedSections.home ? 'active' : ''}`} onClick={() => toggleSection('home')} style={{ cursor: 'pointer' }}>
+                        {/* Dashboard (Main Finance Page) */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Dashboard' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Dashboard', '/finance')}
+                        >
                             <div className="flex items-center gap-3">
                                 <Home size={20} />
-                                <span className="sidebar-label">Home</span>
+                                <span className="sidebar-label">Dashboard</span>
                             </div>
-                            <div className="sidebar-chevron">
-                                {expandedSections.home ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-                            </div>
-                        </div>
+                        </button>
 
-                        {/* Smooth Dropdown Animation for Home */}
-                        <div
-                            style={{
-                                overflow: 'hidden',
-                                transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                maxHeight: expandedSections.home ? '500px' : '0',
-                                opacity: expandedSections.home ? 1 : 0
-                            }}
-                        >
-                            <div className="sidebar-subgroup">
-                                <button className={`sidebar-item level-1 ${activeItem === 'Dashboard' ? 'active' : ''}`} onClick={() => handleItemClick('Dashboard', '/home')}>
-                                    <div className="flex items-center gap-3"><LayoutDashboard size={18} /><span className="sidebar-label">Dashboard</span></div>
-                                </button>
-                                <button className={`sidebar-item level-1 ${activeItem === 'Reports' ? 'active' : ''}`} onClick={() => handleItemClick('Reports')}>
-                                    <div className="flex items-center gap-3"><FileText size={18} /><span className="sidebar-label">Reports</span></div>
-                                </button>
-                                <button className={`sidebar-item level-1 ${activeItem === 'Statistics' ? 'active' : ''}`} onClick={() => handleItemClick('Statistics')}>
-                                    <div className="flex items-center gap-3"><BarChart3 size={18} /><span className="sidebar-label">Statistics</span></div>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Standard Home Items */}
+                        {/* Merged Home Items */}
                         {[
-                            { icon: TrendingUp, label: 'Income', path: '/home/income' },
-                            { icon: TrendingDown, label: 'Expenses', path: '/home/expenses' },
-                            { icon: Wallet, label: 'Budgets', path: '/home/budgets' },
-                            { icon: CreditCard, label: 'Accounts', path: '/home/accounts' },
-                            { icon: CalendarClock, label: 'Planned payments', path: '/home/planned-payments' },
-                            { icon: PiggyBank, label: 'Savings', path: '/home/savings' },
-                            { icon: LineChart, label: 'Investments', path: '/home/investments' },
-                            { icon: Banknote, label: 'Debts', path: '/home/debts' }
+                            { icon: Receipt, label: 'Transactions', path: '/finance/transactions' },
+                            { icon: Wallet, label: 'Budgets', path: '/finance/budgets' },
+                            { icon: CreditCard, label: 'Accounts', path: '/finance/accounts' },
+                            { icon: CalendarClock, label: 'Planned payments', path: '/finance/planned-payments' }
                         ].map(item => (
                             <button
                                 key={item.label}
@@ -208,6 +180,17 @@ const Sidebar = ({ isOpen }) => {
 
                 {showBooksSidebar && (
                     <>
+                        {/* Books Dashboard */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Books Dashboard' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Books Dashboard', '/books/dashboard')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Home size={20} style={{ color: '#195BAC' }} />
+                                <span className="sidebar-label">Dashboard</span>
+                            </div>
+                        </button>
+
                         {/* Stock */}
                         <button
                             className={`sidebar-item ${activeItem === 'Stock' ? 'active' : ''}`}
@@ -219,102 +202,27 @@ const Sidebar = ({ isOpen }) => {
                             </div>
                         </button>
 
-                        {/* Financial Plan Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('financial')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'financial' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Wallet size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Financial Plan</span>
-                                </div>
-                                {openDropdown === 'financial' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
+                        {/* Financial Plan Button (Converted from Dropdown) */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Financial Plan' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Financial Plan', '/books/financial-plan')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Wallet size={20} style={{ color: '#195BAC' }} />
+                                <span className="sidebar-label">Financial Plan</span>
                             </div>
+                        </button>
 
-                            {/* Smooth Dropdown Animation */}
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'financial' ? '400px' : '0',
-                                    opacity: openDropdown === 'financial' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Budget' ? 'active' : ''}`} onClick={() => handleItemClick('Budget', '/books/plan/budget')}>
-                                        <div className="flex items-center gap-3"><DollarSign size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Budget</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Income' ? 'active' : ''}`} onClick={() => handleItemClick('Income', '/books/plan/income')}>
-                                        <div className="flex items-center gap-3"><ArrowLeftRight size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Income</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Expense' ? 'active' : ''}`} onClick={() => handleItemClick('Expense', '/books/plan/expense')}>
-                                        <div className="flex items-center gap-3"><ShoppingCart size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Expense</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Financial Calendar' ? 'active' : ''}`} onClick={() => handleItemClick('Financial Calendar', '/books/plan/calendar')}>
-                                        <div className="flex items-center gap-3"><Calendar size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Financial Calendar</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Savings & Goals' ? 'active' : ''}`} onClick={() => handleItemClick('Savings & Goals', '/books/plan/goals')}>
-                                        <div className="flex items-center gap-3"><Target size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Savings & Goals</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Reminders' ? 'active' : ''}`} onClick={() => handleItemClick('Reminders', '/books/plan/reminders')}>
-                                        <div className="flex items-center gap-3"><Bell size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Reminders</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Analysis' ? 'active' : ''}`} onClick={() => handleItemClick('Analysis', '/books/plan/analysis')}>
-                                        <div className="flex items-center gap-3"><BarChart3 size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Analysis</span></div>
-                                    </button>
-                                </div>
+                        {/* People Button (Converted from Dropdown) */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('People', '/books/people')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Users size={20} style={{ color: '#195BAC' }} />
+                                <span className="sidebar-label">People</span>
                             </div>
-                        </div>
-
-                        {/* People Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('people')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'people' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Users size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">People</span>
-                                </div>
-                                {openDropdown === 'people' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            {/* Smooth Dropdown Animation */}
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'people' ? '300px' : '0',
-                                    opacity: openDropdown === 'people' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Overview' ? 'active' : ''}`} onClick={() => handleItemClick('Overview', '/books/people/overview')}>
-                                        <div className="flex items-center gap-3"><Eye size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Overview</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Transactions' ? 'active' : ''}`} onClick={() => handleItemClick('Transactions', '/books/people/transactions')}>
-                                        <div className="flex items-center gap-3"><Receipt size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Transactions</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'PeopleReminders' ? 'active' : ''}`} onClick={() => handleItemClick('PeopleReminders', '/books/people/reminders')}>
-                                        <div className="flex items-center gap-3"><Bell size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Reminders</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Records' ? 'active' : ''}`} onClick={() => handleItemClick('Records', '/books/people/records')}>
-                                        <div className="flex items-center gap-3"><BookOpen size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Records</span></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        </button>
 
                         {/* Other Items */}
                         <button
@@ -344,216 +252,14 @@ const Sidebar = ({ isOpen }) => {
                                 <span className="sidebar-label">Split Expense</span>
                             </div>
                         </button>
-                    </>
-                )}
 
-                {showFinanceSidebar && (
-                    <>
-                        {/* Transfers & Payments Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('transfers')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'transfers' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <ArrowLeftRight size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Transfers & Payments</span>
-                                </div>
-                                {openDropdown === 'transfers' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'transfers' ? '200px' : '0',
-                                    opacity: openDropdown === 'transfers' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Bank & Self Transfer' ? 'active' : ''}`} onClick={() => handleItemClick('Bank & Self Transfer')}>
-                                        <div className="flex items-center gap-3"><Send size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Bank & Self Transfer</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`} onClick={() => handleItemClick('Split & Collect')}>
-                                        <div className="flex items-center gap-3"><Users size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Split & Collect</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Salary Funds' ? 'active' : ''}`} onClick={() => handleItemClick('Salary Funds')}>
-                                        <div className="flex items-center gap-3"><Wallet size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Salary Funds</span></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Accounts & Banking Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('accounts')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'accounts' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Building2 size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Accounts & Banking</span>
-                                </div>
-                                {openDropdown === 'accounts' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'accounts' ? '150px' : '0',
-                                    opacity: openDropdown === 'accounts' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Banking' ? 'active' : ''}`} onClick={() => handleItemClick('Banking')}>
-                                        <div className="flex items-center gap-3"><Landmark size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Banking</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Balance & History' ? 'active' : ''}`} onClick={() => handleItemClick('Balance & History')}>
-                                        <div className="flex items-center gap-3"><History size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Balance & History</span></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Bills, Tax & Penalties Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('bills')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'bills' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <FileText size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Bills, Tax & Penalties</span>
-                                </div>
-                                {openDropdown === 'bills' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'bills' ? '250px' : '0',
-                                    opacity: openDropdown === 'bills' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Bills' ? 'active' : ''}`} onClick={() => handleItemClick('Bills')}>
-                                        <div className="flex items-center gap-3"><Receipt size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Bills</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Recharge' ? 'active' : ''}`} onClick={() => handleItemClick('Recharge')}>
-                                        <div className="flex items-center gap-3"><Smartphone size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Recharge</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Pay Tax' ? 'active' : ''}`} onClick={() => handleItemClick('Pay Tax')}>
-                                        <div className="flex items-center gap-3"><FileCheck size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Pay Tax</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Fines & Challans' ? 'active' : ''}`} onClick={() => handleItemClick('Fines & Challans')}>
-                                        <div className="flex items-center gap-3"><AlertCircle size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Fines & Challans</span></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Savings, Loans & Insurance Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('savings')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'savings' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <PiggyBank size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Savings & Credit</span>
-                                </div>
-                                {openDropdown === 'savings' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'savings' ? '250px' : '0',
-                                    opacity: openDropdown === 'savings' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Saving' ? 'active' : ''}`} onClick={() => handleItemClick('Saving')}>
-                                        <div className="flex items-center gap-3"><TrendingUp size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Saving</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Loan' ? 'active' : ''}`} onClick={() => handleItemClick('Loan')}>
-                                        <div className="flex items-center gap-3"><Banknote size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Loan</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Insurance' ? 'active' : ''}`} onClick={() => handleItemClick('Insurance')}>
-                                        <div className="flex items-center gap-3"><Shield size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Insurance</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'CIBIL' ? 'active' : ''}`} onClick={() => handleItemClick('CIBIL')}>
-                                        <div className="flex items-center gap-3"><BarChart3 size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">CIBIL</span></div>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        {/* Rewards & Benefits Dropdown */}
-                        <div className="mb-1">
-                            <div
-                                onClick={() => toggleDropdown('rewards')}
-                                className="sidebar-item"
-                                style={{ cursor: 'pointer', backgroundColor: openDropdown === 'rewards' ? '#F8FAFC' : 'transparent' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Gift size={20} style={{ color: '#195BAC' }} />
-                                    <span className="sidebar-label">Rewards & Benefits</span>
-                                </div>
-                                {openDropdown === 'rewards' ? (
-                                    <ChevronUp size={16} className="text-gray-500" />
-                                ) : (
-                                    <ChevronDown size={16} className="text-gray-500" />
-                                )}
-                            </div>
-
-                            <div
-                                style={{
-                                    overflow: 'hidden',
-                                    transition: 'max-height 0.3s ease-in-out, opacity 0.3s ease-in-out',
-                                    maxHeight: openDropdown === 'rewards' ? '250px' : '0',
-                                    opacity: openDropdown === 'rewards' ? 1 : 0
-                                }}
-                            >
-                                <div className="ml-4 mt-1 space-y-1">
-                                    <button className={`sidebar-item ${activeItem === 'Rewards' ? 'active' : ''}`} onClick={() => handleItemClick('Rewards')}>
-                                        <div className="flex items-center gap-3"><Tag size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Rewards</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Offers' ? 'active' : ''}`} onClick={() => handleItemClick('Offers')}>
-                                        <div className="flex items-center gap-3"><Gift size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Offers</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Refer & Earn' ? 'active' : ''}`} onClick={() => handleItemClick('Refer & Earn')}>
-                                        <div className="flex items-center gap-3"><UserPlus size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Refer & Earn</span></div>
-                                    </button>
-                                    <button className={`sidebar-item ${activeItem === 'Donation' ? 'active' : ''}`} onClick={() => handleItemClick('Donation')}>
-                                        <div className="flex items-center gap-3"><Heart size={16} style={{ color: '#195BAC' }} /><span className="sidebar-label">Donation</span></div>
-                                    </button>
-                                </div>
-                            </div>
+                        {/* Audit */}
+                        <div style={{ marginTop: '6rem' }}>
+                            <Tooltip
+                                onClick={() => handleItemClick('Audit', '/auditor')}
+                                text="Audit"
+                                tooltipText="Auditor"
+                            />
                         </div>
                     </>
                 )}
@@ -563,7 +269,11 @@ const Sidebar = ({ isOpen }) => {
                         {/* Trading Dropdown */}
                         <div className="mb-1">
                             <div
+                                role="button"
+                                tabIndex={0}
+                                aria-expanded={openDropdown === 'trading'}
                                 onClick={() => toggleDropdown('trading')}
+                                onKeyDown={(e) => handleKeyDown(e, () => toggleDropdown('trading'))}
                                 className="sidebar-item"
                                 style={{ cursor: 'pointer', backgroundColor: openDropdown === 'trading' ? '#F8FAFC' : 'transparent' }}
                             >
@@ -642,17 +352,7 @@ const Sidebar = ({ isOpen }) => {
                 )}
             </nav>
 
-            <div className="sidebar-footer">
-                <button
-                    className={`sidebar-item ${activeItem === 'Settings' ? 'active' : ''}`}
-                    onClick={() => handleItemClick('Settings')}
-                >
-                    <div className="flex items-center gap-3">
-                        <Settings size={20} style={{ color: showBooksSidebar ? '#195BAC' : 'inherit' }} />
-                        <span className="sidebar-label">Settings</span>
-                    </div>
-                </button>
-            </div>
+
         </aside>
     );
 };

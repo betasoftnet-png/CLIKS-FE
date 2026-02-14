@@ -3,19 +3,12 @@ import {
     TrendingUp,
     Plus,
     Calendar,
-    DollarSign,
-    Tag,
-    Edit2,
-    Trash2,
-    Filter,
-    Search,
-    ChevronDown,
-    Briefcase,
-    Building2,
     PieChart,
-    ArrowUpRight
+    ArrowUpRight,
+    IndianRupee
 } from 'lucide-react';
 import '../App.css';
+import { formatCurrency } from '../lib/formatCurrency';
 
 const IncomeStr = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="income-stat-card">
@@ -34,11 +27,11 @@ const IncomeStr = ({ label, value, subtext, icon: Icon, colorClass }) => (
 
 const Income = () => {
     const [incomeData] = useState([
-        { id: 1, source: 'Salary', amount: 5000, category: 'Employment', date: '2026-01-01', recurring: true, icon: Briefcase },
-        { id: 2, source: 'Freelance Project', amount: 1200, category: 'Business', date: '2026-01-15', recurring: false, icon: Building2 },
-        { id: 3, source: 'Investment Returns', amount: 350, category: 'Investments', date: '2026-01-10', recurring: false, icon: TrendingUp },
-        { id: 4, source: 'Rental Income', amount: 800, category: 'Property', date: '2026-01-05', recurring: true, icon: Building2 },
-        { id: 5, source: 'Dividend Payout', amount: 150, category: 'Investments', date: '2026-01-20', recurring: false, icon: PieChart },
+        { id: 1, source: 'Salary', amount: 50000, category: 'Employment', date: '2026-01-01', recurring: true, icon: Briefcase },
+        { id: 2, source: 'Freelance Project', amount: 12000, category: 'Business', date: '2026-01-15', recurring: false, icon: Building2 },
+        { id: 3, source: 'Investment Returns', amount: 3500, category: 'Investments', date: '2026-01-10', recurring: false, icon: TrendingUp },
+        { id: 4, source: 'Rental Income', amount: 8000, category: 'Property', date: '2026-01-05', recurring: true, icon: Building2 },
+        { id: 5, source: 'Dividend Payout', amount: 1500, category: 'Investments', date: '2026-01-20', recurring: false, icon: PieChart },
     ]);
 
     const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
@@ -48,7 +41,7 @@ const Income = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Income</h1>
+
                     <p className="text-muted text-sm mt-1">Track and manage your revenue streams</p>
                 </div>
                 <button className="btn-primary">
@@ -62,14 +55,14 @@ const Income = () => {
                 <div className="income-stats-grid">
                     <IncomeStr
                         label="Total Income"
-                        value={`$${totalIncome.toLocaleString()}`}
+                        value={formatCurrency(totalIncome)}
                         subtext="+12% from last month"
-                        icon={DollarSign}
+                        icon={IndianRupee}
                         colorClass="icon-green"
                     />
                     <IncomeStr
                         label="Recurring Revenue"
-                        value={`$${recurringIncome.toLocaleString()}`}
+                        value={formatCurrency(recurringIncome)}
                         subtext="Monthly stable income"
                         icon={Calendar}
                         colorClass="icon-blue"
@@ -122,7 +115,7 @@ const Income = () => {
                                     <td>
                                         <div className="flex items-center gap-3">
                                             <div className="table-icon-bg">
-                                                {item.icon ? <item.icon size={18} /> : <DollarSign size={18} />}
+                                                {item.icon ? <item.icon size={18} /> : <IndianRupee size={18} />}
                                             </div>
                                             <div>
                                                 <div className="font-medium text-main">{item.source}</div>
@@ -138,7 +131,7 @@ const Income = () => {
                                         </span>
                                     </td>
                                     <td className="text-muted">{new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                                    <td className="font-bold text-success">+${item.amount.toLocaleString()}</td>
+                                    <td className="font-bold text-success">+{formatCurrency(item.amount)}</td>
                                     <td>
                                         <div className="flex gap-2">
                                             <button className="action-btn hover-blue" title="Edit">

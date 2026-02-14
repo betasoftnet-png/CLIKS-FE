@@ -1,81 +1,144 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './routes/ProtectedRoute';
+import { ErrorBoundary } from './components/common';
 import MainLayout from './layouts/MainLayout';
-import Home from './pages/Home';
-import Income from './pages/Income';
-import Expenses from './pages/Expenses';
-import Budgets from './pages/Budgets';
-import Accounts from './pages/Accounts';
-import PlannedPayments from './pages/PlannedPayments';
-import Savings from './pages/Savings';
-import Investments from './pages/Investments';
-import Debts from './pages/Debts';
-import Finance from './pages/Finance';
-import Books from './pages/Books';
-import Public from './pages/Public';
-import Stock from './pages/Stock';
-import PlanBudget from './pages/financial-plan/PlanBudget';
-import PlanIncome from './pages/financial-plan/PlanIncome';
-import PlanExpense from './pages/financial-plan/PlanExpense';
-import FinancialCalendar from './pages/financial-plan/FinancialCalendar';
-import PlanGoals from './pages/financial-plan/PlanGoals';
-import PlanReminders from './pages/financial-plan/PlanReminders';
-import PlanAnalysis from './pages/financial-plan/PlanAnalysis';
-import PeopleOverview from './pages/people/PeopleOverview';
-import PeopleTransactions from './pages/people/PeopleTransactions';
-import PeopleReminders from './pages/people/PeopleReminders';
-import PeopleRecords from './pages/people/PeopleRecords';
-import FinancialContacts from './pages/FinancialContacts';
-import Segregation from './pages/Segregation';
-import SplitExpense from './pages/SplitExpense';
-import Profile from './pages/Profile';
+import AuditorLayout from './layouts/AuditorLayout';
+import Landing from './pages/Landing'; // Keep Landing eager for LCP
+
+// Lazy Load Pages to optimize bundle size
+
+const Income = React.lazy(() => import('./pages/Income'));
+const Expenses = React.lazy(() => import('./pages/Expenses'));
+const Transactions = React.lazy(() => import('./pages/Transactions'));
+const Budgets = React.lazy(() => import('./pages/Budgets'));
+const Accounts = React.lazy(() => import('./pages/Accounts'));
+const PlannedPayments = React.lazy(() => import('./pages/PlannedPayments'));
+const Savings = React.lazy(() => import('./pages/Savings'));
+const Investments = React.lazy(() => import('./pages/Investments'));
+const Debts = React.lazy(() => import('./pages/Debts'));
+const Finance = React.lazy(() => import('./pages/Finance'));
+const Transfers = React.lazy(() => import('./pages/finance/Transfers'));
+const FinanceAccounts = React.lazy(() => import('./pages/finance/Accounts'));
+const Bills = React.lazy(() => import('./pages/finance/Bills'));
+const FinanceSavings = React.lazy(() => import('./pages/finance/Savings'));
+const Rewards = React.lazy(() => import('./pages/finance/Rewards'));
+const Books = React.lazy(() => import('./pages/Books'));
+const BooksDashboard = React.lazy(() => import('./pages/books/Dashboard'));
+const Auditor = React.lazy(() => import('./pages/Auditor'));
+const Public = React.lazy(() => import('./pages/Public'));
+const Stock = React.lazy(() => import('./pages/Stock'));
+const FinancialPlan = React.lazy(() => import('./pages/financial-plan/FinancialPlan'));
+const PlanBudget = React.lazy(() => import('./pages/financial-plan/PlanBudget'));
+const PlanIncome = React.lazy(() => import('./pages/financial-plan/PlanIncome'));
+const PlanExpense = React.lazy(() => import('./pages/financial-plan/PlanExpense'));
+const FinancialCalendar = React.lazy(() => import('./pages/financial-plan/FinancialCalendar'));
+const PlanGoals = React.lazy(() => import('./pages/financial-plan/PlanGoals'));
+const PlanReminders = React.lazy(() => import('./pages/financial-plan/PlanReminders'));
+const PlanAnalysis = React.lazy(() => import('./pages/financial-plan/PlanAnalysis'));
+const People = React.lazy(() => import('./pages/People'));
+const PeopleOverview = React.lazy(() => import('./pages/people/PeopleOverview'));
+const PeopleTransactions = React.lazy(() => import('./pages/people/PeopleTransactions'));
+const PeopleReminders = React.lazy(() => import('./pages/people/PeopleReminders'));
+const PeopleRecords = React.lazy(() => import('./pages/people/PeopleRecords'));
+const FinancialContacts = React.lazy(() => import('./pages/FinancialContacts'));
+const Segregation = React.lazy(() => import('./pages/Segregation'));
+const SplitExpense = React.lazy(() => import('./pages/SplitExpense'));
+const Profile = React.lazy(() => import('./pages/Profile'));
+const Settings = React.lazy(() => import('./pages/Settings'));
+const FAQ = React.lazy(() => import('./pages/FAQ'));
+
 import './App.css';
+
+const PageLoader = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#64748B' }}>
+    Loading...
+  </div>
+);
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Profile Page with custom layout */}
-        <Route path="/books/profile" element={<Profile />} />
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Router>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/auditor" element={
+              <Suspense fallback={<PageLoader />}>
+                <AuditorLayout>
+                  <Auditor />
+                </AuditorLayout>
+              </Suspense>
+            } />
+            <Route path="/books/profile" element={
+              <Suspense fallback={<PageLoader />}>
+                <Profile />
+              </Suspense>
+            } />
 
-        {/* Main App Layout for all other routes */}
-        <Route path="*" element={
-          <MainLayout>
-            <Routes>
-              <Route path="/" element={<Navigate to="/home" replace />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/home/income" element={<Income />} />
-              <Route path="/home/expenses" element={<Expenses />} />
-              <Route path="/home/budgets" element={<Budgets />} />
-              <Route path="/home/accounts" element={<Accounts />} />
-              <Route path="/home/planned-payments" element={<PlannedPayments />} />
-              <Route path="/home/savings" element={<Savings />} />
-              <Route path="/home/investments" element={<Investments />} />
-              <Route path="/home/debts" element={<Debts />} />
-              <Route path="/books" element={<Books />} />
-              <Route path="/books/stock" element={<Stock />} />
-              <Route path="/books/plan/budget" element={<PlanBudget />} />
-              <Route path="/books/plan/income" element={<PlanIncome />} />
-              <Route path="/books/plan/expense" element={<PlanExpense />} />
-              <Route path="/books/plan/calendar" element={<FinancialCalendar />} />
-              <Route path="/books/plan/goals" element={<PlanGoals />} />
-              <Route path="/books/plan/reminders" element={<PlanReminders />} />
-              <Route path="/books/plan/analysis" element={<PlanAnalysis />} />
-              <Route path="/books/people/overview" element={<PeopleOverview />} />
-              <Route path="/books/people/transactions" element={<PeopleTransactions />} />
-              <Route path="/books/people/reminders" element={<PeopleReminders />} />
-              <Route path="/books/people/records" element={<PeopleRecords />} />
-              <Route path="/books/contacts" element={<FinancialContacts />} />
-              <Route path="/books/segregation" element={<Segregation />} />
-              <Route path="/books/split-expense" element={<SplitExpense />} />
-              <Route path="/finance" element={<Finance />} />
-              <Route path="/public" element={<Public />} />
-            </Routes>
-          </MainLayout>
-        } />
-      </Routes>
-    </Router>
+            {/* Protected Routes - All routes within MainLayout require authentication */}
+            <Route path="*" element={
+              <ProtectedRoute>
+                <ErrorBoundary>
+                  <MainLayout>
+                    <Suspense fallback={<PageLoader />}>
+                      <Routes>
+                        {/* Finance (formerly Home) Section */}
+                        <Route path="/finance" element={<Finance />} />
+                        <Route path="/finance/income" element={<Income />} />
+                        <Route path="/finance/expenses" element={<Expenses />} />
+                        <Route path="/finance/budgets" element={<Budgets />} />
+                        <Route path="/finance/accounts" element={<Accounts />} />
+                        <Route path="/finance/transactions" element={<Transactions />} />
+                        <Route path="/finance/planned-payments" element={<PlannedPayments />} />
+                        <Route path="/finance/savings" element={<Savings />} />
+                        <Route path="/finance/investments" element={<Investments />} />
+                        <Route path="/finance/debts" element={<Debts />} />
+
+
+
+                        {/* Books Section */}
+                        <Route path="/books" element={<Books />} />
+                        <Route path="/books/dashboard" element={<BooksDashboard />} />
+                        <Route path="/books/stock" element={<Stock />} />
+                        <Route path="/books/financial-plan" element={<FinancialPlan />} />
+                        <Route path="/books/plan/budget" element={<PlanBudget />} />
+                        <Route path="/books/plan/income" element={<PlanIncome />} />
+                        <Route path="/books/plan/expense" element={<PlanExpense />} />
+                        <Route path="/books/plan/calendar" element={<FinancialCalendar />} />
+                        <Route path="/books/plan/goals" element={<PlanGoals />} />
+                        <Route path="/books/plan/reminders" element={<PlanReminders />} />
+                        <Route path="/books/plan/analysis" element={<PlanAnalysis />} />
+                        <Route path="/books/people" element={<People />} />
+                        <Route path="/books/people/overview" element={<PeopleOverview />} />
+                        <Route path="/books/people/transactions" element={<PeopleTransactions />} />
+                        <Route path="/books/people/reminders" element={<PeopleReminders />} />
+                        <Route path="/books/people/records" element={<PeopleRecords />} />
+                        <Route path="/books/contacts" element={<FinancialContacts />} />
+                        <Route path="/books/segregation" element={<Segregation />} />
+                        <Route path="/books/split-expense" element={<SplitExpense />} />
+                        <Route path="/books/settings" element={<Settings />} />
+                        <Route path="/books/faq" element={<FAQ />} />
+
+                        {/* Public Section */}
+                        <Route path="/public" element={<Public />} />
+                      </Routes>
+                    </Suspense>
+                  </MainLayout>
+                </ErrorBoundary>
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </QueryClientProvider >
   );
 }
 
 export default App;
+
+

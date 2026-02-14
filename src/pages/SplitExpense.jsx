@@ -2,449 +2,547 @@ import React, { useState } from 'react';
 import {
     Plus,
     Search,
-    Users,
-    Receipt,
+    TrendingUp,
+    TrendingDown,
     ArrowUpRight,
     ArrowDownLeft,
-    ScanLine,
-    MoreVertical,
-    Wallet
+    MonitorPlay,
+    Music,
+    MoreVertical
 } from 'lucide-react';
-import '../App.css';
+
 
 const SplitExpense = () => {
-    // Mock Data
-    const [friends] = useState([
-        { id: 1, name: 'Alice', bg: '#E0F2FE', color: '#0284C7', initial: 'A' },
-        { id: 2, name: 'Bob', bg: '#FCE7F3', color: '#DB2777', initial: 'B' },
-        { id: 3, name: 'Charlie', bg: '#DCFCE7', color: '#16A34A', initial: 'C' },
-        { id: 4, name: 'David', bg: '#FEF9C3', color: '#CA8A04', initial: 'D' },
-        { id: 5, name: 'Trip Group', bg: '#F3F4F6', color: '#4B5563', initial: 'TG', isGroup: true },
-    ]);
+    const [activeTab, setActiveTab] = useState('ALL FRIENDS');
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const [activities] = useState([
-        { id: 1, title: 'Dinner at Italian Place', date: 'Today, 8:30 PM', amount: 1200, type: 'lent', with: 'Alice' },
-        { id: 2, title: 'Movie Tickets', date: 'Yesterday', amount: 300, type: 'borrowed', with: 'Bob' },
-        { id: 3, title: 'Groceries', date: 'Oct 24', amount: 450, type: 'lent', with: 'Charlie' },
-        { id: 4, title: 'Uber Ride', date: 'Oct 20', amount: 150, type: 'borrowed', with: 'David' },
-    ]);
+    const people = [
+        { id: 1, name: 'Sarah Jenks', status: 'owes_you', amount: 240.00, avatar: 'SJ', avatarColor: '#D1FAE5', textColor: '#065F46' },
+        { id: 2, name: 'Michael Chen', status: 'you_owe', amount: 85.25, avatar: 'MC', avatarColor: '#FFE4E6', textColor: '#9F1239' },
+    ];
+
+    const subscriptions = [
+        { id: 1, name: 'Netflix Family', cost: 4.50, detail: 'Split with 4 friends', icon: MonitorPlay, color: '#DC2626' },
+        { id: 2, name: 'Spotify Premium', cost: 3.33, detail: 'Split with 3 friends', icon: Music, color: '#10B981' },
+    ];
 
     return (
         <div className="split-page">
-            {/* Header Section */}
-            <div className="split-header">
-                <div className="header-top">
-                    <div>
-                        <h1 className="header-title">Split Expense</h1>
-                        <p className="header-subtitle">Simplify your shared spending</p>
-                    </div>
-                    <button className="icon-btn-ghost">
-                        <MoreVertical size={20} />
-                    </button>
+            {/* Header */}
+            <div className="split-header-row">
+                <div>
+
+                    <p className="page-subtitle">Manage your shared expenses and friend balances</p>
                 </div>
-
-                {/* Hero Balance Card */}
-                <div className="balance-hero">
-                    <div className="balance-info">
-                        <span className="balance-label">Overall, you are owed</span>
-                        <h2 className="balance-amount">₹1,350.00</h2>
-                    </div>
-                    <div className="balance-chart">
-                        {/* Abstract Visual for Balance */}
-                        <div className="pie-mini"></div>
-                    </div>
-                </div>
-
-                {/* Quick Actions */}
-                <div className="quick-actions">
-                    <button className="action-pill">
-                        <ScanLine size={18} />
-                        <span>Scan Receipt</span>
-                    </button>
-                    <button className="action-pill">
-                        <Users size={18} />
-                        <span>Create Group</span>
-                    </button>
-                </div>
-            </div>
-
-            {/* Main Content Body */}
-            <div className="split-body">
-
-                {/* Search Bar */}
-                <div className="search-section">
-                    <div className="search-bar">
-                        <Search size={18} className="search-icon" />
-                        <input type="text" placeholder="Pay friends or groups" className="search-input" />
-                    </div>
-                </div>
-
-                {/* People & Groups (Horizontal Scroll) */}
-                <div className="section-label">Recents</div>
-                <div className="people-scroll">
-                    <div className="person-item add-new">
-                        <div className="avatar-circle add">
-                            <Plus size={24} />
-                        </div>
-                        <span className="person-name">New</span>
-                    </div>
-                    {friends.map(friend => (
-                        <div key={friend.id} className="person-item">
-                            <div
-                                className="avatar-circle"
-                                style={{ backgroundColor: friend.bg, color: friend.color }}
-                            >
-                                {friend.initial}
-                            </div>
-                            <span className="person-name">{friend.name}</span>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Recent Activity List */}
-                <div className="section-label mt-6">Recent Activity</div>
-                <div className="activity-list">
-                    {activities.map(item => (
-                        <div key={item.id} className="activity-card">
-                            <div className={`activity-icon-box ${item.type}`}>
-                                {item.type === 'lent' ? <Receipt size={20} /> : <Wallet size={20} />}
-                            </div>
-                            <div className="activity-details">
-                                <h4 className="activity-title">{item.title}</h4>
-                                <p className="activity-meta">
-                                    <span className="meta-with">{item.with}</span> • {item.date}
-                                </p>
-                            </div>
-                            <div className="activity-amount-box">
-                                <span className={`amount-text ${item.type}`}>
-                                    {item.type === 'lent' ? '+' : '-'}₹{item.amount}
-                                </span>
-                                <span className="status-text">
-                                    {item.type === 'lent' ? 'you lent' : 'you borrowed'}
-                                </span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Floating Action Button */}
-                <button className="fab-main">
-                    <Plus size={24} />
-                    <span className="fab-text">Split Bill</span>
+                <button className="btn-new-split">
+                    <Plus size={18} />
+                    <span>New Split</span>
                 </button>
             </div>
 
+            {/* Top Stats Cards */}
+            <div className="stats-row">
+                {/* People Owe You */}
+                <div className="stat-card">
+                    <div className="stat-label-row text-green">
+                        <ArrowDownLeft size={18} />
+                        <span>PEOPLE OWE YOU</span>
+                    </div>
+                    <div className="stat-value">$1,240.50</div>
+                    <div className="stat-trend text-green">
+                        <TrendingUp size={16} />
+                        <span>+12.5% this month</span>
+                    </div>
+                </div>
+
+                {/* You Owe */}
+                <div className="stat-card">
+                    <div className="stat-label-row text-orange">
+                        <ArrowUpRight size={18} />
+                        <span>YOU OWE</span>
+                    </div>
+                    <div className="stat-value">$450.25</div>
+                    <div className="stat-trend text-orange">
+                        <TrendingDown size={16} />
+                        <span>-5.2% this month</span>
+                    </div>
+                </div>
+
+                {/* Ratio Card */}
+                <div className="stat-card">
+                    <div className="flex justify-between items-center mb-2">
+                        <span className="text-sm font-semibold text-slate-700">Owed vs Owing Ratio</span>
+                        <span className="text-sm font-bold text-blue-600">73%</span>
+                    </div>
+                    <div className="progress-bar-bg">
+                        <div className="progress-bar-fill" style={{ width: '73%' }}></div>
+                    </div>
+                    <div className="text-xs text-slate-500 mt-3 font-medium tracking-wide uppercase">
+                        $1,690.75 Total Volume
+                    </div>
+                </div>
+            </div>
+
+            {/* Tabs & Search */}
+            <div className="controls-row">
+                <div className="tabs-group">
+                    {['ALL FRIENDS', 'OWED TO YOU', 'YOU OWE'].map(tab => (
+                        <button
+                            key={tab}
+                            className={`tab-btn ${activeTab === tab ? 'active' : ''}`}
+                            onClick={() => setActiveTab(tab)}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+                <div className="search-wrapper">
+                    <Search size={18} className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Find a friend..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+            </div>
+
+            {/* Main Grid */}
+            <div className="main-grid">
+                {/* Subscription Card */}
+                <div className="subscription-card">
+                    <div className="sub-header">
+                        <div>
+                            <h3 className="sub-title">Shared Subscriptions</h3>
+                            <p className="sub-subtitle">MONTHLY RECURRING</p>
+                        </div>
+                        <div className="sub-icon-badge">
+                            <MonitorPlay size={16} color="white" />
+                        </div>
+                    </div>
+
+                    <div className="sub-list">
+                        {subscriptions.map(sub => (
+                            <div key={sub.id} className="sub-item">
+                                <div className="sub-item-icon" style={{ backgroundColor: sub.color }}>
+                                    {sub.name.charAt(0)}
+                                </div>
+                                <div className="sub-item-details">
+                                    <div className="sub-name">{sub.name}</div>
+                                    <div className="sub-detail">{sub.detail}</div>
+                                </div>
+                                <div className="sub-cost text-white font-bold">${sub.cost.toFixed(2)}</div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <button className="btn-manage-subs">
+                        Manage Subscriptions
+                    </button>
+                </div>
+
+                {/* Friend Cards */}
+                {people.map(person => (
+                    <div key={person.id} className="friend-card">
+                        <div className="friend-header">
+                            <div className="friend-avatar">
+                                <img
+                                    src={`https://api.dicebear.com/7.x/notionists/svg?seed=${person.name}`}
+                                    alt={person.name}
+                                />
+                            </div>
+                            <div className="friend-info">
+                                <div className="friend-name">{person.name}</div>
+                                <div className={`status-badge ${person.status}`}>
+                                    {person.status.replace('_', ' ')}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="friend-balance-area">
+                            <span className="balance-label">Net Balance</span>
+                            <div className={`balance-amount ${person.status === 'settled' ? 'text-slate-400' : (person.status === 'owes_you' ? 'text-green' : 'text-orange')}`}>
+                                ${person.amount.toFixed(2)}
+                            </div>
+                        </div>
+
+                        <div className="friend-actions">
+                            {person.status === 'owes_you' && (
+                                <button className="btn-action primary-light">Remind</button>
+                            )}
+                            {person.status === 'you_owe' && (
+                                <button className="btn-action primary">Settle</button>
+                            )}
+                            {person.status === 'settled' && (
+                                <button className="btn-action outline">View History</button>
+                            )}
+                            {person.status !== 'settled' && (
+                                <button className="btn-action outline">Details</button>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             <style>{`
+                /* Colors */
+                :root {
+                    --primary: #195BAC;
+                    --primary-hover: #154a8f;
+                    --bg-color: #E9F4FF;
+                    --text-dark: #0F172A;
+                    --text-slate: #64748B;
+                    --green: #10B981;
+                    --orange: #F97316;
+                    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+                }
+
                 .split-page {
-                    background-color: #F8FAFC; /* Consistent very light grey bg */
+                    background-color: var(--bg-color);
                     min-height: 100vh;
-                    position: relative;
-                    padding-bottom: 80px; /* Space for FAB */
+                    padding: 2rem 3rem;
                     font-family: 'Inter', sans-serif;
                 }
 
-                /* Header Styling */
-                .split-header {
-                    background: white;
-                    padding: 24px;
-                    border-bottom: 1px solid #F1F5F9;
+                /* Header */
+                .split-header-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 2rem;
                 }
 
-                .header-top {
+                .page-title {
+                    font-size: 2rem;
+                    font-weight: 800;
+                    color: var(--text-dark);
+                    margin: 0;
+                    letter-spacing: -0.03em;
+                }
+
+                .page-subtitle {
+                    color: var(--text-slate);
+                    font-size: 0.95rem;
+                    margin-top: 0.25rem;
+                }
+
+                .btn-new-split {
+                    background-color: var(--primary);
+                    color: white;
+                    border: none;
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 99px;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                    box-shadow: 0 4px 12px rgba(25, 91, 172, 0.25);
+                }
+                .btn-new-split:hover {
+                    background-color: var(--primary-hover);
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 16px rgba(25, 91, 172, 0.35);
+                }
+
+                /* Stats Row */
+                .stats-row {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1.5rem;
+                    margin-bottom: 2.5rem;
+                }
+
+                .stat-card {
+                    background: white;
+                    border-radius: 1.25rem;
+                    padding: 1.5rem;
+                    box-shadow: var(--card-shadow);
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    min-height: 140px; /* Golden-ish ratio landscape */
+                }
+
+                .stat-label-row {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 0.5rem;
+                    text-transform: uppercase;
+                }
+
+                .stat-value {
+                    font-size: 2rem;
+                    font-weight: 800;
+                    color: var(--text-dark);
+                    margin-bottom: 0.5rem;
+                }
+
+                .stat-trend {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.25rem;
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                }
+
+                .text-green { color: var(--green); }
+                .text-orange { color: var(--orange); }
+
+                .progress-bar-bg {
+                    width: 100%;
+                    height: 8px;
+                    background: #F1F5F9;
+                    border-radius: 4px;
+                    overflow: hidden;
+                }
+                .progress-bar-fill {
+                    height: 100%;
+                    background: var(--primary);
+                    border-radius: 4px;
+                }
+
+                /* Controls */
+                .controls-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 2rem;
+                    border-bottom: 1px solid rgba(0,0,0,0.05);
+                    padding-bottom: 1rem;
+                }
+
+                .tabs-group {
+                    display: flex;
+                    gap: 2rem;
+                }
+
+                .tab-btn {
+                    background: none;
+                    border: none;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    color: var(--text-slate);
+                    cursor: pointer;
+                    padding-bottom: 0.5rem;
+                    position: relative;
+                }
+                .tab-btn.active {
+                    color: var(--primary);
+                }
+                .tab-btn.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -1rem; /* Align with container border-bottom */
+                    left: 0;
+                    width: 100%;
+                    height: 3px;
+                    background: var(--primary);
+                    border-radius: 3px 3px 0 0;
+                }
+
+                .search-wrapper {
+                    background: white;
+                    border-radius: 99px;
+                    padding: 0.6rem 1.25rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    border: 1px solid white;
+                    transition: all 0.2s;
+                    width: 300px;
+                }
+                .search-wrapper:focus-within {
+                    border-color: #BFDBFE;
+                    box-shadow: 0 0 0 3px rgba(191, 219, 254, 0.5);
+                }
+                .search-icon { color: #94A3B8; }
+                .search-wrapper input {
+                    border: none;
+                    outline: none;
+                    font-size: 0.9rem;
+                    color: var(--text-dark);
+                    width: 100%;
+                }
+
+                /* Grid */
+                .main-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+                    gap: 1.5rem;
+                }
+
+                /* Subscription Card */
+                .subscription-card {
+                    background: var(--primary);
+                    border-radius: 1.5rem; /* Rounder corners */
+                    padding: 1.5rem;
+                    color: white;
+                    box-shadow: 0 10px 25px -5px rgba(25, 91, 172, 0.4);
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .sub-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-start;
-                    margin-bottom: 24px;
+                    margin-bottom: 1.5rem;
                 }
+                .sub-title { font-size: 1.1rem; font-weight: 700; margin: 0; }
+                .sub-subtitle { font-size: 0.7rem; opacity: 0.8; font-weight: 600; margin-top: 0.25rem; letter-spacing: 0.05em; }
 
-                .header-title {
-                    font-size: 24px;
-                    font-weight: 700;
-                    color: #1E293B;
-                    margin: 0;
-                }
-
-                .header-subtitle {
-                    color: #64748B;
-                    font-size: 14px;
-                    margin-top: 4px;
-                }
-
-                .icon-btn-ghost {
-                    background: transparent;
-                    border: none;
-                    color: #64748B;
-                    cursor: pointer;
-                    padding: 8px;
-                    border-radius: 50%;
-                }
-                .icon-btn-ghost:hover {
-                    background-color: #F1F5F9;
-                }
-
-                /* Hero Balance Card */
-                .balance-hero {
-                    background: linear-gradient(135deg, #195BAC 0%, #3B82F6 100%);
-                    color: white;
-                    padding: 24px;
-                    border-radius: 16px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 24px;
-                    box-shadow: 0 10px 25px -5px rgba(25, 91, 172, 0.25);
-                }
-
-                .balance-label {
-                    font-size: 13px;
-                    opacity: 0.9;
-                    font-weight: 500;
-                    display: block;
-                    margin-bottom: 8px;
-                }
-
-                .balance-amount {
-                    font-size: 32px;
-                    font-weight: 700;
-                    margin: 0;
-                    letter-spacing: -0.5px;
-                }
-
-                .pie-mini {
-                    width: 48px;
-                    height: 48px;
-                    border-radius: 50%;
-                    background: conic-gradient(rgba(255,255,255,0.2) 0% 70%, transparent 70% 100%);
-                    border: 4px solid rgba(255,255,255,0.3);
-                }
-
-                /* Quick Actions */
-                .quick-actions {
-                    display: flex;
-                    gap: 12px;
-                }
-
-                .action-pill {
-                    flex: 1;
+                .sub-icon-badge {
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(255,255,255,0.2);
+                    border-radius: 8px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 8px;
-                    background: white;
-                    border: 1px solid #E2E8F0;
-                    padding: 10px;
-                    border-radius: 99px;
-                    font-size: 14px;
-                    font-weight: 600;
-                    color: #334155;
-                    cursor: pointer;
-                    transition: all 0.2s;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
                 }
 
-                .action-pill:hover {
-                    background: #F8FAFC;
-                    border-color: #CBD5E1;
+                .sub-list {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    margin-bottom: 1.5rem;
                 }
 
-                /* Body Content */
-                .split-body {
-                    padding: 24px;
-                }
-
-                /* Search */
-                .search-section {
-                    margin-bottom: 24px;
-                }
-
-                .search-bar {
-                    background: white;
-                    border: 1px solid #E2E8F0;
+                .sub-item {
+                    background: rgba(255,255,255,0.1);
                     border-radius: 12px;
+                    padding: 0.75rem;
                     display: flex;
                     align-items: center;
-                    padding: 12px 16px;
-                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                    gap: 0.75rem;
                 }
 
-                .search-icon {
-                    color: #94A3B8;
-                    margin-right: 12px;
-                }
-
-                .search-input {
-                    border: none;
-                    background: transparent;
-                    flex: 1;
-                    font-size: 15px;
-                    color: #1E293B;
-                    outline: none;
-                }
-
-                .section-label {
-                    font-size: 13px;
-                    font-weight: 600;
-                    color: #64748B;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                    margin-bottom: 16px;
-                }
-                .mt-6 { margin-top: 24px; }
-
-                /* People Scroll */
-                .people-scroll {
+                .sub-item-icon {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
                     display: flex;
-                    gap: 20px;
-                    overflow-x: auto;
-                    padding-bottom: 8px;
-                    scrollbar-width: none; /* Hide scrollbar Firefox */
-                }
-                .people-scroll::-webkit-scrollbar {
-                    display: none; /* Hide scrollbar Chrome */
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    color: white;
+                    font-size: 0.85rem;
                 }
 
-                .person-item {
+                .sub-item-details { flex: 1; }
+                .sub-name { font-size: 0.85rem; font-weight: 600; }
+                .sub-detail { font-size: 0.7rem; opacity: 0.7; }
+
+                .btn-manage-subs {
+                    background: white;
+                    color: var(--primary);
+                    border: none;
+                    width: 100%;
+                    padding: 0.75rem;
+                    border-radius: 99px;
+                    font-weight: 700;
+                    font-size: 0.85rem;
+                    cursor: pointer;
+                    transition: transform 0.2s;
+                }
+                .btn-manage-subs:hover { transform: translateY(-1px); }
+
+                /* Friend Card */
+                .friend-card {
+                    background: white;
+                    border-radius: 1.5rem;
+                    padding: 1.5rem;
+                    box-shadow: var(--card-shadow);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center; /* Center content like image */
+                    text-align: center;
+                    transition: transform 0.2s;
+                }
+                .friend-card:hover { transform: translateY(-3px); }
+
+                .friend-header {
+                    margin-bottom: 1rem;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
-                    gap: 8px;
-                    cursor: pointer;
-                    min-width: 64px;
+                    gap: 0.75rem;
                 }
 
-                .avatar-circle {
-                    width: 56px;
-                    height: 56px;
+                .friend-avatar {
+                    width: 64px;
+                    height: 64px;
                     border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 20px;
+                    overflow: hidden;
+                    background: #f1f5f9;
+                }
+                .friend-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+                .friend-name { font-weight: 700; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.25rem; }
+                
+                .status-badge {
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 6px;
+                    font-size: 0.65rem;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                .status-badge.owes_you { background: #DCFCE7; color: #166534; }
+                .status-badge.you_owe { background: #FFEDD5; color: #C2410C; }
+                .status-badge.settled { background: #F1F5F9; color: #64748B; }
+
+                .friend-balance-area {
+                    margin-bottom: 1.5rem;
+                }
+                .balance-label { font-size: 0.8rem; color: var(--text-slate); }
+                .balance-amount { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; }
+
+                .friend-actions {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 0.75rem;
+                    width: 100%;
+                    margin-top: auto;
+                }
+
+                .btn-action {
+                    padding: 0.6rem;
+                    font-size: 0.85rem;
+                    border-radius: 99px;
                     font-weight: 600;
-                    transition: transform 0.2s;
-                    border: 2px solid transparent;
-                }
-
-                .person-item:hover .avatar-circle {
-                    transform: scale(1.05);
-                }
-
-                .avatar-circle.add {
-                    background: white;
-                    border: 2px dashed #CBD5E1;
-                    color: #64748B;
-                }
-
-                .person-name {
-                    font-size: 12px;
-                    font-weight: 500;
-                    color: #475569;
-                    text-align: center;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 100%;
-                }
-
-                /* Activity List */
-                .activity-list {
-                    background: white;
-                    border-radius: 16px;
-                    border: 1px solid #F1F5F9;
-                    overflow: hidden;
-                }
-
-                .activity-card {
-                    display: flex;
-                    align-items: center;
-                    padding: 16px;
-                    border-bottom: 1px solid #F1F5F9;
-                    transition: background 0.2s;
                     cursor: pointer;
+                    border: 1px solid transparent;
+                    transition: all 0.2s;
                 }
-
-                .activity-card:last-child {
-                    border-bottom: none;
-                }
-
-                .activity-card:hover {
-                    background: #F8FAFC;
-                }
-
-                .activity-icon-box {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    margin-right: 16px;
-                }
-                .activity-icon-box.lent { background: #DCFCE7; color: #15803D; }
-                .activity-icon-box.borrowed { background: #FEE2E2; color: #B91C1C; }
-
-                .activity-details {
-                    flex: 1;
-                }
-
-                .activity-title {
-                    font-size: 15px;
-                    font-weight: 600;
-                    color: #1E293B;
-                    margin: 0 0 4px 0;
-                }
-
-                .activity-meta {
-                    font-size: 12px;
-                    color: #64748B;
-                    margin: 0;
-                }
-                .meta-with { font-weight: 500; color: #334155; }
-
-                .activity-amount-box {
-                    text-align: right;
-                }
-
-                .amount-text {
-                    font-size: 15px;
-                    font-weight: 700;
-                    display: block;
-                    margin-bottom: 2px;
-                }
-                .amount-text.lent { color: #15803D; }
-                .amount-text.borrowed { color: #B91C1C; }
-
-                .status-text {
-                    font-size: 11px;
-                    color: #94A3B8;
-                    font-weight: 500;
-                }
-
-                /* FAB */
-                .fab-main {
-                    position: fixed;
-                    bottom: 32px;
-                    right: 32px;
-                    background: #195BAC;
+                .btn-action.primary {
+                    background: var(--primary);
                     color: white;
-                    border: none;
-                    height: 56px;
-                    padding: 0 24px;
-                    border-radius: 28px;
-                    display: flex;
-                    align-items: center;
-                    gap: 12px;
-                    font-weight: 600;
-                    font-size: 16px;
-                    box-shadow: 0 4px 12px rgba(25, 91, 172, 0.4);
-                    cursor: pointer;
-                    transition: transform 0.2s, box-shadow 0.2s;
-                    z-index: 100;
                 }
+                .btn-action.primary-light {
+                    background: #DBEAFE;
+                    color: var(--primary);
+                }
+                .btn-action.primary-light:hover { background: #BFDBFE; }
 
-                .fab-main:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 16px rgba(25, 91, 172, 0.5);
+                .btn-action.outline {
+                    background: white;
+                    border: 1px solid #E2E8F0;
+                    color: var(--text-dark);
+                }
+                .btn-action.outline:hover { background: #F8FAFC; border-color: #CBD5E1; }
+
+                @media (max-width: 1024px) {
+                   .stats-row { grid-template-columns: 1fr; }
+                   .main-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
                 }
             `}</style>
         </div>

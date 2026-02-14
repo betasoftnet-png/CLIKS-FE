@@ -23,7 +23,9 @@ import {
     Trophy,
     MapPin,
     Video,
-    Sparkles
+    Sparkles,
+    Plus,
+    Globe
 } from 'lucide-react';
 import '../App.css';
 
@@ -33,364 +35,117 @@ export default function Public() {
 
     // News Feed Component
     const NewsFeed = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-            {/* Header */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <div>
-                    <h1 style={{ fontSize: '2rem', fontWeight: '800', color: '#111827', marginBottom: '0.5rem' }}>
-                        Social & Public
-                    </h1>
-                    <p style={{ color: '#6B7280', fontSize: '1rem' }}>
-                        Stay updated with the latest financial news and trends
-                    </p>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ position: 'relative' }}>
-                        <Search style={{
-                            position: 'absolute',
-                            left: '12px',
-                            top: '50%',
-                            transform: 'translateY(-50%)',
-                            width: '20px',
-                            height: '20px',
-                            color: '#9CA3AF'
-                        }} />
-                        <input
-                            type="text"
-                            placeholder="Search news..."
-                            style={{
-                                paddingLeft: '2.75rem',
-                                paddingRight: '1rem',
-                                paddingTop: '0.625rem',
-                                paddingBottom: '0.625rem',
-                                border: '1px solid #E5E7EB',
-                                borderRadius: '10px',
-                                fontSize: '0.95rem',
-                                outline: 'none',
-                                width: '280px',
-                                transition: 'all 0.2s'
-                            }}
-                            onFocus={(e) => {
-                                e.currentTarget.style.borderColor = '#195BAC';
-                                e.currentTarget.style.boxShadow = '0 0 0 3px rgba(25, 91, 172, 0.1)';
-                            }}
-                            onBlur={(e) => {
-                                e.currentTarget.style.borderColor = '#E5E7EB';
-                                e.currentTarget.style.boxShadow = 'none';
-                            }}
-                        />
+        <section className="social-feed-section">
+            <div className="social-container">
+                {/* Left Column: Exclusives */}
+                <div className="social-col-left">
+                    <div className="flex flex-col gap-8 md:gap-12">
+                        <div className="exclusive-item">
+                            <h3>
+                                <span className="exclusive-dot"></span>
+                                <span className="exclusive-label">Exclusive</span>
+                            </h3>
+                            <a rel="noopener noreferrer" href="#" className="exclusive-link">Global markets rally as inflation data shows unexpected cooling.</a>
+                            <p className="meta-text">47 minutes ago by
+                                <a rel="noopener noreferrer" href="#" className="author-link">Sarah Jennings</a>
+                            </p>
+                        </div>
+                        <div className="exclusive-item">
+                            <h3>
+                                <span className="exclusive-dot"></span>
+                                <span className="exclusive-label">Exclusive</span>
+                            </h3>
+                            <a rel="noopener noreferrer" href="#" className="exclusive-link">New banking regulations set to reshape the fintech landscape in 2026.</a>
+                            <p className="meta-text">2 hours ago by
+                                <a rel="noopener noreferrer" href="#" className="author-link">Michael Chen</a>
+                            </p>
+                        </div>
+                        <div className="exclusive-item">
+                            <h3>
+                                <span className="exclusive-dot"></span>
+                                <span className="exclusive-label">Exclusive</span>
+                            </h3>
+                            <a rel="noopener noreferrer" href="#" className="exclusive-link">Cryptocurrency volatility continues to spark debate among EU regulators.</a>
+                            <p className="meta-text">4 hours ago by
+                                <a rel="noopener noreferrer" href="#" className="author-link">Elena Ross</a>
+                            </p>
+                        </div>
                     </div>
-                    <button style={{
-                        padding: '0.625rem',
-                        border: '1px solid #E5E7EB',
-                        borderRadius: '10px',
-                        background: 'white',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.background = '#F9FAFB';
-                            e.currentTarget.style.borderColor = '#195BAC';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.background = 'white';
-                            e.currentTarget.style.borderColor = '#E5E7EB';
-                        }}
-                    >
-                        <Filter style={{ width: '20px', height: '20px', color: '#6B7280' }} />
-                    </button>
+                    <div className="see-more-container">
+                        <div className="progress-bar">
+                            <div className="progress-fill"></div>
+                        </div>
+                        <a rel="noopener noreferrer" href="#" className="see-more-link">
+                            <span className="exclusive-label">See more exclusives</span>
+                            <svg viewBox="0 0 24 24" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" className="see-more-icon">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            {/* Trending Topics */}
-            <div style={{
-                background: 'linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%)',
-                borderRadius: '16px',
-                padding: '1.75rem',
-                border: '1px solid #BAE6FD',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
-            }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
-                    <div style={{
-                        width: '40px',
-                        height: '40px',
-                        borderRadius: '12px',
-                        background: 'linear-gradient(135deg, #195BAC 0%, #1E40AF 100%)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 4px 6px rgba(25, 91, 172, 0.2)'
-                    }}>
-                        <Sparkles style={{ width: '22px', height: '22px', color: 'white' }} />
-                    </div>
-                    <h2 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0C4A6E' }}>
-                        Trending Today
-                    </h2>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-                    {['Bitcoin Rally', 'Stock Market Update', 'Crypto News', 'Tech Stocks', 'Fed Meeting'].map((tag) => (
-                        <span
-                            key={tag}
-                            style={{
-                                padding: '0.625rem 1.25rem',
-                                background: 'white',
-                                borderRadius: '9999px',
-                                fontSize: '0.9rem',
-                                color: '#1F2937',
-                                fontWeight: '600',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s',
-                                border: '1px solid #E0F2FE',
-                                boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = '#195BAC';
-                                e.currentTarget.style.color = 'white';
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'white';
-                                e.currentTarget.style.color = '#1F2937';
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
-                            }}
-                        >
-                            #{tag}
+                {/* Main Column: Featured Image */}
+                <div className="social-col-main" style={{ backgroundImage: "url('https://source.unsplash.com/random/239x319')" }}>
+                    <span className="main-card-location">New York, USA</span>
+                    <a className="main-card-overlay">
+                        <span className="live-indicator">
+                            <span className="live-dot-container">
+                                <span className="live-ping"></span>
+                            </span>
+                            <span className="text-sm font-bold">Live</span>
                         </span>
-                    ))}
+                        <h1 rel="noopener noreferrer" href="#" className="main-title">Tech giants report record quarterly earnings, driving S&P 500 higher.</h1>
+                    </a>
                 </div>
-            </div>
 
-            {/* News Threads */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {[
-                    { author: 'Analyst', initial: 'A', time: '2 hours ago', category: 'Finance', title: 'Market Analysis: Tech Stocks Show Strong Performance in Q4', content: 'Technology stocks continued their upward trend as investors reacted positively to strong earnings and optimistic forward guidance. Analysts suggest the momentum may continue into the next quarter based on sector-wide indicators.', likes: 245, comments: 42, status: 'Trending', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', statusBg: '#ECFDF5', statusColor: '#059669', borderColor: '#DBEAFE' },
-                    { author: 'Crypto Expert', initial: 'C', time: '5 hours ago', category: 'Crypto', title: 'Bitcoin Reaches New Milestone Amid Institutional Interest', content: 'Bitcoin surged past key resistance levels as major institutional investors increased their positions. Market analysts point to growing mainstream adoption and regulatory clarity as key drivers of the recent rally.', likes: 189, comments: 67, status: 'Hot', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', statusBg: '#FEF2F2', statusColor: '#DC2626', borderColor: '#FED7AA' },
-                    { author: 'Investment Guru', initial: 'I', time: '1 day ago', category: 'Investment', title: 'Top 5 Mutual Funds for Long-Term Wealth Creation in 2026', content: 'Financial advisors share their picks for the best performing mutual funds this year. These funds have shown consistent returns and low expense ratios, making them ideal for long-term investors seeking steady growth.', likes: 412, comments: 89, status: 'Popular', gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)', statusBg: '#F3E8FF', statusColor: '#9333EA', borderColor: '#D1FAE5' }
-                ].map((item, idx) => (
-                    <div
-                        key={idx}
-                        style={{
-                            background: 'white',
-                            borderRadius: '16px',
-                            border: `2px solid ${item.borderColor}`,
-                            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                            padding: '1.5rem',
-                            transition: 'all 0.3s ease',
-                            cursor: 'pointer'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.15)';
-                            e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
-                            e.currentTarget.style.transform = 'translateY(0)';
-                        }}
-                    >
-                        <div style={{ display: 'flex', gap: '1.5rem' }}>
-                            {/* Left: Author / Meta */}
-                            <div style={{ width: '140px', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <div style={{
-                                        width: '48px',
-                                        height: '48px',
-                                        borderRadius: '50%',
-                                        background: item.gradient,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontWeight: '700',
-                                        fontSize: '1.25rem',
-                                        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
-                                    }}>
-                                        {item.initial}
-                                    </div>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                    <span style={{ fontWeight: '600', color: '#1F2937', fontSize: '0.95rem' }}>{item.author}</span>
-                                    <span style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{item.time}</span>
-                                </div>
-                                <span style={{
-                                    display: 'inline-flex',
-                                    alignItems: 'center',
-                                    fontSize: '0.75rem',
-                                    padding: '0.375rem 0.75rem',
-                                    background: '#DBEAFE',
-                                    color: '#1E40AF',
-                                    borderRadius: '9999px',
-                                    width: 'fit-content',
-                                    fontWeight: '600'
-                                }}>
-                                    {item.category}
-                                </span>
-                            </div>
-
-                            {/* Center: Content */}
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                                <h3 style={{
-                                    fontSize: '1.25rem',
-                                    fontWeight: '700',
-                                    color: '#111827',
-                                    marginBottom: '0.75rem',
-                                    lineHeight: '1.5',
-                                    transition: 'color 0.2s'
-                                }}
-                                    onMouseEnter={(e) => e.currentTarget.style.color = '#2563EB'}
-                                    onMouseLeave={(e) => e.currentTarget.style.color = '#111827'}
-                                >
-                                    {item.title}
-                                </h3>
-                                <p style={{
-                                    color: '#6B7280',
-                                    fontSize: '0.95rem',
-                                    lineHeight: '1.6',
-                                    marginBottom: '1rem',
-                                    display: '-webkit-box',
-                                    WebkitLineClamp: 3,
-                                    WebkitBoxOrient: 'vertical',
-                                    overflow: 'hidden'
-                                }}>
-                                    {item.content}
+                {/* Right Column: News List */}
+                <div className="social-col-right">
+                    <div className="tabs-header">
+                        <button type="button" className="tab-btn active">Latest</button>
+                        <button type="button" className="tab-btn">Popular</button>
+                    </div>
+                    <div className="news-list">
+                        <div className="news-item">
+                            <img alt="" className="news-thumb" src="https://source.unsplash.com/random/244x324" />
+                            <div className="news-content">
+                                <a rel="noopener noreferrer" href="#" className="news-title">Investment strategies for the post-pandemic economy.</a>
+                                <p className="news-item-meta">5 minutes ago
+                                    <a rel="noopener noreferrer" href="#" className="tag-link">Investing</a>
                                 </p>
-
-                                {/* Actions */}
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginTop: 'auto' }}>
-                                    <button style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#6B7280',
-                                        fontSize: '0.9rem',
-                                        cursor: 'pointer',
-                                        padding: '0.5rem',
-                                        borderRadius: '8px',
-                                        transition: 'all 0.2s'
-                                    }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#FEE2E2';
-                                            e.currentTarget.style.color = '#EF4444';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#6B7280';
-                                        }}
-                                    >
-                                        <Heart size={18} />
-                                        <span style={{ fontWeight: '600' }}>{item.likes}</span>
-                                    </button>
-                                    <button style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#6B7280',
-                                        fontSize: '0.9rem',
-                                        cursor: 'pointer',
-                                        padding: '0.5rem',
-                                        borderRadius: '8px',
-                                        transition: 'all 0.2s'
-                                    }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#DBEAFE';
-                                            e.currentTarget.style.color = '#2563EB';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#6B7280';
-                                        }}
-                                    >
-                                        <MessageCircle size={18} />
-                                        <span style={{ fontWeight: '600' }}>{item.comments}</span>
-                                    </button>
-                                    <button style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem',
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#6B7280',
-                                        fontSize: '0.9rem',
-                                        cursor: 'pointer',
-                                        padding: '0.5rem',
-                                        borderRadius: '8px',
-                                        transition: 'all 0.2s'
-                                    }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#D1FAE5';
-                                            e.currentTarget.style.color = '#059669';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#6B7280';
-                                        }}
-                                    >
-                                        <Share2 size={18} />
-                                        <span style={{ fontWeight: '600' }}>Share</span>
-                                    </button>
-                                    <button style={{
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: '#9CA3AF',
-                                        cursor: 'pointer',
-                                        padding: '0.5rem',
-                                        borderRadius: '8px',
-                                        transition: 'all 0.2s'
-                                    }}
-                                        onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#F3F4F6';
-                                            e.currentTarget.style.color = '#195BAC';
-                                        }}
-                                        onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#9CA3AF';
-                                        }}
-                                    >
-                                        <Bookmark size={18} />
-                                    </button>
-                                </div>
                             </div>
-
-                            {/* Right: Context / Status */}
-                            <div style={{ width: '160px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                                <span style={{
-                                    fontSize: '0.75rem',
-                                    padding: '0.5rem 1rem',
-                                    background: item.statusBg,
-                                    color: item.statusColor,
-                                    borderRadius: '9999px',
-                                    fontWeight: '700',
-                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-                                }}>
-                                    {item.status}
-                                </span>
-                                <div style={{ display: 'flex', marginLeft: '-0.5rem' }}>
-                                    {[1, 2, 3].map((u) => (
-                                        <div key={u} style={{
-                                            width: '36px',
-                                            height: '36px',
-                                            borderRadius: '50%',
-                                            background: 'linear-gradient(135deg, #E5E7EB 0%, #D1D5DB 100%)',
-                                            border: '3px solid white',
-                                            marginLeft: '-8px',
-                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                                        }} />
-                                    ))}
-                                </div>
+                        </div>
+                        <div className="news-item">
+                            <img alt="" className="news-thumb" src="https://source.unsplash.com/random/245x325" />
+                            <div className="news-content">
+                                <a rel="noopener noreferrer" href="#" className="news-title">Central banks signal potential rate cuts in the coming months.</a>
+                                <p className="news-item-meta">14 minutes ago
+                                    <a rel="noopener noreferrer" href="#" className="tag-link">Economy</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div className="news-item">
+                            <img alt="" className="news-thumb" src="https://source.unsplash.com/random/246x326" />
+                            <div className="news-content">
+                                <a rel="noopener noreferrer" href="#" className="news-title">Sustainable investing gains traction among millennial investors.</a>
+                                <p className="news-item-meta">22 minutes ago
+                                    <a rel="noopener noreferrer" href="#" className="tag-link">ESG</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div className="news-item">
+                            <img alt="" className="news-thumb" src="https://source.unsplash.com/random/247x327" />
+                            <div className="news-content">
+                                <a rel="noopener noreferrer" href="#" className="news-title">Understanding the impact of geopolitical shifts on currency markets.</a>
+                                <p className="news-item-meta">37 minutes ago
+                                    <a rel="noopener noreferrer" href="#" className="tag-link">Forex</a>
+                                </p>
                             </div>
                         </div>
                     </div>
-                ))}
+                </div>
             </div>
-        </div>
+        </section>
     );
 
     // Trading SIP Page
@@ -1190,46 +945,319 @@ export default function Public() {
     );
 
     // Meetup Page
-    const MeetupPage = () => (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-800">Meetups & Events</h1>
-                    <p className="text-gray-600 mt-1">Join finance meetups, workshops, and webinars</p>
-                </div>
-                <button className="px-6 py-3 rounded-lg text-white font-medium" style={{ backgroundColor: '#195BAC' }}>
-                    Create Event
-                </button>
-            </div>
+    const MeetupPage = () => {
+        const [filter, setFilter] = useState('All');
 
-            <div className="grid grid-cols-3 gap-6">
-                {[
-                    { title: 'Stock Market Basics', type: 'Offline', date: 'Mar 18, 2026' },
-                    { title: 'Crypto Trading Webinar', type: 'Online', date: 'Mar 22, 2026' },
-                    { title: 'Investment Planning Workshop', type: 'Offline', date: 'Mar 30, 2026' }
-                ].map((event) => (
-                    <div key={event.title} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-lg transition-shadow">
-                        <div className="flex items-center gap-2 mb-3">
-                            {event.type === 'Online' ? (
-                                <Video className="w-5 h-5 text-purple-600" />
-                            ) : (
-                                <MapPin className="w-5 h-5 text-blue-600" />
-                            )}
-                            <span className="text-sm text-gray-600">{event.type}</span>
+        const events = [
+            {
+                title: 'Stock Market Basics Masterclass',
+                type: 'Offline',
+                date: 'Mar 18, 2026',
+                time: '10:00 AM',
+                location: 'Downtown Conf. Center',
+                attendees: [1, 2, 3, 4],
+                gradient: 'linear-gradient(135deg, #FF9A9E 0%, #FECFEF 99%, #FECFEF 100%)',
+                icon: TrendingUp,
+                price: 'Free'
+            },
+            {
+                title: 'Crypto Trading Strategies Webinar',
+                type: 'Online',
+                date: 'Mar 22, 2026',
+                time: '06:00 PM',
+                location: 'Zoom Meeting',
+                attendees: [1, 2, 3, 4, 5, 6],
+                gradient: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
+                icon: Bitcoin,
+                price: '$29'
+            },
+            {
+                title: 'Investment Planning Workshop',
+                type: 'Offline',
+                date: 'Mar 30, 2026',
+                time: '02:00 PM',
+                location: 'Grand Hotel, NYC',
+                attendees: [1, 2, 3],
+                gradient: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+                icon: PiggyBank,
+                price: 'Free'
+            },
+            {
+                title: 'DeFi & Web3 Future Summit',
+                type: 'Online',
+                date: 'Apr 05, 2026',
+                time: '09:00 PM',
+                location: 'Live Stream',
+                attendees: [1, 2, 3, 4, 5],
+                gradient: 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
+                icon: Globe,
+                price: '$49'
+            },
+            {
+                title: 'Real Estate Investing 101',
+                type: 'Offline',
+                date: 'Apr 12, 2026',
+                time: '11:00 AM',
+                location: 'Community Hall',
+                attendees: [1, 2, 3, 4, 5, 6, 7],
+                gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                icon: MapPin,
+                price: 'Free'
+            }
+        ];
+
+        return (
+            <div className="space-y-8">
+                {/* Header Section */}
+                <div style={{
+                    background: 'linear-gradient(135deg, #1e3a8a 0%, #172554 100%)',
+                    borderRadius: '24px',
+                    padding: '3rem',
+                    color: 'white',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    boxShadow: '0 20px 25px -5px rgba(30, 58, 138, 0.25)'
+                }}>
+                    <div style={{ position: 'relative', zIndex: 10 }}>
+                        <div style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            padding: '0.5rem 1rem',
+                            background: 'rgba(255, 255, 255, 0.15)',
+                            borderRadius: '999px',
+                            backdropFilter: 'blur(10px)',
+                            marginBottom: '1rem',
+                            fontSize: '0.9rem',
+                            fontWeight: '500'
+                        }}>
+                            <Sparkles size={16} />
+                            <span>Community Events</span>
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{event.title}</h3>
-                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
-                            <Calendar className="w-4 h-4" />
-                            {event.date}
-                        </div>
-                        <button className="w-full py-2 rounded-lg border-2 border-blue-600 text-blue-600 font-medium hover:bg-blue-600 hover:text-white transition-colors">
-                            View Details
-                        </button>
+                        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', lineHeight: 1.2 }}>
+                            Connect, Learn & <br /> Grow Together
+                        </h1>
+                        <p style={{
+                            fontSize: '1.1rem',
+                            color: '#93c5fd',
+                            maxWidth: '480px',
+                            lineHeight: 1.6
+                        }}>
+                            Join our exclusive finance meetups, workshops, and webinars to level up your investing game.
+                        </p>
                     </div>
-                ))}
+
+                    {/* Decorative Circle */}
+                    <div style={{
+                        position: 'absolute',
+                        top: '-50%',
+                        right: '-10%',
+                        width: '500px',
+                        height: '500px',
+                        background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(30, 58, 138, 0) 70%)',
+                        borderRadius: '50%',
+                        pointerEvents: 'none'
+                    }} />
+
+                    <button className="transition" style={{
+                        position: 'relative',
+                        zIndex: 10,
+                        padding: '1rem 2rem',
+                        background: 'white',
+                        color: '#1e3a8a',
+                        border: 'none',
+                        borderRadius: '12px',
+                        fontWeight: '700',
+                        fontSize: '1rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                    }}>
+                        <Plus size={20} />
+                        Create Event
+                    </button>
+                </div>
+
+                {/* Filters */}
+                <div style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', overflowX: 'auto' }}>
+                    {['All Events', 'Upcoming', 'Workshops', 'Webinars', 'My Events'].map(tab => (
+                        <button
+                            key={tab}
+                            onClick={() => setFilter(tab)}
+                            className="transition"
+                            style={{
+                                padding: '0.75rem 1.5rem',
+                                borderRadius: '999px',
+                                border: filter === tab ? 'none' : '1px solid #E5E7EB',
+                                background: filter === tab ? '#195BAC' : 'white',
+                                color: filter === tab ? 'white' : '#6B7280',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                fontSize: '0.95rem'
+                            }}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Events Grid */}
+                <div className="grid grid-cols-3 gap-6">
+                    {events.map((event, idx) => (
+                        <div
+                            key={idx}
+                            className="transition"
+                            style={{
+                                background: 'white',
+                                borderRadius: '20px',
+                                border: '1px solid #F3F4F6',
+                                overflow: 'hidden',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-5px)';
+                                e.currentTarget.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
+                        >
+                            {/* Graphic Header */}
+                            <div style={{
+                                height: '140px',
+                                background: event.gradient,
+                                position: 'relative',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <div style={{
+                                    width: '64px',
+                                    height: '64px',
+                                    background: 'rgba(255,255,255,0.25)',
+                                    backdropFilter: 'blur(8px)',
+                                    borderRadius: '16px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    boxShadow: '0 8px 16px rgba(0,0,0,0.1)'
+                                }}>
+                                    <event.icon size={32} />
+                                </div>
+
+                                <span style={{
+                                    position: 'absolute',
+                                    top: '1rem',
+                                    right: '1rem',
+                                    padding: '0.25rem 0.75rem',
+                                    background: 'white',
+                                    color: '#1F2937',
+                                    borderRadius: '999px',
+                                    fontSize: '0.8rem',
+                                    fontWeight: '700',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                }}>
+                                    {event.price}
+                                </span>
+                            </div>
+
+                            {/* Content */}
+                            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                                    <span style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: '700',
+                                        color: event.type === 'Online' ? '#9333EA' : '#2563EB',
+                                        background: event.type === 'Online' ? '#F3E8FF' : '#DBEAFE',
+                                        padding: '0.25rem 0.75rem',
+                                        borderRadius: '6px'
+                                    }}>
+                                        {event.type}
+                                    </span>
+                                    <span style={{ fontSize: '0.85rem', color: '#6B7280', fontWeight: '500' }}>
+                                        {event.date}
+                                    </span>
+                                </div>
+
+                                <h3 style={{ fontSize: '1.15rem', fontWeight: '700', color: '#111827', marginBottom: '0.5rem', lineHeight: '1.4' }}>
+                                    {event.title}
+                                </h3>
+
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#6B7280', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+                                    <Clock size={16} />
+                                    <span>{event.time}</span>
+                                </div>
+
+                                {/* Footer: Attendees & Button */}
+                                <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', paddingLeft: '8px' }}>
+                                        {event.attendees.slice(0, 4).map((_, i) => (
+                                            <div key={i} style={{
+                                                width: '28px',
+                                                height: '28px',
+                                                borderRadius: '50%',
+                                                background: '#E5E7EB',
+                                                border: '2px solid white',
+                                                marginLeft: '-8px'
+                                            }} />
+                                        ))}
+                                        {event.attendees.length > 4 && (
+                                            <div style={{
+                                                width: '28px',
+                                                height: '28px',
+                                                borderRadius: '50%',
+                                                background: '#F3F4F6',
+                                                border: '2px solid white',
+                                                marginLeft: '-8px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '0.7rem',
+                                                color: '#6B7280',
+                                                fontWeight: '600'
+                                            }}>
+                                                +{event.attendees.length - 4}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <button className="transition" style={{
+                                        padding: '0.5rem 1.25rem',
+                                        border: '1px solid #195BAC',
+                                        borderRadius: '8px',
+                                        color: '#195BAC',
+                                        background: 'transparent',
+                                        fontWeight: '600',
+                                        cursor: 'pointer'
+                                    }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = '#195BAC';
+                                            e.currentTarget.style.color = 'white';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'transparent';
+                                            e.currentTarget.style.color = '#195BAC';
+                                        }}
+                                    >
+                                        Join
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-        </div>
-    );
+        );
+    };
 
     // Render the appropriate page based on page URL param
     const renderPage = () => {

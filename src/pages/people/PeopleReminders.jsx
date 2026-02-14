@@ -23,7 +23,7 @@ const PeopleReminders = () => {
             {/* Header */}
             <div className="page-header-container">
                 <div>
-                    <h1 className="page-title">Reminders</h1>
+
                     <p className="page-subtitle">Manage payments and follow-ups</p>
                 </div>
                 <div className="header-controls">

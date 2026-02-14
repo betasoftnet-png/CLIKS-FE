@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
+import AnalyticsSection from '../components/AnalyticsSection';
 
 const OverviewCard = ({ title, icon: Icon, color, path, stats, children }) => {
     const navigate = useNavigate();
@@ -75,10 +76,13 @@ const Books = () => {
     return (
         <>
             <div className="dashboard-header">
-                <h1 className="page-title">Books Overview</h1>
+
             </div>
 
             <div className="content-wrapper">
+                <div style={{ marginBottom: '24px' }}>
+                    <AnalyticsSection />
+                </div>
                 <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
 
                     {/* Stock Overview */}

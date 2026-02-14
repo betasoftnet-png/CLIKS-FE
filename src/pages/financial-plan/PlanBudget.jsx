@@ -30,7 +30,7 @@ const PlanBudget = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Budget Planning</h1>
+
                     <p className="text-muted text-sm mt-1">Allocate your monthly funds effectively</p>
                 </div>
                 <div className="flex gap-3">

@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Plus, Search, Filter, Package, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { Plus, Search, Filter, Package, ArrowUpRight, ArrowDownLeft, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+import { queryKeys } from '../lib/queryClient';
+import { fetchStockItemsMock, fetchStockStatsMock } from '../services/stockService';
+import { ErrorState, EmptyState } from '../components/common';
 import '../App.css';
+
+// ---------------------------------------------------------------------------
+// Sub-components
+// ---------------------------------------------------------------------------
 
 const StockItem = ({ name, category, quantity, unit, value, status }) => (
     <div className="stock-item-row">
@@ -24,18 +32,67 @@ const StockItem = ({ name, category, quantity, unit, value, status }) => (
     </div>
 );
 
+/**
+ * Loading state component for the stock list.
+ */
+const StockListLoading = () => (
+    <div className="stock-loading-state">
+        <Loader2 size={32} className="loading-spinner" />
+        <p>Loading stock items...</p>
+    </div>
+);
+
+// ---------------------------------------------------------------------------
+// Main Component
+// ---------------------------------------------------------------------------
+
 const Stock = () => {
-    const [items] = useState([
-        { id: 1, name: 'Office Paper A4', category: 'Stationery', quantity: 15, unit: 'Reams', value: '4,500', status: 'In Stock' },
-        { id: 2, name: 'Printer Ink (Black)', category: 'Stationery', quantity: 2, unit: 'Cartridges', value: '2,800', status: 'Low Stock' },
-        { id: 3, name: 'Laptops', category: 'Electronics', quantity: 5, unit: 'Units', value: '2,50,000', status: 'In Use' },
-        { id: 4, name: 'Coffee Beans', category: 'Pantry', quantity: 4, unit: 'kg', value: '3,200', status: 'In Stock' },
-    ]);
+    // Local state for search/filter (not server state)
+    const [searchQuery, setSearchQuery] = useState('');
+
+    // ---------------------------------------------------------------------------
+    // React Query: Fetch Stock Items
+    // ---------------------------------------------------------------------------
+    const {
+        data: items = [],
+        isLoading: isLoadingItems,
+        isError: isItemsError,
+        error: itemsError,
+        refetch: refetchItems,
+    } = useQuery({
+        queryKey: queryKeys.stock.list({ search: searchQuery }),
+        queryFn: () => fetchStockItemsMock({ search: searchQuery }),
+        // Keep previous data while fetching new data (smooth UX during search)
+        placeholderData: (previousData) => previousData,
+    });
+
+    // ---------------------------------------------------------------------------
+    // React Query: Fetch Stock Stats
+    // ---------------------------------------------------------------------------
+    const {
+        data: stats,
+        isLoading: isLoadingStats,
+    } = useQuery({
+        queryKey: queryKeys.stock.stats(),
+        queryFn: fetchStockStatsMock,
+    });
+
+    // ---------------------------------------------------------------------------
+    // Event Handlers
+    // ---------------------------------------------------------------------------
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    // ---------------------------------------------------------------------------
+    // Render
+    // ---------------------------------------------------------------------------
 
     return (
         <>
             <div className="dashboard-header">
-                <h1 className="page-title">Stock & Assets</h1>
+
                 <div className="header-actions">
                     <button className="btn-primary">
                         <Plus size={16} />
@@ -49,15 +106,21 @@ const Stock = () => {
                 <div className="stock-stats-grid">
                     <div className="stat-card">
                         <div className="stat-label">Total Value</div>
-                        <div className="stat-value">₹2,60,500</div>
+                        <div className="stat-value">
+                            {isLoadingStats ? '...' : `₹${stats?.totalValue || '0'}`}
+                        </div>
                     </div>
                     <div className="stat-card">
                         <div className="stat-label">Total Items</div>
-                        <div className="stat-value">26</div>
+                        <div className="stat-value">
+                            {isLoadingStats ? '...' : stats?.totalItems || 0}
+                        </div>
                     </div>
                     <div className="stat-card">
                         <div className="stat-label">Low Stock</div>
-                        <div className="stat-value warning">1</div>
+                        <div className="stat-value warning">
+                            {isLoadingStats ? '...' : stats?.lowStockCount || 0}
+                        </div>
                     </div>
                 </div>
 
@@ -65,7 +128,13 @@ const Stock = () => {
                 <div className="controls-bar">
                     <div className="search-wrapper">
                         <Search size={18} className="search-icon" />
-                        <input type="text" placeholder="Search assets..." className="search-input" />
+                        <input
+                            type="text"
+                            placeholder="Search assets..."
+                            className="search-input"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                        />
                     </div>
                     <div className="flex gap-2">
                         <button className="icon-btn" title="Filter"><Filter size={20} /></button>
@@ -81,6 +150,29 @@ const Stock = () => {
                         <div>Status</div>
                     </div>
                     <div className="stock-list-body">
+                        {/* Loading State */}
+                        {isLoadingItems && items.length === 0 && (
+                            <StockListLoading />
+                        )}
+
+                        {/* Error State */}
+                        {isItemsError && (
+                            <ErrorState
+                                title="Failed to load stock"
+                                message={itemsError?.message}
+                                onRetry={refetchItems}
+                            />
+                        )}
+
+                        {/* Empty State */}
+                        {!isLoadingItems && !isItemsError && items.length === 0 && (
+                            <EmptyState
+                                title="No stock items found"
+                                description="Try adjusting your search or filters."
+                            />
+                        )}
+
+                        {/* Data */}
                         {items.map(item => (
                             <StockItem key={item.id} {...item} />
                         ))}
@@ -184,6 +276,47 @@ const Stock = () => {
                 .status-in-stock { background: #DCFCE7; color: #166534; }
                 .status-low-stock { background: #FEF9C3; color: #854D0E; }
                 .status-in-use { background: #DBEAFE; color: #1E40AF; }
+
+                /* Loading State */
+                .stock-loading-state {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 3rem 1.5rem;
+                    color: var(--text-muted);
+                    text-align: center;
+                    gap: 1rem;
+                }
+
+                .loading-spinner {
+                    animation: spin 1s linear infinite;
+                    color: var(--primary);
+                }
+
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+
+                .btn-secondary {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    background: #F1F5F9;
+                    border: 1px solid var(--border-color);
+                    border-radius: 8px;
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: var(--text-main);
+                    cursor: pointer;
+                    transition: all 0.15s ease;
+                }
+                .btn-secondary:hover {
+                    background: #E2E8F0;
+                    border-color: #CBD5E1;
+                }
 
                 /* Mobile Responsiveness for Stock List */
                 @media (max-width: 768px) {

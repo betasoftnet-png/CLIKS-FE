@@ -50,7 +50,7 @@ const Budgets = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Budgets</h1>
+
                     <p className="text-muted text-sm mt-1">Plan and track your monthly spending limits</p>
                 </div>
                 <button className="btn-primary">

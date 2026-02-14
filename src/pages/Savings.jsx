@@ -46,7 +46,7 @@ const Savings = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Savings</h1>
+
                     <p className="text-muted text-sm mt-1">Track your financial goals and progress</p>
                 </div>
                 <button className="btn-primary">

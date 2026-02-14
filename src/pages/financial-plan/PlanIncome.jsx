@@ -23,7 +23,7 @@ const PlanIncome = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Income Planning</h1>
+
                     <p className="text-muted text-sm mt-1">Forecast expected earnings</p>
                 </div>
                 <button className="btn-primary">

@@ -5,7 +5,7 @@ import {
     AlertCircle,
     Calendar,
     TrendingDown,
-    DollarSign,
+    IndianRupee,
     Edit2,
     Trash2,
     Percent,
@@ -16,6 +16,7 @@ import {
     Car
 } from 'lucide-react';
 import '../App.css';
+import { formatCurrency } from '../lib/formatCurrency';
 
 const DebtStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="debt-stat-card">
@@ -34,10 +35,10 @@ const DebtStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 
 const Debts = () => {
     const [debts] = useState([
-        { id: 1, name: 'Student Loan', totalAmount: 25000, remaining: 18000, interestRate: 5.5, monthlyPayment: 350, dueDate: '2026-02-01', type: 'Loan', icon: GraduationCap },
-        { id: 2, name: 'Credit Card', totalAmount: 5000, remaining: 3200, interestRate: 18.9, monthlyPayment: 200, dueDate: '2026-01-25', type: 'Credit', icon: CreditCard },
-        { id: 3, name: 'Car Loan', totalAmount: 20000, remaining: 12000, interestRate: 4.2, monthlyPayment: 450, dueDate: '2026-01-28', type: 'Loan', icon: Car },
-        { id: 4, name: 'Personal Loan', totalAmount: 10000, remaining: 6500, interestRate: 7.8, monthlyPayment: 280, dueDate: '2026-02-05', type: 'Loan', icon: Landmark },
+        { id: 1, name: 'Student Loan', totalAmount: 250000, remaining: 180000, interestRate: 5.5, monthlyPayment: 3500, dueDate: '2026-02-01', type: 'Loan', icon: GraduationCap },
+        { id: 2, name: 'Credit Card', totalAmount: 50000, remaining: 32000, interestRate: 18.9, monthlyPayment: 2000, dueDate: '2026-01-25', type: 'Credit', icon: CreditCard },
+        { id: 3, name: 'Car Loan', totalAmount: 200000, remaining: 120000, interestRate: 4.2, monthlyPayment: 4500, dueDate: '2026-01-28', type: 'Loan', icon: Car },
+        { id: 4, name: 'Personal Loan', totalAmount: 100000, remaining: 65000, interestRate: 7.8, monthlyPayment: 2800, dueDate: '2026-02-05', type: 'Loan', icon: Landmark },
     ]);
 
     const totalDebt = debts.reduce((sum, d) => sum + d.remaining, 0);
@@ -49,7 +50,7 @@ const Debts = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Debts</h1>
+
                     <p className="text-muted text-sm mt-1">Manage liabilities and track payoff progress</p>
                 </div>
                 <button className="btn-primary">
@@ -63,14 +64,14 @@ const Debts = () => {
                 <div className="debt-stats-grid">
                     <DebtStat
                         label="Total Outstanding"
-                        value={`$${totalDebt.toLocaleString()}`}
+                        value={formatCurrency(totalDebt)}
                         subtext="Principal remaining"
                         icon={Banknote}
                         colorClass="icon-red"
                     />
                     <DebtStat
                         label="Monthly Liability"
-                        value={`$${totalMonthlyPayment.toLocaleString()}`}
+                        value={formatCurrency(totalMonthlyPayment)}
                         subtext="Required minimums"
                         icon={Calendar}
                         colorClass="icon-orange"
@@ -78,7 +79,7 @@ const Debts = () => {
                     <DebtStat
                         label="Debt Paid Off"
                         value={`${overallProgress.toFixed(1)}%`}
-                        subtext={`$${totalPaid.toLocaleString()} cleared`}
+                        subtext={`${formatCurrency(totalPaid)} cleared`}
                         icon={TrendingDown}
                         colorClass="icon-green"
                     />
@@ -105,8 +106,8 @@ const Debts = () => {
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="font-bold text-main">${debt.remaining.toLocaleString()}</div>
-                                                <div className="text-xs text-muted">of ${debt.totalAmount.toLocaleString()}</div>
+                                                <div className="font-bold text-main">{formatCurrency(debt.remaining)}</div>
+                                                <div className="text-xs text-muted">of {formatCurrency(debt.totalAmount)}</div>
                                             </div>
                                         </div>
 
@@ -119,7 +120,7 @@ const Debts = () => {
                                             </div>
                                             <div className="progress-labels">
                                                 <span>{progress.toFixed(0)}% Paid</span>
-                                                <span className="text-muted">${(debt.totalAmount - debt.remaining).toLocaleString()} paid</span>
+                                                <span className="text-muted">{formatCurrency(debt.totalAmount - debt.remaining)} paid</span>
                                             </div>
                                         </div>
 
@@ -129,7 +130,7 @@ const Debts = () => {
                                                     <Calendar size={14} /> Due {new Date(debt.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                                                 </div>
                                                 <div className="flex items-center gap-1 text-main font-medium">
-                                                    <DollarSign size={14} /> ${debt.monthlyPayment}/mo
+                                                    <IndianRupee size={14} /> {formatCurrency(debt.monthlyPayment)}/mo
                                                 </div>
                                             </div>
                                             <button className="text-btn">Details <ArrowRight size={14} /></button>
@@ -154,7 +155,7 @@ const Debts = () => {
 
                         <div className="snowball-card">
                             <h4><Percent size={18} /> Highest Interest</h4>
-                            <p>Focusing on <strong>{debts.reduce((prev, current) => (prev.interestRate > current.interestRate) ? prev : current).name}</strong> could save you $450 in interest.</p>
+                            <p>Focusing on <strong>{debts.reduce((prev, current) => (prev.interestRate > current.interestRate) ? prev : current).name}</strong> could save you {formatCurrency(4500)} in interest.</p>
                         </div>
                     </div>
                 </div>

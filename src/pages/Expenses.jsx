@@ -18,6 +18,7 @@ import {
     CreditCard
 } from 'lucide-react';
 import '../App.css';
+import { formatCurrency } from '../lib/formatCurrency';
 
 const ExpenseStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="expense-stat-card">
@@ -36,11 +37,11 @@ const ExpenseStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 
 const Expenses = () => {
     const [expenseData] = useState([
-        { id: 1, name: 'Groceries', amount: 450, category: 'Food', date: '2026-01-18', paymentMethod: 'Credit Card', icon: ShoppingCart },
-        { id: 2, name: 'Electricity Bill', amount: 120, category: 'Utilities', date: '2026-01-15', paymentMethod: 'Bank Transfer', icon: Zap },
-        { id: 3, name: 'Gym Membership', amount: 60, category: 'Health', date: '2026-01-10', paymentMethod: 'Debit Card', icon: Activity },
-        { id: 4, name: 'Netflix Subscription', amount: 15, category: 'Entertainment', date: '2026-01-05', paymentMethod: 'Credit Card', icon: Coffee },
-        { id: 5, name: 'Fuel', amount: 200, category: 'Transportation', date: '2026-01-12', paymentMethod: 'Cash', icon: Car },
+        { id: 1, name: 'Groceries', amount: 4500, category: 'Food', date: '2026-01-18', paymentMethod: 'Credit Card', icon: ShoppingCart },
+        { id: 2, name: 'Electricity Bill', amount: 1200, category: 'Utilities', date: '2026-01-15', paymentMethod: 'Bank Transfer', icon: Zap },
+        { id: 3, name: 'Gym Membership', amount: 600, category: 'Health', date: '2026-01-10', paymentMethod: 'Debit Card', icon: Activity },
+        { id: 4, name: 'Netflix Subscription', amount: 1500, category: 'Entertainment', date: '2026-01-05', paymentMethod: 'Credit Card', icon: Coffee },
+        { id: 5, name: 'Fuel', amount: 2000, category: 'Transportation', date: '2026-01-12', paymentMethod: 'Cash', icon: Car },
     ]);
 
     const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
@@ -50,7 +51,7 @@ const Expenses = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Expenses</h1>
+
                     <p className="text-muted text-sm mt-1">Monitor and control your spending habits</p>
                 </div>
                 <button className="btn-primary">
@@ -64,14 +65,14 @@ const Expenses = () => {
                 <div className="expense-stats-grid">
                     <ExpenseStat
                         label="Total Spend"
-                        value={`$${totalExpenses.toLocaleString()}`}
+                        value={formatCurrency(totalExpenses)}
                         subtext="+5% vs last month"
                         icon={TrendingDown}
                         colorClass="icon-red"
                     />
                     <ExpenseStat
                         label="Daily Average"
-                        value={`$${avgDaily}`}
+                        value={formatCurrency(avgDaily)}
                         subtext="Per day analysis"
                         icon={Calendar}
                         colorClass="icon-orange"
@@ -142,7 +143,7 @@ const Expenses = () => {
                                             {item.paymentMethod}
                                         </div>
                                     </td>
-                                    <td className="font-bold text-danger">-${item.amount.toLocaleString()}</td>
+                                    <td className="font-bold text-danger">-{formatCurrency(item.amount)}</td>
                                     <td>
                                         <div className="flex gap-2">
                                             <button className="action-btn hover-blue" title="Edit">

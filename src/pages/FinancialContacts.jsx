@@ -224,7 +224,7 @@ const FinancialContacts = () => {
         <div className="contacts-page">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Financial Contacts</h1>
+
                     <p className="subtitle">Manage your professional network</p>
                 </div>
                 <div className="controls">

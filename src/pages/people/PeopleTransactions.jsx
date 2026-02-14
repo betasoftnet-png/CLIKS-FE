@@ -11,7 +11,7 @@ const PeopleTransactions = () => {
     return (
         <>
             <div className="dashboard-header">
-                <h1 className="page-title">People Transactions</h1>
+
                 <div className="header-actions">
                     <button className="btn-primary">
                         <Plus size={16} />

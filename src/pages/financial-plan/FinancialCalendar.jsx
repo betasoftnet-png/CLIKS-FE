@@ -28,7 +28,7 @@ const FinancialCalendar = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Financial Calendar</h1>
+
                     <p className="text-muted text-sm mt-1">Timeline of your financial activities</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-lg border border-[var(--border-color)]">
@@ -60,10 +60,10 @@ const FinancialCalendar = () => {
                                         <div className="mt-2 space-y-1">
                                             {dayEvents.map(event => (
                                                 <div key={event.id} className={`text-[10px] truncate px-1.5 py-0.5 rounded font-medium ${event.color === 'green' ? 'bg-green-100 text-green-700' :
-                                                        event.color === 'red' ? 'bg-red-100 text-red-700' :
-                                                            event.color === 'blue' ? 'bg-blue-100 text-blue-700' :
-                                                                event.color === 'purple' ? 'bg-purple-100 text-purple-700' :
-                                                                    'bg-orange-100 text-orange-700'
+                                                    event.color === 'red' ? 'bg-red-100 text-red-700' :
+                                                        event.color === 'blue' ? 'bg-blue-100 text-blue-700' :
+                                                            event.color === 'purple' ? 'bg-purple-100 text-purple-700' :
+                                                                'bg-orange-100 text-orange-700'
                                                     }`}>
                                                     {event.title}
                                                 </div>
@@ -86,10 +86,10 @@ const FinancialCalendar = () => {
                                 {events.map(event => (
                                     <div key={event.id} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer group">
                                         <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center border font-bold ${event.color === 'green' ? 'bg-green-50 border-green-100 text-green-700' :
-                                                event.color === 'red' ? 'bg-red-50 border-red-100 text-red-700' :
-                                                    event.color === 'blue' ? 'bg-blue-50 border-blue-100 text-blue-700' :
-                                                        event.color === 'purple' ? 'bg-purple-50 border-purple-100 text-purple-700' :
-                                                            'bg-orange-50 border-orange-100 text-orange-700'
+                                            event.color === 'red' ? 'bg-red-50 border-red-100 text-red-700' :
+                                                event.color === 'blue' ? 'bg-blue-50 border-blue-100 text-blue-700' :
+                                                    event.color === 'purple' ? 'bg-purple-50 border-purple-100 text-purple-700' :
+                                                        'bg-orange-50 border-orange-100 text-orange-700'
                                             }`}>
                                             <span className="text-xs uppercase opacity-70">Feb</span>
                                             <span className="text-lg leading-none">{event.date}</span>

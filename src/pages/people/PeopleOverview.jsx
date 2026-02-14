@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Search, Filter, User, MoreVertical, Edit2 } from 'lucide-react';
 import '../../App.css';
+import { formatCurrency } from '../../lib/formatCurrency';
 
 const PeopleOverview = () => {
     // Mock Data
@@ -12,7 +13,7 @@ const PeopleOverview = () => {
     return (
         <>
             <div className="dashboard-header">
-                <h1 className="page-title">People Overview</h1>
+
                 <div className="header-actions">
                     <button className="btn-primary">
                         <Plus size={16} />
@@ -26,11 +27,11 @@ const PeopleOverview = () => {
                 <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: '2rem' }}>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Net Receivables</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#16A34A', marginTop: '0.5rem' }}>₹500.00</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#16A34A', marginTop: '0.5rem' }}>{formatCurrency(500)}</div>
                     </div>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Net Payables</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DC2626', marginTop: '0.5rem' }}>₹200.00</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DC2626', marginTop: '0.5rem' }}>{formatCurrency(200)}</div>
                     </div>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Contacts</div>
@@ -77,10 +78,10 @@ const PeopleOverview = () => {
                                 {person.category}
                             </div>
                             <div style={{ fontWeight: '600', color: person.type === 'receivable' ? '#16A34A' : '#DC2626' }}>
-                                {person.type === 'receivable' ? '+' : '-'}₹{Math.abs(person.netBalance)}
+                                {person.type === 'receivable' ? '+' : '-'}{formatCurrency(Math.abs(person.netBalance))}
                             </div>
-                            <div style={{ color: 'var(--text-muted)' }}>₹{person.totalGiven}</div>
-                            <div style={{ color: 'var(--text-muted)' }}>₹{person.totalReceived}</div>
+                            <div style={{ color: 'var(--text-muted)' }}>{formatCurrency(person.totalGiven)}</div>
+                            <div style={{ color: 'var(--text-muted)' }}>{formatCurrency(person.totalReceived)}</div>
                             <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                                 <button className="icon-btn" title="Edit"><Edit2 size={16} /></button>
                             </div>

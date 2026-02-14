@@ -24,7 +24,7 @@ const PlanExpense = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Expense Planning</h1>
+
                     <p className="text-muted text-sm mt-1">Track and prepare for upcoming large expenses</p>
                 </div>
                 <button className="btn-primary">
@@ -60,15 +60,15 @@ const PlanExpense = () => {
                     {plannedExpenses.map((expense) => (
                         <div key={expense.id} className="bg-white p-5 rounded-xl border border-[var(--border-color)] hover:shadow-lg transition-all relative overflow-hidden group">
                             <div className={`absolute top-0 left-0 w-1 h-full ${expense.priority === 'Critical' ? 'bg-red-500' :
-                                    expense.priority === 'High' ? 'bg-orange-500' :
-                                        expense.priority === 'Medium' ? 'bg-blue-500' : 'bg-green-500'
+                                expense.priority === 'High' ? 'bg-orange-500' :
+                                    expense.priority === 'Medium' ? 'bg-blue-500' : 'bg-green-500'
                                 }`}></div>
 
                             <div className="flex justify-between items-start mb-3 pl-3">
                                 <h4 className="font-bold text-lg text-[var(--text-main)] group-hover:text-[var(--primary)] transition-colors">{expense.item}</h4>
                                 <span className={`text-xs px-2 py-1 rounded-full font-medium ${expense.priority === 'Critical' ? 'bg-red-100 text-red-700' :
-                                        expense.priority === 'High' ? 'bg-orange-100 text-orange-700' :
-                                            expense.priority === 'Medium' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
+                                    expense.priority === 'High' ? 'bg-orange-100 text-orange-700' :
+                                        expense.priority === 'Medium' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
                                     }`}>{expense.priority}</span>
                             </div>
 

@@ -23,7 +23,7 @@ const PlanReminders = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Financial Reminders</h1>
+
                     <p className="text-muted text-sm mt-1">Never miss a payment or review</p>
                 </div>
                 <button className="btn-primary">
@@ -62,9 +62,9 @@ const PlanReminders = () => {
                         {reminders.map((reminder) => (
                             <div key={reminder.id} className={`bg-white p-5 rounded-xl border border-[var(--border-color)] hover:shadow-md transition-shadow flex items-start sm:items-center gap-4 group ${reminder.status === 'Completed' ? 'opacity-60' : ''}`}>
                                 <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${reminder.priority === 'Critical' ? 'bg-red-100 text-red-600' :
-                                        reminder.priority === 'High' ? 'bg-orange-100 text-orange-600' :
-                                            reminder.priority === 'Medium' ? 'bg-blue-100 text-blue-600' :
-                                                'bg-green-100 text-green-600'
+                                    reminder.priority === 'High' ? 'bg-orange-100 text-orange-600' :
+                                        reminder.priority === 'Medium' ? 'bg-blue-100 text-blue-600' :
+                                            'bg-green-100 text-green-600'
                                     }`}>
                                     <Bell size={24} />
                                 </div>
@@ -95,10 +95,10 @@ const PlanReminders = () => {
                                     </button>
                                 </div>
                                 <div className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold border ${reminder.status === 'Completed'
-                                        ? 'bg-green-50 text-green-700 border-green-200'
-                                        : reminder.priority === 'Critical'
-                                            ? 'bg-red-50 text-red-700 border-red-200'
-                                            : 'bg-white text-muted border-gray-200'
+                                    ? 'bg-green-50 text-green-700 border-green-200'
+                                    : reminder.priority === 'Critical'
+                                        ? 'bg-red-50 text-red-700 border-red-200'
+                                        : 'bg-white text-muted border-gray-200'
                                     }`}>
                                     {reminder.status === 'Completed' ? 'Done' : reminder.priority}
                                 </div>

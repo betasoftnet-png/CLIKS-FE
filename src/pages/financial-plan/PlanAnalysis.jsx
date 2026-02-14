@@ -15,7 +15,7 @@ const PlanAnalysis = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Financial Analysis</h1>
+
                     <p className="text-muted text-sm mt-1">Deep dive into your financial health</p>
                 </div>
                 <button className="btn-secondary">

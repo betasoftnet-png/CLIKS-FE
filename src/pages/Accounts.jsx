@@ -83,7 +83,7 @@ const Accounts = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <h1 className="page-title">Accounts</h1>
+
                     <p className="text-muted text-sm mt-1">Manage your banking & investment portfolios</p>
                 </div>
                 <div className="flex gap-3">

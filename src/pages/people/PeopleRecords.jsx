@@ -34,7 +34,7 @@ const PeopleRecords = () => {
             {/* Header */}
             <div className="page-header-container">
                 <div>
-                    <h1 className="page-title">Records & Attachments</h1>
+
                     <p className="page-subtitle">Store and manage important financial documents</p>
                 </div>
                 <div className="header-controls">

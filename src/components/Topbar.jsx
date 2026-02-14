@@ -1,36 +1,47 @@
 import React, { useState } from 'react';
-import { User, QrCode, Wallet } from 'lucide-react';
+import { User, QrCode, Wallet, Home, BookOpen, Calculator, Users } from 'lucide-react';
 import '../App.css';
-
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { ProfileDropdown } from './ProfileDropdown';
 
 const Topbar = ({ onToggleSidebar }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
-    const isActive = (path) => location.pathname === path ? 'active' : '';
-
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
-    const closeMenu = () => {
-        setIsOpen(false);
-    };
-
     const handleNavigation = (path) => {
         navigate(path);
-        closeMenu();
+        setIsOpen(false);
     }
+
+    const navItems = [
+        { name: 'Books', url: '/books/dashboard', icon: BookOpen },
+        { name: 'Finance', url: '/finance', icon: Calculator },
+        { name: 'Social', url: '/public', icon: Users },
+    ];
 
     return (
         <header className="topbar">
             {/* Left: Branding / App Switcher */}
             <div className="topbar-left">
+                {/* ... existing logo code ... */}
                 <div
                     className="logo-area"
                     onClick={onToggleSidebar}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Toggle Sidebar"
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            onToggleSidebar();
+                        }
+                    }}
                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
                     title="Toggle Sidebar"
                 >
@@ -54,50 +65,73 @@ const Topbar = ({ onToggleSidebar }) => {
                 <span></span>
             </button>
 
-            {/* Center: Navigation */}
-            <nav className={`top-nav-links ${isOpen ? 'active' : ''}`}>
-                <button
-                    className={`nav-link ${isActive('/home')}`}
-                    onClick={() => handleNavigation('/home')}
-                >
-                    Home
-                </button>
-                <button
-                    className={`nav-link ${isActive('/books')}`}
-                    onClick={() => handleNavigation('/books')}
-                >
-                    Books
-                </button>
-                <button
-                    className={`nav-link ${isActive('/finance')}`}
-                    onClick={() => handleNavigation('/finance')}
-                >
-                    Finance
-                </button>
-                <button
-                    className={`nav-link ${isActive('/public')}`}
-                    onClick={() => handleNavigation('/public')}
-                >
-                    Social & Public
-                </button>
-            </nav>
+            {/* Center: Navigation (New Lamp Style) */}
+            <div className={`top-nav-links ${isOpen ? 'active' : ''}`} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    backdropFilter: 'blur(8px)',
+                    padding: '4px',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}>
+                    {navItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false;
 
-            {/* Right: Actions & Profile */}
-            <div className="topbar-right">
-                <button className="icon-btn" title="Scan QR">
+                        return (
+                            <button
+                                key={item.name}
+                                onClick={() => item.action ? item.action() : handleNavigation(item.url)}
+                                aria-label={item.name}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    padding: '8px 20px',
+                                    borderRadius: '999px',
+                                    border: 'none',
+                                    background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                                    fontSize: '14px',
+                                    fontWeight: 500,
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    position: 'relative'
+                                }}
+                                onMouseEnter={(e) => {
+                                    if (!isActive) e.currentTarget.style.color = '#ffffff';
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (!isActive) e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+                                }}
+                            >
+                                <span className="hidden md:inline">{item.name}</span>
+                                <span className="md:hidden">
+                                    <Icon size={18} />
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Right Group (Audit + Profile) */}
+            <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '1rem', paddingRight: '1rem' }}>
+                {/* Audit Button (Standalone Pill) */}
+                <button className="icon-btn" title="Scan QR" aria-label="Scan QR Code" style={{ color: 'rgba(255,255,255,0.8)' }}>
                     <QrCode size={20} />
                 </button>
 
-                <div
-                    className="user-profile topbar-profile"
-                    onClick={() => handleNavigation('/books/profile')}
-                    style={{ cursor: 'pointer' }}
-                >
-                    <div className="avatar">
-                        <User size={18} />
-                    </div>
-                    <span className="username">Aditya .s</span>
-                </div>
+                <ProfileDropdown
+                    onAccount={() => navigate('/books/profile')}
+                    onSettings={() => navigate('/books/settings')}
+                    onFAQ={() => navigate('/books/faq')}
+                    onLogout={() => navigate('/')}
+                />
             </div>
         </header>
     );
