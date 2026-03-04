@@ -7,9 +7,13 @@ import {
     Check
 } from 'lucide-react';
 
+import { Loader } from '../components/common';
+
 // Animation hooks
-const useScrollAnimation = () => {
+const useScrollAnimation = (loading) => {
     useEffect(() => {
+        if (loading) return;
+
         const observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
@@ -21,24 +25,48 @@ const useScrollAnimation = () => {
             { threshold: 0.1 }
         );
 
-        const elements = document.querySelectorAll('.scroll-animate');
-        elements.forEach((el) => observer.observe(el));
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+            const elements = document.querySelectorAll('.scroll-animate');
+            elements.forEach((el) => observer.observe(el));
+        }, 100);
 
-        return () => elements.forEach((el) => observer.unobserve(el));
-    }, []);
+        return () => observer.disconnect();
+    }, [loading]);
 };
 
 const Landing = () => {
     const navigate = useNavigate();
     const [scrolled, setScrolled] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    useScrollAnimation();
+    useScrollAnimation(loading);
 
     useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 2500);
         const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
+
+    if (loading) {
+        return (
+            <div style={{
+                height: '100vh',
+                width: '100vw',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                background: '#E9F4FF'
+            }}>
+                <Loader />
+            </div>
+        );
+    }
 
     const handleLogin = (e) => {
         if (e) e.preventDefault();

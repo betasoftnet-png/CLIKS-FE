@@ -91,8 +91,7 @@ const Stock = () => {
 
     return (
         <>
-            <div className="dashboard-header">
-
+            <div className="dashboard-header" style={{ justifyContent: 'flex-end' }}>
                 <div className="header-actions">
                     <button className="btn-primary">
                         <Plus size={16} />

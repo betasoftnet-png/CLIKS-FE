@@ -149,7 +149,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
     position: sticky;
     top: 0;
     z-index: 10;
@@ -170,7 +170,7 @@
 
 /* Buttons and Profiles */
 .btn-primary {
-    background-color: var(--primary);
+    background-color: #195BAC;
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 8px;
@@ -256,12 +256,19 @@
 
 /* Specific Account Styles */
 .account-card:nth-child(1) {
-    background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
-    /* Cyan Blue Gradient */
+    background: #195BAC;
+    /* Primary Blue */
 }
 
 .account-card:nth-child(2) {
     background: #1E3A8A;
+    /* Dark Blue - Keeping or changing? User said "all tiles". Let's change to same or similar shade?
+       "Use same 195BAC as the primary color for all tiles."
+       If I change both to 195BAC, they will look identical. Maybe the user means "primary" as in the main theme color.
+       But "for all tiles" implies uniformity. I will set the second one to 195BAC as well, or maybe a slightly darker variant if it's "Locker".
+       However, strict interpretation: "same 195BAC". I will use it.
+    */
+    background: #195BAC;
     /* Dark Blue */
 }
 
@@ -316,7 +323,7 @@
 
 .add-account-btn:hover {
     border-color: #3B82F6;
-    color: #3B82F6;
+    color: #195BAC;
     background: #F8FAFC;
 }
 
@@ -719,7 +726,7 @@
 .send-btn {
     width: 40px;
     height: 40px;
-    background: var(--primary);
+    background: #195BAC;
     color: white;
     border-radius: 8px;
     display: flex;

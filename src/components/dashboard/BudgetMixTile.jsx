@@ -47,34 +47,18 @@ const BudgetItem = ({ icon: Icon, label, current, total, color }) => {
 
 const BudgetMixTile = () => {
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-            {/* Header with View All is usually handled by the Tile wrapper title, 
-                but specific 'View All' link for this content might be needed inside if the main title is generic. 
-                The Dashboard renders the title "Budget". We can add the View All link here. 
-            */}
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1rem' }}>
             <div style={{
                 display: 'flex',
-                justifyContent: 'flex-end',
-                marginBottom: '1rem',
-                marginTop: '-0.5rem' // Pull up slightly to align with header area if needed, or just standard spacing
-            }}>
-                <a href="#view-all" style={{ fontSize: '0.85rem', color: '#3B82F6', fontWeight: 600, textDecoration: 'none' }}>
-                    View All
-                </a>
-            </div>
-
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: '2rem 1.5rem', // Row gap, Column gap
-                alignItems: 'start'
+                flexDirection: 'column',
+                gap: '1.25rem'
             }}>
                 <BudgetItem
                     icon={Utensils}
                     label="Food & Drinks"
                     current={420}
                     total={600}
-                    color="#1E40AF" // Dark Blue
+                    color="#195BAC" // Primary Blue
                 />
                 <BudgetItem
                     icon={Film}
@@ -97,6 +81,12 @@ const BudgetMixTile = () => {
                     total={120}
                     color="#EF4444" // Red
                 />
+            </div>
+
+            <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', paddingTop: '0.5rem' }}>
+                <a href="#view-all" style={{ fontSize: '0.85rem', color: '#195BAC', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    View All Categories
+                </a>
             </div>
         </div>
     );

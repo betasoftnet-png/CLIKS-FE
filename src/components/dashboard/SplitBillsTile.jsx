@@ -10,7 +10,7 @@ const SplitBillsTile = () => {
             */}
 
             <div style={{ display: 'flex', alignItems: 'center', background: 'white', padding: '1rem', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', border: '1px solid #F1F5F9' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1D4ED8', marginRight: '1rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#195BAC', marginRight: '1rem' }}>
                     <Share2 size={20} />
                 </div>
                 <div style={{ flex: 1 }}>
@@ -21,7 +21,7 @@ const SplitBillsTile = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', background: 'white', padding: '1rem', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', border: '1px solid #F1F5F9' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1D4ED8', marginRight: '1rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#195BAC', marginRight: '1rem' }}>
                     <Film size={20} />
                 </div>
                 <div style={{ flex: 1 }}>

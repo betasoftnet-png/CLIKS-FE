@@ -6,7 +6,7 @@ const TheSquadTile = () => {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', gap: '1.5rem' }}>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #3B82F6', padding: '2px' }}>
+                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #195BAC', padding: '2px' }}>
                         <img src="https://i.pravatar.cc/150?u=sarah" alt="Sarah" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
                     </div>
                     <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1E293B' }}>Sarah</span>
@@ -37,7 +37,7 @@ const TheSquadTile = () => {
                     cursor: 'pointer',
                     transition: 'all 0.2s'
                 }}
-                    onMouseOver={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; e.currentTarget.style.color = '#3B82F6'; }}
+                    onMouseOver={(e) => { e.currentTarget.style.borderColor = '#195BAC'; e.currentTarget.style.color = '#195BAC'; }}
                     onMouseOut={(e) => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.color = '#94A3B8'; }}
                 >
                     <Plus size={24} />
@@ -47,7 +47,7 @@ const TheSquadTile = () => {
             <button style={{
                 width: '100%',
                 padding: '0.85rem',
-                background: '#1D4ED8',
+                background: '#195BAC',
                 color: 'white',
                 border: 'none',
                 borderRadius: '12px',
@@ -57,7 +57,7 @@ const TheSquadTile = () => {
                 justifyContent: 'center',
                 gap: '0.5rem',
                 cursor: 'pointer',
-                boxShadow: '0 4px 6px -1px rgba(29, 78, 216, 0.3)',
+                boxShadow: '0 4px 6px -1px rgba(25, 91, 172, 0.3)',
                 marginTop: 'auto'
             }}>
                 <Send size={18} />

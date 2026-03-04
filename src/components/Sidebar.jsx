@@ -75,6 +75,9 @@ const Sidebar = ({ isOpen }) => {
         if (path.includes('/books/stock')) return 'Stock';
         if (path.includes('/books/financial-plan') || path.includes('/books/plan/')) return 'Financial Plan';
         if (path.includes('/books/people')) return 'People';
+        if (path.includes('/books/contacts')) return 'Financial Contacts';
+        if (path.includes('/books/segregation')) return 'Segregation';
+        if (path.includes('/books/split-expense')) return 'Split Expense';
         if (path === '/auditor') return 'Audit';
 
         return 'Dashboard';

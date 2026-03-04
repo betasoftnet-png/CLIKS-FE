@@ -297,7 +297,7 @@ const BooksDashboard = () => {
             title: null,
             icon: LineChart,
             className: '',
-            style: { gridColumn: 'span 2', gridRow: 'span 2', minHeight: '320px' }
+            style: { gridColumn: 'span 2', gridRow: 'span 1', minHeight: '190px' }
         },
         {
             id: 'budget',
@@ -436,9 +436,7 @@ const BooksDashboard = () => {
     return (
         <>
             {/* Top Header */}
-            <div className="dashboard-header">
-
-
+            <div className="dashboard-header" style={{ justifyContent: 'flex-end' }}>
                 <div className="header-actions">
                     <button className="btn-primary" onClick={() => setIsAddWidgetOpen(true)}>
                         <Plus size={16} />

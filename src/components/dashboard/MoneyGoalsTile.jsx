@@ -40,7 +40,7 @@ const MoneyGoalsTile = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     Money Goals
-                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#195BAC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <div style={{ width: '8px', height: '8px', background: 'white', clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}></div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ const MoneyGoalsTile = () => {
                     current="3,750"
                     total="5,000"
                     percent={75}
-                    color="#1D4ED8"
+                    color="#195BAC"
                     icon={Plane}
                 />
                 <GoalItem
@@ -72,7 +72,7 @@ const MoneyGoalsTile = () => {
                 border: '2px dashed #CBD5E1',
                 borderRadius: '99px',
                 background: 'transparent',
-                color: '#1D4ED8',
+                color: '#195BAC',
                 fontWeight: 600,
                 fontSize: '0.9rem',
                 cursor: 'pointer',
@@ -82,7 +82,7 @@ const MoneyGoalsTile = () => {
                 justifyContent: 'center',
                 gap: '0.5rem'
             }}
-                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#1D4ED8'; e.currentTarget.style.background = '#EFF6FF'; }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#195BAC'; e.currentTarget.style.background = '#EFF6FF'; }}
                 onMouseOut={(e) => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.background = 'transparent'; }}
             >
                 <Plus size={16} /> Add New Goal

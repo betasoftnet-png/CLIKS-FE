@@ -126,13 +126,7 @@ const FinancialPlan = () => {
                                                 const isWednesday = day === 'W' && i === 2;
                                                 return (
                                                     <div key={i} className={`chart-col ${isWednesday ? 'active-col' : ''}`}>
-                                                        {isWednesday && (
-                                                            <div className="chart-tooltip">
-                                                                <div className="tooltip-row"><span>Goal:</span> <span className="font-bold">16</span></div>
-                                                                <div className="tooltip-row"><span>Spent:</span> <span className="font-bold">19</span></div>
-                                                                <div className="tooltip-arrow"></div>
-                                                            </div>
-                                                        )}
+
                                                         <div className="bar-wrapper">
                                                             <div
                                                                 className="chart-bar"
@@ -560,31 +554,7 @@ const FinancialPlan = () => {
                 .day-label { font-size: 0.75rem; color: #94A3B8; font-weight: 500; }
                 .day-label.text-dark { color: #1E293B; font-weight: 700; }
 
-                /* Tooltip */
-                .chart-tooltip {
-                    position: absolute;
-                    bottom: 110%; /* Above the bar */
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: #1E293B;
-                    color: white;
-                    padding: 0.5rem 0.75rem;
-                    border-radius: 8px;
-                    width: max-content;
-                    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-                    z-index: 20;
-                    animation: fadeIn 0.3s;
-                }
-                .tooltip-row { font-size: 0.75rem; display: flex; gap: 0.5rem; justify-content: space-between; }
-                .tooltip-arrow {
-                    position: absolute;
-                    bottom: -4px;
-                    left: 50%;
-                    transform: translateX(-50%) rotate(45deg);
-                    width: 8px;
-                    height: 8px;
-                    background: #1E293B;
-                }
+
             `}</style>
         </div>
     );

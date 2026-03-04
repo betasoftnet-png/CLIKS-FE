@@ -20,9 +20,9 @@ const Topbar = ({ onToggleSidebar }) => {
     }
 
     const navItems = [
-        { name: 'Books', url: '/books/dashboard', icon: BookOpen },
-        { name: 'Finance', url: '/finance', icon: Calculator },
-        { name: 'Social', url: '/public', icon: Users },
+        { name: 'Books', url: '/books/dashboard', icon: BookOpen, activeBase: '/books' },
+        { name: 'Finance', url: '/finance', icon: Calculator, activeBase: '/finance' },
+        { name: 'Social', url: '/public', icon: Users, activeBase: '/public' },
     ];
 
     return (
@@ -80,7 +80,9 @@ const Topbar = ({ onToggleSidebar }) => {
                 }}>
                     {navItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false;
+                        const isActive = item.activeBase
+                            ? location.pathname.startsWith(item.activeBase)
+                            : (item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false);
 
                         return (
                             <button
