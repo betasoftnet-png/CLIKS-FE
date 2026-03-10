@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     TrendingUp,
     TrendingDown,
     Plus,
     Calendar,
     IndianRupee,
-    Edit2,
     Trash2,
     Filter,
     Search,
@@ -16,11 +16,29 @@ import {
     Coffee,
     Home,
     Smartphone,
-    MoreHorizontal
+    X,
 } from 'lucide-react';
 import '../App.css';
 import './Transactions.css';
+import '../styles/modals.css';
 import { formatCurrency } from '../lib/formatCurrency';
+
+const CATEGORIES = [
+    'Employment', 'Business', 'Investment', 'Freelance', 'Rental',
+    'Housing', 'Food', 'Utilities', 'Transport', 'Healthcare',
+    'Entertainment', 'Shopping', 'Education', 'Travel', 'Other'
+];
+
+const ICON_MAP = {
+    Employment: Briefcase,
+    Business: Building2,
+    Housing: Home,
+    Food: Coffee,
+    Utilities: Smartphone,
+    Default: Receipt,
+};
+
+const EMPTY_FORM = { title: '', category: '', amount: '', date: '', notes: '' };
 
 const StatCard = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="stat-card">
@@ -39,12 +57,32 @@ const StatCard = ({ label, value, subtext, icon: Icon, colorClass }) => (
 
 const Transactions = () => {
     const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+    const [modalType, setModalType] = useState(null); // 'income' | 'expense' | null
+    const [formData, setFormData] = useState(EMPTY_FORM);
+    const [formError, setFormError] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const menuRef = useRef(null);
 
-    // Close menu when clicking outside
+    const [transactions, setTransactions] = useState(() => {
+        const saved = localStorage.getItem('books_transactions');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: 1, type: 'Income',   title: 'Salary',      category: 'Employment', amount: 50000, date: '2026-01-01' },
+            { id: 2, type: 'Expense',  title: 'Rent Payment', category: 'Housing',   amount: 12000, date: '2026-01-02' },
+            { id: 3, type: 'Expense',  title: 'Starbucks',    category: 'Food',      amount: 450,   date: '2026-01-03' },
+            { id: 4, type: 'Income',   title: 'Freelance',    category: 'Business',  amount: 8000,  date: '2026-01-05' },
+            { id: 5, type: 'Expense',  title: 'Mobile Bill',  category: 'Utilities', amount: 600,   date: '2026-01-10' },
+        ];
+    });
+
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
+        localStorage.setItem('books_transactions', JSON.stringify(transactions));
+    }, [transactions]);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
                 setIsAddMenuOpen(false);
             }
         };
@@ -52,28 +90,63 @@ const Transactions = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const [transactions] = useState([
-        { id: 1, type: 'Income', source: 'Salary', amount: 50000, category: 'Employment', date: '2026-01-01', icon: Briefcase },
-        { id: 2, type: 'Expense', source: 'Rent Payment', amount: 12000, category: 'Housing', date: '2026-01-02', icon: Home },
-        { id: 3, type: 'Expense', source: 'Starbucks', amount: 450, category: 'Food', date: '2026-01-03', icon: Coffee },
-        { id: 4, type: 'Income', source: 'Freelance', amount: 8000, category: 'Business', date: '2026-01-05', icon: Building2 },
-        { id: 5, type: 'Expense', source: 'Mobile Bill', amount: 600, category: 'Utilities', date: '2026-01-10', icon: Smartphone },
-    ]);
+    const openModal = (type) => {
+        setModalType(type);
+        setFormData(EMPTY_FORM);
+        setFormError('');
+        setIsAddMenuOpen(false);
+    };
 
-    const totalIncome = transactions.filter(t => t.type === 'Income').reduce((sum, t) => sum + t.amount, 0);
-    const totalExpense = transactions.filter(t => t.type === 'Expense').reduce((sum, t) => sum + t.amount, 0);
-    const netBalance = totalIncome - totalExpense;
+    const closeModal = () => {
+        setModalType(null);
+        setFormError('');
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.title || !formData.category || !formData.amount || !formData.date) {
+            setFormError('Source, category, amount and date are required.');
+            return;
+        }
+
+        const newTransaction = {
+            id: Date.now(),
+            type: modalType === 'income' ? 'Income' : 'Expense',
+            title: formData.title,
+            category: formData.category,
+            amount: parseFloat(formData.amount),
+            date: formData.date,
+            notes: formData.notes,
+        };
+
+        setTransactions((prev) => [newTransaction, ...prev]);
+        closeModal();
+    };
+
+    const handleDelete = (id) => {
+        setTransactions((prev) => prev.filter((t) => t.id !== id));
+    };
+
+    const totalIncome  = transactions.filter(t => t.type === 'Income').reduce((s, t) => s + t.amount, 0);
+    const totalExpense = transactions.filter(t => t.type === 'Expense').reduce((s, t) => s + t.amount, 0);
+    const netBalance   = totalIncome - totalExpense;
+
+    const filtered = transactions.filter((t) =>
+        t.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const getIcon = (category) => ICON_MAP[category] || ICON_MAP.Default;
 
     return (
         <div className="transactions-page page-fade-in">
             {/* Header */}
             <div className="page-header">
                 <div className="header-content">
-
                     <p className="page-subtitle">Track and manage your financial activity</p>
                 </div>
 
-                {/* Add Transaction Menu */}
+                {/* Dropdown menu */}
                 <div className="action-menu-container" ref={menuRef}>
                     <button
                         onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
@@ -86,7 +159,7 @@ const Transactions = () => {
 
                     {isAddMenuOpen && (
                         <div className="dropdown-menu animate-scale-in">
-                            <button className="dropdown-item">
+                            <button className="dropdown-item" onClick={() => openModal('income')}>
                                 <div className="icon-box bg-green">
                                     <TrendingUp size={16} />
                                 </div>
@@ -95,7 +168,7 @@ const Transactions = () => {
                                     <span className="item-desc">Salary, Freelance...</span>
                                 </div>
                             </button>
-                            <button className="dropdown-item">
+                            <button className="dropdown-item" onClick={() => openModal('expense')}>
                                 <div className="icon-box bg-red">
                                     <TrendingDown size={16} />
                                 </div>
@@ -111,32 +184,13 @@ const Transactions = () => {
 
             {/* Stats Grid */}
             <div className="stats-grid">
-                <StatCard
-                    label="Total Income"
-                    value={formatCurrency(totalIncome)}
-                    subtext="Actual • This Month"
-                    icon={TrendingUp}
-                    colorClass="stat-green"
-                />
-                <StatCard
-                    label="Total Expenses"
-                    value={formatCurrency(totalExpense)}
-                    subtext="Actual • This Month"
-                    icon={TrendingDown}
-                    colorClass="stat-red"
-                />
-                <StatCard
-                    label="Net Balance"
-                    value={formatCurrency(netBalance)}
-                    subtext="Cash Flow Status"
-                    icon={IndianRupee}
-                    colorClass="stat-blue"
-                />
+                <StatCard label="Total Income"   value={formatCurrency(totalIncome)}  subtext="Actual • This Month" icon={TrendingUp}   colorClass="stat-green" />
+                <StatCard label="Total Expenses" value={formatCurrency(totalExpense)} subtext="Actual • This Month" icon={TrendingDown}  colorClass="stat-red"   />
+                <StatCard label="Net Balance"    value={formatCurrency(netBalance)}   subtext="Cash Flow Status"   icon={IndianRupee}  colorClass="stat-blue"  />
             </div>
 
-            {/* Content Area */}
+            {/* Transactions Table */}
             <div className="transactions-container">
-
                 {/* Toolbar */}
                 <div className="toolbar-section">
                     <div className="search-box">
@@ -145,9 +199,10 @@ const Transactions = () => {
                             type="text"
                             placeholder="Search transactions..."
                             className="search-input"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
-
                     <div className="filter-actions">
                         <button className="btn-secondary">
                             <Filter size={16} />
@@ -160,8 +215,6 @@ const Transactions = () => {
                     </div>
                 </div>
 
-                {/* Transaction List (Horizontal Tiles) */}
-                {/* Transactions Table (New Layout) */}
                 <div className="transactions-table-container">
                     <div className="table-header-row">
                         <div className="table-title">
@@ -178,46 +231,48 @@ const Transactions = () => {
                                 <th>APPLICATION</th>
                                 <th>TYPE</th>
                                 <th>RATE</th>
-                                <th style={{ textAlign: 'right' }}>PROFIT</th>
+                                <th style={{ textAlign: 'right' }}>AMOUNT</th>
+                                <th style={{ textAlign: 'center' }}>ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {transactions.map((item, index) => {
-                                // Dummy percentage for the 'Rate' column to match reference
-                                const percentage = Math.floor(Math.random() * (90 - 20 + 1)) + 20;
+                            {filtered.map((item) => {
+                                const ItemIcon = getIcon(item.category);
+                                const pct = Math.floor(Math.random() * 70) + 20;
                                 return (
                                     <tr key={item.id} className="table-row-card">
-                                        <td>
-                                            <div className="custom-checkbox">
-                                                {/* Logic for checkbox would go here */}
-                                            </div>
-                                        </td>
+                                        <td><div className="custom-checkbox" /></td>
                                         <td className="app-col">
                                             <div className="app-info">
-                                                <div className="app-icon-box">
-                                                    {item.icon ? <item.icon size={20} /> : <Receipt size={20} />}
-                                                </div>
-                                                <span className="app-name">{item.source}</span>
+                                                <div className="app-icon-box"><ItemIcon size={20} /></div>
+                                                <span className="app-name">{item.title}</span>
                                             </div>
                                         </td>
-                                        <td className="type-col">
-                                            {item.category}
-                                        </td>
+                                        <td className="type-col">{item.category}</td>
                                         <td className="rate-col">
                                             <div className="rate-wrapper">
                                                 <div className="progress-track">
                                                     <div
                                                         className="progress-fill"
-                                                        style={{ width: `${percentage}%`, background: item.type === 'Income' ? '#4F46E5' : '#10B981' }}
-                                                    ></div>
+                                                        style={{ width: `${pct}%`, background: item.type === 'Income' ? '#4F46E5' : '#10B981' }}
+                                                    />
                                                 </div>
-                                                <span className="rate-text">{percentage}%</span>
+                                                <span className="rate-text">{pct}%</span>
                                             </div>
                                         </td>
                                         <td className="profit-col">
                                             <span style={{ color: item.type === 'Income' ? '#10B981' : '#1e293b' }}>
                                                 {item.type === 'Expense' ? '-' : ''}{formatCurrency(item.amount)}
                                             </span>
+                                        </td>
+                                        <td style={{ textAlign: 'center' }}>
+                                            <button
+                                                className="icon-btn hover-red"
+                                                title="Delete"
+                                                onClick={() => handleDelete(item.id)}
+                                            >
+                                                <Trash2 size={15} />
+                                            </button>
                                         </td>
                                     </tr>
                                 );
@@ -228,13 +283,108 @@ const Transactions = () => {
 
                 {/* Pagination */}
                 <div className="pagination-bar">
-                    <span className="page-info">Showing {transactions.length} entries</span>
+                    <span className="page-info">Showing {filtered.length} entries</span>
                     <div className="page-controls">
                         <button className="btn-page" disabled>Previous</button>
                         <button className="btn-page">Next</button>
                     </div>
                 </div>
             </div>
+
+            {/* ── Add Transaction Modal ── */}
+            <AnimatePresence>
+                {modalType && (
+                    <div className="modal-overlay">
+                        <motion.div
+                            className="modal-card"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="modal-header">
+                                <h2 className="modal-title">
+                                    {modalType === 'income' ? 'Add Income' : 'Add Expense'}
+                                </h2>
+                                <button className="modal-close-btn" onClick={closeModal}>
+                                    <X size={16} />
+                                </button>
+                            </div>
+
+                            <form className="modal-form" onSubmit={handleSubmit}>
+                                <div className="modal-field">
+                                    <label className="modal-label">
+                                        {modalType === 'income' ? 'Source Name' : 'Expense Name'}
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        placeholder={modalType === 'income' ? 'e.g. Salary, Freelance' : 'e.g. Rent, Groceries'}
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Category</label>
+                                    <select
+                                        className="modal-select"
+                                        value={formData.category}
+                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                    >
+                                        <option value="">Select a category</option>
+                                        {CATEGORIES.map((cat) => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="modal-row">
+                                    <div className="modal-field">
+                                        <label className="modal-label">Amount (₹)</label>
+                                        <input
+                                            type="number"
+                                            className="modal-input"
+                                            placeholder="0"
+                                            min="0"
+                                            value={formData.amount}
+                                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="modal-field">
+                                        <label className="modal-label">Date</label>
+                                        <input
+                                            type="date"
+                                            className="modal-input"
+                                            value={formData.date}
+                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Notes (optional)</label>
+                                    <textarea
+                                        className="modal-textarea"
+                                        placeholder="Additional details..."
+                                        value={formData.notes}
+                                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                                    />
+                                </div>
+
+                                {formError && <p className="modal-error">{formError}</p>}
+
+                                <div className="modal-footer">
+                                    <button type="button" className="modal-btn-cancel" onClick={closeModal}>Cancel</button>
+                                    <button type="submit" className="modal-btn-submit">
+                                        {modalType === 'income' ? 'Save Income' : 'Save Expense'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

@@ -10,6 +10,7 @@ import AuditorLayout from './layouts/AuditorLayout';
 import Landing from './pages/Landing'; // Keep Landing eager for LCP
 
 // Lazy Load Pages to optimize bundle size
+const Auth = React.lazy(() => import('./pages/Auth'));
 
 const Income = React.lazy(() => import('./pages/Income'));
 const Expenses = React.lazy(() => import('./pages/Expenses'));
@@ -67,6 +68,11 @@ function App() {
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={
+              <Suspense fallback={<PageLoader />}>
+                <Auth />
+              </Suspense>
+            } />
             <Route path="/auditor" element={
               <Suspense fallback={<PageLoader />}>
                 <AuditorLayout>

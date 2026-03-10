@@ -1,19 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     CreditCard,
     Plus,
-    Building2,
     Wallet,
     TrendingUp,
     TrendingDown,
     Eye,
     EyeOff,
-    MoreVertical,
     Globe,
     ShieldCheck,
-    Smartphone
+    Smartphone,
+    X,
 } from 'lucide-react';
 import '../App.css';
+import '../styles/modals.css';
+
+const ACCOUNT_TYPES = ['Checking', 'Savings', 'Credit Card', 'Investment'];
+
+const THEMES = {
+    Checking:    'dark-blue',
+    Savings:     'emerald',
+    'Credit Card': 'purple',
+    Investment:  'orange',
+};
+
+const EMPTY_FORM = { bank: '', type: 'Checking', number: '', balance: '' };
 
 const AccountStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="account-stat-card">
@@ -32,69 +44,80 @@ const AccountStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 
 const Accounts = () => {
     const [showBalances, setShowBalances] = useState(true);
-    const [accounts] = useState([
-        {
-            id: 1,
-            name: 'Main Checking',
-            type: 'Checking',
-            bank: 'Chase Bank',
-            balance: 12450.50,
-            accountNumber: '**** 4521',
-            theme: 'dark-blue',
-            network: 'Visa'
-        },
-        {
-            id: 2,
-            name: 'Savings Select',
-            type: 'Savings',
-            bank: 'Bank of America',
-            balance: 28900.00,
-            accountNumber: '**** 7832',
-            theme: 'emerald',
-            network: 'Mastercard'
-        },
-        {
-            id: 3,
-            name: 'Platinum Credit',
-            type: 'Credit',
-            bank: 'American Express',
-            balance: -2340.75,
-            accountNumber: '**** 9012',
-            theme: 'purple',
-            network: 'Amex'
-        },
-        {
-            id: 4,
-            name: 'Growth Folio',
-            type: 'Investment',
-            bank: 'Fidelity',
-            balance: 45200.00,
-            accountNumber: '**** 3456',
-            theme: 'orange',
-            network: 'Invest'
-        },
-    ]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState(EMPTY_FORM);
+    const [formError, setFormError] = useState('');
 
-    const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
-    const totalAssets = accounts.filter(acc => acc.balance > 0).reduce((sum, acc) => sum + acc.balance, 0);
-    const totalLiabilities = Math.abs(accounts.filter(acc => acc.balance < 0).reduce((sum, acc) => sum + acc.balance, 0));
+    const [accounts, setAccounts] = useState(() => {
+        const saved = localStorage.getItem('books_accounts');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: 1, name: 'Main Checking',   type: 'Checking',     bank: 'Chase Bank',      balance:  12450.50, accountNumber: '**** 4521', theme: 'dark-blue', network: 'Visa'       },
+            { id: 2, name: 'Savings Select',  type: 'Savings',      bank: 'Bank of America', balance:  28900.00, accountNumber: '**** 7832', theme: 'emerald',   network: 'Mastercard' },
+            { id: 3, name: 'Platinum Credit', type: 'Credit Card',  bank: 'American Express',balance:  -2340.75, accountNumber: '**** 9012', theme: 'purple',    network: 'Amex'       },
+            { id: 4, name: 'Growth Folio',    type: 'Investment',   bank: 'Fidelity',        balance:  45200.00, accountNumber: '**** 3456', theme: 'orange',    network: 'Invest'     },
+        ];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('books_accounts', JSON.stringify(accounts));
+    }, [accounts]);
+
+    const openModal = () => {
+        setFormData(EMPTY_FORM);
+        setFormError('');
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setFormError('');
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.bank || !formData.type || !formData.balance) {
+            setFormError('Bank name, account type, and balance are required.');
+            return;
+        }
+
+        // Mask the last 4 digits if provided, otherwise random
+        const rawNum = formData.number.replace(/\D/g, '');
+        const masked = rawNum.length >= 4
+            ? `**** ${rawNum.slice(-4)}`
+            : `**** ${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const newAccount = {
+            id: Date.now(),
+            name: `${formData.bank} ${formData.type}`,
+            type: formData.type,
+            bank: formData.bank,
+            balance: parseFloat(formData.balance),
+            accountNumber: masked,
+            theme: THEMES[formData.type] || 'dark-blue',
+            network: formData.type === 'Investment' ? 'Invest' : formData.type === 'Credit Card' ? 'Card' : 'Bank',
+        };
+
+        setAccounts((prev) => [...prev, newAccount]);
+        closeModal();
+    };
+
+    const totalBalance  = accounts.reduce((s, a) => s + a.balance, 0);
+    const totalAssets   = accounts.filter(a => a.balance > 0).reduce((s, a) => s + a.balance, 0);
+    const totalLiab     = Math.abs(accounts.filter(a => a.balance < 0).reduce((s, a) => s + a.balance, 0));
 
     return (
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
-                    <p className="text-muted text-sm mt-1">Manage your banking & investment portfolios</p>
+                    <p className="text-muted text-sm mt-1">Manage your banking &amp; investment portfolios</p>
                 </div>
                 <div className="flex gap-3">
-                    <button
-                        onClick={() => setShowBalances(!showBalances)}
-                        className="btn-secondary"
-                    >
+                    <button onClick={() => setShowBalances(!showBalances)} className="btn-secondary">
                         {showBalances ? <EyeOff size={18} /> : <Eye size={18} />}
                         <span>{showBalances ? 'Hide' : 'Show'} Balances</span>
                     </button>
-                    <button className="btn-primary">
+                    <button className="btn-primary" onClick={openModal}>
                         <Plus size={18} />
                         <span>Link Account</span>
                     </button>
@@ -102,47 +125,27 @@ const Accounts = () => {
             </div>
 
             <div className="content-wrapper">
-                {/* Stats Grid */}
+                {/* Stats */}
                 <div className="account-stats-grid">
-                    <AccountStat
-                        label="Net Worth"
-                        value={showBalances ? `$${totalBalance.toLocaleString()}` : '••••••••'}
-                        subtext="Total cumulative value"
-                        icon={Wallet}
-                        colorClass="icon-blue"
-                    />
-                    <AccountStat
-                        label="Total Assets"
-                        value={showBalances ? `$${totalAssets.toLocaleString()}` : '••••••••'}
-                        subtext="Liquid & fixed assets"
-                        icon={TrendingUp}
-                        colorClass="icon-green"
-                    />
-                    <AccountStat
-                        label="Liabilities"
-                        value={showBalances ? `$${totalLiabilities.toLocaleString()}` : '••••••••'}
-                        subtext="Outstanding debt"
-                        icon={TrendingDown}
-                        colorClass="icon-red"
-                    />
+                    <AccountStat label="Net Worth"     value={showBalances ? `$${totalBalance.toLocaleString()}` : '••••••••'} subtext="Total cumulative value"  icon={Wallet}      colorClass="icon-blue"  />
+                    <AccountStat label="Total Assets"  value={showBalances ? `$${totalAssets.toLocaleString()}`  : '••••••••'} subtext="Liquid & fixed assets"   icon={TrendingUp}  colorClass="icon-green" />
+                    <AccountStat label="Liabilities"   value={showBalances ? `$${totalLiab.toLocaleString()}`   : '••••••••'} subtext="Outstanding debt"         icon={TrendingDown} colorClass="icon-red"   />
                 </div>
 
-                {/* Cards Grid */}
+                {/* Cards */}
                 <div className="cards-grid">
                     {accounts.map((account) => (
                         <div key={account.id} className={`bank-card theme-${account.theme}`}>
                             <div className="card-top">
-                                <div className="card-chip"></div>
+                                <div className="card-chip" />
                                 <div className="card-contactless"><ShieldCheck size={18} /></div>
                             </div>
-
                             <div className="card-balance-section">
                                 <span className="card-label">Current Balance</span>
                                 <h3 className="card-balance">
                                     {showBalances ? `$${Math.abs(account.balance).toLocaleString()}` : '•••• •••• ••••'}
                                 </h3>
                             </div>
-
                             <div className="card-details">
                                 <div className="card-info">
                                     <div className="card-holder">{account.name}</div>
@@ -150,7 +153,6 @@ const Accounts = () => {
                                 </div>
                                 <div className="card-brand">{account.bank}</div>
                             </div>
-
                             <div className="card-actions-overlay">
                                 <button className="overlay-btn"><Smartphone size={16} /> Pay</button>
                                 <button className="overlay-btn"><Globe size={16} /> Details</button>
@@ -158,8 +160,8 @@ const Accounts = () => {
                         </div>
                     ))}
 
-                    {/* Add New Card Placemat */}
-                    <div className="add-card-placeholder">
+                    {/* Add placeholder */}
+                    <div className="add-card-placeholder" onClick={openModal}>
                         <div className="placeholder-content">
                             <div className="plus-circle"><Plus size={24} /></div>
                             <span className="font-medium">Add New Account</span>
@@ -167,6 +169,82 @@ const Accounts = () => {
                     </div>
                 </div>
             </div>
+
+            {/* ── Link Account Modal ── */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                        <motion.div
+                            className="modal-card"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="modal-header">
+                                <h2 className="modal-title">Link Account</h2>
+                                <button className="modal-close-btn" onClick={closeModal}><X size={16} /></button>
+                            </div>
+
+                            <form className="modal-form" onSubmit={handleSubmit}>
+                                <div className="modal-field">
+                                    <label className="modal-label">Bank Name</label>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        placeholder="e.g. Chase Bank"
+                                        value={formData.bank}
+                                        onChange={(e) => setFormData({ ...formData, bank: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Account Type</label>
+                                    <select
+                                        className="modal-select"
+                                        value={formData.type}
+                                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                    >
+                                        {ACCOUNT_TYPES.map((t) => (
+                                            <option key={t} value={t}>{t}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Account Number (last 4 digits)</label>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        placeholder="e.g. 4521"
+                                        maxLength={16}
+                                        value={formData.number}
+                                        onChange={(e) => setFormData({ ...formData, number: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Current Balance ($)</label>
+                                    <input
+                                        type="number"
+                                        className="modal-input"
+                                        placeholder="0.00"
+                                        value={formData.balance}
+                                        onChange={(e) => setFormData({ ...formData, balance: e.target.value })}
+                                    />
+                                </div>
+
+                                {formError && <p className="modal-error">{formError}</p>}
+
+                                <div className="modal-footer">
+                                    <button type="button" className="modal-btn-cancel" onClick={closeModal}>Cancel</button>
+                                    <button type="submit" className="modal-btn-submit">Link Account</button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <style>{`
                 .page-fade-in { animation: fadeIn 0.4s ease-in-out; }
@@ -199,7 +277,6 @@ const Accounts = () => {
                 .icon-green { background: #DCFCE7; color: #16A34A; }
                 .icon-red { background: #FEE2E2; color: #EF4444; }
 
-                /* Cards Grid */
                 .cards-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -207,24 +284,15 @@ const Accounts = () => {
                 }
 
                 .bank-card {
-                    height: 220px;
-                    border-radius: 20px;
-                    padding: 1.5rem;
-                    color: white;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    position: relative;
-                    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
-                    transition: transform 0.3s;
-                    overflow: hidden;
-                    cursor: pointer;
+                    height: 220px; border-radius: 20px; padding: 1.5rem; color: white;
+                    display: flex; flex-direction: column; justify-content: space-between;
+                    position: relative; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
+                    transition: transform 0.3s; overflow: hidden; cursor: pointer;
                 }
 
                 .bank-card:hover { transform: translateY(-5px); }
                 .bank-card:hover .card-actions-overlay { opacity: 1; }
 
-                /* Themes */
                 .theme-dark-blue { background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%); }
                 .theme-emerald { background: linear-gradient(135deg, #065F46 0%, #10B981 100%); }
                 .theme-purple { background: linear-gradient(135deg, #581C87 0%, #8B5CF6 100%); }
@@ -243,11 +311,9 @@ const Accounts = () => {
                 .card-number { font-family: monospace; font-size: 1rem; opacity: 0.9; }
                 .card-brand { font-size: 1rem; font-weight: 700; font-style: italic; opacity: 0.9; }
 
-                /* Overlay */
                 .card-actions-overlay {
                     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-                    background: rgba(0,0,0,0.6);
-                    backdrop-filter: blur(4px);
+                    background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
                     display: flex; align-items: center; justify-content: center; gap: 1rem;
                     opacity: 0; transition: opacity 0.2s;
                 }
@@ -259,16 +325,10 @@ const Accounts = () => {
                 }
                 .overlay-btn:hover { background: white; color: var(--text-main); }
 
-                /* Add Card */
                 .add-card-placeholder {
-                    height: 220px;
-                    border: 2px dashed var(--border-color);
-                    border-radius: 20px;
+                    height: 220px; border: 2px dashed var(--border-color); border-radius: 20px;
                     display: flex; align-items: center; justify-content: center;
-                    cursor: pointer;
-                    background: #F8FAFC;
-                    transition: all 0.2s;
-                    color: var(--text-muted);
+                    cursor: pointer; background: #F8FAFC; transition: all 0.2s; color: var(--text-muted);
                 }
                 .add-card-placeholder:hover { border-color: var(--primary); color: var(--primary); background: #EFF6FF; }
                 .placeholder-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }

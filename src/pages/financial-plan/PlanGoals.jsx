@@ -1,118 +1,304 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import EmptyState from '../../components/common/EmptyState';
 import {
-    Target,
     Plus,
+    Target,
     Trophy,
-    Calendar,
     TrendingUp,
-    MoreHorizontal
+    Search,
+    Filter,
+    ChevronDown,
+    Edit,
+    Trash2,
+    X,
+    Wallet,
 } from 'lucide-react';
-import '../../App.css';
+import './financial-plan.css';
+
+const EMPTY_FORM = { name: '', target: '', current: '', deadline: '' };
 
 const PlanGoals = () => {
-    const [goals] = useState([
-        { id: 1, name: 'Emergency Fund', target: 10000, current: 6500, deadline: 'Dec 2026', icon: Trophy, color: 'yellow' },
-        { id: 2, name: 'New Car', target: 25000, current: 8000, deadline: 'Aug 2027', icon: Target, color: 'blue' },
-        { id: 3, name: 'Home Downpayment', target: 50000, current: 15000, deadline: 'Jan 2029', icon: HomeIcon, color: 'purple' },
-    ]);
+    const [goals, setGoals] = useState(() => {
+        const saved = localStorage.getItem('books_plan_goals');
+        return saved ? JSON.parse(saved) : [];
+    });
 
-    // Simple mock icon component
-    function HomeIcon(props) {
-        return (
-            <svg
-                {...props}
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-            >
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-        );
-    }
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState(EMPTY_FORM);
+    const [formError, setFormError] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        localStorage.setItem('books_plan_goals', JSON.stringify(goals));
+    }, [goals]);
+
+    const openModal = () => {
+        setFormData(EMPTY_FORM);
+        setFormError('');
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setFormError('');
+    };
+
+    const handleAddGoal = (e) => {
+        e.preventDefault();
+        if (!formData.name || !formData.target || !formData.current || !formData.deadline) {
+            setFormError('All fields are required.');
+            return;
+        }
+
+        const newGoal = {
+            id: Date.now(),
+            name: formData.name,
+            target: parseFloat(formData.target),
+            current: parseFloat(formData.current),
+            deadline: formData.deadline,
+        };
+
+        setGoals((prev) => [newGoal, ...prev]);
+        closeModal();
+    };
+
+    const handleDelete = (id) => {
+        setGoals((prev) => prev.filter((item) => item.id !== id));
+    };
+
+    const totalTarget = goals.reduce((sum, item) => sum + item.target, 0);
+    const totalCurrent = goals.reduce((sum, item) => sum + item.current, 0);
+
+    const filteredGoals = goals.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
-        <div className="page-fade-in">
-            <div className="dashboard-header">
-                <div>
-
-                    <p className="text-muted text-sm mt-1">Plan and track your long-term objectives</p>
+        <div className="fp-page">
+            {/* ── Page Header ── */}
+            <div className="fp-header">
+                <div className="fp-header-left">
+                    <h1>Savings &amp; Goals</h1>
+                    <p>Plan and track your long-term financial objectives</p>
                 </div>
-                <button className="btn-primary">
-                    <Plus size={18} />
-                    <span>Create New Goal</span>
+                <button className="btn-primary flex items-center gap-2" onClick={openModal}>
+                    <Plus size={16} />
+                    <span>Add Goal</span>
                 </button>
             </div>
 
-            <div className="content-wrapper">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {goals.map((goal) => {
-                        const progress = (goal.current / goal.target) * 100;
-                        return (
-                            <div key={goal.id} className="bg-white p-6 rounded-2xl border border-[var(--border-color)] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-4">
-                                    <button className="text-gray-300 hover:text-[var(--text-main)]"><MoreHorizontal size={20} /></button>
-                                </div>
+            {/* ── Summary Cards ── */}
+            <div className="fp-summary-grid">
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--indigo">
+                        <Target size={22} />
+                    </div>
+                    <div className="fp-summary-info">
+                        <p>Total Target</p>
+                        <h3>${totalTarget.toLocaleString()}</h3>
+                    </div>
+                </div>
 
-                                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-${goal.color}-50 text-${goal.color}-600`}>
-                                    <goal.icon size={28} />
-                                </div>
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--green">
+                        <Wallet size={22} />
+                    </div>
+                    <div className="fp-summary-info">
+                        <p>Current Savings</p>
+                        <h3>${totalCurrent.toLocaleString()}</h3>
+                    </div>
+                </div>
 
-                                <h3 className="text-xl font-bold text-[var(--text-main)] mb-1">{goal.name}</h3>
-                                <div className="flex items-center gap-2 text-sm text-muted mb-6">
-                                    <Calendar size={14} />
-                                    <span>Target: {goal.deadline}</span>
-                                </div>
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--yellow">
+                        <Trophy size={22} />
+                    </div>
+                    <div className="fp-summary-info">
+                        <p>Active Goals</p>
+                        <h3>{goals.length}</h3>
+                    </div>
+                </div>
+            </div>
 
-                                <div className="space-y-2 mb-4">
-                                    <div className="flex justify-between items-end">
-                                        <span className="text-3xl font-bold text-[var(--text-main)]">${goal.current.toLocaleString()}</span>
-                                        <span className="text-sm font-medium text-muted mb-1">of ${goal.target.toLocaleString()}</span>
-                                    </div>
-                                    <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                                        <div
-                                            className={`h-full rounded-full transition-all duration-1000 ease-out bg-${goal.color}-500`}
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
-                                    </div>
-                                    <div className="flex justify-between text-xs font-medium mt-1">
-                                        <span className={`text-${goal.color}-600`}>{progress.toFixed(0)}% Completed</span>
-                                        <span className="text-muted">${(goal.target - goal.current).toLocaleString()} left</span>
-                                    </div>
-                                </div>
-
-                                <button className="w-full py-2.5 rounded-xl border border-[var(--border-color)] text-[var(--text-main)] font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
-                                    <TrendingUp size={16} />
-                                    Add Funds
-                                </button>
-                            </div>
-                        );
-                    })}
-
-                    {/* Add New Goal Card */}
-                    <button className="border-2 border-dashed border-[var(--border-color)] rounded-2xl flex flex-col items-center justify-center gap-4 text-muted hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors min-h-[300px] bg-gray-50/50 hover:bg-blue-50/50 group">
-                        <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Plus size={32} />
-                        </div>
-                        <div className="text-center">
-                            <span className="font-bold text-lg block">Start a New Goal</span>
-                            <span className="text-sm opacity-70">Save for a vacation, gadget, or future</span>
-                        </div>
+            {/* ── Toolbar ── */}
+            <div className="fp-toolbar">
+                <div className="fp-search-wrap">
+                    <Search size={15} className="fp-search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search goals..."
+                        className="fp-search-input"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+                <div className="fp-toolbar-actions">
+                    <button className="fp-filter-btn">
+                        <Filter size={14} />
+                        Filter
+                    </button>
+                    <button className="fp-sort-btn">
+                        Sort By
+                        <ChevronDown size={14} />
                     </button>
                 </div>
             </div>
 
-            <style>{`
-                .bg-yellow-50 { background-color: #FEFCE8; } .text-yellow-600 { color: #CA8A04; } .bg-yellow-500 { background-color: #EAB308; }
-                .bg-blue-50 { background-color: #EFF6FF; } .text-blue-600 { color: #2563EB; } .bg-blue-500 { background-color: #3B82F6; }
-                .bg-purple-50 { background-color: #FAF5FF; } .text-purple-600 { color: #9333EA; } .bg-purple-500 { background-color: #A855F7; }
-            `}</style>
+            {/* ── Data Section ── */}
+            {filteredGoals.length === 0 ? (
+                <EmptyState
+                    title="No goals set yet"
+                    description="Add your first savings goal to start tracking your progress."
+                />
+            ) : (
+                <div className="fp-table-card">
+                    <table className="fp-table">
+                        <thead>
+                            <tr>
+                                <th>Goal Name</th>
+                                <th className="fp-th-right">Target Amount</th>
+                                <th className="fp-th-right">Current Savings</th>
+                                <th className="fp-th-center">Progress</th>
+                                <th>Target Date</th>
+                                <th className="fp-th-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredGoals.map((goal) => {
+                                const progress =
+                                    goal.target > 0
+                                        ? Math.min((goal.current / goal.target) * 100, 100)
+                                        : 0;
+                                return (
+                                    <tr key={goal.id}>
+                                        <td className="fp-td-name">{goal.name}</td>
+                                        <td className="fp-td-amount">${goal.target.toLocaleString()}</td>
+                                        <td className="fp-td-amount">${goal.current.toLocaleString()}</td>
+                                        <td className="fp-td-center">
+                                            <div className="fp-progress-wrap">
+                                                <div className="fp-progress-bar-bg">
+                                                    <div
+                                                        className="fp-progress-bar-fill"
+                                                        style={{ width: `${progress}%` }}
+                                                    />
+                                                </div>
+                                                <span className="fp-progress-label">
+                                                    {progress.toFixed(0)}%
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td className="fp-td-muted">{goal.deadline}</td>
+                                        <td className="fp-td-center">
+                                            <div className="fp-row-actions">
+                                                <button className="fp-action-btn fp-action-btn--edit" title="Edit">
+                                                    <Edit size={15} />
+                                                </button>
+                                                <button
+                                                    className="fp-action-btn fp-action-btn--delete"
+                                                    title="Delete"
+                                                    onClick={() => handleDelete(goal.id)}
+                                                >
+                                                    <Trash2 size={15} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* ── Add Goal Modal ── */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fp-modal-overlay">
+                        <motion.div
+                            className="fp-modal"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="fp-modal-header">
+                                <h2 className="fp-modal-title">Add Savings Goal</h2>
+                                <button className="fp-modal-close" onClick={closeModal}>
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <form className="fp-form" onSubmit={handleAddGoal}>
+                                <div className="fp-field">
+                                    <label className="fp-label">Goal Name</label>
+                                    <input
+                                        type="text"
+                                        className="fp-input"
+                                        placeholder="e.g. New Car, Emergency Fund"
+                                        value={formData.name}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, name: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Target Amount</label>
+                                    <input
+                                        type="number"
+                                        className="fp-input"
+                                        placeholder="0.00"
+                                        value={formData.target}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, target: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Current Savings</label>
+                                    <input
+                                        type="number"
+                                        className="fp-input"
+                                        placeholder="0.00"
+                                        value={formData.current}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, current: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Target Date</label>
+                                    <input
+                                        type="date"
+                                        className="fp-input"
+                                        value={formData.deadline}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, deadline: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                {formError && (
+                                    <p className="fp-form-error">{formError}</p>
+                                )}
+
+                                <div className="fp-modal-footer">
+                                    <button
+                                        type="button"
+                                        className="fp-btn-cancel"
+                                        onClick={closeModal}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="fp-btn-submit">
+                                        Save Goal
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

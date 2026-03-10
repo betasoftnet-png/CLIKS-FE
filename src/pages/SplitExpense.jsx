@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import EmptyState from '../components/common/EmptyState';
 import {
     Plus,
     Search,
@@ -16,15 +18,83 @@ const SplitExpense = () => {
     const [activeTab, setActiveTab] = useState('ALL FRIENDS');
     const [searchQuery, setSearchQuery] = useState('');
 
-    const people = [
-        { id: 1, name: 'Sarah Jenks', status: 'owes_you', amount: 240.00, avatar: 'SJ', avatarColor: '#D1FAE5', textColor: '#065F46' },
-        { id: 2, name: 'Michael Chen', status: 'you_owe', amount: 85.25, avatar: 'MC', avatarColor: '#FFE4E6', textColor: '#9F1239' },
-    ];
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState({ title: '', amount: '', paidBy: 'You', splitWith: '', date: '' });
+    const [formError, setFormError] = useState('');
 
-    const subscriptions = [
-        { id: 1, name: 'Netflix Family', cost: 4.50, detail: 'Split with 4 friends', icon: MonitorPlay, color: '#DC2626' },
-        { id: 2, name: 'Spotify Premium', cost: 3.33, detail: 'Split with 3 friends', icon: Music, color: '#10B981' },
-    ];
+    const [people, setPeople] = useState(() => {
+        const saved = localStorage.getItem('books_splits');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    const handleAddSplit = (e) => {
+        e.preventDefault();
+        if (!formData.title || !formData.amount || !formData.paidBy || !formData.splitWith || !formData.date) {
+            setFormError('All fields are required');
+            return;
+        }
+
+        const totalAmount = parseFloat(formData.amount);
+        const splitNames = formData.splitWith.split(',').map(n => n.trim()).filter(Boolean);
+        if (splitNames.length === 0) {
+            setFormError('Include at least one friend');
+            return;
+        }
+
+        const splitAmount = totalAmount / (splitNames.length + (formData.paidBy === 'You' ? 1 : 0)); // Assuming equal split
+        
+        // Add or update people
+        const newPeople = [...people];
+        splitNames.forEach(name => {
+            const existingIdx = newPeople.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+            if (existingIdx >= 0) {
+                // Simplified update logic
+                let currentPerson = {...newPeople[existingIdx]};
+                let owesYouAmt = currentPerson.status === 'owes_you' ? currentPerson.amount : -currentPerson.amount;
+                
+                if (formData.paidBy === 'You') {
+                    owesYouAmt += splitAmount;
+                } else {
+                    owesYouAmt -= splitAmount;
+                }
+                
+                if (owesYouAmt > 0) {
+                    currentPerson.status = 'owes_you';
+                    currentPerson.amount = owesYouAmt;
+                } else if (owesYouAmt < 0) {
+                    currentPerson.status = 'you_owe';
+                    currentPerson.amount = Math.abs(owesYouAmt);
+                } else {
+                    currentPerson.status = 'settled';
+                    currentPerson.amount = 0;
+                }
+                newPeople[existingIdx] = currentPerson;
+            } else {
+                // New person
+                const isOwedToYou = formData.paidBy === 'You';
+                newPeople.push({
+                    id: Date.now() + Math.random(),
+                    name: name,
+                    status: isOwedToYou ? 'owes_you' : 'you_owe',
+                    amount: splitAmount,
+                    avatar: name.substring(0, 2).toUpperCase(),
+                    avatarColor: isOwedToYou ? '#D1FAE5' : '#FFE4E6',
+                    textColor: isOwedToYou ? '#065F46' : '#9F1239'
+                });
+            }
+        });
+
+        setPeople(newPeople);
+        localStorage.setItem('books_splits', JSON.stringify(newPeople));
+        setIsModalOpen(false);
+        setFormData({ title: '', amount: '', paidBy: 'You', splitWith: '', date: '' });
+        setFormError('');
+    };
+
+    const totalOwesYou = people.filter(p => p.status === 'owes_you').reduce((sum, p) => sum + p.amount, 0);
+    const totalYouOwe = people.filter(p => p.status === 'you_owe').reduce((sum, p) => sum + p.amount, 0);
+    const totalVolume = totalOwesYou + totalYouOwe;
+    const ratio = totalVolume > 0 ? (totalOwesYou / totalVolume) * 100 : 0;
 
     return (
         <div className="split-page">
@@ -34,7 +104,7 @@ const SplitExpense = () => {
 
                     <p className="page-subtitle">Manage your shared expenses and friend balances</p>
                 </div>
-                <button className="btn-new-split">
+                <button className="btn-new-split" onClick={() => setIsModalOpen(true)}>
                     <Plus size={18} />
                     <span>New Split</span>
                 </button>
@@ -48,7 +118,7 @@ const SplitExpense = () => {
                         <ArrowDownLeft size={18} />
                         <span>PEOPLE OWE YOU</span>
                     </div>
-                    <div className="stat-value">$1,240.50</div>
+                    <div className="stat-value">${totalOwesYou.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                     <div className="stat-trend text-green">
                         <TrendingUp size={16} />
                         <span>+12.5% this month</span>
@@ -61,7 +131,7 @@ const SplitExpense = () => {
                         <ArrowUpRight size={18} />
                         <span>YOU OWE</span>
                     </div>
-                    <div className="stat-value">$450.25</div>
+                    <div className="stat-value">${totalYouOwe.toLocaleString('en-US', { minimumFractionDigits: 2 })}</div>
                     <div className="stat-trend text-orange">
                         <TrendingDown size={16} />
                         <span>-5.2% this month</span>
@@ -72,13 +142,13 @@ const SplitExpense = () => {
                 <div className="stat-card">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-semibold text-slate-700">Owed vs Owing Ratio</span>
-                        <span className="text-sm font-bold text-blue-600">73%</span>
+                        <span className="text-sm font-bold text-blue-600">{ratio.toFixed(0)}%</span>
                     </div>
                     <div className="progress-bar-bg">
-                        <div className="progress-bar-fill" style={{ width: '73%' }}></div>
+                        <div className="progress-bar-fill" style={{ width: `${ratio}%` }}></div>
                     </div>
                     <div className="text-xs text-slate-500 mt-3 font-medium tracking-wide uppercase">
-                        $1,690.75 Total Volume
+                        ${totalVolume.toLocaleString('en-US', { minimumFractionDigits: 2 })} Total Volume
                     </div>
                 </div>
             </div>
@@ -108,39 +178,13 @@ const SplitExpense = () => {
             </div>
 
             {/* Main Grid */}
+            {people.length === 0 ? (
+                <EmptyState 
+                    title="No Split Expenses" 
+                    description="It looks like you haven't added any shared expenses yet. Click 'New Split' to manage balances with friends."
+                />
+            ) : (
             <div className="main-grid">
-                {/* Subscription Card */}
-                <div className="subscription-card">
-                    <div className="sub-header">
-                        <div>
-                            <h3 className="sub-title">Shared Subscriptions</h3>
-                            <p className="sub-subtitle">MONTHLY RECURRING</p>
-                        </div>
-                        <div className="sub-icon-badge">
-                            <MonitorPlay size={16} color="white" />
-                        </div>
-                    </div>
-
-                    <div className="sub-list">
-                        {subscriptions.map(sub => (
-                            <div key={sub.id} className="sub-item">
-                                <div className="sub-item-icon" style={{ backgroundColor: sub.color }}>
-                                    {sub.name.charAt(0)}
-                                </div>
-                                <div className="sub-item-details">
-                                    <div className="sub-name">{sub.name}</div>
-                                    <div className="sub-detail">{sub.detail}</div>
-                                </div>
-                                <div className="sub-cost text-white font-bold">${sub.cost.toFixed(2)}</div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <button className="btn-manage-subs">
-                        Manage Subscriptions
-                    </button>
-                </div>
-
                 {/* Friend Cards */}
                 {people.map(person => (
                     <div key={person.id} className="friend-card">
@@ -183,6 +227,92 @@ const SplitExpense = () => {
                     </div>
                 ))}
             </div>
+            )}
+
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="modal-content"
+                        >
+                            <h2 className="modal-title">Add New Split</h2>
+                            <form onSubmit={handleAddSplit} className="modal-form">
+                                <div className="form-group">
+                                    <label>Expense Title</label>
+                                    <input 
+                                        type="text" 
+                                        value={formData.title} 
+                                        onChange={e => setFormData({...formData, title: e.target.value})}
+                                        className="form-input"
+                                        placeholder="e.g. Dinner"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Amount ($)</label>
+                                    <input 
+                                        type="number" 
+                                        step="0.01"
+                                        value={formData.amount} 
+                                        onChange={e => setFormData({...formData, amount: e.target.value})}
+                                        className="form-input"
+                                        placeholder="120.00"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Paid By</label>
+                                    <select 
+                                        value={formData.paidBy} 
+                                        onChange={e => setFormData({...formData, paidBy: e.target.value})}
+                                        className="form-input"
+                                    >
+                                        <option value="You">You</option>
+                                        <option value="Friend">Someone else</option>
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Split With (comma separated names)</label>
+                                    <input 
+                                        type="text" 
+                                        value={formData.splitWith} 
+                                        onChange={e => setFormData({...formData, splitWith: e.target.value})}
+                                        className="form-input"
+                                        placeholder="Sarah, Alex"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Date</label>
+                                    <input 
+                                        type="date" 
+                                        value={formData.date} 
+                                        onChange={e => setFormData({...formData, date: e.target.value})}
+                                        className="form-input"
+                                    />
+                                </div>
+                                
+                                {formError && <p className="form-error">{formError}</p>}
+                                
+                                <div className="modal-actions">
+                                    <button 
+                                        type="button" 
+                                        className="btn-secondary" 
+                                        style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer' }}
+                                        onClick={() => setIsModalOpen(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn-primary" style={{ background: '#195BAC', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '6px', cursor: 'pointer' }}>
+                                        Add Split
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <style>{`
                 /* Colors */
@@ -195,6 +325,67 @@ const SplitExpense = () => {
                     --green: #10B981;
                     --orange: #F97316;
                     --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+                }
+
+                .modal-overlay {
+                    position: fixed;
+                    top: 0; left: 0; right: 0; bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
+                .modal-content {
+                    background: white;
+                    padding: 24px;
+                    border-radius: 12px;
+                    width: 100%;
+                    max-width: 400px;
+                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+                }
+                .modal-title {
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    margin: 0 0 1rem 0;
+                    color: var(--text-dark);
+                }
+                .modal-form {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+                .form-group label {
+                    font-size: 0.875rem;
+                    font-weight: 500;
+                    color: var(--text-slate);
+                }
+                .form-input {
+                    padding: 0.5rem 0.75rem;
+                    border: 1px solid #E2E8F0;
+                    border-radius: 6px;
+                    font-size: 0.875rem;
+                    outline: none;
+                }
+                .form-input:focus {
+                    border-color: #195BAC;
+                    box-shadow: 0 0 0 2px rgba(25, 91, 172, 0.1);
+                }
+                .form-error {
+                    color: #EF4444;
+                    font-size: 0.875rem;
+                    margin: 0;
+                }
+                .modal-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 8px;
+                    margin-top: 1rem;
                 }
 
                 .split-page {

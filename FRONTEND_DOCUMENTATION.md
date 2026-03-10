@@ -86,7 +86,11 @@
     ├── 📂 services/           # Business logic & API calls
     │   └── stockService.js    # Stock management API services
     ├── 📂 assets/             # Static assets
+    │   └── react.svg
     ├── 📂 components/         # Reusable components
+    │   ├── AnalyticsSection.jsx
+    │   ├── AuditPanel.jsx
+    │   ├── AuditorSidebar.jsx
     │   ├── Breadcrumbs.jsx
     │   ├── ProfileDropdown.jsx
     │   ├── Sidebar.jsx
@@ -96,17 +100,32 @@
     │   │   ├── ErrorBoundary.jsx
     │   │   ├── ErrorState.jsx
     │   │   └── Tooltip.jsx
+    │   ├── 📂 dashboard/      # Dashboard tiles
+    │   │   ├── BudgetMixTile.jsx
+    │   │   ├── MarketPulseTile.jsx
+    │   │   ├── MoneyGoalsTile.jsx
+    │   │   ├── SplitBillsTile.jsx
+    │   │   └── TheSquadTile.jsx
     │   └── 📂 ui/             # UI primitives
     │       ├── accordion.jsx
     │       ├── spotlight.tsx
     │       └── toggle.jsx
     ├── 📂 layouts/            # Layout components
+    │   ├── AuditorLayout.jsx
     │   └── MainLayout.jsx
     ├── 📂 lib/                # Utility functions
     │   ├── config.js          # Environment configuration
     │   ├── queryClient.js     # TanStack Query setup
     │   └── utils.js
     └── 📂 pages/              # Page components
+        ├── 📂 books/          # Books pages
+        │   └── Dashboard.jsx
+        ├── 📂 finance/        # Finance pages
+        │   ├── Accounts.jsx
+        │   ├── Bills.jsx
+        │   ├── Rewards.jsx
+        │   ├── Savings.jsx
+        │   └── Transfers.jsx
         ├── 📂 financial-plan/ # Financial planning pages
         │   ├── FinancialCalendar.jsx
         │   ├── FinancialPlan.jsx
@@ -122,6 +141,10 @@
         │   ├── PeopleReminders.jsx
         │   └── PeopleTransactions.jsx
         ├── Accounts.jsx
+        ├── Audit.css
+        ├── Audit.jsx
+        ├── Auditor.css
+        ├── Auditor.jsx
         ├── Books.jsx
         ├── Budgets.jsx
         ├── Debts.jsx
@@ -129,10 +152,10 @@
         ├── FAQ.jsx
         ├── Finance.jsx
         ├── FinancialContacts.jsx
-        ├── Home.jsx
         ├── Income.jsx
         ├── Investments.jsx
         ├── Landing.jsx
+        ├── Login.jsx
         ├── PlannedPayments.jsx
         ├── Profile.jsx
         ├── Public.jsx
@@ -887,6 +910,29 @@ import { cn } from '@/lib/utils';
 
 ---
 
+## ⚙️ Environment Configuration
+
+The application uses environment variables for configuration across different deployments.
+
+### Environment Files
+
+| File | Purpose |
+|------|---------|
+| `.env.example` | Template file with documented variables. Should be copied to create local configurations. |
+| `.env.development` | Configuration for local development (`npm run dev`). |
+| `.env.production` | Configuration for production builds (`npm run build`). |
+
+### Key Variables
+
+| Variable | Description |
+|----------|-------------|
+| `VITE_API_BASE_URL` | Base URL for backend API requests. |
+| `VITE_ENABLE_DEV_TOOLS` | Boolean feature flag to enable/disable development tools. |
+
+*Note: Never commit `.env.local` or environment files containing real secrets to version control.*
+
+---
+
 ## 📦 Build & Deployment
 
 ### Vite Configuration (`vite.config.js`)
@@ -1068,5 +1114,5 @@ For questions or issues with the frontend codebase, refer to:
 
 ---
 
-*Documentation generated: January 29, 2026*
+*Documentation generated: March 7, 2026*
 *Version: 0.0.0 (as per package.json)*

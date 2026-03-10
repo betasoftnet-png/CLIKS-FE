@@ -1,114 +1,288 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import EmptyState from '../../components/common/EmptyState';
 import {
     Plus,
-    ShoppingCart,
-    CalendarClock,
-    Tag,
-    AlertCircle,
-    ArrowRight
+    DollarSign,
+    TrendingUp,
+    Wallet,
+    Search,
+    Filter,
+    ChevronDown,
+    Edit,
+    Trash2,
+    X,
 } from 'lucide-react';
-import '../../App.css';
+import './financial-plan.css';
+
+const EMPTY_FORM = { item: '', category: '', estimatedCost: '', plannedMonth: '' };
 
 const PlanExpense = () => {
-    // These are planned/future expenses, distinct from actual tracked expenses
-    const [plannedExpenses] = useState([
-        { id: 1, item: 'New Laptop', category: 'Electronics', estimatedCost: 1200, plannedMonth: 'March 2026', priority: 'High' },
-        { id: 2, item: 'Car Insurance Renewal', category: 'Insurance', estimatedCost: 850, plannedMonth: 'May 2026', priority: 'Critical' },
-        { id: 3, item: 'Holiday Trip', category: 'Travel', estimatedCost: 2000, plannedMonth: 'August 2026', priority: 'Medium' },
-        { id: 4, item: 'Home Repairs', category: 'Housing', estimatedCost: 500, plannedMonth: 'Feb 2026', priority: 'Low' },
-    ]);
+    const [plannedExpenses, setPlannedExpenses] = useState(() => {
+        const saved = localStorage.getItem('books_plan_expense');
+        return saved ? JSON.parse(saved) : [];
+    });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState(EMPTY_FORM);
+    const [formError, setFormError] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+
+    useEffect(() => {
+        localStorage.setItem('books_plan_expense', JSON.stringify(plannedExpenses));
+    }, [plannedExpenses]);
+
+    const openModal = () => {
+        setFormData(EMPTY_FORM);
+        setFormError('');
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setFormError('');
+    };
+
+    const handleAddExpense = (e) => {
+        e.preventDefault();
+        if (!formData.item || !formData.category || !formData.estimatedCost || !formData.plannedMonth) {
+            setFormError('All fields are required.');
+            return;
+        }
+
+        const newExpense = {
+            id: Date.now(),
+            item: formData.item,
+            category: formData.category,
+            estimatedCost: parseFloat(formData.estimatedCost),
+            plannedMonth: formData.plannedMonth,
+        };
+
+        setPlannedExpenses((prev) => [newExpense, ...prev]);
+        closeModal();
+    };
+
+    const handleDelete = (id) => {
+        setPlannedExpenses((prev) => prev.filter((item) => item.id !== id));
+    };
 
     const totalProjected = plannedExpenses.reduce((sum, item) => sum + item.estimatedCost, 0);
+    const monthlyAverage =
+        plannedExpenses.length > 0 ? totalProjected / plannedExpenses.length : 0;
+
+    const filteredExpenses = plannedExpenses.filter(
+        (item) =>
+            item.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
-        <div className="page-fade-in">
-            <div className="dashboard-header">
-                <div>
-
-                    <p className="text-muted text-sm mt-1">Track and prepare for upcoming large expenses</p>
+        <div className="fp-page">
+            {/* ── Page Header ── */}
+            <div className="fp-header">
+                <div className="fp-header-left">
+                    <h1>Expense</h1>
+                    <p>Track and prepare for upcoming large expenses</p>
                 </div>
-                <button className="btn-primary">
-                    <Plus size={18} />
-                    <span>Plan New Expense</span>
+                <button className="btn-primary flex items-center gap-2" onClick={openModal}>
+                    <Plus size={16} />
+                    <span>Add Expense</span>
                 </button>
             </div>
 
-            <div className="content-wrapper">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                    {/* Stats */}
-                    <div className="bg-white p-6 rounded-2xl border border-[var(--border-color)] flex flex-col justify-center">
-                        <div className="flex items-center gap-2 text-muted mb-2">
-                            <ShoppingCart size={20} />
-                            <span className="font-medium">Total Planned (Attempts)</span>
-                        </div>
-                        <h2 className="text-4xl font-bold text-[var(--text-main)]">${totalProjected.toLocaleString()}</h2>
-                        <p className="text-sm text-muted mt-2">Across {plannedExpenses.length} upcoming items</p>
+            {/* ── Summary Cards ── */}
+            <div className="fp-summary-grid">
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--red">
+                        <DollarSign size={22} />
                     </div>
-
-                    <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 flex flex-col justify-center">
-                        <div className="flex items-center gap-2 text-blue-700 mb-2">
-                            <AlertCircle size={20} />
-                            <span className="font-medium">Upcoming Critical</span>
-                        </div>
-                        <h2 className="text-3xl font-bold text-blue-900">$850</h2>
-                        <p className="text-sm text-blue-700 mt-2">Car Insurance Renewal due in May</p>
+                    <div className="fp-summary-info">
+                        <p>Total Planned</p>
+                        <h3>${totalProjected.toLocaleString()}</h3>
                     </div>
                 </div>
 
-                <h3 className="section-title mb-4">Planned Expenses</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {plannedExpenses.map((expense) => (
-                        <div key={expense.id} className="bg-white p-5 rounded-xl border border-[var(--border-color)] hover:shadow-lg transition-all relative overflow-hidden group">
-                            <div className={`absolute top-0 left-0 w-1 h-full ${expense.priority === 'Critical' ? 'bg-red-500' :
-                                expense.priority === 'High' ? 'bg-orange-500' :
-                                    expense.priority === 'Medium' ? 'bg-blue-500' : 'bg-green-500'
-                                }`}></div>
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--orange">
+                        <TrendingUp size={22} />
+                    </div>
+                    <div className="fp-summary-info">
+                        <p>Monthly Average</p>
+                        <h3>${monthlyAverage.toLocaleString(undefined, { maximumFractionDigits: 2 })}</h3>
+                    </div>
+                </div>
 
-                            <div className="flex justify-between items-start mb-3 pl-3">
-                                <h4 className="font-bold text-lg text-[var(--text-main)] group-hover:text-[var(--primary)] transition-colors">{expense.item}</h4>
-                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${expense.priority === 'Critical' ? 'bg-red-100 text-red-700' :
-                                    expense.priority === 'High' ? 'bg-orange-100 text-orange-700' :
-                                        expense.priority === 'Medium' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'
-                                    }`}>{expense.priority}</span>
-                            </div>
+                <div className="fp-summary-card">
+                    <div className="fp-summary-icon fp-icon--indigo">
+                        <Wallet size={22} />
+                    </div>
+                    <div className="fp-summary-info">
+                        <p>Upcoming Items</p>
+                        <h3>{plannedExpenses.length}</h3>
+                    </div>
+                </div>
+            </div>
 
-                            <div className="pl-3 space-y-2">
-                                <div className="flex items-center gap-2 text-sm text-muted">
-                                    <Tag size={16} />
-                                    <span>{expense.category}</span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm text-muted">
-                                    <CalendarClock size={16} />
-                                    <span>{expense.plannedMonth}</span>
-                                </div>
-                            </div>
-
-                            <div className="mt-4 pt-4 border-t border-[var(--border-color)] flex justify-between items-center pl-3">
-                                <span className="font-bold text-xl text-[var(--text-main)]">${expense.estimatedCost.toLocaleString()}</span>
-                                <button className="p-2 hover:bg-gray-100 rounded-full text-gray-400 hover:text-[var(--primary)] transition-colors">
-                                    <ArrowRight size={20} />
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-
-                    {/* Add New Card */}
-                    <button className="border-2 border-dashed border-[var(--border-color)] rounded-xl flex flex-col items-center justify-center text-muted hover:border-[var(--primary)] hover:text-[var(--primary)] transition-colors min-h-[200px] bg-gray-50/50 hover:bg-blue-50/50">
-                        <div className="w-14 h-14 rounded-full bg-white shadow-sm flex items-center justify-center mb-3">
-                            <Plus size={24} />
-                        </div>
-                        <span className="font-medium">Plan Item</span>
+            {/* ── Toolbar ── */}
+            <div className="fp-toolbar">
+                <div className="fp-search-wrap">
+                    <Search size={15} className="fp-search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search expenses..."
+                        className="fp-search-input"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                </div>
+                <div className="fp-toolbar-actions">
+                    <button className="fp-filter-btn">
+                        <Filter size={14} />
+                        Filter
+                    </button>
+                    <button className="fp-sort-btn">
+                        Sort By
+                        <ChevronDown size={14} />
                     </button>
                 </div>
             </div>
 
-            <style>{`
-                .section-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
-                .text-blue-700 { color: #1D4ED8; }
-                .text-blue-900 { color: #1E3A8A; }
-                .bg-blue-50 { background-color: #EFF6FF; }
-                .bg-blue-100 { background-color: #DBEAFE; }
-            `}</style>
+            {/* ── Data Section ── */}
+            {filteredExpenses.length === 0 ? (
+                <EmptyState
+                    title="No expenses planned yet"
+                    description="Add your first planned expense to start preparing your budget."
+                />
+            ) : (
+                <div className="fp-table-card">
+                    <table className="fp-table">
+                        <thead>
+                            <tr>
+                                <th>Expense Name</th>
+                                <th>Category</th>
+                                <th className="fp-th-right">Amount</th>
+                                <th>Date</th>
+                                <th className="fp-th-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredExpenses.map((expense) => (
+                                <tr key={expense.id}>
+                                    <td className="fp-td-name">{expense.item}</td>
+                                    <td>
+                                        <span className="fp-badge">{expense.category}</span>
+                                    </td>
+                                    <td className="fp-td-amount">${expense.estimatedCost.toLocaleString()}</td>
+                                    <td className="fp-td-muted">{expense.plannedMonth}</td>
+                                    <td className="fp-td-center">
+                                        <div className="fp-row-actions">
+                                            <button className="fp-action-btn fp-action-btn--edit" title="Edit">
+                                                <Edit size={15} />
+                                            </button>
+                                            <button
+                                                className="fp-action-btn fp-action-btn--delete"
+                                                title="Delete"
+                                                onClick={() => handleDelete(expense.id)}
+                                            >
+                                                <Trash2 size={15} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+
+            {/* ── Add Expense Modal ── */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fp-modal-overlay">
+                        <motion.div
+                            className="fp-modal"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="fp-modal-header">
+                                <h2 className="fp-modal-title">Add Planned Expense</h2>
+                                <button className="fp-modal-close" onClick={closeModal}>
+                                    <X size={18} />
+                                </button>
+                            </div>
+
+                            <form className="fp-form" onSubmit={handleAddExpense}>
+                                <div className="fp-field">
+                                    <label className="fp-label">Expense Name</label>
+                                    <input
+                                        type="text"
+                                        className="fp-input"
+                                        placeholder="e.g. New Laptop"
+                                        value={formData.item}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, item: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Category</label>
+                                    <input
+                                        type="text"
+                                        className="fp-input"
+                                        placeholder="e.g. Electronics"
+                                        value={formData.category}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, category: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Amount</label>
+                                    <input
+                                        type="number"
+                                        className="fp-input"
+                                        placeholder="0.00"
+                                        value={formData.estimatedCost}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, estimatedCost: e.target.value })
+                                        }
+                                    />
+                                </div>
+                                <div className="fp-field">
+                                    <label className="fp-label">Date</label>
+                                    <input
+                                        type="date"
+                                        className="fp-input"
+                                        value={formData.plannedMonth}
+                                        onChange={(e) =>
+                                            setFormData({ ...formData, plannedMonth: e.target.value })
+                                        }
+                                    />
+                                </div>
+
+                                {formError && (
+                                    <p className="fp-form-error">{formError}</p>
+                                )}
+
+                                <div className="fp-modal-footer">
+                                    <button
+                                        type="button"
+                                        className="fp-btn-cancel"
+                                        onClick={closeModal}
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="fp-btn-submit">
+                                        Save Expense
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

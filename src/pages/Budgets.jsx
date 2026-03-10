@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
     Wallet,
     Plus,
@@ -6,17 +7,34 @@ import {
     AlertCircle,
     CheckCircle,
     Edit2,
-    Trash2,
-    PieChart,
-    ChevronRight,
-    Search,
     ShoppingBag,
     Car,
     Zap,
     HeartPulse,
-    Coffee
+    Coffee,
+    Home,
+    Briefcase,
+    Globe,
+    X,
 } from 'lucide-react';
 import '../App.css';
+import '../styles/modals.css';
+
+// Budget icon options the user can pick
+const ICON_OPTIONS = [
+    { label: 'Shopping',       value: 'shopping',  Icon: ShoppingBag },
+    { label: 'Transport',      value: 'car',       Icon: Car        },
+    { label: 'Entertainment',  value: 'coffee',    Icon: Coffee      },
+    { label: 'Utilities',      value: 'zap',       Icon: Zap        },
+    { label: 'Healthcare',     value: 'health',    Icon: HeartPulse  },
+    { label: 'Housing',        value: 'home',      Icon: Home        },
+    { label: 'Work',           value: 'work',      Icon: Briefcase   },
+    { label: 'Other',          value: 'other',     Icon: Globe       },
+];
+
+const COLOR_POOL = ['orange', 'blue', 'purple', 'green', 'red', 'indigo'];
+
+const EMPTY_FORM = { category: '', limit: '', spent: '', iconValue: 'shopping' };
 
 const BudgetStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="budget-stat-card">
@@ -34,26 +52,78 @@ const BudgetStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Budgets = () => {
-    const [budgets] = useState([
-        { id: 1, category: 'Food & Dining', allocated: 800, spent: 650, color: 'orange', icon: ShoppingBag },
-        { id: 2, category: 'Transportation', allocated: 300, spent: 280, color: 'blue', icon: Car },
-        { id: 3, category: 'Entertainment', allocated: 200, spent: 220, color: 'purple', icon: Coffee },
-        { id: 4, category: 'Utilities', allocated: 400, spent: 320, color: 'green', icon: Zap },
-        { id: 5, category: 'Healthcare', allocated: 250, spent: 150, color: 'red', icon: HeartPulse },
-    ]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState(EMPTY_FORM);
+    const [formError, setFormError] = useState('');
 
-    const totalAllocated = budgets.reduce((sum, b) => sum + b.allocated, 0);
-    const totalSpent = budgets.reduce((sum, b) => sum + b.spent, 0);
-    const remaining = totalAllocated - totalSpent;
+    const [budgets, setBudgets] = useState(() => {
+        const saved = localStorage.getItem('books_budgets');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: 1, category: 'Food & Dining',  limit: 800,  spent: 650, color: 'orange', iconValue: 'shopping' },
+            { id: 2, category: 'Transportation',  limit: 300,  spent: 280, color: 'blue',   iconValue: 'car'      },
+            { id: 3, category: 'Entertainment',   limit: 200,  spent: 220, color: 'purple', iconValue: 'coffee'   },
+            { id: 4, category: 'Utilities',       limit: 400,  spent: 320, color: 'green',  iconValue: 'zap'      },
+            { id: 5, category: 'Healthcare',      limit: 250,  spent: 150, color: 'red',    iconValue: 'health'   },
+        ];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('books_budgets', JSON.stringify(budgets));
+    }, [budgets]);
+
+    const openModal = () => {
+        setFormData(EMPTY_FORM);
+        setFormError('');
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setFormError('');
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!formData.category || !formData.limit) {
+            setFormError('Category and monthly limit are required.');
+            return;
+        }
+
+        const colorIndex = budgets.length % COLOR_POOL.length;
+        const newBudget = {
+            id: Date.now(),
+            category: formData.category,
+            limit: parseFloat(formData.limit),
+            spent: formData.spent ? parseFloat(formData.spent) : 0,
+            color: COLOR_POOL[colorIndex],
+            iconValue: formData.iconValue,
+        };
+
+        setBudgets((prev) => [...prev, newBudget]);
+        closeModal();
+    };
+
+    const handleDelete = (id) => {
+        setBudgets((prev) => prev.filter((b) => b.id !== id));
+    };
+
+    const totalAllocated = budgets.reduce((s, b) => s + b.limit, 0);
+    const totalSpent     = budgets.reduce((s, b) => s + b.spent, 0);
+    const remaining      = totalAllocated - totalSpent;
+
+    const getIcon = (iconValue) => {
+        const match = ICON_OPTIONS.find((o) => o.value === iconValue);
+        return match ? match.Icon : Globe;
+    };
 
     return (
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
                     <p className="text-muted text-sm mt-1">Plan and track your monthly spending limits</p>
                 </div>
-                <button className="btn-primary">
+                <button className="btn-primary" onClick={openModal}>
                     <Plus size={18} />
                     <span>Create Budget</span>
                 </button>
@@ -62,76 +132,59 @@ const Budgets = () => {
             <div className="content-wrapper">
                 {/* Stats Grid */}
                 <div className="budget-stats-grid">
-                    <BudgetStat
-                        label="Total Budget"
-                        value={`$${totalAllocated.toLocaleString()}`}
-                        subtext="Monthly Cap"
-                        icon={Wallet}
-                        colorClass="icon-blue"
-                    />
-                    <BudgetStat
-                        label="Total Spent"
-                        value={`$${totalSpent.toLocaleString()}`}
-                        subtext={`${((totalSpent / totalAllocated) * 100).toFixed(1)}% utilizied`}
-                        icon={TrendingUp}
-                        colorClass="icon-orange"
-                    />
-                    <BudgetStat
-                        label="Remaining"
-                        value={`$${Math.abs(remaining).toLocaleString()}`}
-                        subtext={remaining > 0 ? 'Safe margin' : 'Over budget'}
-                        icon={remaining > 0 ? CheckCircle : AlertCircle}
-                        colorClass={remaining > 0 ? "icon-green" : "icon-red"}
-                    />
+                    <BudgetStat label="Total Budget" value={`$${totalAllocated.toLocaleString()}`} subtext="Monthly Cap"                                          icon={Wallet}        colorClass="icon-blue"   />
+                    <BudgetStat label="Total Spent"  value={`$${totalSpent.toLocaleString()}`}     subtext={`${((totalSpent / (totalAllocated || 1)) * 100).toFixed(1)}% utilized`} icon={TrendingUp}    colorClass="icon-orange" />
+                    <BudgetStat label="Remaining"    value={`$${Math.abs(remaining).toLocaleString()}`} subtext={remaining >= 0 ? 'Safe margin' : 'Over budget'} icon={remaining >= 0 ? CheckCircle : AlertCircle} colorClass={remaining >= 0 ? 'icon-green' : 'icon-red'} />
                 </div>
 
-                {/* Main Budget Grid */}
+                {/* Budget Cards */}
                 <div className="budget-cards-container">
                     {budgets.map((budget) => {
-                        const percentage = Math.min((budget.spent / budget.allocated) * 100, 100);
-                        const isOver = budget.spent > budget.allocated;
+                        const BudgetIcon = getIcon(budget.iconValue);
+                        const percentage = Math.min((budget.spent / budget.limit) * 100, 100);
+                        const isOver = budget.spent > budget.limit;
 
                         return (
                             <div key={budget.id} className="budget-card">
                                 <div className="budget-card-header">
                                     <div className="flex items-center gap-3">
                                         <div className={`category-icon bg-${budget.color}`}>
-                                            <budget.icon size={20} />
+                                            <BudgetIcon size={20} />
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-main">{budget.category}</h3>
                                             <p className="text-xs text-muted">Monthly limit</p>
                                         </div>
                                     </div>
-                                    <button className="icon-btn-ghost"><Edit2 size={16} /></button>
+                                    <button className="icon-btn-ghost" onClick={() => handleDelete(budget.id)} title="Delete">
+                                        <Edit2 size={16} />
+                                    </button>
                                 </div>
 
                                 <div className="budget-values">
                                     <div>
                                         <span className="text-xl font-bold text-main">${budget.spent}</span>
-                                        <span className="text-sm text-muted"> / ${budget.allocated}</span>
+                                        <span className="text-sm text-muted"> / ${budget.limit}</span>
                                     </div>
                                     <div className={`text-percentage ${isOver ? 'text-red' : ''}`}>
-                                        {Math.round((budget.spent / budget.allocated) * 100)}%
+                                        {Math.round((budget.spent / budget.limit) * 100)}%
                                     </div>
                                 </div>
 
                                 <div className="progress-bar-bg">
                                     <div
-                                        className={`progress-bar-fill bg-${budget.color} ${isOver ? 'bg-red' : ''}`}
+                                        className={`progress-bar-fill ${isOver ? 'bg-red' : `bg-${budget.color}`}`}
                                         style={{ width: `${percentage}%` }}
-                                    ></div>
+                                    />
                                 </div>
 
                                 <div className="budget-footer text-sm">
                                     {isOver ? (
                                         <span className="text-red flex items-center gap-1 font-medium">
-                                            <AlertCircle size={14} /> Over by ${budget.spent - budget.allocated}
+                                            <AlertCircle size={14} /> Over by ${budget.spent - budget.limit}
                                         </span>
                                     ) : (
-                                        <span className="text-muted">
-                                            ${budget.allocated - budget.spent} left
-                                        </span>
+                                        <span className="text-muted">${budget.limit - budget.spent} left</span>
                                     )}
                                 </div>
                             </div>
@@ -139,6 +192,84 @@ const Budgets = () => {
                     })}
                 </div>
             </div>
+
+            {/* ── Create Budget Modal ── */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="modal-overlay">
+                        <motion.div
+                            className="modal-card"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <div className="modal-header">
+                                <h2 className="modal-title">Create Budget</h2>
+                                <button className="modal-close-btn" onClick={closeModal}><X size={16} /></button>
+                            </div>
+
+                            <form className="modal-form" onSubmit={handleSubmit}>
+                                <div className="modal-field">
+                                    <label className="modal-label">Category Name</label>
+                                    <input
+                                        type="text"
+                                        className="modal-input"
+                                        placeholder="e.g. Groceries"
+                                        value={formData.category}
+                                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                    />
+                                </div>
+
+                                <div className="modal-row">
+                                    <div className="modal-field">
+                                        <label className="modal-label">Monthly Limit ($)</label>
+                                        <input
+                                            type="number"
+                                            className="modal-input"
+                                            placeholder="0"
+                                            min="0"
+                                            value={formData.limit}
+                                            onChange={(e) => setFormData({ ...formData, limit: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="modal-field">
+                                        <label className="modal-label">Current Spending ($)</label>
+                                        <input
+                                            type="number"
+                                            className="modal-input"
+                                            placeholder="0 (optional)"
+                                            min="0"
+                                            value={formData.spent}
+                                            onChange={(e) => setFormData({ ...formData, spent: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="modal-field">
+                                    <label className="modal-label">Icon</label>
+                                    <select
+                                        className="modal-select"
+                                        value={formData.iconValue}
+                                        onChange={(e) => setFormData({ ...formData, iconValue: e.target.value })}
+                                    >
+                                        {ICON_OPTIONS.map((opt) => (
+                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                {formError && <p className="modal-error">{formError}</p>}
+
+                                <div className="modal-footer">
+                                    <button type="button" className="modal-btn-cancel" onClick={closeModal}>Cancel</button>
+                                    <button type="submit" className="modal-btn-submit">Create Budget</button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
 
             <style>{`
                 .page-fade-in { animation: fadeIn 0.4s ease-in-out; }
@@ -171,7 +302,6 @@ const Budgets = () => {
                 .icon-green { background: #DCFCE7; color: #16A34A; }
                 .icon-red { background: #FEE2E2; color: #EF4444; }
 
-                /* Budget Cards Grid */
                 .budget-cards-container {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -196,6 +326,7 @@ const Budgets = () => {
                 .bg-purple { background: #A855F7; }
                 .bg-green { background: #22C55E; }
                 .bg-red { background: #EF4444; }
+                .bg-indigo { background: #6366F1; }
 
                 .icon-btn-ghost { color: var(--text-muted); padding: 0.5rem; border-radius: 6px; transition: background 0.2s; }
                 .icon-btn-ghost:hover { background: #F1F5F9; color: var(--text-main); }

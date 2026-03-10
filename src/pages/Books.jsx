@@ -17,53 +17,33 @@ const OverviewCard = ({ title, icon: Icon, color, path, stats, children }) => {
 
     return (
         <div
-            className="dashboard-tile"
-            style={{
-                cursor: 'pointer',
-                transition: 'transform 0.2s, box-shadow 0.2s',
-                minHeight: '200px',
-                display: 'flex',
-                flexDirection: 'column'
-            }}
+            className="dashboard-tile overview-card-wrapper"
             onClick={() => path && navigate(path)}
-            onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
-            }}
         >
-            <div className="tile-header" style={{ borderBottom: 'none', padding: '1.5rem 1.5rem 0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '12px',
-                        background: `${color}15`,
-                        color: color,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
+            <div className="tile-header overview-card-header">
+                <div className="overview-card-header-inner">
+                    <div 
+                        className="overview-card-icon-wrapper"
+                        style={{ background: `${color}15`, color: color }}
+                    >
+                        {/* Icon component is properly capitalized as dictated by the prop mapping */}
                         <Icon size={24} />
                     </div>
                     <div>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', margin: 0 }}>{title}</h3>
-                        <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <h3 className="overview-card-title">{title}</h3>
+                        <span className="overview-card-view-details">
                             View Details <ArrowRight size={12} />
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className="tile-content" style={{ padding: '0 1.5rem 1.5rem', flex: 1 }}>
-                <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            <div className="tile-content overview-card-content">
+                <div className="overview-card-stats-container">
                     {stats ? stats.map((stat, index) => (
-                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem' }}>
-                            <span style={{ color: 'var(--text-muted)' }}>{stat.label}</span>
-                            <span style={{ fontWeight: '600', color: 'var(--text-main)' }}>{stat.value}</span>
+                        <div key={index} className="overview-card-stat-row">
+                            <span className="overview-card-stat-label">{stat.label}</span>
+                            <span className="overview-card-stat-value">{stat.value}</span>
                         </div>
                     )) : children}
                 </div>
@@ -80,10 +60,10 @@ const Books = () => {
             </div>
 
             <div className="content-wrapper">
-                <div style={{ marginBottom: '24px' }}>
+                <div className="analytics-section-wrapper">
                     <AnalyticsSection />
                 </div>
-                <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                <div className="dashboard-grid books-dashboard-grid">
 
                     {/* Stock Overview */}
                     <OverviewCard
@@ -165,6 +145,80 @@ const Books = () => {
 
                 </div>
             </div>
+
+            <style>{`
+                .overview-card-wrapper {
+                    cursor: pointer;
+                    transition: transform 0.2s, box-shadow 0.2s;
+                    min-height: 200px;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .overview-card-wrapper:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                }
+                .overview-card-header {
+                    border-bottom: none;
+                    padding: 1.5rem 1.5rem 0.5rem;
+                }
+                .overview-card-header-inner {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                }
+                .overview-card-icon-wrapper {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .overview-card-title {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    color: var(--text-main);
+                    margin: 0;
+                }
+                .overview-card-view-details {
+                    font-size: 0.8rem;
+                    color: var(--text-muted);
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                }
+                .overview-card-content {
+                    padding: 0 1.5rem 1.5rem;
+                    flex: 1;
+                }
+                .overview-card-stats-container {
+                    margin-top: 1rem;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.75rem;
+                }
+                .overview-card-stat-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-size: 0.9rem;
+                }
+                .overview-card-stat-label {
+                    color: var(--text-muted);
+                }
+                .overview-card-stat-value {
+                    font-weight: 600;
+                    color: var(--text-main);
+                }
+                .analytics-section-wrapper {
+                    margin-bottom: 24px;
+                }
+                .books-dashboard-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 1.5rem;
+                }
+            `}</style>
         </>
     );
 };

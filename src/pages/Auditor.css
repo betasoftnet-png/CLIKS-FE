@@ -1,0 +1,116 @@
+/* a:\Books\src\pages\Auditor.css */
+.auditor-page {
+    text-align: center;
+}
+
+.auditor-page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: left;
+    color: var(--text-main);
+}
+
+.auditor-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .auditor-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (min-width: 1024px) {
+    .auditor-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+.auditor-skeleton-card {
+    height: 16rem;
+    background-color: #f1f5f9;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+    animation: auditor-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes auditor-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .5;
+    }
+}
+
+.auditor-skeleton-shimmer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: skewX(12deg) translateX(-150%);
+    animation: auditor-shimmer 2s infinite;
+}
+
+@keyframes auditor-shimmer {
+    100% {
+        transform: skewX(12deg) translateX(150%);
+    }
+}
+
+.auditor-skeleton-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+}
+
+.auditor-skeleton-line-1 {
+    height: 1.5rem;
+    width: 50%;
+    background-color: #e2e8f0;
+    border-radius: 0.25rem;
+}
+
+.auditor-skeleton-line-2 {
+    height: 1rem;
+    width: 75%;
+    background-color: #e2e8f0;
+    border-radius: 0.25rem;
+}
+
+.auditor-skeleton-spacer {
+    flex: 1 1 0%;
+}
+
+.auditor-skeleton-button {
+    height: 2.5rem;
+    width: 100%;
+    background-color: #e2e8f0;
+    border-radius: 0.5rem;
+}
+
+.auditor-skeleton-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.auditor-skeleton-list-item {
+    height: 8rem;
+    width: 100%;
+    background-color: #f1f5f9;
+    border-radius: 1rem;
+    animation: auditor-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}

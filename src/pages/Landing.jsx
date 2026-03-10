@@ -70,7 +70,7 @@ const Landing = () => {
 
     const handleLogin = (e) => {
         if (e) e.preventDefault();
-        navigate('/books/dashboard');
+        navigate('/auth');
     };
 
     const scrollToSection = (id) => {
@@ -175,7 +175,7 @@ const Landing = () => {
             <nav style={styles.navbar}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '18px', fontWeight: '700', color: '#195BAC' }}>
                     <CircleDot size={20} style={{ color: '#4CAF50', animation: 'pulse 2s infinite' }} />
-                    <span style={{ fontSize: '16px' }}>Burj Tech consultancy</span>
+                    <span style={{ fontSize: '16px' }}>Books & Finance</span>
                 </div>
 
                 <div className="nav-items" style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
@@ -498,7 +498,7 @@ const Landing = () => {
             <footer style={{ padding: "60px 40px 30px", background: "#1A1A2E", color: "#FFFFFF" }}>
                 <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: "40px", maxWidth: "1200px", margin: "0 auto 40px", paddingBottom: "40px", borderBottom: "1px solid rgba(255,255,255,0.1)" }} className="footer-grid">
                     <div style={{ gridColumn: "span 1" }}>
-                        <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "12px" }}>Burj Tech consultancy</h3>
+                        <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "12px" }}>Books & Finance</h3>
                         <p style={{ fontSize: "14px", lineHeight: "1.7", opacity: 0.7, marginBottom: "20px", maxWidth: "300px" }}>
                             Make your money easy to understand. Track accounts, budgets, debts and investments in one clean dashboard.
                         </p>
@@ -531,7 +531,7 @@ const Landing = () => {
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: "1400px", margin: "0 auto", fontSize: "14px", opacity: 0.6, flexWrap: "wrap", gap: "20px" }}>
-                    <div>© 2026 Burj Tech consultancy. All rights reserved.</div>
+                    <div>© 2026 Books & Finance. All rights reserved.</div>
                     <div style={{ display: "flex", gap: "20px" }}>
                         <span>🔒 Bank-level Security</span>
                         <span>⚡ 99.9% Uptime</span>

@@ -62,7 +62,7 @@ export async function fetchStockStats() {
  * This simulates API responses until the backend is ready.
  * Remove this entire section once the backend is implemented.
  */
-const MOCK_STOCK_ITEMS = [
+let MOCK_STOCK_ITEMS = [
     { id: 1, name: 'Office Paper A4', category: 'Stationery', quantity: 15, unit: 'Reams', value: '4,500', status: 'In Stock' },
     { id: 2, name: 'Printer Ink (Black)', category: 'Stationery', quantity: 2, unit: 'Cartridges', value: '2,800', status: 'Low Stock' },
     { id: 3, name: 'Laptops', category: 'Electronics', quantity: 5, unit: 'Units', value: '2,50,000', status: 'In Use' },
@@ -71,7 +71,7 @@ const MOCK_STOCK_ITEMS = [
     { id: 6, name: 'Monitors', category: 'Electronics', quantity: 8, unit: 'Units', value: '1,20,000', status: 'In Stock' },
 ];
 
-const MOCK_STOCK_STATS = {
+let MOCK_STOCK_STATS = {
     totalValue: '2,60,500',
     totalItems: 26,
     lowStockCount: 1,
@@ -123,4 +123,41 @@ export async function fetchStockStatsMock() {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 300));
     return { ...MOCK_STOCK_STATS };
+}
+
+export async function addStockItemMock(newItem) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    
+    const quantity = parseInt(newItem.quantity, 10);
+    const price = parseFloat(newItem.pricePerUnit);
+    const totalValueNumeric = quantity * price;
+    
+    // Auto-determine status
+    let status = 'In Stock';
+    if (quantity <= 1) status = 'Critical';
+    else if (quantity >= 2 && quantity <= 5) status = 'Low Stock';
+    
+    const formattedValue = new Intl.NumberFormat('en-IN').format(totalValueNumeric);
+    
+    const item = {
+        id: Date.now(),
+        name: newItem.name,
+        category: newItem.category,
+        quantity: quantity,
+        unit: newItem.unit,
+        value: formattedValue,
+        status: status
+    };
+    
+    MOCK_STOCK_ITEMS.unshift(item);
+    
+    // Update stats
+    const currentTotalValue = parseFloat(MOCK_STOCK_STATS.totalValue.replace(/,/g, ''));
+    MOCK_STOCK_STATS.totalValue = new Intl.NumberFormat('en-IN').format(currentTotalValue + totalValueNumeric);
+    MOCK_STOCK_STATS.totalItems += 1;
+    if (status === 'Low Stock' || status === 'Critical') {
+        MOCK_STOCK_STATS.lowStockCount += 1;
+    }
+    
+    return item;
 }
