@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { investmentsService } from '../../services';
 import { Star, ArrowUpRight, TrendingUp, Filter } from 'lucide-react';
 
 const MutualFundsView = () => {
     const [activeFilter, setActiveFilter] = useState('All Funds');
     const filters = ['All Funds', 'Equity', 'Debt', 'Hybrid', 'Index Funds', 'Tax Saving'];
 
-    const funds = [
-        { name: 'HDFC Top 100 Fund – Direct Growth', category: 'Equity – Large Cap', rating: 5, y1: '+24.8%', y3: '+18.2%', nav: '₹823.45' },
-        { name: 'SBI Bluechip Fund – Direct Growth', category: 'Equity – Large Cap', rating: 5, y1: '+22.1%', y3: '+16.8%', nav: '₹671.20' },
-        { name: 'ICICI Pru Balanced Advantage – Direct', category: 'Hybrid – Balanced', rating: 4, y1: '+18.5%', y3: '+14.2%', nav: '₹58.34' },
-        { name: 'Axis Long Term Equity – Direct Growth', category: 'Equity – Tax Saving', rating: 4, y1: '+20.3%', y3: '+15.6%', nav: '₹92.18' },
-        { name: 'Mirae Asset Large Cap – Direct Growth', category: 'Equity – Large Cap', rating: 5, y1: '+26.1%', y3: '+19.4%', nav: '₹105.67' },
-        { name: 'Parag Parikh Flexi Cap – Direct Growth', category: 'Equity – Flexi Cap', rating: 5, y1: '+21.7%', y3: '+17.9%', nav: '₹68.42' },
-    ];
+    // Fetch mutual funds
+    const { data: funds = [], isLoading } = useQuery({
+        queryKey: ['investments-mutual-funds'],
+        queryFn: async () => {
+            const data = await investmentsService.getInvestments();
+            return data.filter(i => i.type === 'Mutual Fund').map(i => ({
+                id: i.id,
+                name: i.name,
+                category: i.category || 'Equity – Large Cap',
+                rating: i.rating || 5,
+                y1: i.y1_returns || '+24.8%',
+                y3: i.y3_returns || '+18.2%',
+                nav: `₹${parseFloat(i.amount).toLocaleString()}`
+            }));
+        }
+    });
 
     const renderStars = (count) => (
         <div className="mf-stars">
@@ -21,6 +31,14 @@ const MutualFundsView = () => {
             ))}
         </div>
     );
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <div className="animate-spin" style={{ width: '30px', height: '30px', border: '3px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="view-fade-in">

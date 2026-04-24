@@ -1,6 +1,21 @@
 import React from 'react';
-import { Utensils, Film, Car, Lightbulb } from 'lucide-react';
+import { Utensils, Film, Car, Lightbulb, Wallet, ShoppingBag, Globe, MoreHorizontal } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { budgetsService } from '../../services';
 
+const ICON_MAP = {
+    'Food & Drinks': Utensils,
+    'Entertainment': Film,
+    'Transport': Car,
+    'Utilities': Lightbulb,
+    'Housing': Wallet,
+    'Shopping': ShoppingBag,
+    'Other': MoreHorizontal
+};
+
+const COLOR_MAP = [
+    '#195BAC', '#3B82F6', '#60A5FA', '#EF4444', '#10B981', '#F59E0B', '#8B5CF6'
+];
 
 const BudgetItem = ({ icon: Icon, label, current, total, color }) => {
     const percentage = Math.min((current / total) * 100, 100);
@@ -13,7 +28,7 @@ const BudgetItem = ({ icon: Icon, label, current, total, color }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: color // Use the color for the icon itself to match "React-icons" style request often implying colored icons
+                        color: color
                     }}>
                         <Icon size={20} />
                     </div>
@@ -25,7 +40,6 @@ const BudgetItem = ({ icon: Icon, label, current, total, color }) => {
                 </div>
             </div>
 
-            {/* Progress Bar */}
             <div style={{
                 width: '100%',
                 height: '8px',
@@ -46,6 +60,14 @@ const BudgetItem = ({ icon: Icon, label, current, total, color }) => {
 };
 
 const BudgetMixTile = () => {
+    const { data: budgets = [], isLoading } = useQuery({
+        queryKey: ['budgets'],
+        queryFn: budgetsService.getBudgets
+    });
+
+    if (isLoading) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>Loading budgets...</div>;
+    if (budgets.length === 0) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>No budgets set. Create one to see overview.</div>;
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1rem' }}>
             <div style={{
@@ -53,34 +75,16 @@ const BudgetMixTile = () => {
                 flexDirection: 'column',
                 gap: '1.25rem'
             }}>
-                <BudgetItem
-                    icon={Utensils}
-                    label="Food & Drinks"
-                    current={420}
-                    total={600}
-                    color="#195BAC" // Primary Blue
-                />
-                <BudgetItem
-                    icon={Film}
-                    label="Entertainment"
-                    current={180}
-                    total={200}
-                    color="#3B82F6" // Blue
-                />
-                <BudgetItem
-                    icon={Car}
-                    label="Transport"
-                    current={85}
-                    total={150}
-                    color="#60A5FA" // Light Blue
-                />
-                <BudgetItem
-                    icon={Lightbulb}
-                    label="Utilities"
-                    current={120}
-                    total={120}
-                    color="#EF4444" // Red
-                />
+                {budgets.slice(0, 4).map((b, i) => (
+                    <BudgetItem
+                        key={b.id}
+                        icon={ICON_MAP[b.category] || Globe}
+                        label={b.category}
+                        current={Number(b.spent || 0)}
+                        total={Number(b.amount)}
+                        color={COLOR_MAP[i % COLOR_MAP.length]}
+                    />
+                ))}
             </div>
 
             <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', paddingTop: '0.5rem' }}>

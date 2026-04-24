@@ -1,19 +1,47 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { investmentsService } from '../../services';
 import { TrendingUp, ArrowUpRight, Shield, BarChart3, Wallet, Target } from 'lucide-react';
 
 const SIPView = () => {
+    // Fetch SIPs
+    const { data: sips = [], isLoading } = useQuery({
+        queryKey: ['investments-sip'],
+        queryFn: async () => {
+            const data = await investmentsService.getInvestments();
+            return data.filter(i => i.type === 'SIP').map(i => ({
+                id: i.id,
+                name: i.name,
+                returns: i.expected_returns || '12–15%',
+                risk: i.risk_level || 'Medium',
+                min: `₹${parseFloat(i.amount).toLocaleString()}`,
+                amount: parseFloat(i.amount)
+            }));
+        }
+    });
+
+    const activeCount = sips.length;
+    const monthlyTotal = sips.reduce((sum, s) => sum + s.amount, 0);
+
     const summaryCards = [
-        { label: 'Active SIPs', value: '12', icon: Target, color: '#2563EB', bg: '#DBEAFE' },
-        { label: 'Monthly Investment', value: '₹50K', icon: Wallet, color: '#7C3AED', bg: '#EDE9FE' },
+        { label: 'Active SIPs', value: activeCount.toString(), icon: Target, color: '#2563EB', bg: '#DBEAFE' },
+        { label: 'Monthly Investment', value: `₹${(monthlyTotal / 1000).toFixed(1)}K`, icon: Wallet, color: '#7C3AED', bg: '#EDE9FE' },
         { label: 'Total Returns', value: '+18.5%', icon: TrendingUp, color: '#16A34A', bg: '#DCFCE7' },
         { label: 'Portfolio Value', value: '₹8.2L', icon: BarChart3, color: '#EA580C', bg: '#FFF7ED' },
     ];
 
-    const plans = [
+    const plans = sips.length > 0 ? sips : [
         { name: 'Conservative Plan', returns: '12–15%', risk: 'Low', riskColor: '#16A34A', riskBg: '#DCFCE7', min: '₹500', icon: Shield },
         { name: 'Balanced Plan', returns: '12–15%', risk: 'Medium', riskColor: '#CA8A04', riskBg: '#FEF9C3', min: '₹500', icon: BarChart3 },
         { name: 'Aggressive Plan', returns: '12–15%', risk: 'High', riskColor: '#DC2626', riskBg: '#FEE2E2', min: '₹500', icon: TrendingUp },
     ];
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <div className="animate-spin" style={{ width: '30px', height: '30px', border: '3px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="view-fade-in">

@@ -1,37 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import EmptyState from '../../components/common/EmptyState';
-import {
-    Plus,
-    Target,
-    Trophy,
-    TrendingUp,
-    Search,
-    Filter,
-    ChevronDown,
-    Edit,
-    Trash2,
-    X,
-    Wallet,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import './financial-plan.css';
 
 const EMPTY_FORM = { name: '', target: '', current: '', deadline: '' };
+const DEFAULT_PLAN_ID = 1;
 
 const PlanGoals = () => {
-    const [goals, setGoals] = useState(() => {
-        const saved = localStorage.getItem('books_plan_goals');
-        return saved ? JSON.parse(saved) : [];
-    });
-
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState(EMPTY_FORM);
-    const [formError, setFormError] = useState('');
+    const [formData, setFormData]       = useState(EMPTY_FORM);
+    const [formError, setFormError]     = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
-        localStorage.setItem('books_plan_goals', JSON.stringify(goals));
-    }, [goals]);
+    // Fetch Goals
+    const { data: goals = [], isLoading } = useQuery({
+        queryKey: ['plan-goals', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+            const data = await financialPlanService.getPlanGoals(DEFAULT_PLAN_ID);
+            return data.map(item => ({
+                id: item.id,
+                name: item.name || item.title,
+                target: parseFloat(item.target_amount || item.target),
+                current: parseFloat(item.current_amount || item.current),
+                deadline: item.date || item.deadline
+            }));
+        }
+    });
+
+    // Create Mutation
+    const createMutation = useMutation({
+        mutationFn: (newGoal) => financialPlanService.createPlanGoal(DEFAULT_PLAN_ID, newGoal),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-goals', DEFAULT_PLAN_ID] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to add goal.');
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => financialPlanService.deletePlanGoal(DEFAULT_PLAN_ID, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-goals', DEFAULT_PLAN_ID] });
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -52,19 +66,19 @@ const PlanGoals = () => {
         }
 
         const newGoal = {
-            id: Date.now(),
             name: formData.name,
-            target: parseFloat(formData.target),
-            current: parseFloat(formData.current),
-            deadline: formData.deadline,
+            target_amount: parseFloat(formData.target),
+            current_amount: parseFloat(formData.current),
+            date: formData.deadline,
         };
 
-        setGoals((prev) => [newGoal, ...prev]);
-        closeModal();
+        createMutation.mutate(newGoal);
     };
 
     const handleDelete = (id) => {
-        setGoals((prev) => prev.filter((item) => item.id !== id));
+        if (window.confirm('Are you sure you want to delete this goal?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalTarget = goals.reduce((sum, item) => sum + item.target, 0);
@@ -74,9 +88,16 @@ const PlanGoals = () => {
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#4F46E5', borderRadius: '50%' }} />
+            </div>
+        );
+    }
+
     return (
         <div className="fp-page">
-            {/* ── Page Header ── */}
             <div className="fp-header">
                 <div className="fp-header-left">
                     <h1>Savings &amp; Goals</h1>
@@ -88,7 +109,6 @@ const PlanGoals = () => {
                 </button>
             </div>
 
-            {/* ── Summary Cards ── */}
             <div className="fp-summary-grid">
                 <div className="fp-summary-card">
                     <div className="fp-summary-icon fp-icon--indigo">
@@ -121,7 +141,6 @@ const PlanGoals = () => {
                 </div>
             </div>
 
-            {/* ── Toolbar ── */}
             <div className="fp-toolbar">
                 <div className="fp-search-wrap">
                     <Search size={15} className="fp-search-icon" />
@@ -145,7 +164,6 @@ const PlanGoals = () => {
                 </div>
             </div>
 
-            {/* ── Data Section ── */}
             {filteredGoals.length === 0 ? (
                 <EmptyState
                     title="No goals set yet"
@@ -211,7 +229,6 @@ const PlanGoals = () => {
                 </div>
             )}
 
-            {/* ── Add Goal Modal ── */}
             <AnimatePresence>
                 {isModalOpen && (
                     <div className="fp-modal-overlay">

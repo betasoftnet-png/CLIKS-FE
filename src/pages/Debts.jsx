@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { debtsService } from '../services';
 import {
     Banknote,
     Plus,
@@ -13,10 +14,19 @@ import {
     Landmark,
     CreditCard,
     GraduationCap,
-    Car
+    Car,
+    Globe
 } from 'lucide-react';
 import '../App.css';
 import { formatCurrency } from '../lib/formatCurrency';
+
+const ICON_MAP = {
+    GraduationCap: GraduationCap,
+    CreditCard: CreditCard,
+    Car: Car,
+    Landmark: Landmark,
+    Default: Globe
+};
 
 const DebtStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="debt-stat-card">
@@ -34,17 +44,38 @@ const DebtStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Debts = () => {
-    const [debts] = useState([
-        { id: 1, name: 'Student Loan', totalAmount: 250000, remaining: 180000, interestRate: 5.5, monthlyPayment: 3500, dueDate: '2026-02-01', type: 'Loan', icon: GraduationCap },
-        { id: 2, name: 'Credit Card', totalAmount: 50000, remaining: 32000, interestRate: 18.9, monthlyPayment: 2000, dueDate: '2026-01-25', type: 'Credit', icon: CreditCard },
-        { id: 3, name: 'Car Loan', totalAmount: 200000, remaining: 120000, interestRate: 4.2, monthlyPayment: 4500, dueDate: '2026-01-28', type: 'Loan', icon: Car },
-        { id: 4, name: 'Personal Loan', totalAmount: 100000, remaining: 65000, interestRate: 7.8, monthlyPayment: 2800, dueDate: '2026-02-05', type: 'Loan', icon: Landmark },
-    ]);
+    // Fetch debts
+    const { data: debts = [], isLoading } = useQuery({
+        queryKey: ['debts'],
+        queryFn: async () => {
+            const data = await debtsService.getDebts();
+            return data.map(d => ({
+                id: d.id,
+                name: d.name,
+                totalAmount: parseFloat(d.total_amount),
+                remaining: parseFloat(d.remaining_amount),
+                interestRate: parseFloat(d.interest_rate),
+                monthlyPayment: parseFloat(d.monthly_payment),
+                dueDate: d.due_date,
+                type: d.type,
+                icon: ICON_MAP[d.icon] || ICON_MAP.Default
+            }));
+        }
+    });
 
     const totalDebt = debts.reduce((sum, d) => sum + d.remaining, 0);
     const totalMonthlyPayment = debts.reduce((sum, d) => sum + d.monthlyPayment, 0);
     const totalPaid = debts.reduce((sum, d) => sum + (d.totalAmount - d.remaining), 0);
-    const overallProgress = (totalPaid / debts.reduce((sum, d) => sum + d.totalAmount, 0)) * 100;
+    const totalOriginal = debts.reduce((sum, d) => sum + d.totalAmount, 0);
+    const overallProgress = totalOriginal > 0 ? (totalPaid / totalOriginal) * 100 : 0;
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#EF4444', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">

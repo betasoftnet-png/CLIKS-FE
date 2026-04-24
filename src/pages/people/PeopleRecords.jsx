@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
-import {
-    Plus,
-    FileText,
-    Image,
-    Paperclip,
-    Search,
-    Filter,
-    MoreHorizontal,
-    Download,
-    Eye
-} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { peopleService } from '../../services';
 import '../../App.css';
 
 const PeopleRecords = () => {
-    const [records] = useState([
-        { id: 1, title: 'Invoice #001 - John Doe', type: 'invoice', date: '2024-03-01', size: '2.4 MB', format: 'PDF' },
-        { id: 2, title: 'Chat Screenshot', type: 'image', date: '2024-02-28', size: '500 KB', format: 'PNG' },
-        { id: 3, title: 'Settlement Agreement', type: 'contract', date: '2024-02-25', size: '1.2 MB', format: 'DOCX' },
-        { id: 4, title: 'Payment Receipt', type: 'receipt', date: '2024-02-20', size: '150 KB', format: 'JPG' },
-    ]);
+    // Fetch Global Records
+    const { data: records = [], isLoading } = useQuery({
+        queryKey: ['people-records-all'],
+        queryFn: async () => {
+            const data = await peopleService.getAllRecords();
+            return data.map(rec => ({
+                id: rec.id,
+                title: rec.title,
+                type: rec.type || 'document',
+                date: rec.date || new Date().toISOString().split('T')[0],
+                size: rec.file_size || 'N/A',
+                format: rec.file_type || 'TXT'
+            }));
+        }
+    });
 
     const getIconForType = (type) => {
         switch (type) {
@@ -29,12 +28,19 @@ const PeopleRecords = () => {
         }
     };
 
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
+
     return (
         <div className="records-page">
-            {/* Header */}
             <div className="page-header-container">
                 <div>
-
+                    <h1 className="text-2xl font-bold text-slate-800">People Records</h1>
                     <p className="page-subtitle">Store and manage important financial documents</p>
                 </div>
                 <div className="header-controls">
@@ -49,9 +55,7 @@ const PeopleRecords = () => {
                 </div>
             </div>
 
-            {/* Content Area */}
             <div className="content-card">
-                {/* Toolbar */}
                 <div className="table-toolbar">
                     <div className="search-input-wrapper">
                         <Search size={18} className="search-icon" />
@@ -63,9 +67,10 @@ const PeopleRecords = () => {
                     </div>
                 </div>
 
-                {/* Records Grid */}
                 <div className="records-grid">
-                    {records.map(record => (
+                    {records.length === 0 ? (
+                        <div className="col-span-full p-12 text-center text-muted italic">No records found.</div>
+                    ) : records.map(record => (
                         <div key={record.id} className="record-card">
                             <div className="record-preview">
                                 {getIconForType(record.type)}
@@ -93,7 +98,6 @@ const PeopleRecords = () => {
                         </div>
                     ))}
 
-                    {/* Upload Placeholder */}
                     <div className="upload-placeholder">
                         <div className="upload-content">
                             <div className="upload-icon">

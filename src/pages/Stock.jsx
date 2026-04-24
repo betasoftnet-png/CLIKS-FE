@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Filter, Package, ArrowUpRight, ArrowDownLeft, Loader2, AlertCircle, RefreshCw, X, CheckCircle2 } from 'lucide-react';
 import { queryKeys } from '../lib/queryClient';
-// eslint-disable-next-line no-unused-vars
-import { fetchStockItemsMock, fetchStockStatsMock, addStockItemMock } from '../services/stockService';
+import { fetchStockItems, fetchStockStats, addStockItem } from '../services/stockService';
 import { ErrorState, EmptyState } from '../components/common';
 import '../App.css';
 
@@ -157,7 +156,7 @@ const Stock = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
     const addItemMutation = useMutation({
-        mutationFn: addStockItemMock,
+        mutationFn: addStockItem,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: queryKeys.stock.all });
             setShowToast(true);
@@ -166,7 +165,15 @@ const Stock = () => {
     });
 
     const handleAddItem = async (newItem) => {
-        await addItemMutation.mutateAsync(newItem);
+        // Map frontend field names to backend expected names
+        const payload = {
+            name: newItem.name,
+            category: newItem.category,
+            quantity: parseInt(newItem.quantity),
+            unit: newItem.unit,
+            unit_price: parseFloat(newItem.pricePerUnit)
+        };
+        await addItemMutation.mutateAsync(payload);
     };
 
     // ---------------------------------------------------------------------------
@@ -180,7 +187,7 @@ const Stock = () => {
         refetch: refetchItems,
     } = useQuery({
         queryKey: queryKeys.stock.list({ search: searchQuery }),
-        queryFn: () => fetchStockItemsMock({ search: searchQuery }),
+        queryFn: () => fetchStockItems({ search: searchQuery }),
         // Keep previous data while fetching new data (smooth UX during search)
         placeholderData: (previousData) => previousData,
     });
@@ -193,7 +200,7 @@ const Stock = () => {
         isLoading: isLoadingStats,
     } = useQuery({
         queryKey: queryKeys.stock.stats(),
-        queryFn: fetchStockStatsMock,
+        queryFn: fetchStockStats,
     });
 
     // ---------------------------------------------------------------------------

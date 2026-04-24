@@ -1,14 +1,30 @@
-import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { incomeService } from '../services';
 import {
     TrendingUp,
     Plus,
     Calendar,
     PieChart,
     ArrowUpRight,
-    IndianRupee
+    IndianRupee,
+    Briefcase,
+    Building2,
+    Search,
+    Filter,
+    ChevronDown,
+    Trash2,
+    Edit2
 } from 'lucide-react';
 import '../App.css';
 import { formatCurrency } from '../lib/formatCurrency';
+
+const ICON_MAP = {
+    Employment: Briefcase,
+    Business: Building2,
+    Investments: TrendingUp,
+    Property: Building2,
+    Default: IndianRupee
+};
 
 const IncomeStr = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="income-stat-card">
@@ -26,16 +42,49 @@ const IncomeStr = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Income = () => {
-    const [incomeData] = useState([
-        { id: 1, source: 'Salary', amount: 50000, category: 'Employment', date: '2026-01-01', recurring: true, icon: Briefcase },
-        { id: 2, source: 'Freelance Project', amount: 12000, category: 'Business', date: '2026-01-15', recurring: false, icon: Building2 },
-        { id: 3, source: 'Investment Returns', amount: 3500, category: 'Investments', date: '2026-01-10', recurring: false, icon: TrendingUp },
-        { id: 4, source: 'Rental Income', amount: 8000, category: 'Property', date: '2026-01-05', recurring: true, icon: Building2 },
-        { id: 5, source: 'Dividend Payout', amount: 1500, category: 'Investments', date: '2026-01-20', recurring: false, icon: PieChart },
-    ]);
+    const queryClient = useQueryClient();
+    
+    // Fetch income data
+    const { data: incomeData = [], isLoading } = useQuery({
+        queryKey: ['income'],
+        queryFn: async () => {
+            const data = await incomeService.getIncome();
+            return data.map(item => ({
+                id: item.id,
+                source: item.source,
+                amount: parseFloat(item.amount),
+                category: item.category,
+                date: item.date || item.created_at,
+                recurring: !!item.recurring,
+                icon: ICON_MAP[item.category] || ICON_MAP.Default
+            }));
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => incomeService.deleteIncome(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+        }
+    });
+
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this income record?')) {
+            deleteMutation.mutate(id);
+        }
+    };
 
     const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
     const recurringIncome = incomeData.filter(item => item.recurring).reduce((sum, item) => sum + item.amount, 0);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#195BAC', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">
@@ -70,7 +119,7 @@ const Income = () => {
                     <IncomeStr
                         label="Active Sources"
                         value={incomeData.length}
-                        subtext="Across 3 categories"
+                        subtext={`Across ${new Set(incomeData.map(i => i.category)).size} categories`}
                         icon={PieChart}
                         colorClass="icon-purple"
                     />
@@ -110,40 +159,53 @@ const Income = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {incomeData.map((item) => (
-                                <tr key={item.id}>
-                                    <td>
-                                        <div className="flex items-center gap-3">
-                                            <div className="table-icon-bg">
-                                                {item.icon ? <item.icon size={18} /> : <IndianRupee size={18} />}
-                                            </div>
-                                            <div>
-                                                <div className="font-medium text-main">{item.source}</div>
-                                                {item.recurring && (
-                                                    <span className="recurring-badge">Recurring</span>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className="category-pill">
-                                            {item.category}
-                                        </span>
-                                    </td>
-                                    <td className="text-muted">{new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                                    <td className="font-bold text-success">+{formatCurrency(item.amount)}</td>
-                                    <td>
-                                        <div className="flex gap-2">
-                                            <button className="action-btn hover-blue" title="Edit">
-                                                <Edit2 size={16} />
-                                            </button>
-                                            <button className="action-btn hover-red" title="Delete">
-                                                <Trash2 size={16} />
-                                            </button>
-                                        </div>
+                            {incomeData.length === 0 ? (
+                                <tr>
+                                    <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                                        No income records found.
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                incomeData.map((item) => (
+                                    <tr key={item.id}>
+                                        <td>
+                                            <div className="flex items-center gap-3">
+                                                <div className="table-icon-bg">
+                                                    <item.icon size={18} />
+                                                </div>
+                                                <div>
+                                                    <div className="font-medium text-main">{item.source}</div>
+                                                    {item.recurring && (
+                                                        <span className="recurring-badge">Recurring</span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className="category-pill">
+                                                {item.category}
+                                            </span>
+                                        </td>
+                                        <td className="text-muted">{new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                                        <td className="font-bold text-success">+{formatCurrency(item.amount)}</td>
+                                        <td>
+                                            <div className="flex gap-2">
+                                                <button className="action-btn hover-blue" title="Edit">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button 
+                                                    className="action-btn hover-red" 
+                                                    title="Delete"
+                                                    onClick={() => handleDelete(item.id)}
+                                                    disabled={deleteMutation.isPending}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

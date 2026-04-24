@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
-import { Plus, Search, Filter, User, MoreVertical, Edit2 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { peopleService } from '../../services';
 import '../../App.css';
 import { formatCurrency } from '../../lib/formatCurrency';
 
 const PeopleOverview = () => {
-    // Mock Data
-    const [people] = useState([
-        { id: 1, name: 'John Doe', category: 'Friend', netBalance: 500, type: 'receivable', totalGiven: 1000, totalReceived: 500, status: 'Active' },
-        { id: 2, name: 'Jane Smith', category: 'Vendor', netBalance: -200, type: 'payable', totalGiven: 0, totalReceived: 200, status: 'Active' },
-    ]);
+    // Fetch People
+    const { data: people = [], isLoading } = useQuery({
+        queryKey: ['people'],
+        queryFn: async () => {
+            const data = await peopleService.getPeople();
+            return data.map(p => ({
+                id: p.id,
+                name: p.name,
+                category: p.category || 'Other',
+                totalGiven: parseFloat(p.total_given || 0),
+                totalReceived: parseFloat(p.total_received || 0),
+                netBalance: parseFloat(p.total_given || 0) - parseFloat(p.total_received || 0),
+                status: p.status || 'Active'
+            }));
+        }
+    });
+
+    const netReceivables = people.reduce((sum, p) => p.netBalance > 0 ? sum + p.netBalance : sum, 0);
+    const netPayables = people.reduce((sum, p) => p.netBalance < 0 ? sum + Math.abs(p.netBalance) : sum, 0);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#3B82F6', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <>
             <div className="dashboard-header">
-
+                <div>
+                    <h1 className="text-2xl font-bold text-slate-800">People Overview</h1>
+                    <p className="text-muted text-sm mt-1">Manage all your contacts and relationships</p>
+                </div>
                 <div className="header-actions">
                     <button className="btn-primary">
                         <Plus size={16} />
@@ -23,23 +48,21 @@ const PeopleOverview = () => {
             </div>
 
             <div className="content-wrapper">
-                {/* Stats Cards */}
                 <div className="dashboard-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginBottom: '2rem' }}>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Net Receivables</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#16A34A', marginTop: '0.5rem' }}>{formatCurrency(500)}</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#16A34A', marginTop: '0.5rem' }}>{formatCurrency(netReceivables)}</div>
                     </div>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Net Payables</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DC2626', marginTop: '0.5rem' }}>{formatCurrency(200)}</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#DC2626', marginTop: '0.5rem' }}>{formatCurrency(netPayables)}</div>
                     </div>
                     <div className="dashboard-tile" style={{ padding: '1.5rem', minHeight: 'auto' }}>
                         <div style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Total Contacts</div>
-                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)', marginTop: '0.5rem' }}>2</div>
+                        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--text-main)', marginTop: '0.5rem' }}>{people.length}</div>
                     </div>
                 </div>
 
-                {/* Filter Bar */}
                 <div className="controls-bar">
                     <div className="search-wrapper" style={{ flex: 1, maxWidth: '400px', position: 'relative' }}>
                         <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
@@ -53,7 +76,6 @@ const PeopleOverview = () => {
                     <button className="icon-btn"><Filter size={20} /></button>
                 </div>
 
-                {/* People List */}
                 <div className="stock-list-container" style={{ background: 'white', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' }}>
                     <div className="stock-list-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 0.5fr', padding: '1rem 1.5rem', background: '#F8FAFC', borderBottom: '1px solid var(--border-color)', fontWeight: '600', color: 'var(--text-muted)' }}>
                         <div>Name</div>
@@ -64,7 +86,9 @@ const PeopleOverview = () => {
                         <div></div>
                     </div>
 
-                    {people.map(person => (
+                    {people.length === 0 ? (
+                        <div className="p-12 text-center text-muted">No contacts found.</div>
+                    ) : people.map(person => (
                         <div key={person.id} className="stock-item-row" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr 1fr 0.5fr', padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-color)', alignItems: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                                 <div style={{ width: '40px', height: '40px', background: '#F1F5F9', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -77,8 +101,8 @@ const PeopleOverview = () => {
                             <div style={{ display: 'inline-block', padding: '2px 8px', borderRadius: '12px', background: '#E0F2FE', color: '#0369A1', fontSize: '0.8rem', width: 'fit-content' }}>
                                 {person.category}
                             </div>
-                            <div style={{ fontWeight: '600', color: person.type === 'receivable' ? '#16A34A' : '#DC2626' }}>
-                                {person.type === 'receivable' ? '+' : '-'}{formatCurrency(Math.abs(person.netBalance))}
+                            <div style={{ fontWeight: '600', color: person.netBalance >= 0 ? '#16A34A' : '#DC2626' }}>
+                                {person.netBalance >= 0 ? '+' : '-'}{formatCurrency(Math.abs(person.netBalance))}
                             </div>
                             <div style={{ color: 'var(--text-muted)' }}>{formatCurrency(person.totalGiven)}</div>
                             <div style={{ color: 'var(--text-muted)' }}>{formatCurrency(person.totalReceived)}</div>

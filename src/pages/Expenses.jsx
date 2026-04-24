@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { expensesService } from '../services';
 import {
     TrendingDown,
     Plus,
@@ -20,6 +21,15 @@ import {
 import '../App.css';
 import { formatCurrency } from '../lib/formatCurrency';
 
+const ICON_MAP = {
+    Food: ShoppingCart,
+    Utilities: Zap,
+    Health: Activity,
+    Entertainment: Coffee,
+    Transportation: Car,
+    Default: Receipt
+};
+
 const ExpenseStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="expense-stat-card">
         <div className="flex justify-between items-start">
@@ -36,16 +46,49 @@ const ExpenseStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Expenses = () => {
-    const [expenseData] = useState([
-        { id: 1, name: 'Groceries', amount: 4500, category: 'Food', date: '2026-01-18', paymentMethod: 'Credit Card', icon: ShoppingCart },
-        { id: 2, name: 'Electricity Bill', amount: 1200, category: 'Utilities', date: '2026-01-15', paymentMethod: 'Bank Transfer', icon: Zap },
-        { id: 3, name: 'Gym Membership', amount: 600, category: 'Health', date: '2026-01-10', paymentMethod: 'Debit Card', icon: Activity },
-        { id: 4, name: 'Netflix Subscription', amount: 1500, category: 'Entertainment', date: '2026-01-05', paymentMethod: 'Credit Card', icon: Coffee },
-        { id: 5, name: 'Fuel', amount: 2000, category: 'Transportation', date: '2026-01-12', paymentMethod: 'Cash', icon: Car },
-    ]);
+    const queryClient = useQueryClient();
+    
+    // Fetch expenses
+    const { data: expenseData = [], isLoading } = useQuery({
+        queryKey: ['expenses'],
+        queryFn: async () => {
+            const data = await expensesService.getExpenses();
+            return data.map(item => ({
+                id: item.id,
+                name: item.name,
+                amount: parseFloat(item.amount),
+                category: item.category,
+                date: item.date || item.created_at,
+                paymentMethod: item.payment_method || 'N/A',
+                icon: ICON_MAP[item.category] || ICON_MAP.Default
+            }));
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => expensesService.deleteExpense(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+        }
+    });
+
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this expense?')) {
+            deleteMutation.mutate(id);
+        }
+    };
 
     const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
-    const avgDaily = (totalExpenses / 18).toFixed(2); // Assuming 18 days passed
+    const avgDaily = (totalExpenses / 30).toFixed(2); // Using a 30-day baseline
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#F44336', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">
@@ -80,7 +123,7 @@ const Expenses = () => {
                     <ExpenseStat
                         label="Total Transactions"
                         value={expenseData.length}
-                        subtext=" across 5 categories"
+                        subtext={`Across ${new Set(expenseData.map(e => e.category)).size} categories`}
                         icon={Receipt}
                         colorClass="icon-blue"
                     />
@@ -121,41 +164,54 @@ const Expenses = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {expenseData.map((item) => (
-                                <tr key={item.id}>
-                                    <td>
-                                        <div className="flex items-center gap-3">
-                                            <div className="table-icon-bg">
-                                                {item.icon ? <item.icon size={18} /> : <Receipt size={18} />}
-                                            </div>
-                                            <div className="font-medium text-main">{item.name}</div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className="category-pill">
-                                            {item.category}
-                                        </span>
-                                    </td>
-                                    <td className="text-muted">{new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
-                                    <td>
-                                        <div className="flex items-center gap-2 text-sm text-muted">
-                                            <CreditCard size={14} />
-                                            {item.paymentMethod}
-                                        </div>
-                                    </td>
-                                    <td className="font-bold text-danger">-{formatCurrency(item.amount)}</td>
-                                    <td>
-                                        <div className="flex gap-2">
-                                            <button className="action-btn hover-blue" title="Edit">
-                                                <Edit2 size={16} />
-                                            </button>
-                                            <button className="action-btn hover-red" title="Delete">
-                                                <Trash2 size={16} />
-                                            </button>
-                                        </div>
+                            {expenseData.length === 0 ? (
+                                <tr>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                                        No expenses found.
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                expenseData.map((item) => (
+                                    <tr key={item.id}>
+                                        <td>
+                                            <div className="flex items-center gap-3">
+                                                <div className="table-icon-bg">
+                                                    <item.icon size={18} />
+                                                </div>
+                                                <div className="font-medium text-main">{item.name}</div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span className="category-pill">
+                                                {item.category}
+                                            </span>
+                                        </td>
+                                        <td className="text-muted">{new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+                                        <td>
+                                            <div className="flex items-center gap-2 text-sm text-muted">
+                                                <CreditCard size={14} />
+                                                {item.paymentMethod}
+                                            </div>
+                                        </td>
+                                        <td className="font-bold text-danger">-{formatCurrency(item.amount)}</td>
+                                        <td>
+                                            <div className="flex gap-2">
+                                                <button className="action-btn hover-blue" title="Edit">
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button 
+                                                    className="action-btn hover-red" 
+                                                    title="Delete"
+                                                    onClick={() => handleDelete(item.id)}
+                                                    disabled={deleteMutation.isPending}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

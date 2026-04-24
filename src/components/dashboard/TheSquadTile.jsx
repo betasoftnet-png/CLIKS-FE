@@ -1,28 +1,31 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { contactsService } from '../../services';
 import { Plus, Send } from 'lucide-react';
 
 const TheSquadTile = () => {
+    const { data: contacts = [], isLoading } = useQuery({
+        queryKey: ['contacts'],
+        queryFn: contactsService.getContacts,
+        select: (res) => res.data
+    });
+
+    if (isLoading) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>Loading contacts...</div>;
+
     return (
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', gap: '1.5rem' }}>
             <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #195BAC', padding: '2px' }}>
-                        <img src="https://i.pravatar.cc/150?u=sarah" alt="Sarah" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                {contacts.slice(0, 5).map(contact => (
+                    <div key={contact.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #E2E8F0', padding: '2px' }}>
+                            <img 
+                                src={contact.avatar_url || `https://i.pravatar.cc/150?u=${contact.id}`} 
+                                alt={contact.name} 
+                                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
+                            />
+                        </div>
+                        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1E293B' }}>{contact.name.split(' ')[0]}</span>
                     </div>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1E293B' }}>Sarah</span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #E2E8F0', padding: '2px' }}>
-                        <img src="https://i.pravatar.cc/150?u=ben" alt="Ben" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                    </div>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1E293B' }}>Ben</span>
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '56px', height: '56px', borderRadius: '50%', border: '2px solid #E2E8F0', padding: '2px' }}>
-                        <img src="https://i.pravatar.cc/150?u=chloe" alt="Chloe" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
-                    </div>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1E293B' }}>Chloe</span>
-                </div>
+                ))}
 
                 <button style={{
                     width: '56px',

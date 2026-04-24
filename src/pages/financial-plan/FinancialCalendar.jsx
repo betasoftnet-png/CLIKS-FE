@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import {
-    Calendar,
-    ChevronLeft,
-    ChevronRight,
-    Circle,
-    Clock,
-    DollarSign,
-    MoreHorizontal
-} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import '../../App.css';
 
 const FinancialCalendar = () => {
-    const [currentMonth] = useState('February 2026');
-    const [events] = useState([
-        { id: 1, date: 1, title: 'Salary Credit', amount: 4200, type: 'Income', color: 'green' },
-        { id: 2, date: 5, title: 'Rent Payment', amount: 1200, type: 'Expense', color: 'red' },
-        { id: 3, date: 10, title: 'Utility Bills', amount: 250, type: 'Expense', color: 'orange' },
-        { id: 4, date: 15, title: 'Freelance Payout', amount: 800, type: 'Income', color: 'green' },
-        { id: 5, date: 20, title: 'SIP Investment', amount: 500, type: 'Investment', color: 'blue' },
-        { id: 6, date: 28, title: 'Credit Card Bill', amount: 350, type: 'Liability', color: 'purple' },
-    ]);
+    const { data: events = [], isLoading } = useQuery({
+        queryKey: ['financial-calendar'],
+        queryFn: async () => {
+            const data = await financialPlanService.getCalendar();
+            return data.map(e => ({
+                id: e.id,
+                date: new Date(e.date).getDate(),
+                monthName: new Date(e.date).toLocaleString('default', { month: 'short' }),
+                title: e.title,
+                amount: parseFloat(e.amount),
+                type: e.type,
+                color: e.color || (e.type === 'Income' ? 'green' : e.type === 'Investment' ? 'blue' : 'red')
+            }));
+        }
+    });
 
-    // Simplified calendar grid generation for visual purposes
+    const [currentMonth] = useState('February 2026');
     const days = Array.from({ length: 28 }, (_, i) => i + 1);
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
+                    <h1 className="text-2xl font-bold text-slate-800">Financial Calendar</h1>
                     <p className="text-muted text-sm mt-1">Timeline of your financial activities</p>
                 </div>
                 <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-lg border border-[var(--border-color)]">
@@ -43,15 +49,12 @@ const FinancialCalendar = () => {
 
             <div className="content-wrapper">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Calendar View */}
                     <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-[var(--border-color)] shadow-sm">
                         <div className="grid grid-cols-7 gap-4 mb-4 text-center text-sm font-medium text-muted uppercase tracking-wider">
                             <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
                         </div>
                         <div className="grid grid-cols-7 gap-4">
-                            {/* Simplify offset for visual attractiveness */}
                             {[null, null, null].map((_, i) => <div key={`empty-${i}`}></div>)}
-
                             {days.map(day => {
                                 const dayEvents = events.filter(e => e.date === day);
                                 return (
@@ -75,7 +78,6 @@ const FinancialCalendar = () => {
                         </div>
                     </div>
 
-                    {/* Upcoming List */}
                     <div className="space-y-6">
                         <div className="bg-white p-6 rounded-2xl border border-[var(--border-color)] shadow-sm h-full">
                             <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
@@ -83,7 +85,9 @@ const FinancialCalendar = () => {
                                 Upcoming This Month
                             </h3>
                             <div className="space-y-4">
-                                {events.map(event => (
+                                {events.length === 0 ? (
+                                    <p className="text-center py-8 text-muted">No events scheduled.</p>
+                                ) : events.map(event => (
                                     <div key={event.id} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors cursor-pointer group">
                                         <div className={`w-12 h-12 rounded-xl flex flex-col items-center justify-center border font-bold ${event.color === 'green' ? 'bg-green-50 border-green-100 text-green-700' :
                                             event.color === 'red' ? 'bg-red-50 border-red-100 text-red-700' :
@@ -91,7 +95,7 @@ const FinancialCalendar = () => {
                                                     event.color === 'purple' ? 'bg-purple-50 border-purple-100 text-purple-700' :
                                                         'bg-orange-50 border-orange-100 text-orange-700'
                                             }`}>
-                                            <span className="text-xs uppercase opacity-70">Feb</span>
+                                            <span className="text-xs uppercase opacity-70">{event.monthName || 'Feb'}</span>
                                             <span className="text-lg leading-none">{event.date}</span>
                                         </div>
                                         <div className="flex-1">
@@ -100,7 +104,7 @@ const FinancialCalendar = () => {
                                         </div>
                                         <div className="text-right">
                                             <div className={`font-bold ${event.type === 'Income' ? 'text-green-600' : 'text-[var(--text-main)]'}`}>
-                                                {event.type === 'Income' ? '+' : '-'}${event.amount}
+                                                {event.type === 'Income' ? '+' : '-'}${event.amount.toLocaleString()}
                                             </div>
                                             <MoreHorizontal size={16} className="text-gray-300 ml-auto mt-1 opacity-0 group-hover:opacity-100" />
                                         </div>

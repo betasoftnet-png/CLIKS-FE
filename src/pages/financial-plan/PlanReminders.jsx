@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
-import {
-    Bell,
-    Plus,
-    Clock,
-    CheckCircle2,
-    Calendar,
-    AlertTriangle,
-    Mail,
-    FileText
-} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import '../../App.css';
 
+const DEFAULT_PLAN_ID = 1;
+
 const PlanReminders = () => {
-    const [reminders] = useState([
-        { id: 1, title: 'Pay Electricity Bill', date: 'Feb 15, 2026', time: '10:00 AM', priority: 'High', type: 'Payment', status: 'Pending' },
-        { id: 2, title: 'Review Mutual Funds', date: 'Feb 20, 2026', time: '02:00 PM', priority: 'Medium', type: 'Review', status: 'Pending' },
-        { id: 3, title: 'File Tax Returns', date: 'Mar 15, 2026', time: '09:00 AM', priority: 'Critical', type: 'Tax', status: 'Pending' },
-        { id: 4, title: 'Car Service Appointment', date: 'Jan 28, 2026', time: '11:00 AM', priority: 'Low', type: 'Personal', status: 'Completed' },
-    ]);
+    const { data: reminders = [], isLoading } = useQuery({
+        queryKey: ['plan-reminders', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+            const data = await financialPlanService.getPlanReminders(DEFAULT_PLAN_ID);
+            return data.map(item => ({
+                id: item.id,
+                title: item.title,
+                date: item.date,
+                time: item.time,
+                priority: item.priority || 'Medium',
+                type: item.type || 'General',
+                status: item.status || 'Pending'
+            }));
+        }
+    });
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#EA580C', borderRadius: '50%' }} />
+            </div>
+        );
+    }
+
+    const upcomingCount = reminders.filter(r => r.status !== 'Completed').length;
+    const completedCount = reminders.filter(r => r.status === 'Completed').length;
 
     return (
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
+                    <h1 className="text-2xl font-bold text-slate-800">Plan Reminders</h1>
                     <p className="text-muted text-sm mt-1">Never miss a payment or review</p>
                 </div>
                 <button className="btn-primary">
@@ -34,32 +47,30 @@ const PlanReminders = () => {
 
             <div className="content-wrapper">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    {/* Filters Sidebar */}
                     <div className="lg:col-span-1 hidden lg:block space-y-2">
                         <div className="bg-white p-4 rounded-xl border border-[var(--border-color)]">
                             <h3 className="font-semibold text-sm text-[var(--text-main)] mb-3 uppercase tracking-wider">Filters</h3>
                             <button className="w-full text-left px-3 py-2 rounded-lg bg-blue-50 text-[var(--primary)] font-medium text-sm flex items-center justify-between">
                                 <span>All Reminders</span>
-                                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">4</span>
+                                <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">{reminders.length}</span>
                             </button>
                             <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 text-[var(--text-muted)] font-medium text-sm flex items-center justify-between">
                                 <span>Upcoming</span>
-                                <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">3</span>
-                            </button>
-                            <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 text-[var(--text-muted)] font-medium text-sm flex items-center justify-between">
-                                <span>Overdue</span>
-                                <span className="bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs">0</span>
+                                <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs">{upcomingCount}</span>
                             </button>
                             <button className="w-full text-left px-3 py-2 rounded-lg hover:bg-gray-50 text-[var(--text-muted)] font-medium text-sm flex items-center justify-between">
                                 <span>Completed</span>
-                                <span className="bg-green-50 text-green-600 px-2 py-0.5 rounded text-xs">1</span>
+                                <span className="bg-green-50 text-green-600 px-2 py-0.5 rounded text-xs">{completedCount}</span>
                             </button>
                         </div>
                     </div>
 
-                    {/* Reminders List */}
                     <div className="lg:col-span-3 space-y-4">
-                        {reminders.map((reminder) => (
+                        {reminders.length === 0 ? (
+                            <div className="text-center py-12 bg-white rounded-xl border border-dashed border-gray-300 text-muted">
+                                No reminders found for this plan.
+                            </div>
+                        ) : reminders.map((reminder) => (
                             <div key={reminder.id} className={`bg-white p-5 rounded-xl border border-[var(--border-color)] hover:shadow-md transition-shadow flex items-start sm:items-center gap-4 group ${reminder.status === 'Completed' ? 'opacity-60' : ''}`}>
                                 <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${reminder.priority === 'Critical' ? 'bg-red-100 text-red-600' :
                                     reminder.priority === 'High' ? 'bg-orange-100 text-orange-600' :

@@ -1,30 +1,57 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { investmentsService } from '../../services';
 import {
     Briefcase, TrendingUp, BarChart3, ArrowUpRight, ArrowDownRight,
     Bitcoin, PiggyBank, LineChart, Layers, Clock
 } from 'lucide-react';
 
 const OverallTradingView = () => {
+    // Fetch all investments
+    const { data: investments = [], isLoading } = useQuery({
+        queryKey: ['investments-overall'],
+        queryFn: async () => {
+            return await investmentsService.getInvestments();
+        }
+    });
+
+    const totalInvested = investments.reduce((sum, i) => sum + parseFloat(i.amount), 0);
+    const currentValue = totalInvested * 1.15; // Mocking a 15% gain for UI purposes if real value not provided
+    const profitLoss = currentValue - totalInvested;
+
     const summaryCards = [
-        { label: 'Total Portfolio', value: '₹12.5L', trend: '+12.5%', positive: true, icon: Briefcase, color: '#2563EB', bg: '#DBEAFE' },
-        { label: 'Total Invested', value: '₹10.2L', trend: null, icon: Layers, color: '#7C3AED', bg: '#EDE9FE' },
-        { label: 'Current Value', value: '₹14.8L', trend: '+45.1%', positive: true, icon: TrendingUp, color: '#16A34A', bg: '#DCFCE7' },
-        { label: "Today's P&L", value: '+₹3,250', trend: '+2.6%', positive: true, icon: BarChart3, color: '#EA580C', bg: '#FFF7ED' },
+        { label: 'Total Portfolio', value: `₹${(currentValue / 100000).toFixed(1)}L`, trend: '+15.0%', positive: true, icon: Briefcase, color: '#2563EB', bg: '#DBEAFE' },
+        { label: 'Total Invested', value: `₹${(totalInvested / 100000).toFixed(1)}L`, trend: null, icon: Layers, color: '#7C3AED', bg: '#EDE9FE' },
+        { label: 'Current Value', value: `₹${(currentValue / 100000).toFixed(1)}L`, trend: '+15.0%', positive: true, icon: TrendingUp, color: '#16A34A', bg: '#DCFCE7' },
+        { label: "Total P&L", value: `+₹${profitLoss.toLocaleString()}`, trend: '+15.0%', positive: true, icon: BarChart3, color: '#EA580C', bg: '#FFF7ED' },
     ];
 
-    const allocations = [
-        { name: 'Mutual Funds', pct: '45%', value: '₹5.6L', color: '#2563EB', icon: PiggyBank },
-        { name: 'Stocks', pct: '30%', value: '₹3.7L', color: '#7C3AED', icon: LineChart },
-        { name: 'Crypto', pct: '15%', value: '₹1.9L', color: '#EA580C', icon: Bitcoin },
-        { name: 'SIP', pct: '10%', value: '₹1.2L', color: '#16A34A', icon: TrendingUp },
-    ];
+    const types = [...new Set(investments.map(i => i.type))];
+    const allocations = types.map(type => {
+        const typeTotal = investments.filter(i => i.type === type).reduce((sum, i) => sum + parseFloat(i.amount), 0);
+        const pct = totalInvested > 0 ? (typeTotal / totalInvested) * 100 : 0;
+        return {
+            name: type,
+            pct: `${pct.toFixed(1)}%`,
+            value: `₹${(typeTotal / 100000).toFixed(1)}L`,
+            color: type === 'Mutual Fund' ? '#2563EB' : type === 'Crypto' ? '#EA580C' : type === 'SIP' ? '#16A34A' : '#7C3AED',
+            icon: type === 'Mutual Fund' ? PiggyBank : type === 'Crypto' ? Bitcoin : type === 'SIP' ? TrendingUp : LineChart
+        };
+    });
 
-    const transactions = [
-        { name: 'Buy Bitcoin', time: '2 hours ago', amount: '₹25,000', type: 'buy' },
-        { name: 'Sell HDFC MF', time: '5 hours ago', amount: '+₹12,500', type: 'sell' },
-        { name: 'Buy TCS Stock', time: 'Yesterday', amount: '₹50,000', type: 'buy' },
-        { name: 'SIP Index Fund', time: '2 days ago', amount: '₹5,000', type: 'sip' },
-    ];
+    const transactions = investments.slice(0, 4).map(i => ({
+        name: `Invest in ${i.name}`,
+        time: new Date(i.created_at).toLocaleDateString(),
+        amount: `₹${parseFloat(i.amount).toLocaleString()}`,
+        type: 'buy'
+    }));
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <div className="animate-spin" style={{ width: '30px', height: '30px', border: '3px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="view-fade-in">

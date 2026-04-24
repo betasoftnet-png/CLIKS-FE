@@ -34,9 +34,15 @@ import { ApiError, normalizeError } from './errors';
  * Build the full URL for an API request.
  */
 function buildUrl(endpoint, params = null) {
-    // Remove leading slash if present to avoid double slashes
+    // Ensure base URL ends with a slash so the URL constructor doesn't drop the last segment (/v1)
+    const baseUrl = API_BASE_URL
+        ? (API_BASE_URL.endsWith('/') ? API_BASE_URL : `${API_BASE_URL}/`)
+        : window.location.origin;
+
+    // Remove leading slash from endpoint if present. 
+    // If endpoint has a leading slash, new URL(endpoint, baseUrl) resets to the root of the domain.
     const path = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-    const url = new URL(path, API_BASE_URL || window.location.origin);
+    const url = new URL(path, baseUrl);
 
     if (params) {
         Object.entries(params).forEach(([key, value]) => {
@@ -51,13 +57,21 @@ function buildUrl(endpoint, params = null) {
 
 /**
  * Build headers for a request.
- * Merges default headers with custom headers.
+ * Merges default headers with custom headers and injects Auth token if present.
  */
 function buildHeaders(customHeaders = {}) {
-    return {
+    const headers = {
         ...DEFAULT_HEADERS,
         ...customHeaders,
     };
+
+    // Inject token from localStorage
+    const token = localStorage.getItem('books_auth_token');
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return headers;
 }
 
 // ---------------------------------------------------------------------------

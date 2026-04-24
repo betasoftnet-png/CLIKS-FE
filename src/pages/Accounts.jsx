@@ -1,20 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-    CreditCard,
-    Plus,
-    Wallet,
-    TrendingUp,
-    TrendingDown,
-    Eye,
-    EyeOff,
-    Globe,
-    ShieldCheck,
-    Smartphone,
-    X,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { accountsService } from '../services';
 import '../App.css';
 import '../styles/modals.css';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { EyeOff,Plus, Wallet,TrendingUp,TrendingDown } from 'lucide-react';
 
 const ACCOUNT_TYPES = ['Checking', 'Savings', 'Credit Card', 'Investment'];
 
@@ -43,25 +33,42 @@ const AccountStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Accounts = () => {
+    const queryClient = useQueryClient();
     const [showBalances, setShowBalances] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [formError, setFormError] = useState('');
 
-    const [accounts, setAccounts] = useState(() => {
-        const saved = localStorage.getItem('books_accounts');
-        if (saved) return JSON.parse(saved);
-        return [
-            { id: 1, name: 'Main Checking',   type: 'Checking',     bank: 'Chase Bank',      balance:  12450.50, accountNumber: '**** 4521', theme: 'dark-blue', network: 'Visa'       },
-            { id: 2, name: 'Savings Select',  type: 'Savings',      bank: 'Bank of America', balance:  28900.00, accountNumber: '**** 7832', theme: 'emerald',   network: 'Mastercard' },
-            { id: 3, name: 'Platinum Credit', type: 'Credit Card',  bank: 'American Express',balance:  -2340.75, accountNumber: '**** 9012', theme: 'purple',    network: 'Amex'       },
-            { id: 4, name: 'Growth Folio',    type: 'Investment',   bank: 'Fidelity',        balance:  45200.00, accountNumber: '**** 3456', theme: 'orange',    network: 'Invest'     },
-        ];
+    // Fetch account data
+    const { data: accounts = [], isLoading } = useQuery({
+        queryKey: ['accounts'],
+        queryFn: async () => {
+            const data = await accountsService.getAccounts();
+            // Map backend fields to frontend expectations if necessary
+            return data.map(acc => ({
+                id: acc.id,
+                name: acc.name || `${acc.bank} ${acc.type}`,
+                type: acc.type,
+                bank: acc.bank,
+                balance: parseFloat(acc.balance),
+                accountNumber: acc.account_number || acc.accountNumber,
+                theme: acc.theme || THEMES[acc.type] || 'dark-blue',
+                network: acc.network || (acc.type === 'Investment' ? 'Invest' : acc.type === 'Credit Card' ? 'Card' : 'Bank'),
+            }));
+        }
     });
 
-    useEffect(() => {
-        localStorage.setItem('books_accounts', JSON.stringify(accounts));
-    }, [accounts]);
+    // Create Account Mutation
+    const createMutation = useMutation({
+        mutationFn: (newAccount) => accountsService.createAccount(newAccount),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to link account. Please try again.');
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -81,25 +88,20 @@ const Accounts = () => {
             return;
         }
 
-        // Mask the last 4 digits if provided, otherwise random
         const rawNum = formData.number.replace(/\D/g, '');
-        const masked = rawNum.length >= 4
-            ? `**** ${rawNum.slice(-4)}`
-            : `**** ${Math.floor(1000 + Math.random() * 9000)}`;
+        const masked = rawNum.length >= 4 ? `**** ${rawNum.slice(-4)}` : `**** ${Math.floor(1000 + Math.random() * 9000)}`;
 
         const newAccount = {
-            id: Date.now(),
             name: `${formData.bank} ${formData.type}`,
             type: formData.type,
             bank: formData.bank,
             balance: parseFloat(formData.balance),
-            accountNumber: masked,
+            account_number: masked, // Using backend naming convention
             theme: THEMES[formData.type] || 'dark-blue',
             network: formData.type === 'Investment' ? 'Invest' : formData.type === 'Credit Card' ? 'Card' : 'Bank',
         };
 
-        setAccounts((prev) => [...prev, newAccount]);
-        closeModal();
+        createMutation.mutate(newAccount);
     };
 
     const totalBalance  = accounts.reduce((s, a) => s + a.balance, 0);

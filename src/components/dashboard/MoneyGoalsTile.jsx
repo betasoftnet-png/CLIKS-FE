@@ -1,7 +1,14 @@
-import React from 'react';
-import { Plane, Footprints, Plus } from 'lucide-react'; // Using icons for visual match
+import { useQuery } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
+import { Plane, Footprints, Plus, Target, Globe } from 'lucide-react';
 
-const GoalItem = ({ title, sub, current, total, percent, color, icon: Icon }) => (
+const ICON_MAP = {
+    'Travel': Plane,
+    'Sneakers': Footprints,
+    'General': Target
+};
+
+const GoalItem = ({ title, current, total, percent, color, icon: Icon }) => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem 0' }}>
         <div style={{ position: 'relative', width: '48px', height: '48px' }}>
             <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)', width: '100%', height: '100%' }}>
@@ -35,34 +42,62 @@ const GoalItem = ({ title, sub, current, total, percent, color, icon: Icon }) =>
 );
 
 const MoneyGoalsTile = () => {
+    // 1. Fetch plans to get a planId
+    const { data: plansRes, isLoading: loadingPlans } = useQuery({
+        queryKey: ['financial-plans'],
+        queryFn: financialPlanService.getPlans
+    });
+
+    const activePlanId = plansRes?.data?.[0]?.id;
+
+    // 2. Fetch goals for the active plan
+    const { data: goalsRes, isLoading: loadingGoals } = useQuery({
+        queryKey: ['plan-goals', activePlanId],
+        queryFn: () => financialPlanService.getPlanGoals(activePlanId),
+        enabled: !!activePlanId
+    });
+
+    if (loadingPlans || loadingGoals) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>Loading goals...</div>;
+
+    const goals = goalsRes?.data || [];
+
+    if (goals.length === 0) {
+        return (
+            <div style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1rem' }}>No goals found.</div>
+                <button style={{
+                    padding: '0.75rem 1.5rem',
+                    border: '2px dashed #CBD5E1',
+                    borderRadius: '99px',
+                    background: 'transparent',
+                    color: '#195BAC',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                }}>
+                    <Plus size={16} /> Add Goal
+                </button>
+            </div>
+        );
+    }
+
     return (
         <div style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    Money Goals
-                    <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#195BAC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ width: '8px', height: '8px', background: 'white', clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' }}></div>
-                    </div>
-                </div>
-            </div>
-
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <GoalItem
-                    title="Euro Summer '25"
-                    current="3,750"
-                    total="5,000"
-                    percent={75}
-                    color="#195BAC"
-                    icon={Plane}
-                />
-                <GoalItem
-                    title="New Sneaker Fund"
-                    current="150"
-                    total="500"
-                    percent={30}
-                    color="#93C5FD"
-                    icon={Footprints}
-                />
+                {goals.slice(0, 3).map(goal => {
+                    const percent = Math.min(Math.round((goal.current_amount / goal.target_amount) * 100), 100);
+                    const Icon = ICON_MAP[goal.title] || ICON_MAP[goal.name] || Globe;
+                    return (
+                        <GoalItem
+                            key={goal.id}
+                            title={goal.title || goal.name}
+                            current={goal.current_amount}
+                            total={goal.target_amount}
+                            percent={percent}
+                            color="#195BAC"
+                            icon={Icon}
+                        />
+                    );
+                })}
             </div>
 
             <button style={{
@@ -81,10 +116,7 @@ const MoneyGoalsTile = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '0.5rem'
-            }}
-                onMouseOver={(e) => { e.currentTarget.style.borderColor = '#195BAC'; e.currentTarget.style.background = '#EFF6FF'; }}
-                onMouseOut={(e) => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.background = 'transparent'; }}
-            >
+            }}>
                 <Plus size={16} /> Add New Goal
             </button>
         </div>

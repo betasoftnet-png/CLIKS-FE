@@ -28,6 +28,9 @@ import TheSquadTile from '../../components/dashboard/TheSquadTile';
 import MarketPulseTile from '../../components/dashboard/MarketPulseTile';
 import MoneyGoalsTile from '../../components/dashboard/MoneyGoalsTile';
 
+import { useQuery } from '@tanstack/react-query';
+import { homeService } from '../../services';
+
 // Fix for potential ReferenceError in stale builds or cached components
 const StatsCard = () => null;
 
@@ -287,6 +290,12 @@ const ConfirmRemoveModal = ({ isOpen, onClose, onConfirm, widgetName }) => {
 };
 
 const BooksDashboard = () => {
+    const { data: stats, isLoading, error } = useQuery({
+        queryKey: ['home-stats'],
+        queryFn: homeService.getHomeStats,
+        select: (res) => res.data
+    });
+
     const [activeWidgets, setActiveWidgets] = useState(['market', 'budget', 'goals', 'split', 'squad']);
     const [isAddWidgetOpen, setIsAddWidgetOpen] = useState(false);
     const [widgetToRemove, setWidgetToRemove] = useState(null);
@@ -363,63 +372,89 @@ const BooksDashboard = () => {
 
     const renderWidget = (id) => {
         switch (id) {
-            case 'market': return <MarketPulseTile />;
+            case 'market': 
+                return (
+                    <MarketPulseTile 
+                        totalValue={stats?.totalInvestments || 0} 
+                        totalInvested={stats?.totalInvestedAmount || 0} 
+                    />
+                );
             case 'goals': return <MoneyGoalsTile />;
             case 'overview':
+                const balance = stats?.totalBalance || 0;
+                const income = stats?.monthlyIncome || 0;
+                const expenses = stats?.monthlyExpenses || 0;
+                const total = income || 1; // avoid division by zero
+                
                 return (
                     <div className="gauges-container">
-                        <DonutChart label="Balance" value={formatCurrency(50000)} colorClass="chart-success" percent={65} />
-                        <DonutChart label="Cash Flow" value={formatCurrency(12000)} colorClass="chart-warning" percent={40} />
-                        <DonutChart label="Spending" value={formatCurrency(5000)} colorClass="chart-danger" percent={25} />
+                        <DonutChart 
+                            label="Balance" 
+                            value={formatCurrency(balance)} 
+                            colorClass="chart-success" 
+                            percent={75} 
+                        />
+                        <DonutChart 
+                            label="Monthly Income" 
+                            value={formatCurrency(income)} 
+                            colorClass="chart-warning" 
+                            percent={100} 
+                        />
+                        <DonutChart 
+                            label="Monthly Expenses" 
+                            value={formatCurrency(expenses)} 
+                            colorClass="chart-danger" 
+                            percent={Math.min((expenses / total) * 100, 100)} 
+                        />
                     </div>
                 );
             case 'transactions':
+                const transactions = stats?.recentTransactions || [];
                 return (
                     <div className="hide-scrollbar" style={{ overflowX: 'auto', width: '100%' }}>
-                        <table className="table-auto" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
-                            <thead>
-                                <tr style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                    <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Type</th>
-                                    <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Description</th>
-                                    <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Date</th>
-                                    <th style={{ textAlign: 'right', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {[
-                                    { desc: 'Rare Book Purchase', date: 'Today', amount: -125.00, type: 'expense' },
-                                    { desc: 'Freelance Payment', date: 'Yesterday', amount: 2450.00, type: 'income' },
-                                    { desc: 'Library Subscription', date: 'Oct 24', amount: -15.00, type: 'expense' },
-                                    { desc: 'Coffee & Pastry', date: 'Oct 23', amount: -8.50, type: 'expense' },
-                                ].map((item, index) => (
-                                    <tr key={index} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                        <td style={{ padding: '16px' }}>
-                                            <div style={{
-                                                width: '36px',
-                                                height: '36px',
-                                                borderRadius: '50%',
-                                                background: item.type === 'income' ? '#DCFCE7' : '#FFE4E6',
-                                                color: item.type === 'income' ? '#16A34A' : '#E11D48',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center'
-                                            }}>
-                                                {item.type === 'income' ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
-                                            </div>
-                                        </td>
-                                        <td style={{ padding: '16px', fontWeight: '500', color: '#1E293B' }}>
-                                            {item.desc}
-                                        </td>
-                                        <td style={{ padding: '16px', color: '#64748B' }}>
-                                            {item.date}
-                                        </td>
-                                        <td style={{ padding: '16px', textAlign: 'right', fontWeight: '700', color: '#1E293B' }}>
-                                            {item.amount > 0 ? '+' : ''}{formatCurrency(item.amount)}
-                                        </td>
+                        {transactions.length === 0 ? (
+                            <div style={{ padding: '2rem', textAlign: 'center', color: '#64748B' }}>No recent transactions</div>
+                        ) : (
+                            <table className="table-auto" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.95rem' }}>
+                                <thead>
+                                    <tr style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Type</th>
+                                        <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Description</th>
+                                        <th style={{ textAlign: 'left', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Date</th>
+                                        <th style={{ textAlign: 'right', padding: '16px', color: '#94A3B8', fontWeight: '500', fontSize: '0.85rem' }}>Amount</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {transactions.map((item, index) => (
+                                        <tr key={item.id || index} style={{ borderBottom: '1px solid #F8FAFC' }}>
+                                            <td style={{ padding: '16px' }}>
+                                                <div style={{
+                                                    width: '36px',
+                                                    height: '36px',
+                                                    borderRadius: '50%',
+                                                    background: item.type === 'income' ? '#DCFCE7' : '#FFE4E6',
+                                                    color: item.type === 'income' ? '#16A34A' : '#E11D48',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center'
+                                                }}>
+                                                    {item.type === 'income' ? <TrendingUp size={18} /> : <TrendingDown size={18} />}
+                                                </div>
+                                            </td>
+                                            <td style={{ padding: '16px', fontWeight: '500', color: '#1E293B' }}>
+                                                {item.description}
+                                            </td>
+                                            <td style={{ padding: '16px', color: '#64748B' }}>
+                                                {new Date(item.date).toLocaleDateString()}
+                                            </td>
+                                            <td style={{ padding: '16px', textAlign: 'right', fontWeight: '700', color: '#1E293B' }}>
+                                                {item.type === 'income' ? '+' : '-'}{formatCurrency(item.amount)}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 );
             case 'budget':
@@ -432,6 +467,9 @@ const BooksDashboard = () => {
                 return null;
         }
     };
+
+    if (isLoading) return <div className="flex items-center justify-center h-full">Loading dashboard...</div>;
+    if (error) return <div className="flex items-center justify-center h-full text-red-500">Error loading dashboard: {error.message}</div>;
 
     return (
         <>
@@ -449,18 +487,15 @@ const BooksDashboard = () => {
             <div className="content-wrapper">
                 {/* Accounts Row */}
                 <div className="accounts-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-                    <AccountCard
-                        name="Bank 1"
-                        amount={75000}
-                        color="" // handled by css
-                        icon={Building2}
-                    />
-                    <AccountCard
-                        name="Locker"
-                        amount={28500}
-                        color="" // handled by css
-                        icon={Target}
-                    />
+                    {(stats?.accounts || []).map(account => (
+                        <AccountCard
+                            key={account.id}
+                            name={account.name}
+                            amount={account.balance}
+                            color={account.color || '#195BAC'} 
+                            icon={Building2}
+                        />
+                    ))}
 
                     <button className="add-account-btn">
                         <Plus size={20} />

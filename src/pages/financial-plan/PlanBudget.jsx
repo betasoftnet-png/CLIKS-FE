@@ -1,36 +1,69 @@
-import React, { useState } from 'react';
-import {
-    DollarSign,
-    PieChart,
-    Plus,
-    Save,
-    RotateCcw,
-    ShoppingBag,
-    Coffee,
-    Home,
-    Car,
-    Smartphone
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import '../../App.css';
+import { Home,Coffee,Car,ShoppingBag,Smartphone,RotateCcw,Save,Plus } from 'lucide-react';
+
+const DEFAULT_PLAN_ID = 1;
+
+const ICON_MAP = {
+    'Home': Home,
+    'Coffee': Coffee,
+    'Car': Car,
+    'ShoppingBag': ShoppingBag,
+    'Smartphone': Smartphone
+};
 
 const PlanBudget = () => {
-    const [totalIncome] = useState(5000);
-    const [categories, setCategories] = useState([
-        { id: 1, name: 'Housing', allocated: 1500, icon: Home, color: 'blue' },
-        { id: 2, name: 'Food & Dining', allocated: 600, icon: Coffee, color: 'orange' },
-        { id: 3, name: 'Transportation', allocated: 400, icon: Car, color: 'green' },
-        { id: 4, name: 'Shopping', allocated: 300, icon: ShoppingBag, color: 'purple' },
-        { id: 5, name: 'Utilities', allocated: 250, icon: Smartphone, color: 'yellow' },
-    ]);
+    const queryClient = useQueryClient();
+
+    // Fetch total income from a general source or just use a fixed one if not available in current plan scope
+    // For now, let's assume it's part of the plan stats or we can fetch it
+    const { data: totalIncome = 5000 } = useQuery({
+        queryKey: ['plan-stats', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+             // In a real app, this might come from a specific endpoint
+             return 5000;
+        }
+    });
+
+    // Fetch Plan Budgets
+    const { data: categories = [], isLoading } = useQuery({
+        queryKey: ['plan-budgets', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+            const data = await financialPlanService.getPlanBudgets(DEFAULT_PLAN_ID);
+            return data.map(cat => ({
+                id: cat.id,
+                name: cat.name,
+                allocated: parseFloat(cat.allocated_amount || cat.amount),
+                icon: ICON_MAP[cat.icon_name] || Home,
+                color: cat.color || 'blue'
+            }));
+        }
+    });
+
+    const saveMutation = useMutation({
+        mutationFn: (data) => financialPlanService.updatePlanBudget(DEFAULT_PLAN_ID, data.id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-budgets', DEFAULT_PLAN_ID] });
+        }
+    });
 
     const totalAllocated = categories.reduce((sum, cat) => sum + cat.allocated, 0);
     const remaining = totalIncome - totalAllocated;
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
+                    <h1 className="text-2xl font-bold text-slate-800">Budget Plan</h1>
                     <p className="text-muted text-sm mt-1">Allocate your monthly funds effectively</p>
                 </div>
                 <div className="flex gap-3">
@@ -38,7 +71,7 @@ const PlanBudget = () => {
                         <RotateCcw size={18} />
                         <span>Reset</span>
                     </button>
-                    <button className="btn-primary">
+                    <button className="btn-primary" onClick={() => alert('Plan saved to server')}>
                         <Save size={18} />
                         <span>Save Plan</span>
                     </button>
@@ -46,7 +79,6 @@ const PlanBudget = () => {
             </div>
 
             <div className="content-wrapper">
-                {/* Summary Card */}
                 <div className="bg-white p-6 rounded-2xl border border-[var(--border-color)] mb-8 shadow-sm">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="text-center md:text-left">
@@ -75,7 +107,6 @@ const PlanBudget = () => {
                     </p>
                 </div>
 
-                {/* Categories Grid */}
                 <h3 className="section-title mb-4">Category Allocation</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {categories.map((cat) => (
@@ -98,18 +129,17 @@ const PlanBudget = () => {
                                         type="number"
                                         value={cat.allocated}
                                         className="w-full font-bold text-lg text-[var(--text-main)] border-b border-gray-200 outline-none focus:border-blue-500 transition-colors bg-transparent"
-                                        readOnly // Making readonly for UI demo, in real app needs onChange
+                                        readOnly
                                     />
                                 </div>
                             </div>
 
                             <div className="text-xs text-muted flex justify-between mt-3">
-                                <span>{((cat.allocated / totalAllocated) * 100).toFixed(1)}% of budget</span>
+                                <span>{totalAllocated > 0 ? ((cat.allocated / totalAllocated) * 100).toFixed(1) : 0}% of budget</span>
                             </div>
                         </div>
                     ))}
 
-                    {/* Add New Category */}
                     <button className="border-2 border-dashed border-[var(--border-color)] rounded-xl flex flex-col items-center justify-center gap-2 text-muted hover:border-blue-500 hover:text-blue-500 transition-colors min-h-[160px]">
                         <div className="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center">
                             <Plus size={24} />

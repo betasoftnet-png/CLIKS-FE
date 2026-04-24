@@ -1,36 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import EmptyState from '../../components/common/EmptyState';
-import {
-    Plus,
-    DollarSign,
-    TrendingUp,
-    Wallet,
-    Search,
-    Filter,
-    ChevronDown,
-    Edit,
-    Trash2,
-    X,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import './financial-plan.css';
 
 const EMPTY_FORM = { source: '', category: '', amount: '', date: '' };
+const DEFAULT_PLAN_ID = 1; // Assuming a single plan for now
 
 const PlanIncome = () => {
-    const [incomeSources, setIncomeSources] = useState(() => {
-        const saved = localStorage.getItem('books_plan_income');
-        return saved ? JSON.parse(saved) : [];
-    });
-
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [formError, setFormError] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
-        localStorage.setItem('books_plan_income', JSON.stringify(incomeSources));
-    }, [incomeSources]);
+    // Fetch Income Sources
+    const { data: incomeSources = [], isLoading } = useQuery({
+        queryKey: ['plan-income', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+            const data = await financialPlanService.getPlanIncome(DEFAULT_PLAN_ID);
+            return data.map(item => ({
+                id: item.id,
+                source: item.source,
+                category: item.category,
+                amount: parseFloat(item.amount),
+                date: item.date
+            }));
+        }
+    });
+
+    // Create Mutation
+    const createMutation = useMutation({
+        mutationFn: (newIncome) => financialPlanService.createPlanIncome(DEFAULT_PLAN_ID, newIncome),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-income', DEFAULT_PLAN_ID] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to add income.');
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => financialPlanService.deletePlanIncome(DEFAULT_PLAN_ID, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-income', DEFAULT_PLAN_ID] });
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -51,19 +66,19 @@ const PlanIncome = () => {
         }
 
         const newIncome = {
-            id: Date.now(),
             source: formData.source,
             category: formData.category,
             amount: parseFloat(formData.amount),
             date: formData.date,
         };
 
-        setIncomeSources((prev) => [newIncome, ...prev]);
-        closeModal();
+        createMutation.mutate(newIncome);
     };
 
     const handleDelete = (id) => {
-        setIncomeSources((prev) => prev.filter((item) => item.id !== id));
+        if (window.confirm('Are you sure you want to delete this income source?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalIncome = incomeSources.reduce((sum, item) => sum + item.amount, 0);
@@ -75,6 +90,14 @@ const PlanIncome = () => {
             item.source.toLowerCase().includes(searchQuery.toLowerCase()) ||
             item.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#16A34A', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="fp-page">

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { savingsService } from '../services';
 import {
     PiggyBank,
     Plus,
@@ -11,9 +12,18 @@ import {
     Plane,
     Home,
     Car,
-    Shield
+    Shield,
+    Globe
 } from 'lucide-react';
 import '../App.css';
+
+const ICON_MAP = {
+    Shield: Shield,
+    Plane: Plane,
+    Car: Car,
+    Home: Home,
+    Default: Globe
+};
 
 const SavingsStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
     <div className="savings-stat-card">
@@ -31,16 +41,35 @@ const SavingsStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Savings = () => {
-    const [savingsGoals] = useState([
-        { id: 1, name: 'Emergency Fund', target: 10000, current: 7500, deadline: '2026-12-31', color: 'blue', priority: 'High', icon: Shield },
-        { id: 2, name: 'Vacation to Europe', target: 5000, current: 2800, deadline: '2026-06-30', color: 'purple', priority: 'Medium', icon: Plane },
-        { id: 3, name: 'New Car Down Payment', target: 15000, current: 4200, deadline: '2027-03-31', color: 'green', priority: 'Medium', icon: Car },
-        { id: 4, name: 'Home Renovation', target: 20000, current: 8500, deadline: '2026-09-30', color: 'orange', priority: 'Low', icon: Home },
-    ]);
+    // Fetch savings goals
+    const { data: savingsGoals = [], isLoading } = useQuery({
+        queryKey: ['savings-goals'],
+        queryFn: async () => {
+            const data = await savingsService.getSavings();
+            return data.map(goal => ({
+                id: goal.id,
+                name: goal.name,
+                target: parseFloat(goal.target_amount),
+                current: parseFloat(goal.current_amount),
+                deadline: goal.deadline,
+                color: goal.color || 'blue',
+                priority: goal.priority || 'Medium',
+                icon: ICON_MAP[goal.icon] || ICON_MAP.Default
+            }));
+        }
+    });
 
     const totalTarget = savingsGoals.reduce((sum, g) => sum + g.target, 0);
     const totalSaved = savingsGoals.reduce((sum, g) => sum + g.current, 0);
-    const overallProgress = (totalSaved / totalTarget) * 100;
+    const overallProgress = totalTarget > 0 ? (totalSaved / totalTarget) * 100 : 0;
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#10B981', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">

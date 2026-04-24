@@ -33,12 +33,62 @@
 - Splitting expenses and tracking stock
 - Providing a social/public view for financial updates
 
-### Key Features
+### Key Features Overview
 - **Dashboard Home**: Overview of accounts, income, expenses, and quick transfers
 - **Books Module**: Stock management, financial planning, people tracking
 - **Finance Module**: Detailed financial analysis
 - **Social Module**: Public financial updates and community features
 - **User Profile & Settings**: Account management and app configuration
+
+---
+
+## 📊 Detailed Modules & Features Breakdown
+
+### 1. Finance Module (`/finance`)
+The core personal finance tracking and management system.
+**Key Features:**
+- **Income Tracking (`/finance/income`)**: Log and analyze incoming revenue streams with visual charts.
+- **Expense Tracking (`/finance/expenses`)**: Categorize and monitor outgoing payments to control spending.
+- **Budgets (`/finance/budgets`)**: Create budgeting goals per category and track adherence to these limits.
+- **Accounts (`/finance/accounts`)**: Consolidate views of multiple financial accounts (e.g., bank accounts, cash wallets) and monitor overall liquidity.
+- **Transactions (`/finance/transactions`)**: Comprehensive, sortable, and filterable ledger of all financial activities.
+- **Planned Payments (`/finance/planned-payments`)**: Schedule and track recurring or future obligations to prevent missed payments.
+- **Savings (`/finance/savings`)**: Setup and monitor savings goals and track progression over time.
+- **Investments (`/finance/investments`)**: Maintain a portfolio view of different investment assets.
+- **Debts (`/finance/debts`)**: Track money owed to others or by others, managing loan lifecycles.
+
+### 2. Books Module (`/books`)
+A structured environment for detailed planning, inventory, and shared financial responsibilities.
+**Key Features:**
+- **Books Dashboard (`/books/dashboard`)**: A dedicated hub providing high-level metrics across all books-related resources.
+- **Stock Management (`/books/stock`)**: Inventory control and tracking for businesses or personal assets.
+- **Financial Planning (`/books/financial-plan`)**: A comprehensive toolset for drafting financial futures:
+  - *Plan Budget, Income, & Expense*: Granular forecasting for different revenue and cost buckets.
+  - *Financial Calendar*: Timeline-based view of forecasted transactions.
+  - *Goals & Reminders*: Setting milestones and alerts to stay on track.
+  - *Plan Analysis*: Analytical breakdown validating the feasibility of the financial plan.
+- **People Management (`/books/people`)**: Tracking financial relationships.
+  - *Transactions & Records*: Log every exchange associated with a specific person.
+  - *Reminders*: Alerts connected to specific individuals (e.g., follow-ups for split bills).
+- **Financial Contacts (`/books/contacts`)**: Specialized directory storing payment handlers and bank details of relevant counterparties.
+- **Segregation (`/books/segregation`)**: Advanced tagging and separation of funds for specialized accounting logic.
+- **Split Expenses (`/books/split-expense`)**: A utility to evenly or proportionally divide group bills, calculating balances and settlements.
+
+### 3. Public/Social Module (`/public`)
+Community interactions and public milestones.
+**Key Features:**
+- **Public Feed**: A social-media-style page for financial updates, sharing progress, and viewing leaderboards or community events.
+
+### 4. Auditor Module (`/auditor`)
+Oversight and compliance features.
+**Key Features:**
+- **Auditor Dashboard**: Dedicated layout and tools (`AuditPanel`, `AuditorSidebar`) for reviewing financial anomalies, auditing transaction logs, and ensuring records' integrity.
+
+### 5. Core Platform Features
+Underlying capabilities applied universally across the application.
+**Key Features:**
+- **Authentication & Profiles (`/auth`, `/books/profile`)**: Secure user onboarding, session persistence, and account settings orchestration.
+- **Theme & Settings (`/books/settings`)**: Personalization of the app experience and notification preferences.
 
 ---
 

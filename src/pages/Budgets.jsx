@@ -1,24 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-    Wallet,
-    Plus,
-    TrendingUp,
-    AlertCircle,
-    CheckCircle,
-    Edit2,
-    ShoppingBag,
-    Car,
-    Zap,
-    HeartPulse,
-    Coffee,
-    Home,
-    Briefcase,
-    Globe,
-    X,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { budgetsService } from '../services';
 import '../App.css';
 import '../styles/modals.css';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Budget icon options the user can pick
 const ICON_OPTIONS = [
@@ -31,6 +16,24 @@ const ICON_OPTIONS = [
     { label: 'Work',           value: 'work',      Icon: Briefcase   },
     { label: 'Other',          value: 'other',     Icon: Globe       },
 ];
+
+import {
+    ShoppingBag,
+    Car,
+    Coffee,
+    Zap,
+    HeartPulse,
+    Home,
+    Briefcase,
+    Globe,
+    Plus,
+    Wallet,
+    TrendingUp,
+    CheckCircle,
+    AlertCircle,
+    Edit2,
+    X
+} from 'lucide-react';
 
 const COLOR_POOL = ['orange', 'blue', 'purple', 'green', 'red', 'indigo'];
 
@@ -47,30 +50,51 @@ const BudgetStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
                 <Icon size={20} />
             </div>
         </div>
-        <p className={`stat-subtext ${subtext.includes('Over') ? 'text-red' : 'text-green'}`}>{subtext}</p>
+        <p className={`stat-subtext ${subtext.includes('Over') || subtext.includes('utilized') ? 'text-blue' : 'text-green'}`}>{subtext}</p>
     </div>
 );
 
 const Budgets = () => {
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [formError, setFormError] = useState('');
 
-    const [budgets, setBudgets] = useState(() => {
-        const saved = localStorage.getItem('books_budgets');
-        if (saved) return JSON.parse(saved);
-        return [
-            { id: 1, category: 'Food & Dining',  limit: 800,  spent: 650, color: 'orange', iconValue: 'shopping' },
-            { id: 2, category: 'Transportation',  limit: 300,  spent: 280, color: 'blue',   iconValue: 'car'      },
-            { id: 3, category: 'Entertainment',   limit: 200,  spent: 220, color: 'purple', iconValue: 'coffee'   },
-            { id: 4, category: 'Utilities',       limit: 400,  spent: 320, color: 'green',  iconValue: 'zap'      },
-            { id: 5, category: 'Healthcare',      limit: 250,  spent: 150, color: 'red',    iconValue: 'health'   },
-        ];
+    // Fetch budgets
+    const { data: budgets = [], isLoading } = useQuery({
+        queryKey: ['budgets'],
+        queryFn: async () => {
+            const data = await budgetsService.getBudgets();
+            return data.map((b, idx) => ({
+                id: b.id,
+                category: b.category,
+                limit: parseFloat(b.limit),
+                spent: parseFloat(b.spent || 0),
+                color: b.color || COLOR_POOL[idx % COLOR_POOL.length],
+                iconValue: b.icon_value || b.iconValue || 'shopping'
+            }));
+        }
     });
 
-    useEffect(() => {
-        localStorage.setItem('books_budgets', JSON.stringify(budgets));
-    }, [budgets]);
+    // Create Mutation
+    const createMutation = useMutation({
+        mutationFn: (newBudget) => budgetsService.createBudget(newBudget),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to create budget.');
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => budgetsService.deleteBudget(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['budgets'] });
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -92,20 +116,20 @@ const Budgets = () => {
 
         const colorIndex = budgets.length % COLOR_POOL.length;
         const newBudget = {
-            id: Date.now(),
             category: formData.category,
             limit: parseFloat(formData.limit),
             spent: formData.spent ? parseFloat(formData.spent) : 0,
             color: COLOR_POOL[colorIndex],
-            iconValue: formData.iconValue,
+            icon_value: formData.iconValue,
         };
 
-        setBudgets((prev) => [...prev, newBudget]);
-        closeModal();
+        createMutation.mutate(newBudget);
     };
 
     const handleDelete = (id) => {
-        setBudgets((prev) => prev.filter((b) => b.id !== id));
+        if (window.confirm('Are you sure you want to delete this budget?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalAllocated = budgets.reduce((s, b) => s + b.limit, 0);
@@ -116,6 +140,14 @@ const Budgets = () => {
         const match = ICON_OPTIONS.find((o) => o.value === iconValue);
         return match ? match.Icon : Globe;
     };
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#3B82F6', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">

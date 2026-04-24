@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { settingsService } from '../services';
 import Breadcrumbs from '../components/Breadcrumbs';
 import { Toggle } from '../components/ui/toggle';
 import { Bell, Shield, Globe, Save } from 'lucide-react';
 
 const Settings = () => {
-    // Mock state for settings
-    const [settings, setSettings] = useState({
+    const queryClient = useQueryClient();
+    const [localSettings, setLocalSettings] = useState({
         notifications: true,
         emailDigest: false,
         darkMode: false,
@@ -14,8 +15,29 @@ const Settings = () => {
         dataSharing: false
     });
 
+    const { data: serverSettings, isLoading } = useQuery({
+        queryKey: ['settings'],
+        queryFn: settingsService.getSettings,
+        onSuccess: (data) => {
+            if (data.settings) {
+                setLocalSettings(prev => ({ ...prev, ...data.settings }));
+            }
+        }
+    });
+
+    const mutation = useMutation({
+        mutationFn: (data) => settingsService.updateSettings({ settings: data }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['settings'] });
+        }
+    });
+
     const handleToggle = (key) => {
-        setSettings(prev => ({ ...prev, [key]: !prev[key] }));
+        setLocalSettings(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+    const handleSave = () => {
+        mutation.mutate(localSettings);
     };
 
     const SettingSection = ({ title, icon: Icon, children }) => (
@@ -53,6 +75,14 @@ const Settings = () => {
         </div>
     );
 
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
+
     return (
         <div style={{ maxWidth: '900px', margin: '0 auto', padding: '1.5rem 2rem' }}>
             <div style={{ marginBottom: '2rem' }}>
@@ -65,13 +95,13 @@ const Settings = () => {
                 <SettingItem
                     label="Dark Mode"
                     description="Use a dark theme for the application interface."
-                    isToggled={settings.darkMode}
+                    isToggled={localSettings.darkMode}
                     onToggle={() => handleToggle('darkMode')}
                 />
                 <SettingItem
                     label="Language"
                     description="Current system language: English (US)"
-                    isToggled={true} // Static for demo
+                    isToggled={true}
                     onToggle={() => { }}
                     last={true}
                 />
@@ -81,13 +111,13 @@ const Settings = () => {
                 <SettingItem
                     label="Push Notifications"
                     description="Receive real-time alerts for updates and activities."
-                    isToggled={settings.notifications}
+                    isToggled={localSettings.notifications}
                     onToggle={() => handleToggle('notifications')}
                 />
                 <SettingItem
                     label="Email Digest"
                     description="Receive a weekly summary of your financial activity."
-                    isToggled={settings.emailDigest}
+                    isToggled={localSettings.emailDigest}
                     onToggle={() => handleToggle('emailDigest')}
                     last={true}
                 />
@@ -97,40 +127,45 @@ const Settings = () => {
                 <SettingItem
                     label="Public Profile"
                     description="Allow other users on the platform to find you."
-                    isToggled={settings.publicProfile}
+                    isToggled={localSettings.publicProfile}
                     onToggle={() => handleToggle('publicProfile')}
                 />
                 <SettingItem
                     label="Two-Factor Authentication"
                     description="Add an extra layer of security to your account."
-                    isToggled={settings.twoFactor}
+                    isToggled={localSettings.twoFactor}
                     onToggle={() => handleToggle('twoFactor')}
                 />
                 <SettingItem
                     label="Data & Analytics"
                     description="Allow usage data to be collected to improve experience."
-                    isToggled={settings.dataSharing}
+                    isToggled={localSettings.dataSharing}
                     onToggle={() => handleToggle('dataSharing')}
                     last={true}
                 />
             </SettingSection>
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2rem' }}>
-                <button style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    padding: '0.75rem 2rem',
-                    background: 'var(--primary)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '8px',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 6px -1px rgba(25, 91, 172, 0.2)'
-                }}>
+                <button 
+                    onClick={handleSave}
+                    disabled={mutation.isLoading}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.75rem 2rem',
+                        background: 'var(--primary)',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 600,
+                        cursor: mutation.isLoading ? 'not-allowed' : 'pointer',
+                        boxShadow: '0 4px 6px -1px rgba(25, 91, 172, 0.2)',
+                        opacity: mutation.isLoading ? 0.7 : 1
+                    }}
+                >
                     <Save size={18} />
-                    Save Changes
+                    {mutation.isLoading ? 'Saving...' : 'Save Changes'}
                 </button>
             </div>
         </div>

@@ -1,29 +1,42 @@
-import React, { useState } from 'react';
-import {
-    Plus,
-    Calendar,
-    CheckCircle,
-    Clock,
-    AlertCircle,
-    MoreHorizontal,
-    Filter,
-    Search
-} from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { peopleService } from '../../services';
 import '../../App.css';
 
 const PeopleReminders = () => {
-    const [reminders] = useState([
-        { id: 1, person: 'John Doe', amount: 500, dueDate: '2024-03-20', status: 'upcoming', type: 'Payment' },
-        { id: 2, person: 'Mike Ross', amount: 1500, dueDate: '2024-03-10', status: 'overdue', type: 'Settlement' },
-        { id: 3, person: 'Jane Smith', amount: 200, dueDate: '2024-03-22', status: 'upcoming', type: 'Payment' },
-    ]);
+    // Fetch Global Reminders
+    const { data: reminders = [], isLoading } = useQuery({
+        queryKey: ['people-reminders-all'],
+        queryFn: async () => {
+            const data = await peopleService.getAllReminders();
+            return data.map(rem => ({
+                id: rem.id,
+                person: rem.person_name || 'Generic',
+                amount: parseFloat(rem.amount),
+                dueDate: rem.due_date,
+                status: rem.status || 'upcoming',
+                type: rem.type || 'Payment'
+            }));
+        }
+    });
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const dueToday = reminders.filter(r => r.dueDate === todayStr && r.status !== 'settled').length;
+    const upcoming = reminders.filter(r => r.status === 'upcoming').length;
+    const overdue = reminders.filter(r => r.status === 'overdue').length;
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#1E40AF', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="reminders-page">
-            {/* Header */}
             <div className="page-header-container">
                 <div>
-
+                    <h1 className="text-2xl font-bold text-slate-800">People Reminders</h1>
                     <p className="page-subtitle">Manage payments and follow-ups</p>
                 </div>
                 <div className="header-controls">
@@ -38,12 +51,11 @@ const PeopleReminders = () => {
                 </div>
             </div>
 
-            {/* Stats Cards */}
             <div className="stats-grid">
                 <div className="stat-card">
                     <div>
                         <p className="stat-label">Due Today</p>
-                        <h3 className="stat-value">0</h3>
+                        <h3 className="stat-value">{dueToday}</h3>
                     </div>
                     <div className="stat-icon-wrapper bg-blue">
                         <Calendar size={20} />
@@ -52,7 +64,7 @@ const PeopleReminders = () => {
                 <div className="stat-card">
                     <div>
                         <p className="stat-label">Upcoming</p>
-                        <h3 className="stat-value">2</h3>
+                        <h3 className="stat-value">{upcoming}</h3>
                     </div>
                     <div className="stat-icon-wrapper bg-amber">
                         <Clock size={20} />
@@ -61,7 +73,7 @@ const PeopleReminders = () => {
                 <div className="stat-card">
                     <div>
                         <p className="stat-label">Overdue</p>
-                        <h3 className="stat-value">1</h3>
+                        <h3 className="stat-value">{overdue}</h3>
                     </div>
                     <div className="stat-icon-wrapper bg-red">
                         <AlertCircle size={20} />
@@ -69,9 +81,7 @@ const PeopleReminders = () => {
                 </div>
             </div>
 
-            {/* Content Area */}
             <div className="content-card">
-                {/* Search Bar */}
                 <div className="table-toolbar">
                     <div className="search-input-wrapper">
                         <Search size={18} className="search-icon" />
@@ -83,7 +93,6 @@ const PeopleReminders = () => {
                     </div>
                 </div>
 
-                {/* List Header */}
                 <div className="list-header">
                     <div>Person</div>
                     <div>Type</div>
@@ -93,9 +102,10 @@ const PeopleReminders = () => {
                     <div className="text-right">Action</div>
                 </div>
 
-                {/* List Items */}
                 <div className="list-body">
-                    {reminders.map(rem => (
+                    {reminders.length === 0 ? (
+                        <div className="p-8 text-center text-muted italic">No reminders found.</div>
+                    ) : reminders.map(rem => (
                         <div key={rem.id} className="list-row">
                             <div className="font-strong">{rem.person}</div>
                             <div className="text-muted">{rem.type}</div>

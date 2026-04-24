@@ -1,25 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-    CalendarClock,
-    Plus,
-    DollarSign,
-    AlertCircle,
-    Clock,
-    Edit2,
-    Trash2,
-    Home,
-    Shield,
-    Wifi,
-    Activity,
-    CreditCard,
-    X,
-    RefreshCw,
-    ShoppingBag,
-    Zap,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { plannedPaymentsService } from '../services';
 import '../App.css';
 import '../styles/modals.css';
+import { Home,Shield,Wifi,Activity,CreditCard,ShoppingBag,Zap,Plus,DollarSign,AlertCircle,CalendarClock} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
 
 const CATEGORIES = ['Housing', 'Insurance', 'Credit', 'Utilities', 'Health', 'Entertainment', 'Transport', 'Subscriptions', 'Other'];
 
@@ -51,25 +36,57 @@ const PaymentStat = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const PlannedPayments = () => {
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData]       = useState(EMPTY_FORM);
     const [formError, setFormError]     = useState('');
 
-    const [payments, setPayments] = useState(() => {
-        const saved = localStorage.getItem('books_payments');
-        if (saved) return JSON.parse(saved);
-        return [
-            { id: 1, title: 'Rent Payment',       amount: 1500, dueDate: '2026-02-01', status: 'upcoming',  category: 'Housing',   recurring: true,  iconValue: 'home'     },
-            { id: 2, title: 'Car Insurance',       amount:  250, dueDate: '2026-01-25', status: 'due-soon',  category: 'Insurance', recurring: true,  iconValue: 'shield'   },
-            { id: 3, title: 'Credit Card Payment', amount:  800, dueDate: '2026-01-22', status: 'overdue',   category: 'Credit',    recurring: false, iconValue: 'card'     },
-            { id: 4, title: 'Internet Bill',       amount:   80, dueDate: '2026-01-28', status: 'upcoming',  category: 'Utilities', recurring: true,  iconValue: 'wifi'     },
-            { id: 5, title: 'Gym Membership',      amount:   60, dueDate: '2026-02-05', status: 'upcoming',  category: 'Health',    recurring: true,  iconValue: 'activity' },
-        ];
+    // Fetch payments
+    const { data: payments = [], isLoading } = useQuery({
+        queryKey: ['planned-payments'],
+        queryFn: async () => {
+            const data = await plannedPaymentsService.getPlannedPayments();
+            const today = new Date();
+            return data.map(p => {
+                const due = new Date(p.due_date);
+                const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
+                let status = 'upcoming';
+                if (diffDays < 0) status = 'overdue';
+                else if (diffDays <= 5) status = 'due-soon';
+
+                return {
+                    id: p.id,
+                    title: p.title,
+                    category: p.category,
+                    amount: parseFloat(p.amount),
+                    dueDate: p.due_date,
+                    recurring: !!p.recurring,
+                    status,
+                    iconValue: p.icon_value || 'home'
+                };
+            });
+        }
     });
 
-    useEffect(() => {
-        localStorage.setItem('books_payments', JSON.stringify(payments));
-    }, [payments]);
+    // Create Mutation
+    const createMutation = useMutation({
+        mutationFn: (newPayment) => plannedPaymentsService.createPlannedPayment(newPayment),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['planned-payments'] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to create payment.');
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => plannedPaymentsService.deletePlannedPayment(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['planned-payments'] });
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -89,30 +106,22 @@ const PlannedPayments = () => {
             return;
         }
 
-        const today = new Date();
-        const due   = new Date(formData.dueDate);
-        const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-        let status = 'upcoming';
-        if (diffDays < 0)       status = 'overdue';
-        else if (diffDays <= 5) status = 'due-soon';
-
         const newPayment = {
-            id: Date.now(),
             title: formData.title,
             category: formData.category,
             amount: parseFloat(formData.amount),
-            dueDate: formData.dueDate,
+            due_date: formData.dueDate,
             recurring: formData.recurring,
-            status,
-            iconValue: formData.iconValue,
+            icon_value: formData.iconValue,
         };
 
-        setPayments((prev) => [...prev, newPayment]);
-        closeModal();
+        createMutation.mutate(newPayment);
     };
 
     const handleDelete = (id) => {
-        setPayments((prev) => prev.filter((p) => p.id !== id));
+        if (window.confirm('Are you sure you want to delete this planned payment?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalPlanned     = payments.reduce((s, p) => s + p.amount, 0);
@@ -126,6 +135,14 @@ const PlannedPayments = () => {
         const match = ICON_OPTIONS.find((o) => o.value === iconValue);
         return match ? match.Icon : Home;
     };
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#2563EB', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="page-fade-in">

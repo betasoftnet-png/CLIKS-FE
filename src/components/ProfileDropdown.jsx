@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, User as UserIcon } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export function ProfileDropdown({
     onAccount,
@@ -9,6 +10,11 @@ export function ProfileDropdown({
     onLogout,
 }) {
     const [open, setOpen] = useState(false);
+    const { user, loading } = useAuth();
+    
+    // Fallback if user is not loaded yet
+    const displayEmail = user?.email || "Guest";
+    const displayName = user?.username || user?.name || "User";
 
     // Inline styles to replicate the visual design without relying on Tailwind
     const styles = {
@@ -93,7 +99,8 @@ export function ProfileDropdown({
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f9fafb'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
             >
-                BTC007
+                <UserIcon size={16} color="#195BAC" />
+                <span style={{ textTransform: 'uppercase' }}>{displayName}</span>
                 <ChevronDown
                     size={16}
                     style={{
@@ -117,7 +124,7 @@ export function ProfileDropdown({
                     >
                         <div style={styles.header}>
                             <p style={styles.signedInText}>Signed in as</p>
-                            <p style={styles.emailText} title="btc007@gmail.com">btc007@gmail.com</p>
+                            <p style={styles.emailText} title={displayEmail}>{displayEmail}</p>
                         </div>
 
                         <div style={styles.menuGroup}>

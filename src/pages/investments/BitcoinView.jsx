@@ -1,33 +1,52 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { investmentsService } from '../../services';
 import { ArrowUpRight, TrendingUp, BarChart3 } from 'lucide-react';
 
 const BitcoinView = () => {
     const [buyAmount, setBuyAmount] = useState('');
     const [sellAmount, setSellAmount] = useState('');
-    const btcPrice = 43250;
 
+    // Fetch Bitcoin Holdings
+    const { data: btcInfo = {}, isLoading } = useQuery({
+        queryKey: ['investments-bitcoin'],
+        queryFn: async () => {
+            const data = await investmentsService.getInvestments();
+            const btc = data.find(i => i.symbol === 'BTC' || i.name.toLowerCase() === 'bitcoin');
+            return btc || { price: 43250, amount: 0, day_change: '+2.5%' };
+        }
+    });
+
+    const btcPrice = parseFloat(btcInfo.price || 43250);
     const btcReceived = buyAmount ? (parseFloat(buyAmount) / btcPrice).toFixed(8) : '0.00000000';
     const usdReceived = sellAmount ? (parseFloat(sellAmount) * btcPrice).toLocaleString() : '0';
+
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#F59E0B', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="view-fade-in">
             <div className="btc-header-row">
                 <div>
-                    <h2 className="inv-view-title">Bitcoin Trading</h2>
+                    <h1 className="text-2xl font-bold text-slate-800">Bitcoin Trading</h1>
                     <p className="inv-view-subtitle">Real-time BTC analysis and trading</p>
                 </div>
                 <div className="btc-price-box">
                     <div className="btc-curr-price">
                         <span className="btc-price-label">Current Price</span>
-                        <span className="btc-price-val">$43,250</span>
+                        <span className="btc-price-val">${btcPrice.toLocaleString()}</span>
                     </div>
                     <span className="btc-change-badge">
-                        <ArrowUpRight size={14} /> +2.5%
+                        <ArrowUpRight size={14} /> {btcInfo.day_change || '+2.5%'}
                     </span>
                 </div>
             </div>
 
-            {/* Chart Placeholder */}
             <div className="btc-chart-card">
                 <div className="btc-chart-header">
                     <h3 className="inv-section-title" style={{ margin: 0 }}>Trading Chart</h3>
@@ -55,7 +74,6 @@ const BitcoinView = () => {
                 </div>
             </div>
 
-            {/* Buy / Sell Panels */}
             <div className="btc-trade-grid">
                 <div className="btc-trade-panel buy">
                     <div className="btc-trade-panel-header">

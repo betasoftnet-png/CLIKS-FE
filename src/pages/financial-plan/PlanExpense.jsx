@@ -1,36 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import EmptyState from '../../components/common/EmptyState';
-import {
-    Plus,
-    DollarSign,
-    TrendingUp,
-    Wallet,
-    Search,
-    Filter,
-    ChevronDown,
-    Edit,
-    Trash2,
-    X,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { financialPlanService } from '../../services';
 import './financial-plan.css';
 
 const EMPTY_FORM = { item: '', category: '', estimatedCost: '', plannedMonth: '' };
+const DEFAULT_PLAN_ID = 1;
 
 const PlanExpense = () => {
-    const [plannedExpenses, setPlannedExpenses] = useState(() => {
-        const saved = localStorage.getItem('books_plan_expense');
-        return saved ? JSON.parse(saved) : [];
-    });
-
+    const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [formData, setFormData] = useState(EMPTY_FORM);
-    const [formError, setFormError] = useState('');
+    const [formData, setFormData]       = useState(EMPTY_FORM);
+    const [formError, setFormError]     = useState('');
     const [searchQuery, setSearchQuery] = useState('');
 
-    useEffect(() => {
-        localStorage.setItem('books_plan_expense', JSON.stringify(plannedExpenses));
-    }, [plannedExpenses]);
+    // Fetch Expenses
+    const { data: plannedExpenses = [], isLoading } = useQuery({
+        queryKey: ['plan-expenses', DEFAULT_PLAN_ID],
+        queryFn: async () => {
+            const data = await financialPlanService.getPlanExpenses(DEFAULT_PLAN_ID);
+            return data.map(item => ({
+                id: item.id,
+                item: item.item || item.title,
+                category: item.category,
+                estimatedCost: parseFloat(item.amount || item.estimated_cost),
+                plannedMonth: item.date || item.planned_month
+            }));
+        }
+    });
+
+    // Create Mutation
+    const createMutation = useMutation({
+        mutationFn: (newExpense) => financialPlanService.createPlanExpense(DEFAULT_PLAN_ID, newExpense),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-expenses', DEFAULT_PLAN_ID] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to add expense.');
+        }
+    });
+
+    // Delete Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => financialPlanService.deletePlanExpense(DEFAULT_PLAN_ID, id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['plan-expenses', DEFAULT_PLAN_ID] });
+        }
+    });
 
     const openModal = () => {
         setFormData(EMPTY_FORM);
@@ -51,19 +66,19 @@ const PlanExpense = () => {
         }
 
         const newExpense = {
-            id: Date.now(),
             item: formData.item,
             category: formData.category,
-            estimatedCost: parseFloat(formData.estimatedCost),
-            plannedMonth: formData.plannedMonth,
+            amount: parseFloat(formData.estimatedCost),
+            date: formData.plannedMonth,
         };
 
-        setPlannedExpenses((prev) => [newExpense, ...prev]);
-        closeModal();
+        createMutation.mutate(newExpense);
     };
 
     const handleDelete = (id) => {
-        setPlannedExpenses((prev) => prev.filter((item) => item.id !== id));
+        if (window.confirm('Are you sure you want to delete this planned expense?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalProjected = plannedExpenses.reduce((sum, item) => sum + item.estimatedCost, 0);
@@ -76,9 +91,16 @@ const PlanExpense = () => {
             item.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
+                <div className="animate-spin" style={{ width: '40px', height: '40px', border: '4px solid #E3F2FD', borderTopColor: '#DC2626', borderRadius: '50%' }} />
+            </div>
+        );
+    }
+
     return (
         <div className="fp-page">
-            {/* ── Page Header ── */}
             <div className="fp-header">
                 <div className="fp-header-left">
                     <h1>Expense</h1>
@@ -90,7 +112,6 @@ const PlanExpense = () => {
                 </button>
             </div>
 
-            {/* ── Summary Cards ── */}
             <div className="fp-summary-grid">
                 <div className="fp-summary-card">
                     <div className="fp-summary-icon fp-icon--red">
@@ -123,7 +144,6 @@ const PlanExpense = () => {
                 </div>
             </div>
 
-            {/* ── Toolbar ── */}
             <div className="fp-toolbar">
                 <div className="fp-search-wrap">
                     <Search size={15} className="fp-search-icon" />
@@ -147,7 +167,6 @@ const PlanExpense = () => {
                 </div>
             </div>
 
-            {/* ── Data Section ── */}
             {filteredExpenses.length === 0 ? (
                 <EmptyState
                     title="No expenses planned yet"
@@ -195,7 +214,6 @@ const PlanExpense = () => {
                 </div>
             )}
 
-            {/* ── Add Expense Modal ── */}
             <AnimatePresence>
                 {isModalOpen && (
                     <div className="fp-modal-overlay">

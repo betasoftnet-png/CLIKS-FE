@@ -1,15 +1,48 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Wallet, Mail, Lock, User, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Wallet, Mail, Lock, User, ArrowRight, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Auth = () => {
     const navigate = useNavigate();
+    const { login, register } = useAuth();
     const [isLogin, setIsLogin] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const handleSubmit = (e) => {
+    const [formData, setFormData] = useState({
+        username: '', // Frontend input for email
+        password: '',
+        fullName: '' // Frontend input for full name
+    });
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // After auth, navigate to the home page (Books / Finance)
-        navigate('/finance');
+        setError('');
+        setIsLoading(true);
+
+        try {
+            if (isLogin) {
+                await login(formData.username, formData.password);
+                navigate('/finance');
+            } else {
+                // Register with backend expected fields
+                // Generate username from email prefix (user@domain.com -> user)
+                const generatedUsername = formData.username.split('@')[0].toLowerCase();
+                
+                await register({
+                    username: generatedUsername,
+                    email: formData.username,
+                    password: formData.password
+                });
+                navigate('/finance');
+            }
+        } catch (err) {
+            console.error('[Auth] error:', err);
+            setError(err.response?.data?.message || err.message || 'Failed to authenticate. Please check your credentials.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const toggleMode = () => {
@@ -64,6 +97,17 @@ const Auth = () => {
                     </div>
 
                     <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                        {error && (
+                            <div style={{ 
+                                display: 'flex', alignItems: 'center', gap: '8px', 
+                                padding: '12px', background: '#FFEBEE', color: '#B71C1C', 
+                                borderRadius: '8px', fontSize: '14px', fontWeight: '500' 
+                            }}>
+                                <AlertCircle size={18} />
+                                {error}
+                            </div>
+                        )}
+                        
                         {!isLogin && (
                             <div>
                                 <label style={{ display: "block", fontSize: "12px", fontWeight: "600", color: "#546E7A", marginBottom: "8px", letterSpacing: "0.5px" }}>FULL NAME</label>
@@ -72,7 +116,10 @@ const Auth = () => {
                                     <input
                                         type="text"
                                         placeholder="John Doe"
+                                        value={formData.fullName}
+                                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                                         required
+                                        className="auth-input"
                                         style={{
                                             width: "100%", padding: "14px 16px 14px 44px", borderRadius: "12px",
                                             border: "2px solid #E3F2FD", fontSize: "15px", outline: "none",
@@ -90,9 +137,12 @@ const Auth = () => {
                             <div style={{ position: "relative" }}>
                                 <Mail size={18} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#90A4AE" }} />
                                 <input
-                                    type="email"
+                                    type="text" // Changed from email to text because backend expects username
                                     placeholder="you@email.com"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                                     required
+                                    className="auth-input"
                                     style={{
                                         width: "100%", padding: "14px 16px 14px 44px", borderRadius: "12px",
                                         border: "2px solid #E3F2FD", fontSize: "15px", outline: "none",
@@ -114,7 +164,10 @@ const Auth = () => {
                                 <input
                                     type="password"
                                     placeholder="••••••••"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                     required
+                                    className="auth-input"
                                     style={{
                                         width: "100%", padding: "14px 16px 14px 44px", borderRadius: "12px",
                                         border: "2px solid #E3F2FD", fontSize: "15px", outline: "none",
@@ -126,15 +179,22 @@ const Auth = () => {
                             </div>
                         </div>
 
-                        <button type="submit" style={{
-                            width: "100%", padding: "16px", background: "linear-gradient(135deg, #195BAC 0%, #1E88E5 100%)",
-                            color: "#FFFFFF", border: "none", borderRadius: "12px", fontSize: "16px", fontWeight: "700",
-                            cursor: "pointer", marginTop: "10px", boxShadow: "0 8px 25px rgba(25, 91, 172, 0.3)",
-                            display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", transition: "transform 0.2s"
-                        }}
-                            onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-2px)"}
-                            onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}>
-                            {isLogin ? "Sign In" : "Create Account"} <ArrowRight size={20} />
+                        <button 
+                            type="submit" 
+                            disabled={isLoading}
+                            style={{
+                                width: "100%", padding: "16px", background: isLoading ? "#90A4AE" : "linear-gradient(135deg, #195BAC 0%, #1E88E5 100%)",
+                                color: "#FFFFFF", border: "none", borderRadius: "12px", fontSize: "16px", fontWeight: "700",
+                                cursor: isLoading ? "not-allowed" : "pointer", marginTop: "10px", boxShadow: isLoading ? "none" : "0 8px 25px rgba(25, 91, 172, 0.3)",
+                                display: "flex", justifyContent: "center", alignItems: "center", gap: "8px", transition: "transform 0.2s"
+                            }}
+                            onMouseEnter={(e) => !isLoading && (e.currentTarget.style.transform = "translateY(-2px)")}
+                            onMouseLeave={(e) => !isLoading && (e.currentTarget.style.transform = "translateY(0)")}>
+                            {isLoading ? (
+                                <><Loader2 className="animate-spin" size={20} /> Signing In...</>
+                            ) : (
+                                <>{isLogin ? "Sign In" : "Create Account"} <ArrowRight size={20} /></>
+                            )}
                         </button>
                     </form>
 
@@ -153,10 +213,7 @@ const Auth = () => {
             {/* Right Side - Visual */}
             <div style={{
                 flex: 1.2,
-                display: "none",
-                '@media (min-width: 900px)': {
-                    display: "flex" // Would typically be handled by a CSS media query, let's use a simpler inline style hack or just show it depending on screen, actually inline styles don't support media queries. I'll add a style tag.
-                },
+                display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",

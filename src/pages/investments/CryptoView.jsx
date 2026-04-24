@@ -1,20 +1,40 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { investmentsService } from '../../services';
 import { Globe, BarChart3, Bitcoin, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 
 const CryptoView = () => {
+    // Fetch Crypto investments
+    const { data: cryptos = [], isLoading } = useQuery({
+        queryKey: ['investments-crypto'],
+        queryFn: async () => {
+            const data = await investmentsService.getInvestments();
+            return data.filter(i => i.type === 'Crypto').map((c, idx) => ({
+                rank: idx + 1,
+                name: c.name,
+                symbol: c.symbol || 'COIN',
+                price: `$${parseFloat(c.amount).toLocaleString()}`,
+                change: c.day_change || '+0.0%',
+                positive: !c.day_change || !c.day_change.startsWith('-'),
+                mcap: c.market_cap || 'N/A',
+                color: c.color || '#F7931A'
+            }));
+        }
+    });
+
     const overviewCards = [
         { label: 'Market Cap', value: '$2.1T', icon: Globe, color: '#2563EB', bg: '#DBEAFE' },
         { label: '24h Volume', value: '$98.5B', icon: BarChart3, color: '#7C3AED', bg: '#EDE9FE' },
         { label: 'Bitcoin Dominance', value: '48.2%', icon: Bitcoin, color: '#EA580C', bg: '#FFF7ED' },
-        { label: 'Active Coins', value: '10,234', icon: Activity, color: '#16A34A', bg: '#DCFCE7' },
+        { label: 'Active Coins', value: cryptos.length.toString(), icon: Activity, color: '#16A34A', bg: '#DCFCE7' },
     ];
 
-    const cryptos = [
-        { rank: 1, name: 'Bitcoin', symbol: 'BTC', price: '$43,250', change: '+2.5%', positive: true, mcap: '$845B', color: '#F7931A' },
-        { rank: 2, name: 'Ethereum', symbol: 'ETH', price: '$2,280', change: '+1.8%', positive: true, mcap: '$274B', color: '#627EEA' },
-        { rank: 3, name: 'Ripple', symbol: 'XRP', price: '$0.58', change: '-0.9%', positive: false, mcap: '$31B', color: '#00AAE4' },
-        { rank: 4, name: 'Cardano', symbol: 'ADA', price: '$0.42', change: '+3.2%', positive: true, mcap: '$14.8B', color: '#0033AD' },
-    ];
+    if (isLoading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '300px' }}>
+                <div className="animate-spin" style={{ width: '30px', height: '30px', border: '3px solid #E3F2FD', borderTopColor: '#F7931A', borderRadius: '50%' }} />
+            </div>
+        );
+    }
 
     return (
         <div className="view-fade-in">

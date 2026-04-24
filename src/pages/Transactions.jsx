@@ -1,27 +1,29 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-    TrendingUp,
-    TrendingDown,
-    Plus,
-    Calendar,
-    IndianRupee,
-    Trash2,
-    Filter,
-    Search,
-    ChevronDown,
-    Briefcase,
-    Building2,
-    Receipt,
-    Coffee,
-    Home,
-    Smartphone,
-    X,
-} from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { transactionsService } from '../services';
 import '../App.css';
 import './Transactions.css';
+import { useState, useRef, useEffect } from 'react';
 import '../styles/modals.css';
 import { formatCurrency } from '../lib/formatCurrency';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+    Briefcase,
+    Building2,
+    Home,
+    Coffee,
+    Smartphone,
+    Receipt,
+    Plus,
+    ChevronDown,
+    TrendingUp,
+    TrendingDown,
+    IndianRupee,
+    Search,
+    Filter,
+    Calendar,
+    Trash2,
+    X
+} from 'lucide-react';
 
 const CATEGORIES = [
     'Employment', 'Business', 'Investment', 'Freelance', 'Rental',
@@ -56,6 +58,7 @@ const StatCard = ({ label, value, subtext, icon: Icon, colorClass }) => (
 );
 
 const Transactions = () => {
+    const queryClient = useQueryClient();
     const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
     const [modalType, setModalType] = useState(null); // 'income' | 'expense' | null
     const [formData, setFormData] = useState(EMPTY_FORM);
@@ -63,21 +66,42 @@ const Transactions = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const menuRef = useRef(null);
 
-    const [transactions, setTransactions] = useState(() => {
-        const saved = localStorage.getItem('books_transactions');
-        if (saved) return JSON.parse(saved);
-        return [
-            { id: 1, type: 'Income',   title: 'Salary',      category: 'Employment', amount: 50000, date: '2026-01-01' },
-            { id: 2, type: 'Expense',  title: 'Rent Payment', category: 'Housing',   amount: 12000, date: '2026-01-02' },
-            { id: 3, type: 'Expense',  title: 'Starbucks',    category: 'Food',      amount: 450,   date: '2026-01-03' },
-            { id: 4, type: 'Income',   title: 'Freelance',    category: 'Business',  amount: 8000,  date: '2026-01-05' },
-            { id: 5, type: 'Expense',  title: 'Mobile Bill',  category: 'Utilities', amount: 600,   date: '2026-01-10' },
-        ];
+    // Fetch transactions
+    const { data: transactions = [], isLoading } = useQuery({
+        queryKey: ['transactions'],
+        queryFn: async () => {
+            const data = await transactionsService.getTransactions();
+            return data.map(tx => ({
+                id: tx.id,
+                type: tx.type,
+                title: tx.title,
+                category: tx.category,
+                amount: parseFloat(tx.amount),
+                date: tx.date || tx.created_at,
+                notes: tx.notes
+            }));
+        }
     });
 
-    useEffect(() => {
-        localStorage.setItem('books_transactions', JSON.stringify(transactions));
-    }, [transactions]);
+    // Create Transaction Mutation
+    const createMutation = useMutation({
+        mutationFn: (newTx) => transactionsService.createTransaction(newTx),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to save transaction.');
+        }
+    });
+
+    // Delete Transaction Mutation
+    const deleteMutation = useMutation({
+        mutationFn: (id) => transactionsService.deleteTransaction(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+        }
+    });
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -110,7 +134,6 @@ const Transactions = () => {
         }
 
         const newTransaction = {
-            id: Date.now(),
             type: modalType === 'income' ? 'Income' : 'Expense',
             title: formData.title,
             category: formData.category,
@@ -119,12 +142,13 @@ const Transactions = () => {
             notes: formData.notes,
         };
 
-        setTransactions((prev) => [newTransaction, ...prev]);
-        closeModal();
+        createMutation.mutate(newTransaction);
     };
 
     const handleDelete = (id) => {
-        setTransactions((prev) => prev.filter((t) => t.id !== id));
+        if (window.confirm('Are you sure you want to delete this transaction?')) {
+            deleteMutation.mutate(id);
+        }
     };
 
     const totalIncome  = transactions.filter(t => t.type === 'Income').reduce((s, t) => s + t.amount, 0);

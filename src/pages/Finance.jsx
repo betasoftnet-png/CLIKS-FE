@@ -20,6 +20,13 @@ import {
     CreditCard,
     BarChart3,
 } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { 
+    accountsService, 
+    transactionsService, 
+    homeService, 
+    plannedPaymentsService 
+} from '../services';
 import '../App.css';
 import '../styles/modals.css';
 import '../styles/finance-dashboard.css';
@@ -79,19 +86,24 @@ const SpendingChart = ({ records }) => {
 };
 
 const AccountsSummary = () => {
-    const accs = [
-        { name: 'Chase Checking', balance: '$12,450',  color: ACC_COLORS[0] },
-        { name: 'Savings',        balance: '$28,900',  color: ACC_COLORS[1] },
-        { name: 'Amex Credit',    balance: '-$2,340',  color: ACC_COLORS[2] },
-        { name: 'Fidelity',       balance: '$45,200',  color: ACC_COLORS[3] },
-    ];
+    const { data: accounts = [], isLoading } = useQuery({
+        queryKey: ['accounts'],
+        queryFn: accountsService.getAccounts
+    });
+
+    if (isLoading) return <p className="fd-entry-sub">Loading accounts...</p>;
+    if (accounts.length === 0) return <p className="fd-entry-sub">No accounts found.</p>;
+
     return (
         <div>
-            {accs.map((a) => (
-                <div key={a.name} className="fd-acc-row">
-                    <div className="fd-acc-dot" style={{ background: a.color }} />
+            {accounts.slice(0, 4).map((a, i) => (
+                <div key={a.id} className="fd-acc-row">
+                    <div className="fd-acc-dot" style={{ background: a.color || ACC_COLORS[i % ACC_COLORS.length] }} />
                     <span className="fd-acc-name">{a.name}</span>
-                    <span className="fd-acc-bal">{a.balance}</span>
+                    <span className="fd-acc-bal">
+                        {a.currency === 'INR' ? '₹' : '$'}
+                        {Number(a.balance).toLocaleString()}
+                    </span>
                 </div>
             ))}
         </div>
@@ -104,11 +116,12 @@ const AccountsSummary = () => {
 const DynamicWidget = ({ widget, records, onRemove }) => {
     const { type, id } = widget;
 
-    const expenseRecords = records.filter(r => r.type === 'expense');
-    const incomeTotal    = records.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
-    const expenseTotal   = expenseRecords.reduce((s, r) => s + r.amount, 0);
-    const liquidity      = 12450.80 + incomeTotal - expenseTotal;
+    const { data: accounts = [] } = useQuery({
+        queryKey: ['accounts'],
+        queryFn: accountsService.getAccounts
+    });
 
+    const liquidity = accounts.reduce((sum, acc) => sum + Number(acc.balance), 0);
     const getTitle = () => WIDGET_CATALOGUE.find(w => w.type === type)?.label || '';
 
     const renderContent = () => {
@@ -140,25 +153,36 @@ const DynamicWidget = ({ widget, records, onRemove }) => {
                 return <BudgetMixTile />;
 
             case 'upcomingBills':
+                const { data: bills = [], isLoading: billsLoading } = useQuery({
+                    queryKey: ['planned-payments'],
+                    queryFn: plannedPaymentsService.getPlannedPayments
+                });
+
+                if (billsLoading) return <p className="fd-entry-sub">Loading bills...</p>;
+                
                 return (
                     <div className="bills-list">
-                        {[
-                            { name: 'Monthly Rent', date: 'Due in 2 days', amount: '$1,850', Icon: Home, cls: 'bg-gray-100 text-gray-600' },
-                            { name: 'Netflix',       date: 'Sept 15',       amount: '$19.99', Icon: MonitorPlay, cls: 'bg-blue-100 text-blue-600' },
-                            { name: 'Electricity',   date: 'Sept 18',       amount: '$64.12', Icon: Zap, cls: 'bg-yellow-100 text-yellow-600' },
-                        ].map((b) => (
-                            <div key={b.name} className="bill-item">
-                                <div className={`bill-icon ${b.cls}`}><b.Icon size={18} /></div>
-                                <div className="bill-details">
-                                    <span className="bill-name">{b.name}</span>
-                                    <span className="bill-date">{b.date}</span>
+                        {bills.length === 0 ? (
+                            <p className="fd-entry-sub">No upcoming bills found.</p>
+                        ) : (
+                            bills.slice(0, 3).map((b) => (
+                                <div key={b.id} className="bill-item">
+                                    <div className="bill-icon bg-blue-100 text-blue-600">
+                                        {b.category === 'Housing' ? <Home size={18} /> : 
+                                         b.category === 'Utilities' ? <Zap size={18} /> : 
+                                         <Calendar size={18} />}
+                                    </div>
+                                    <div className="bill-details">
+                                        <span className="bill-name">{b.name}</span>
+                                        <span className="bill-date">{new Date(b.due_date).toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="bill-action">
+                                        <span className="bill-amount">${Number(b.amount).toLocaleString()}</span>
+                                        <button className="btn-pay">Pay Now</button>
+                                    </div>
                                 </div>
-                                <div className="bill-action">
-                                    <span className="bill-amount">{b.amount}</span>
-                                    <button className="btn-pay">Pay Now</button>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 );
 
@@ -236,9 +260,35 @@ const Finance = () => {
     const [expenseForm,  setExpenseForm]  = useState(EMPTY_EXPENSE);
     const [transferForm, setTransferForm] = useState(EMPTY_TRANSFER);
 
-    const [records, setRecords] = useState(() => {
-        const saved = localStorage.getItem('fd_records');
-        return saved ? JSON.parse(saved) : [];
+    const queryClient = useQueryClient();
+
+    // ── Queries ──
+    const { data: records = [], isLoading: isRecordsLoading } = useQuery({
+        queryKey: ['transactions'],
+        queryFn: transactionsService.getTransactions
+    });
+
+    const { data: accounts = [] } = useQuery({
+        queryKey: ['accounts'],
+        queryFn: accountsService.getAccounts
+    });
+
+    const { data: bills = [], isLoading: billsLoading } = useQuery({
+        queryKey: ['planned-payments'],
+        queryFn: plannedPaymentsService.getPlannedPayments
+    });
+
+    // ── Mutations ──
+    const addTransactionMutation = useMutation({
+        mutationFn: transactionsService.createTransaction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] }); // Balance changed
+            closeModal();
+        },
+        onError: (err) => {
+            setFormError(err.message || 'Failed to add record');
+        }
     });
 
     const [widgets, setWidgets] = useState(() => {
@@ -248,8 +298,7 @@ const Finance = () => {
 
     const recordMenuRef = useRef(null);
 
-    // Persist on change
-    useEffect(() => { localStorage.setItem('fd_records', JSON.stringify(records)); }, [records]);
+    // Persist widgets on change (records now handled by API)
     useEffect(() => { localStorage.setItem('fd_widgets', JSON.stringify(widgets)); }, [widgets]);
 
     // Close record dropdown on outside click
@@ -276,8 +325,7 @@ const Finance = () => {
     const closeModal = () => { setRecordModal(null); setFormError(''); };
 
     const addRecord = (newRecord) => {
-        setRecords((prev) => [newRecord, ...prev]);
-        closeModal();
+        addTransactionMutation.mutate(newRecord);
     };
 
     // ── Submit handlers ──
@@ -317,10 +365,8 @@ const Finance = () => {
 
     const removeWidget = (id) => setWidgets((prev) => prev.filter(w => w.id !== id));
 
-    // Derived stats
-    const totalIncome  = records.filter(r => r.type === 'income').reduce((s, r)  => s + r.amount, 0);
-    const totalExpense = records.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
-    const liquidity    = 12450.80 + totalIncome - totalExpense;
+    const liquidity = accounts.reduce((sum, acc) => sum + Number(acc.balance), 0);
+
 
     // Latest 3 records to show in the built‑in Recent Activity tile
     const recentRecords = records.slice(0, 3);
@@ -425,38 +471,12 @@ const Finance = () => {
                                 ))}
                                 {/* Default static items when no records */}
                                 {recentRecords.length === 0 && (
-                                    <>
-                                        <div className="activity-item">
-                                            <div className="activity-icon bg-orange-100 text-orange-600">
-                                                <Utensils size={20} />
-                                            </div>
-                                            <div className="activity-details">
-                                                <span className="activity-name">Starbucks Coffee</span>
-                                                <span className="activity-meta">Food &amp; Drinks • 10:24 AM</span>
-                                            </div>
-                                            <span className="activity-amount negative">-$6.50</span>
+                                    <div className="activity-item" style={{ justifyContent: 'center', opacity: 0.6 }}>
+                                        <div className="activity-details" style={{ textAlign: 'center' }}>
+                                            <span className="activity-name">No recent activity</span>
+                                            <span className="activity-meta">Add a record to get started</span>
                                         </div>
-                                        <div className="activity-item">
-                                            <div className="activity-icon bg-green-100 text-green-600">
-                                                <Briefcase size={20} />
-                                            </div>
-                                            <div className="activity-details">
-                                                <span className="activity-name">Freelance Payment</span>
-                                                <span className="activity-meta">Income • Yesterday</span>
-                                            </div>
-                                            <span className="activity-amount positive">+$1,200.00</span>
-                                        </div>
-                                        <div className="activity-item">
-                                            <div className="activity-icon bg-blue-100 text-blue-600">
-                                                <ShoppingCart size={20} />
-                                            </div>
-                                            <div className="activity-details">
-                                                <span className="activity-name">Amazon.com</span>
-                                                <span className="activity-meta">Shopping • 2 days ago</span>
-                                            </div>
-                                            <span className="activity-amount negative">-$84.20</span>
-                                        </div>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         </div>
@@ -488,44 +508,34 @@ const Finance = () => {
                         <div className="bento-tile bills-tile">
                             <h2 className="tile-heading">Upcoming Bills</h2>
                             <div className="bills-list">
-                                <div className="bill-item">
-                                    <div className="bill-icon bg-gray-100 text-gray-600"><Home size={20} /></div>
-                                    <div className="bill-details">
-                                        <span className="bill-name">Monthly Rent</span>
-                                        <span className="bill-date overdue">Due in 2 days</span>
-                                    </div>
-                                    <div className="bill-action">
-                                        <span className="bill-amount">$1,850.00</span>
-                                        <button className="btn-pay">Pay Now</button>
-                                    </div>
-                                </div>
-                                <div className="bill-item">
-                                    <div className="bill-icon bg-blue-100 text-blue-600"><MonitorPlay size={20} /></div>
-                                    <div className="bill-details">
-                                        <span className="bill-name">Netflix Premium</span>
-                                        <span className="bill-date">Sept 15, 2024</span>
-                                    </div>
-                                    <div className="bill-action">
-                                        <span className="bill-amount">$19.99</span>
-                                        <button className="btn-pay">Pay Now</button>
-                                    </div>
-                                </div>
-                                <div className="bill-item">
-                                    <div className="bill-icon bg-yellow-100 text-yellow-600"><Zap size={20} /></div>
-                                    <div className="bill-details">
-                                        <span className="bill-name">Electricity Bill</span>
-                                        <span className="bill-date">Sept 18, 2024</span>
-                                    </div>
-                                    <div className="bill-action">
-                                        <span className="bill-amount">$64.12</span>
-                                        <button className="btn-pay">Pay Now</button>
-                                    </div>
-                                </div>
+                                {billsLoading ? (
+                                    <p className="fd-entry-sub">Loading bills...</p>
+                                ) : bills.length === 0 ? (
+                                    <p className="fd-entry-sub">No upcoming bills found.</p>
+                                ) : (
+                                    bills.slice(0, 3).map((b) => (
+                                        <div key={b.id} className="bill-item">
+                                            <div className="bill-icon bg-blue-100 text-blue-600">
+                                                {b.category === 'Housing' ? <Home size={18} /> : 
+                                                 b.category === 'Utilities' ? <Zap size={18} /> : 
+                                                 <Calendar size={18} />}
+                                            </div>
+                                            <div className="bill-details">
+                                                <span className="bill-name">{b.name}</span>
+                                                <span className="bill-date">{new Date(b.due_date).toLocaleDateString()}</span>
+                                            </div>
+                                            <div className="bill-action">
+                                                <span className="bill-amount">${Number(b.amount).toLocaleString()}</span>
+                                                <button className="btn-pay">Pay Now</button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                             <div className="financial-tip-box">
                                 <span className="tip-label">Financial Tip</span>
                                 <p className="tip-text">
-                                    You're on track to save <span className="highlight-text">$400</span> more than last month if you stick to your coffee budget!
+                                    Keeping track of your upcoming bills helps you avoid late fees and maintain a healthy credit score.
                                 </p>
                             </div>
                         </div>
