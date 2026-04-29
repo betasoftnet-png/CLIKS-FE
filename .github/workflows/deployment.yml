@@ -1,0 +1,25 @@
+name: Deploy CLIKS Frontend
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd /root/CLIKS-FE || git clone https://github.com/btc004bbtcglobal-wq/CLIKS-FE.git /root/CLIKS-FE
+            cd /root/CLIKS-FE
+            git pull
+            docker build -t cliks-frontend .
+            docker stop cliks-frontend || true
+            docker rm cliks-frontend || true
+            docker run -d -p 3000:80 --name cliks-frontend cliks-frontend
