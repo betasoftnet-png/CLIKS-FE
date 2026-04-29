@@ -15,6 +15,9 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: root
           key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script_stop: true
+          command_timeout: 30m
           script: |
             cd /root/CLIKS-FE || git clone https://github.com/btc004bbtcglobal-wq/CLIKS-FE.git /root/CLIKS-FE
             cd /root/CLIKS-FE
