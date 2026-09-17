@@ -1,0 +1,7 @@
+services:
+  cliks-fe:
+    image: ghcr.io/betasoftnet-png/cliks-fe:latest
+    container_name: cliks-fe
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3104:80"
