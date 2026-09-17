@@ -58,7 +58,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                         <img src={logoPng} alt="CLIKS Logo" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
                     </div>
                     <span style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: '700', letterSpacing: '0.5px' }}>
-                        CLIKS businessdfnsdlfnsdlfdnslfdsnflkdsf
+                        CLIKS
                     </span>
                 </div>
             </div>
