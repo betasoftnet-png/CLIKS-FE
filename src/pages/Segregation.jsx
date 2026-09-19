@@ -66,10 +66,11 @@ const Segregation = () => {
         target_amount: '',
         description: ''
     });
+    const [error, setError] = useState('');
 
-    const targetCapAmount = formData.target_amount;
-    const isTargetCapValid = Number(targetCapAmount) > 0;
-    const isTargetCapDisabled = !targetCapAmount || !isTargetCapValid;
+    const targetAmount = formData.target_amount;
+    const isTargetAmountValid = Boolean(targetAmount && Number(targetAmount) > 0);
+    const isSubmitDisabled = createMutation.isPending || updateMutation.isPending || !targetAmount || Number(targetAmount) <= 0;
 
     const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
     const [historyWalletId, setHistoryWalletId] = useState(null);
@@ -161,6 +162,7 @@ const Segregation = () => {
         setIsCreateModalOpen(false);
         setEditingWalletId(null);
         setFormData({ name: '', target_amount: '', description: '' });
+        setError('');
     };
 
     const isWalletClaimed = (wallet) => Boolean(
@@ -180,9 +182,10 @@ const Segregation = () => {
         const roundedTarget = Math.round(parseFloat(wallet.target_amount || 0));
         setFormData({
             name: wallet.name,
-            target_amount: roundedTarget >= 0 ? roundedTarget.toString() : '0',
+            target_amount: roundedTarget > 0 ? roundedTarget.toString() : '',
             description: wallet.description || ''
         });
+        setError('');
         setIsCreateModalOpen(true);
     };
 
@@ -202,11 +205,15 @@ const Segregation = () => {
 
     const handleCreateSubmit = (e) => {
         e.preventDefault();
-        if (!targetCapAmount || !isTargetCapValid) {
-            return alert("Amount must be greater than 0");
+        if (!targetAmount || Number(targetAmount) <= 0) {
+            setError("Target amount must be strictly greater than 0");
+            return; // Prevent API post completely
         }
-        const amt = parseInt(targetCapAmount, 10);
-        if (isNaN(amt) || amt <= 0) return alert("Amount must be greater than 0");
+        const amt = parseInt(targetAmount, 10);
+        if (isNaN(amt) || amt <= 0) {
+            setError("Target amount must be strictly greater than 0");
+            return;
+        }
         if (editingWalletId) {
             updateMutation.mutate({ id: editingWalletId, data: { ...formData, target_amount: amt } });
         } else {
@@ -450,7 +457,8 @@ const Segregation = () => {
                         const isCompleted = isClaimed;
                         const allocated = parseFloat(wallet.current_amount || 0);
                         const targetCeiling = parseFloat(wallet.target_amount || 0);
-                        const percentage = targetCeiling > 0 ? Math.round((allocated / targetCeiling) * 100) : 0;
+                        const percent = targetCeiling > 0 ? Math.round((allocated / targetCeiling) * 100) : 0;
+                        const percentage = percent;
                         const pct = Math.min(percentage, 100);
                         const current = allocated;
                         const target = targetCeiling;
@@ -783,12 +791,19 @@ const Segregation = () => {
                                                 val = val.replace(/^0+/, '') || '0';
                                             }
                                             setFormData({ ...formData, target_amount: val });
+                                            if (val && Number(val) > 0) {
+                                                setError('');
+                                            } else if (val !== '') {
+                                                setError('Target amount must be greater than 0');
+                                            } else {
+                                                setError('');
+                                            }
                                         }}
                                         style={{ 
                                             width: '100%', 
                                             padding: '0.9rem 1.1rem 0.9rem 2.25rem', 
                                             borderRadius: '14px', 
-                                            border: (targetCapAmount !== '' && !isTargetCapValid) ? '1px solid #EF4444' : '1px solid #E2E8F0', 
+                                            border: (targetAmount !== '' && (!targetAmount || Number(targetAmount) <= 0)) ? '1px solid #EF4444' : '1px solid #E2E8F0', 
                                             outline: 'none', 
                                             fontWeight: '800', 
                                             fontSize: '1.1rem', 
@@ -796,10 +811,10 @@ const Segregation = () => {
                                         }}
                                     />
                                 </div>
-                                {targetCapAmount !== '' && !isTargetCapValid && (
+                                {((targetAmount !== '' && Number(targetAmount) <= 0) || error) && (
                                     <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                         <AlertCircle size={12} />
-                                        <span>Amount must be greater than 0</span>
+                                        <span>{error || "Target amount must be greater than 0"}</span>
                                     </p>
                                 )}
                             </div>
@@ -817,21 +832,21 @@ const Segregation = () => {
 
                             <button 
                                 type="submit"
-                                disabled={createMutation.isPending || updateMutation.isPending || isTargetCapDisabled}
-                                className={isTargetCapDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
+                                disabled={isSubmitDisabled}
+                                className={isSubmitDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                 style={{ 
                                     padding: '1.1rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
-                                    background: isTargetCapDisabled ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: isSubmitDisabled ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', 
                                     fontWeight: '850', 
                                     fontSize: '1rem', 
                                     marginTop: '0.5rem', 
-                                    cursor: (createMutation.isPending || updateMutation.isPending || isTargetCapDisabled) ? 'not-allowed' : 'pointer',
-                                    boxShadow: isTargetCapDisabled ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
-                                    opacity: (createMutation.isPending || updateMutation.isPending || isTargetCapDisabled) ? 0.5 : 1,
-                                    pointerEvents: isTargetCapDisabled ? 'none' : 'auto'
+                                    cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',
+                                    boxShadow: isSubmitDisabled ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
+                                    opacity: isSubmitDisabled ? 0.5 : 1,
+                                    pointerEvents: isSubmitDisabled ? 'none' : 'auto'
                                 }}
                             >
                                 {createMutation.isPending || updateMutation.isPending ? <Loader2 className="animate-spin" style={{ margin: '0 auto' }} /> : (editingWalletId ? 'Save Changes' : 'Activate Isolated Container')}
