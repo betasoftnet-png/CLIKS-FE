@@ -518,7 +518,14 @@ const Subscription = () => {
             <div style={{ display: 'grid', gridTemplateColumns: activeCategory === 'basic' ? 'repeat(1, minmax(0, 360px))' : 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '3rem', justifyContent: activeCategory === 'basic' ? 'center' : 'stretch' }}>
                 {allTiers[activeCategory === 'betaclub' ? (betaSubCategory === 'investor' ? 'betaclub_investor' : 'betaclub_product') : activeCategory].map((tier, idx) => {
                     const price = tier.priceAnnually;
-                    const isActive = tier.name === selectedTier;
+                    const currentCategoryKey = activeCategory === 'betaclub' ? (betaSubCategory === 'investor' ? 'betaclub_investor' : 'betaclub_product') : activeCategory;
+                    const activeModulePlan = 
+                        currentCategoryKey === 'business' ? (user?.active_subscriptions?.business?.plan || user?.tier || 'Starter Plan') :
+                        currentCategoryKey === 'ca' ? (user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan || (localStorage.getItem('cliks_finpro_active') === 'true' ? 'Fin-Pro Solo' : null)) :
+                        currentCategoryKey === 'betaclub_investor' ? (user?.active_subscriptions?.investor?.plan || user?.investor_plan || (localStorage.getItem('cliks_investor_active') === 'true' ? 'Basic Investor' : null)) :
+                        currentCategoryKey === 'betaclub_product' ? (user?.active_subscriptions?.poster?.plan || user?.poster_plan || (localStorage.getItem('cliks_poster_active') === 'true' ? 'Monthly Innovator' : null)) : null;
+
+                    const isActive = tier.name === activeModulePlan || (tier.name === selectedTier && currentCategoryKey === 'business');
                     const TierIcon = tier.icon;
                     return (
                         <div 
@@ -528,16 +535,16 @@ const Subscription = () => {
                             style={{ 
                                 background: 'white', 
                                 borderRadius: '24px', 
-                                border: isActive ? `3px solid ${tier.color}` : '1px solid #E2E8F0',
+                                border: isActive ? `3px solid #0f766e` : '1px solid #E2E8F0',
                                 padding: '1.75rem 2rem',
                                 position: 'relative',
                                 cursor: 'pointer',
                                 transform: isActive ? 'translateY(-6px)' : 'none',
-                                boxShadow: isActive ? `0 20px 25px -5px ${tier.color}15` : 'none'
+                                boxShadow: isActive ? `0 20px 25px -5px rgba(15, 118, 110, 0.2)` : 'none'
                             }}
                         >
                             {isActive && (
-                                <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', background: tier.color, color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '0.4rem 0.8rem', borderRadius: '10px', textTransform: 'uppercase' }}>
+                                <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', background: '#0f766e', color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '0.4rem 0.8rem', borderRadius: '10px', textTransform: 'uppercase' }}>
                                     {tier.badge}
                                 </span>
                             )}
@@ -561,27 +568,78 @@ const Subscription = () => {
                                 </span>
                             </div>
 
-                            <button 
-                                className="upgrade-btn"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleUpgrade(tier);
-                                }}
-                                disabled={isProcessing}
-                                style={{ 
-                                    width: '100%', 
-                                    padding: '0.85rem', 
-                                    borderRadius: '16px', 
-                                    border: isActive ? 'none' : `1px solid ${tier.color}`,
-                                    background: isActive ? `linear-gradient(135deg, ${tier.color} 0%, #0c0f1d 160%)` : (isProcessing ? '#94A3B8' : 'white'),
-                                    color: isActive ? 'white' : tier.color,
-                                    fontWeight: '800',
-                                    cursor: isProcessing ? 'not-allowed' : 'pointer',
-                                    marginBottom: '1.25rem'
-                                }}
-                            >
-                                {isActive ? 'Currently Active Plan' : (isProcessing ? 'Connecting...' : 'Upgrade Plan')}
-                            </button>
+                            {isActive ? (
+                                <button 
+                                    disabled
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '0.85rem', 
+                                        borderRadius: '9999px', 
+                                        border: 'none',
+                                        background: '#0f766e',
+                                        color: '#FFFFFF',
+                                        fontWeight: '700',
+                                        fontSize: '0.875rem',
+                                        letterSpacing: '0.025em',
+                                        textAlign: 'center',
+                                        cursor: 'default',
+                                        marginBottom: '1.25rem',
+                                        boxShadow: '0 4px 12px rgba(15, 118, 110, 0.25)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                >
+                                    Currently Active Plan
+                                </button>
+                            ) : activeCategory === 'betaclub' ? (
+                                <button 
+                                    type="button"
+                                    disabled
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                    className="w-full py-2.5 px-4 border border-purple-400 text-purple-600 bg-white rounded-xl text-sm font-semibold cursor-default select-none transition-none shadow-none"
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '0.85rem', 
+                                        borderRadius: '16px', 
+                                        border: `1px solid ${tier.color || '#a855f7'}`,
+                                        background: 'white',
+                                        color: tier.color || '#7c3aed',
+                                        fontWeight: '800',
+                                        cursor: 'default',
+                                        pointerEvents: 'none',
+                                        userSelect: 'none',
+                                        marginBottom: '1.25rem'
+                                    }}
+                                >
+                                    Upgrade Plan
+                                </button>
+                            ) : (
+                                <button 
+                                    className="upgrade-btn"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleUpgrade(tier);
+                                    }}
+                                    disabled={isProcessing}
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '0.85rem', 
+                                        borderRadius: '16px', 
+                                        border: `1px solid ${tier.color}`,
+                                        background: isProcessing ? '#94A3B8' : 'white',
+                                        color: tier.color,
+                                        fontWeight: '800',
+                                        cursor: isProcessing ? 'not-allowed' : 'pointer',
+                                        marginBottom: '1.25rem'
+                                    }}
+                                >
+                                    {isProcessing ? 'Connecting...' : 'Upgrade Plan'}
+                                </button>
+                            )}
 
                             <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.25rem' }}>
                                 <p style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1E293B', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>What's Included</p>

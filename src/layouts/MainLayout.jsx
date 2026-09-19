@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 import AuditPanel from '../components/AuditPanel';
@@ -79,7 +80,7 @@ const MainLayout = ({ children }) => {
                     }}
                 >
                     <div className="content-scrollable">
-                        {children}
+                        {children || <Outlet />}
                     </div>
                 </div>
 

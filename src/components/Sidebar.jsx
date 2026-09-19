@@ -767,12 +767,71 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                         onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                     >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#FBBF24', padding: '6px', borderRadius: '8px', display: 'flex' }}>
-                                <Crown size={18} strokeWidth={2.5} />
-                            </div>
-                            <span style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)', color: '#FBBF24' }}>Get Subscription</span>
-                        </div>
+                        {(() => {
+                            const subs = user?.active_subscriptions || {};
+                            const activeBoxes = [];
+                            // [1] Business Plan (Starter Plan)
+                            const isBusinessActive = Boolean(
+                                subs.business?.active ||
+                                user?.tier ||
+                                user?.business_plan ||
+                                user?.active_plans?.business
+                            );
+                            if (isBusinessActive || activeBoxes.length === 0) {
+                                activeBoxes.push({ type: 'business', label: `Business: ${subs.business?.plan || user?.tier || 'Starter Plan'}` });
+                            }
+
+                            // [2] FIN-PRO Plan
+                            const isFinProActive = Boolean(
+                                subs.fin_pro?.active ||
+                                user?.finpro_plan || 
+                                user?.ca_plan || 
+                                user?.active_plans?.finpro || 
+                                localStorage.getItem('cliks_finpro_active') === 'true'
+                            );
+                            if (isFinProActive) activeBoxes.push({ type: 'finpro', label: `FIN-PRO: ${subs.fin_pro?.plan || 'Active'}` });
+
+                            // PLD plans (Investor Club / Products & Ideas) are deactivated from active subscriptions
+
+
+                            const displayCardTitle = activeBoxes.length > 1 ? 'Multi-Suite Active' : (user?.tier || 'Get Subscription');
+
+                            return (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#FBBF24', padding: '6px', borderRadius: '8px', display: 'flex' }}>
+                                        <Crown size={18} strokeWidth={2.5} />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
+                                            {activeBoxes.map((box, idx) => {
+                                                const isRedBox = idx === 3 || box.type === 'poster';
+                                                return (
+                                                    <div 
+                                                        key={idx}
+                                                        title={box.label}
+                                                        style={{
+                                                            width: '11px',
+                                                            height: '11px',
+                                                            borderRadius: '2px',
+                                                            border: isRedBox ? '1.5px solid #EF4444' : '1.5px solid #FFFFFF',
+                                                            backgroundColor: isRedBox ? '#EF4444' : 'transparent',
+                                                            boxSizing: 'border-box',
+                                                            transition: 'all 0.2s ease'
+                                                        }}
+                                                    />
+                                                );
+                                            })}
+                                        </div>
+                                        <span 
+                                            title={activeBoxes.map(b => b.label).join(' | ')}
+                                            style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)', color: '#FBBF24', fontSize: '0.82rem', fontWeight: '800', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}
+                                        >
+                                            {displayCardTitle}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })()}
 
                         <div style={{
                             position: 'relative',

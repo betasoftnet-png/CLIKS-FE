@@ -67,6 +67,10 @@ const Segregation = () => {
         description: ''
     });
 
+    const targetCapAmount = formData.target_amount;
+    const isTargetCapValid = Number(targetCapAmount) > 0;
+    const isTargetCapDisabled = !targetCapAmount || !isTargetCapValid;
+
     const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
     const [historyWalletId, setHistoryWalletId] = useState(null);
     const [activeMenuId, setActiveMenuId] = useState(null);
@@ -159,17 +163,33 @@ const Segregation = () => {
         setFormData({ name: '', target_amount: '', description: '' });
     };
 
+    const isWalletClaimed = (wallet) => Boolean(
+        wallet?.isClaimed || 
+        wallet?.status === 'completed' || 
+        wallet?.status === 'claimed' || 
+        wallet?.status === 'FULLY CLAIMED' || 
+        String(wallet?.status || '').toLowerCase() === 'completed' ||
+        String(wallet?.status || '').toLowerCase() === 'claimed'
+    );
+
     const openEditModal = (wallet) => {
+        if (isWalletClaimed(wallet)) {
+            return alert("Fully claimed wallets cannot be edited.");
+        }
         setEditingWalletId(wallet.id);
+        const roundedTarget = Math.round(parseFloat(wallet.target_amount || 0));
         setFormData({
             name: wallet.name,
-            target_amount: wallet.target_amount.toString(),
+            target_amount: roundedTarget >= 0 ? roundedTarget.toString() : '0',
             description: wallet.description || ''
         });
         setIsCreateModalOpen(true);
     };
 
     const openAddMoneyModal = (wallet) => {
+        if (isWalletClaimed(wallet)) {
+            return alert("Funds cannot be added to a fully claimed wallet.");
+        }
         setSelectedWallet(wallet);
         setIsAddMoneyModalOpen(true);
     };
@@ -182,8 +202,11 @@ const Segregation = () => {
 
     const handleCreateSubmit = (e) => {
         e.preventDefault();
-        const amt = parseFloat(formData.target_amount);
-        if (isNaN(amt) || amt <= 0) return alert("Please provide a valid target amount.");
+        if (!targetCapAmount || !isTargetCapValid) {
+            return alert("Amount must be greater than 0");
+        }
+        const amt = parseInt(targetCapAmount, 10);
+        if (isNaN(amt) || amt <= 0) return alert("Amount must be greater than 0");
         if (editingWalletId) {
             updateMutation.mutate({ id: editingWalletId, data: { ...formData, target_amount: amt } });
         } else {
@@ -193,8 +216,9 @@ const Segregation = () => {
 
     const handleAddSubmit = (e) => {
         e.preventDefault();
+        if (!addAmount || Number(addAmount) <= 0) return alert("Enter a valid allocation amount greater than 0.");
         const amt = parseFloat(addAmount);
-        if (isNaN(amt) || amt <= 0) return alert("Enter a valid allocation amount.");
+        if (isNaN(amt) || amt <= 0) return alert("Enter a valid allocation amount greater than 0.");
         addMoneyMutation.mutate({ id: selectedWallet.id, amount: amt });
     };
 
@@ -381,19 +405,9 @@ const Segregation = () => {
                         <Wallet size={36} />
                     </div>
                     <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1F2937', marginBottom: '0.5rem' }}>No Segregated Wallets</h3>
-                    <p style={{ color: '#6B7280', maxWidth: '460px', margin: '0 auto 2rem auto', fontWeight: '500', lineHeight: 1.5 }}>
+                    <p style={{ color: '#6B7280', maxWidth: '460px', margin: '0 auto', fontWeight: '500', lineHeight: 1.5 }}>
                         Setup isolated purpose-driven buckets! For example, reserve money sequentially to buy future equipment, specialized stationery, or tax deposits.
                     </p>
-                    <button 
-                        onClick={() => setIsCreateModalOpen(true)}
-                        style={{ 
-                            padding: '0.85rem 1.75rem', borderRadius: '12px', border: 'none', 
-                            background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', 
-                            fontWeight: '800', cursor: 'pointer', boxShadow: '0 8px 16px rgba(27,107,58,0.2)' 
-                        }}
-                    >
-                        Create First Segregated Wallet
-                    </button>
                 </div>
             ) : filteredWallets.length === 0 ? (
                 <div style={{ 
@@ -425,11 +439,22 @@ const Segregation = () => {
             ) : (
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.75rem' }}>
                     {filteredWallets.map((wallet) => {
-                        const isCompleted = wallet.status === 'completed';
-                        const current = parseFloat(wallet.current_amount || 0);
-                        const target = parseFloat(wallet.target_amount || 1);
-                        const pct = Math.min(Math.round((current / target) * 100), 100);
-                        const canClaim = current >= target && !isCompleted;
+                        const isClaimed = Boolean(
+                            wallet.isClaimed || 
+                            wallet.status === 'completed' || 
+                            wallet.status === 'claimed' || 
+                            wallet.status === 'FULLY CLAIMED' || 
+                            String(wallet.status || '').toLowerCase() === 'completed' ||
+                            String(wallet.status || '').toLowerCase() === 'claimed'
+                        );
+                        const isCompleted = isClaimed;
+                        const allocated = parseFloat(wallet.current_amount || 0);
+                        const targetCeiling = parseFloat(wallet.target_amount || 0);
+                        const percentage = targetCeiling > 0 ? Math.round((allocated / targetCeiling) * 100) : 0;
+                        const pct = Math.min(percentage, 100);
+                        const current = allocated;
+                        const target = targetCeiling;
+                        const canClaim = targetCeiling > 0 && current >= target && !isCompleted;
 
                         return (
                             <div key={wallet.id} style={{ 
@@ -509,33 +534,60 @@ const Segregation = () => {
                                                         textAlign: 'left',
                                                         marginTop: '4px'
                                                     }}>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                openEditModal(wallet);
-                                                                setActiveMenuId(null);
-                                                            }}
-                                                            style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '8px',
-                                                                width: '100%',
-                                                                padding: '8px 12px',
-                                                                border: 'none',
-                                                                background: 'none',
-                                                                color: '#334155',
-                                                                fontSize: '0.82rem',
-                                                                fontWeight: '700',
-                                                                cursor: 'pointer',
-                                                                borderRadius: '8px',
-                                                                transition: 'background 0.2s'
-                                                            }}
-                                                            onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
-                                                            onMouseOut={(e) => e.currentTarget.style.background = 'none'}
-                                                        >
-                                                            <Edit2 size={13} style={{ color: '#059669' }} />
-                                                            Edit Wallet
-                                                        </button>
+                                                        {!isClaimed ? (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    openEditModal(wallet);
+                                                                    setActiveMenuId(null);
+                                                                }}
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '8px',
+                                                                    width: '100%',
+                                                                    padding: '8px 12px',
+                                                                    border: 'none',
+                                                                    background: 'none',
+                                                                    color: '#334155',
+                                                                    fontSize: '0.82rem',
+                                                                    fontWeight: '700',
+                                                                    cursor: 'pointer',
+                                                                    borderRadius: '8px',
+                                                                    transition: 'background 0.2s'
+                                                                }}
+                                                                onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                                                                onMouseOut={(e) => e.currentTarget.style.background = 'none'}
+                                                            >
+                                                                <Edit2 size={13} style={{ color: '#059669' }} />
+                                                                Edit Wallet
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                disabled
+                                                                className="opacity-50 cursor-not-allowed pointer-events-none"
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '8px',
+                                                                    width: '100%',
+                                                                    padding: '8px 12px',
+                                                                    border: 'none',
+                                                                    background: 'none',
+                                                                    color: '#94A3B8',
+                                                                    fontSize: '0.82rem',
+                                                                    fontWeight: '700',
+                                                                    cursor: 'not-allowed',
+                                                                    borderRadius: '8px',
+                                                                    opacity: 0.5,
+                                                                    pointerEvents: 'none'
+                                                                }}
+                                                                title="Claimed wallets cannot be edited"
+                                                            >
+                                                                <Edit2 size={13} style={{ color: '#94A3B8' }} />
+                                                                Edit (Locked)
+                                                            </button>
+                                                        )}
                                                         
                                                         <button
                                                             onClick={async (e) => {
@@ -593,7 +645,7 @@ const Segregation = () => {
                                     <div style={{ marginBottom: '2rem' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                             <span style={{ color: '#334155', fontSize: '0.82rem', fontWeight: '800' }}>Goal Status</span>
-                                            <span style={{ color: '#059669', fontSize: '0.88rem', fontWeight: '950' }}>{pct}%</span>
+                                            <span style={{ color: '#059669', fontSize: '0.88rem', fontWeight: '950' }}>{percentage}%</span>
                                         </div>
                                         <div style={{ height: '8px', borderRadius: '10px', background: '#E2E8F0', overflow: 'hidden' }}>
                                             <div style={{ 
@@ -609,17 +661,20 @@ const Segregation = () => {
                                     {/* Interactive Controls */}
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                         <button
-                                            disabled={isCompleted}
+                                            disabled={isClaimed}
                                             onClick={() => openAddMoneyModal(wallet)}
+                                            className={isClaimed ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                             style={{ 
                                                 padding: '0.85rem', 
                                                 borderRadius: '12px', 
                                                 border: '1px solid #D1FAE5', 
-                                                background: isCompleted ? '#F1F5F9' : '#ECFDF5', 
-                                                color: isCompleted ? '#94A3B8' : '#065F46', 
+                                                background: isClaimed ? '#F1F5F9' : '#ECFDF5', 
+                                                color: isClaimed ? '#94A3B8' : '#065F46', 
                                                 fontWeight: '800', 
                                                 fontSize: '0.88rem',
-                                                cursor: isCompleted ? 'not-allowed' : 'pointer',
+                                                cursor: isClaimed ? 'not-allowed' : 'pointer',
+                                                opacity: isClaimed ? 0.5 : 1,
+                                                pointerEvents: isClaimed ? 'none' : 'auto',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -713,12 +768,40 @@ const Segregation = () => {
                                     <input 
                                         required 
                                         type="number" 
-                                        placeholder="5000" 
+                                        min="1"
+                                        step="1"
+                                        placeholder="0" 
                                         value={formData.target_amount} 
-                                        onChange={e => setFormData({...formData, target_amount: e.target.value})}
-                                        style={{ width: '100%', padding: '0.9rem 1.1rem 0.9rem 2.25rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '1.1rem', color: '#0F172A' }}
+                                        onKeyDown={(e) => { 
+                                            if (e.key === '-' || e.key === '.' || e.key === '+' || e.key === 'e' || e.key === 'E') {
+                                                e.preventDefault(); 
+                                            }
+                                        }}
+                                        onChange={(e) => {
+                                            let val = e.target.value.replace(/[^0-9]/g, '');
+                                            if (val.length > 1 && val.startsWith('0')) {
+                                                val = val.replace(/^0+/, '') || '0';
+                                            }
+                                            setFormData({ ...formData, target_amount: val });
+                                        }}
+                                        style={{ 
+                                            width: '100%', 
+                                            padding: '0.9rem 1.1rem 0.9rem 2.25rem', 
+                                            borderRadius: '14px', 
+                                            border: (targetCapAmount !== '' && !isTargetCapValid) ? '1px solid #EF4444' : '1px solid #E2E8F0', 
+                                            outline: 'none', 
+                                            fontWeight: '800', 
+                                            fontSize: '1.1rem', 
+                                            color: '#0F172A' 
+                                        }}
                                     />
                                 </div>
+                                {targetCapAmount !== '' && !isTargetCapValid && (
+                                    <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                        <AlertCircle size={12} />
+                                        <span>Amount must be greater than 0</span>
+                                    </p>
+                                )}
                             </div>
 
                             <div>
@@ -734,18 +817,21 @@ const Segregation = () => {
 
                             <button 
                                 type="submit"
-                                disabled={createMutation.isPending || updateMutation.isPending}
+                                disabled={createMutation.isPending || updateMutation.isPending || isTargetCapDisabled}
+                                className={isTargetCapDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                 style={{ 
                                     padding: '1.1rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
-                                    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: isTargetCapDisabled ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', 
                                     fontWeight: '850', 
                                     fontSize: '1rem', 
                                     marginTop: '0.5rem', 
-                                    cursor: 'pointer',
-                                    boxShadow: '0 8px 20px rgba(27, 107, 58, 0.2)'
+                                    cursor: (createMutation.isPending || updateMutation.isPending || isTargetCapDisabled) ? 'not-allowed' : 'pointer',
+                                    boxShadow: isTargetCapDisabled ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
+                                    opacity: (createMutation.isPending || updateMutation.isPending || isTargetCapDisabled) ? 0.5 : 1,
+                                    pointerEvents: isTargetCapDisabled ? 'none' : 'auto'
                                 }}
                             >
                                 {createMutation.isPending || updateMutation.isPending ? <Loader2 className="animate-spin" style={{ margin: '0 auto' }} /> : (editingWalletId ? 'Save Changes' : 'Activate Isolated Container')}
@@ -784,7 +870,10 @@ const Segregation = () => {
                                         autoFocus
                                         type="number" 
                                         placeholder="100" 
+                                        min="1"
+                                        step="any"
                                         value={addAmount} 
+                                        onKeyDown={(e) => { if (e.key === '-' || e.key === 'e' || e.key === '+') e.preventDefault(); }}
                                         onChange={e => setAddAmount(e.target.value)}
                                         style={{ width: '100%', padding: '0.9rem 1.1rem 0.9rem 2.25rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '850', fontSize: '1.2rem', color: '#0F172A' }}
                                     />
@@ -796,17 +885,20 @@ const Segregation = () => {
 
                             <button 
                                 type="submit"
-                                disabled={addMoneyMutation.isLoading}
+                                disabled={addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0}
+                                className={(!addAmount || Number(addAmount) <= 0) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                 style={{ 
                                     padding: '1.1rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
-                                    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: (!addAmount || Number(addAmount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', 
                                     fontWeight: '850', 
                                     fontSize: '1rem', 
-                                    cursor: 'pointer',
-                                    boxShadow: '0 8px 20px rgba(27, 107, 58, 0.2)',
+                                    cursor: (addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0) ? 'not-allowed' : 'pointer',
+                                    boxShadow: (!addAmount || Number(addAmount) <= 0) ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
+                                    opacity: (addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0) ? 0.5 : 1,
+                                    pointerEvents: (!addAmount || Number(addAmount) <= 0) ? 'none' : 'auto',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',

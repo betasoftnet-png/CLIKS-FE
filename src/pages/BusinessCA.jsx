@@ -212,6 +212,18 @@ export default function BusinessCA() {
     const [isGeneratingReport, setIsGeneratingReport] = useState(false);
     const [showReportSuccess, setShowReportSuccess] = useState(false);
 
+    const getAuditorShortLabel = (cat) => {
+        if (!cat) return "Dynamic Auditor Tab";
+        if (cat.includes("Statutory")) return "Statutory Financial Auditor";
+        if (cat.includes("Tax Auditor")) return "Tax Auditor";
+        if (cat.includes("Internal Auditor")) return "Internal Auditor";
+        if (cat.includes("Cost Auditor")) return "Cost Auditor";
+        if (cat.includes("Secretarial")) return "Secretarial Auditor";
+        if (cat.includes("Forensic")) return "Forensic Auditor";
+        if (cat.includes("Advisory")) return "FIN-PRO Advisory Workspace";
+        return cat.split(' (')[0] || cat;
+    };
+
     const sidebarTabs = [
         { id: 'home', label: 'Home', icon: Home },
         { id: 'clients', label: 'Clients', icon: User, badge: null },
@@ -219,8 +231,7 @@ export default function BusinessCA() {
         { id: 'teams', label: 'Teams', icon: Users, badge: null },
         { id: 'timetracking', label: 'Time Tracking', icon: Clock, badge: null },
         { id: 'workpaper', label: 'Workpaper', icon: FileText },
-        { id: 'documents', label: 'Documents', icon: Folder },
-        { id: 'reports', label: 'Reports', icon: BarChart }
+        { id: 'auditor_desk', label: getAuditorShortLabel(activeAuditorCategory), icon: Briefcase }
     ];
 
     // Timer Effect

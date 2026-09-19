@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { ErrorBoundary } from './components/common';
@@ -10,6 +10,8 @@ import Landing from './pages/Landing';
 
 // Lazy Load Pages to optimize bundle size
 const Auth = React.lazy(() => import('./pages/Auth'));
+const Join = React.lazy(() => import('./pages/Join'));
+const Register = React.lazy(() => import('./pages/Register'));
 const Income = React.lazy(() => import('./pages/Income'));
 const Expenses = React.lazy(() => import('./pages/Expenses'));
 const Transactions = React.lazy(() => import('./pages/Transactions'));
@@ -71,6 +73,84 @@ const PageLoader = () => (
   </div>
 );
 
+function AuthenticatedApp() {
+  const location = useLocation();
+
+  return (
+    <ProtectedRoute>
+      <ErrorBoundary>
+        <MainLayout>
+          <div key={location.pathname} className="main-content-wrapper" style={{ height: '100%', width: '100%', minHeight: 0 }}>
+            <Suspense fallback={<PageLoader />}>
+              <Routes location={location}>
+                {/* Root Redirect */}
+                <Route path="/" element={<Navigate to="/books/dashboard" replace />} />
+                <Route path="/books" element={<Navigate to="/books/dashboard" replace />} />
+                <Route path="/payments" element={<Navigate to="/payments/transactions" replace />} />
+                <Route path="/social" element={<Navigate to="/social/meetup" replace />} />
+                
+                {/* Finance (formerly Home) Section */}
+                <Route path="/finance" element={<Navigate to="/payments/planner" replace />} />
+                <Route path="/finance/dashboard" element={<Finance />} />
+                <Route path="/finance/income" element={<Income />} />
+                <Route path="/finance/expenses" element={<Expenses />} />
+                <Route path="/finance/budgets" element={<Budgets />} />
+                <Route path="/finance/accounts" element={<Accounts />} />
+                <Route path="/payments/transactions" element={<Transactions />} />
+                <Route path="/finance/planned-payments" element={<PlannedPayments />} />
+                <Route path="/finance/savings" element={<Savings />} />
+                <Route path="/finance/investments" element={<Investments />} />
+                <Route path="/finance/debts" element={<Debts />} />
+
+                {/* Payments Routes shifted from Books */}
+                <Route path="/payments/wallet" element={<Wallet />} />
+                <Route path="/payments/planner" element={<FinancialPlan />} />
+
+                <Route path="/payments/segregation" element={<Segregation />} />
+                <Route path="/payments/split-expense" element={<SplitExpense />} />
+                <Route path="/payments/rewards-offers" element={<Rewards />} />
+
+                {/* Books Section */}
+                <Route path="/books/finance" element={<Navigate to="/books/accounting" replace />} />
+                <Route path="/books/tax-deductions" element={<TaxDeductions />} />
+                <Route path="/books" element={<Books />} />
+                <Route path="/books/dashboard" element={<BooksDashboard />} />
+                <Route path="/books/stock" element={<Stock />} />
+                <Route path="/books/people" element={<People />} />
+                <Route path="/books/people/overview" element={<PeopleOverview />} />
+                <Route path="/books/people/:id" element={<PersonProfile />} />
+                <Route path="/books/people/transactions" element={<PeopleTransactions />} />
+                <Route path="/books/people/reminders" element={<PeopleReminders />} />
+                <Route path="/books/people/records" element={<PeopleRecords />} />
+                <Route path="/books/settings" element={<Settings />} />
+                <Route path="/books/faq" element={<FAQ />} />
+                <Route path="/books/money-tracker" element={<Navigate to="/books/track/simple-billing" replace />} />
+                <Route path="/books/track" element={<Navigate to="/books/track/simple-billing" replace />} />
+                <Route path="/books/track/simple-billing" element={<SimpleBilling />} />
+                <Route path="/books/track/billing-records" element={<BillingRecords />} />
+                <Route path="/books/accounting" element={<Accounting />} />
+                <Route path="/books/purchase-details" element={<PurchaseDetails />} />
+
+                {/* Public / Social Section */}
+                <Route path="/public" element={<Public />} />
+                <Route path="/social/meetup" element={<Public />} />
+                <Route path="/social/trading" element={<Public />} />
+                <Route path="/social/beta-club" element={<Public />} />
+
+                {/* FIN-PRO CA Section */}
+                <Route path="/ca" element={<BusinessCA />} />
+                
+                {/* Subscription Section */}
+                <Route path="/subscription" element={<Subscription />} />
+              </Routes>
+            </Suspense>
+          </div>
+        </MainLayout>
+      </ErrorBoundary>
+    </ProtectedRoute>
+  );
+}
+
 function AppContent() {
 
   return (
@@ -78,6 +158,16 @@ function AppContent() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
+        <Route path="/join" element={
+          <Suspense fallback={<PageLoader />}>
+            <Join />
+          </Suspense>
+        } />
+        <Route path="/register" element={
+          <Suspense fallback={<PageLoader />}>
+            <Register />
+          </Suspense>
+        } />
         <Route path="/auth" element={
           <Suspense fallback={<PageLoader />}>
             <Auth />
@@ -97,76 +187,7 @@ function AppContent() {
         } />
 
         {/* Protected Routes - All routes within MainLayout require authentication */}
-        <Route path="*" element={
-          <ProtectedRoute>
-            <ErrorBoundary>
-              <MainLayout>
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    {/* Root Redirect */}
-                    <Route path="/" element={<Navigate to="/books/dashboard" replace />} />
-                    
-                    {/* Finance (formerly Home) Section */}
-                    <Route path="/finance" element={<Navigate to="/payments/planner" replace />} />
-                    <Route path="/finance/dashboard" element={<Finance />} />
-                    <Route path="/finance/income" element={<Income />} />
-                    <Route path="/finance/expenses" element={<Expenses />} />
-                    <Route path="/finance/budgets" element={<Budgets />} />
-                    <Route path="/finance/accounts" element={<Accounts />} />
-                    <Route path="/payments/transactions" element={<Transactions />} />
-                    <Route path="/finance/planned-payments" element={<PlannedPayments />} />
-                    <Route path="/finance/savings" element={<Savings />} />
-                    <Route path="/finance/investments" element={<Investments />} />
-                    <Route path="/finance/debts" element={<Debts />} />
-
-                    {/* Payments Routes shifted from Books */}
-                    <Route path="/payments/wallet" element={<Wallet />} />
-                    <Route path="/payments/planner" element={<FinancialPlan />} />
-
-                    <Route path="/payments/segregation" element={<Segregation />} />
-                    <Route path="/payments/split-expense" element={<SplitExpense />} />
-                    <Route path="/payments/rewards-offers" element={<Rewards />} />
-
-                    {/* Books Section */}
-                    <Route path="/books/finance" element={<Navigate to="/books/accounting" replace />} />
-                    <Route path="/books/tax-deductions" element={<TaxDeductions />} />
-                    <Route path="/books" element={<Books />} />
-                    <Route path="/books/dashboard" element={<BooksDashboard />} />
-                    <Route path="/books/stock" element={<Stock />} />
-                    <Route path="/books/people" element={<People />} />
-                    <Route path="/books/people/overview" element={<PeopleOverview />} />
-                    <Route path="/books/people/:id" element={<PersonProfile />} />
-                    <Route path="/books/people/transactions" element={<PeopleTransactions />} />
-                    <Route path="/books/people/reminders" element={<PeopleReminders />} />
-                    <Route path="/books/people/records" element={<PeopleRecords />} />
-                    <Route path="/books/settings" element={<Settings />} />
-                    <Route path="/books/faq" element={<FAQ />} />
-                    <Route path="/books/money-tracker" element={<Navigate to="/books/track/simple-billing" replace />} />
-                    <Route path="/books/track" element={<Navigate to="/books/track/simple-billing" replace />} />
-                    <Route path="/books/track/simple-billing" element={<SimpleBilling />} />
-                    <Route path="/books/track/billing-records" element={<BillingRecords />} />
-                    <Route path="/books/accounting" element={<Accounting />} />
-                    <Route path="/books/purchase-details" element={<PurchaseDetails />} />
-
-                    {/* Public / Social Section */}
-                    <Route path="/public" element={<Public />} />
-                    <Route path="/social/meetup" element={<Public />} />
-                    <Route path="/social/trading" element={<Public />} />
-                    <Route path="/social/beta-club" element={<Public />} />
-
-                    {/* FIN-PRO CA Section */}
-                    <Route path="/ca" element={<BusinessCA />} />
-                    
-                    {/* Subscription Section */}
-                    <Route path="/subscription" element={<Subscription />} />
-
-
-                  </Routes>
-                </Suspense>
-              </MainLayout>
-            </ErrorBoundary>
-          </ProtectedRoute>
-        } />
+        <Route path="*" element={<AuthenticatedApp />} />
       </Routes>
     </Router>
   );

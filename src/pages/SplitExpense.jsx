@@ -24,7 +24,8 @@ import {
     Download,
     Pin,
     MoreVertical,
-    Pencil
+    Pencil,
+    ExternalLink
 } from 'lucide-react';
 import '../App.css';
 import splitExpenseService from '../services/splitExpenseService';
@@ -32,6 +33,39 @@ import { config } from '../lib/config';
 
 // Initial Seed Data for Split Groups
 const INITIAL_SPLITS = [];
+
+// Strict URL normalizer using real backend asset origin
+const resolveAttachmentUrl = (filePath) => {
+    if (!filePath) return '';
+
+    // 1. If it's already a complete absolute URL pointing to http:// or https://
+    if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
+        // If it mistakenly points to the frontend domain, redirect to real backend asset host
+        if (filePath.includes('cliksbusiness.com/uploads/')) {
+            return filePath.replace('https://cliksbusiness.com', 'https://cliks.beta-softnet.com')
+                           .replace('http://cliksbusiness.com', 'https://cliks.beta-softnet.com');
+        }
+        return filePath;
+    }
+
+    // 2. Base upload endpoint:
+    // Strictly resolve against real backend host (cliks.beta-softnet.com) or localhost during local dev
+    let baseOrigin = 'https://cliks.beta-softnet.com';
+
+    if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+        baseOrigin = 'http://localhost:3000';
+    }
+
+    const cleanPath = filePath.replace(/^\/?(uploads\/)?/, '');
+    return `${baseOrigin}/uploads/${cleanPath}`;
+};
+
+// Pure calculation function to compute total outlay across both list cards and details view
+export const calculateGroupOutlay = (expenses) => {
+    return (expenses || [])
+        .filter(item => !item.isSettlement && item.type !== 'SETTLEMENT' && item.type !== 'REPAYMENT' && (!item.title || !item.title.toLowerCase().startsWith('settlement:')))
+        .reduce((sum, item) => sum + Number(item.amount || 0), 0);
+};
 
 const SplitExpense = () => {
     const { currency } = useCurrency();
@@ -86,6 +120,8 @@ const SplitExpense = () => {
         splitType: 'equal', // equal, custom
         shares: {} // Custom shares per participant
     });
+
+    const [previewAttachment, setPreviewAttachment] = useState(null);
 
     // Fetch splits from backend on mount
     useEffect(() => {
@@ -295,6 +331,34 @@ const SplitExpense = () => {
         reader.readAsDataURL(file);
     };
 
+    const handleAmountChange = (e) => {
+        let val = e.target.value;
+
+        // Remove non-numeric characters except single decimal point
+        val = val.replace(/[^0-9.]/g, '');
+
+        const parts = val.split('.');
+        if (parts.length > 2) {
+            val = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Enforce max 12 digits on integer part
+        let integerPart = parts[0] || '';
+        if (integerPart.length > 12) {
+            integerPart = integerPart.slice(0, 12);
+        }
+
+        // Cap decimals to 2 places
+        let decimalPart = parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '';
+
+        const cleanAmount = integerPart + decimalPart;
+
+        setExpenseForm((prev) => ({
+            ...prev,
+            amount: cleanAmount
+        }));
+    };
+
     const handleAddExpense = async (e) => {
         e.preventDefault();
         if (!expenseForm.title.trim()) return alert('Please enter expense title.');
@@ -310,11 +374,21 @@ const SplitExpense = () => {
         } else {
             // Validate custom shares sum matches total amount
             let sum = 0;
+            let hasNegativeOrInvalid = false;
             activeSplit.participants.forEach(p => {
-                const share = parseFloat(expenseForm.shares[p]) || 0;
-                finalShares[p] = share;
-                sum += share;
+                const rawVal = expenseForm.shares[p];
+                const share = parseFloat(rawVal);
+                if (rawVal === undefined || rawVal === null || String(rawVal).trim() === '' || isNaN(share) || share < 0) {
+                    hasNegativeOrInvalid = true;
+                }
+                finalShares[p] = share || 0;
+                sum += (share || 0);
             });
+
+            if (hasNegativeOrInvalid) {
+                alert('Participant allocations cannot be negative or non-numeric.');
+                return;
+            }
             
             if (Math.abs(sum - amount) > 0.1) {
                 alert(`The sum of custom shares (${activeSplit.currencySymbol}${sum.toFixed(2)}) must exactly match the total expense amount (${activeSplit.currencySymbol}${amount.toFixed(2)})!`);
@@ -452,15 +526,18 @@ const SplitExpense = () => {
         if (!activeSplit) return { members: {}, debts: [], totalSpent: 0 };
 
         const balances = {};
-        let totalSpent = 0;
         activeSplit.participants.forEach(p => {
             balances[p] = 0;
         });
 
+        // Exclude settlement transactions when calculating total group outlay:
+        // Debt settlements are internal balance transfers, not new group expenses.
+        const totalGroupOutlay = calculateGroupOutlay(activeSplit.expenses);
+        const totalSpent = totalGroupOutlay;
+
         activeSplit.expenses.forEach(exp => {
             const payer = exp.paidBy;
             const amt = parseFloat(exp.amount) || 0;
-            totalSpent += amt;
 
             // Credit the payer
             if (balances[payer] !== undefined) {
@@ -533,6 +610,8 @@ const SplitExpense = () => {
                 date: new Date().toISOString().split('T')[0],
                 attachment: null,
                 splitType: 'custom',
+                isSettlement: true,
+                type: 'SETTLEMENT',
                 shares: {
                     [debt.to]: debt.amount
                 }
@@ -578,7 +657,7 @@ const SplitExpense = () => {
 
     const handleShareGroup = () => {
         if (!activeSplit) return;
-        const groupTotal = activeSplit.expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+        const groupTotal = calculateGroupOutlay(activeSplit.expenses);
         let summaryText = `📊 SPLITWISE STATEMENT: ${activeSplit.title}\n`;
         summaryText += `Total Spent: ${activeSplit.currencySymbol}${groupTotal.toLocaleString()}\n\n`;
         summaryText += `👥 NET BALANCES:\n`;
@@ -601,7 +680,7 @@ const SplitExpense = () => {
 
     const handleDownloadPDF = () => {
         if (!activeSplit) return;
-        const groupTotal = activeSplit.expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+        const groupTotal = calculateGroupOutlay(activeSplit.expenses);
         
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
@@ -744,6 +823,17 @@ const SplitExpense = () => {
         }, 300);
     };
 
+    const hasInvalidCustomShares = expenseForm.splitType === 'custom' && (
+        !activeSplit?.participants ||
+        activeSplit.participants.length === 0 ||
+        activeSplit.participants.some(p => {
+            const val = expenseForm.shares?.[p];
+            if (val === undefined || val === null || String(val).trim() === '') return true;
+            const num = Number(val);
+            return isNaN(num) || num < 0;
+        })
+    );
+
     return (
         <div style={{ padding: '1.25rem 2rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             
@@ -847,7 +937,7 @@ const SplitExpense = () => {
                                             return 0;
                                         })
                                         .map(s => {
-                                            const groupTotal = s.expenses.reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+                                            const groupTotal = calculateGroupOutlay(s.expenses);
                                             const isPinned = pinnedSplitIds.includes(s.id);
                                             return (
                                                 <div 
@@ -1174,7 +1264,7 @@ const SplitExpense = () => {
                                         ) : (
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                                                 {filteredExpenses.map(e => {
-                                                    const isSettlement = e.title.startsWith('Settlement:');
+                                                    const isSettlement = e.isSettlement || e.type === 'SETTLEMENT' || e.type === 'REPAYMENT' || (e.title && e.title.startsWith('Settlement:'));
                                                     return (
                                                         <div 
                                                             key={e.id} 
@@ -1217,23 +1307,43 @@ const SplitExpense = () => {
                                                                         <Calendar size={12} /> {e.date}
                                                                     </span>
                                                                     {e.attachment && (() => {
-                                                                        const serverBaseUrl = (config.api.baseUrl || '').replace('/api/v1', '');
-                                                                        const fileUrl = `${serverBaseUrl}/uploads/${e.attachment}`;
+                                                                        const fileUrl = resolveAttachmentUrl(e.attachment);
+                                                                        const isPdf = e.attachment.toLowerCase().endsWith('.pdf');
+                                                                        const isImage = /\.(jpe?g|png|webp|gif|svg)$/i.test(e.attachment);
                                                                         return (
                                                                             <>
                                                                                 <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#CBD5E1' }} />
-                                                                                <a 
-                                                                                    href={fileUrl}
-                                                                                    target="_blank"
-                                                                                    rel="noopener noreferrer"
-                                                                                    title={`View Document: ${e.attachment}`}
-                                                                                    onClick={(evt) => evt.stopPropagation()}
-                                                                                    style={{ textDecoration: 'none', fontSize: '0.65rem', fontWeight: '850', color: '#2563EB', background: '#EFF6FF', border: '1px solid #BFDBFE', padding: '1px 6px', borderRadius: '5px', display: 'inline-flex', alignItems: 'center', gap: '3px', transition: 'background 0.2s' }}
+                                                                                <button 
+                                                                                    type="button"
+                                                                                    title={`Preview Document: ${e.attachment}`}
+                                                                                    onClick={(evt) => {
+                                                                                        evt.stopPropagation();
+                                                                                        setPreviewAttachment({
+                                                                                            url: fileUrl,
+                                                                                            name: e.attachment,
+                                                                                            isPdf,
+                                                                                            isImage
+                                                                                        });
+                                                                                    }}
+                                                                                    style={{ 
+                                                                                        border: '1px solid #BFDBFE', 
+                                                                                        fontSize: '0.65rem', 
+                                                                                        fontWeight: '850', 
+                                                                                        color: '#2563EB', 
+                                                                                        background: '#EFF6FF', 
+                                                                                        padding: '2px 8px', 
+                                                                                        borderRadius: '6px', 
+                                                                                        display: 'inline-flex', 
+                                                                                        alignItems: 'center', 
+                                                                                        gap: '4px', 
+                                                                                        cursor: 'pointer', 
+                                                                                        transition: 'background 0.2s' 
+                                                                                    }}
                                                                                     onMouseOver={(evt) => evt.currentTarget.style.background = '#DBEAFE'}
                                                                                     onMouseOut={(evt) => evt.currentTarget.style.background = '#EFF6FF'}
                                                                                 >
-                                                                                    <FileText size={10} /> {e.attachment.length > 20 ? e.attachment.substring(0, 17) + '...' : e.attachment}
-                                                                                </a>
+                                                                                    <FileText size={11} /> {e.attachment.length > 20 ? e.attachment.substring(0, 17) + '...' : e.attachment}
+                                                                                </button>
                                                                             </>
                                                                         );
                                                                     })()}
@@ -1516,10 +1626,11 @@ const SplitExpense = () => {
                                         <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Amount ({activeSplit.currencySymbol})</label>
                                         <input 
                                             required
-                                            type="number" 
+                                            type="text" 
+                                            inputMode="decimal"
                                             placeholder="0.00"
                                             value={expenseForm.amount}
-                                            onChange={(e) => setExpenseForm({ ...expenseForm, amount: e.target.value })}
+                                            onChange={handleAmountChange}
                                             style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '900', color: '#1B6B3A', fontSize: '0.95rem' }}
                                         />
                                     </div>
@@ -1564,12 +1675,45 @@ const SplitExpense = () => {
                                         onMouseOver={(e) => e.currentTarget.style.borderColor = '#1B6B3A'}
                                         onMouseOut={(e) => e.currentTarget.style.borderColor = '#CBD5E1'}
                                     >
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                                            <Upload size={16} />
-                                            <span style={{ fontSize: '0.78rem', fontWeight: '750' }}>
-                                                {expenseForm.attachmentName ? expenseForm.attachmentName : 'Click to upload invoice / receipt copy'}
-                                            </span>
-                                        </div>
+                                        {expenseForm.attachmentName ? (
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                                                <FileText size={16} color="#2563EB" />
+                                                <span style={{ fontSize: '0.78rem', fontWeight: '800', color: '#1E293B' }}>
+                                                    {expenseForm.attachmentName}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={(ev) => {
+                                                        ev.stopPropagation();
+                                                        const att = expenseForm.attachmentName;
+                                                        const fileUrl = resolveAttachmentUrl(att);
+                                                        setPreviewAttachment({
+                                                            url: fileUrl,
+                                                            name: att,
+                                                            isPdf: att.toLowerCase().endsWith('.pdf'),
+                                                            isImage: /\.(jpe?g|png|webp|gif|svg)$/i.test(att)
+                                                        });
+                                                    }}
+                                                    style={{
+                                                        background: '#EFF6FF',
+                                                        border: '1px solid #BFDBFE',
+                                                        borderRadius: '6px',
+                                                        padding: '2px 8px',
+                                                        fontSize: '0.72rem',
+                                                        fontWeight: '800',
+                                                        color: '#2563EB',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    Preview
+                                                </button>
+                                            </div>
+                                        ) : (
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                                                <Upload size={16} />
+                                                <span style={{ fontSize: '0.78rem', fontWeight: '750' }}>Click to upload invoice / receipt copy</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
@@ -1618,7 +1762,7 @@ const SplitExpense = () => {
                                                     
                                                     {expenseForm.splitType === 'equal' ? (
                                                         <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#1E293B' }}>
-                                                            {activeSplit.currencySymbol}{Math.round(equalShare * 100) / 100}
+                                                            {activeSplit.currencySymbol}{Number.isFinite(equalShare) ? equalShare.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
                                                         </span>
                                                     ) : (
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -1626,14 +1770,29 @@ const SplitExpense = () => {
                                                             <input 
                                                                 required
                                                                 type="number"
+                                                                min="0"
+                                                                step="any"
+                                                                inputMode="decimal"
                                                                 placeholder="0.00"
                                                                 value={expenseForm.shares[p] || ''}
+                                                                onKeyDown={(e) => { if (['-', '+', 'e', 'E'].includes(e.key)) e.preventDefault(); }}
                                                                 onChange={(e) => {
+                                                                    let val = e.target.value;
+                                                                    if (Number(val) < 0) return;
+                                                                    val = val.replace(/[^0-9.]/g, '');
+                                                                    if (Number(val) < 0) return;
+                                                                    const parts = val.split('.');
+                                                                    if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+                                                                    let intPart = parts[0] || '';
+                                                                    if (intPart.length > 12) intPart = intPart.slice(0, 12);
+                                                                    let decPart = parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '';
+                                                                    const cleanVal = intPart + decPart;
+                                                                    if (Number(cleanVal) < 0) return;
                                                                     const newShares = { ...expenseForm.shares };
-                                                                    newShares[p] = e.target.value;
+                                                                    newShares[p] = cleanVal;
                                                                     setExpenseForm({ ...expenseForm, shares: newShares });
                                                                 }}
-                                                                style={{ width: '80px', padding: '0.35rem 0.5rem', borderRadius: '8px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: '900', textAlign: 'right', fontSize: '0.82rem', color: '#1B6B3A' }}
+                                                                style={{ width: '100px', padding: '0.35rem 0.5rem', borderRadius: '8px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: '900', textAlign: 'right', fontSize: '0.82rem', color: '#1B6B3A' }}
                                                             />
                                                         </div>
                                                     )}
@@ -1653,7 +1812,7 @@ const SplitExpense = () => {
                                                 <span style={{ fontSize: '0.75rem', fontWeight: '800' }}>
                                                     {Math.abs(difference) < 0.1 
                                                         ? 'All allocations match total perfectly!' 
-                                                        : `Allocated: ${activeSplit.currencySymbol}${sum.toFixed(2)} (${difference > 0 ? 'Remaining' : 'Over'}: ${activeSplit.currencySymbol}${Math.abs(difference).toFixed(2)})`
+                                                        : `Allocated: ${activeSplit.currencySymbol}${Number.isFinite(sum) ? sum.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'} (${difference > 0 ? 'Remaining' : 'Over'}: ${activeSplit.currencySymbol}${Number.isFinite(difference) ? Math.abs(difference).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'})`
                                                     }
                                                 </span>
                                             </div>
@@ -1663,11 +1822,188 @@ const SplitExpense = () => {
 
                                 <button 
                                     type="submit"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '850', fontSize: '0.88rem', cursor: 'pointer', marginTop: '0.5rem' }}
+                                    disabled={hasInvalidCustomShares}
+                                    style={{ 
+                                        width: '100%', 
+                                        padding: '0.75rem', 
+                                        borderRadius: '12px', 
+                                        background: hasInvalidCustomShares ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        fontWeight: '850', 
+                                        fontSize: '0.88rem', 
+                                        cursor: hasInvalidCustomShares ? 'not-allowed' : 'pointer', 
+                                        marginTop: '0.5rem',
+                                        opacity: hasInvalidCustomShares ? 0.6 : 1
+                                    }}
                                 >
                                     {editingExpenseId ? 'Save Changes' : 'Log Expense'}
                                 </button>
                             </form>
+                        </Motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* ──────── MODAL: ATTACHMENT PREVIEW ──────── */}
+            <AnimatePresence>
+                {previewAttachment && (
+                    <div 
+                        style={{ 
+                            position: 'fixed', 
+                            inset: 0, 
+                            background: 'rgba(15, 23, 42, 0.75)', 
+                            backdropFilter: 'blur(8px)', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            zIndex: 2000,
+                            padding: '1.5rem'
+                        }}
+                        onClick={() => setPreviewAttachment(null)}
+                    >
+                        <Motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ 
+                                background: 'white', 
+                                width: '100%', 
+                                maxWidth: '850px', 
+                                maxHeight: '90vh', 
+                                borderRadius: '24px', 
+                                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', 
+                                display: 'flex', 
+                                flexDirection: 'column', 
+                                overflow: 'hidden' 
+                            }}
+                        >
+                            {/* Header */}
+                            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: '#EFF6FF', color: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <FileText size={18} />
+                                    </div>
+                                    <div>
+                                        <h3 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#1E293B', margin: 0, maxWidth: '400px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                            {previewAttachment.name}
+                                        </h3>
+                                        <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700' }}>
+                                            {previewAttachment.isPdf ? 'PDF Document Preview' : (previewAttachment.isImage ? 'Image Preview' : 'Document Attachment')}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <button 
+                                        type="button"
+                                        onClick={() => {
+                                            if (previewAttachment?.url) {
+                                                window.open(previewAttachment.url, '_blank', 'noopener,noreferrer');
+                                            }
+                                        }}
+                                        style={{ 
+                                            display: 'inline-flex', 
+                                            alignItems: 'center', 
+                                            gap: '4px', 
+                                            padding: '0.45rem 0.85rem', 
+                                            borderRadius: '10px', 
+                                            background: '#EFF6FF', 
+                                            color: '#2563EB', 
+                                            textDecoration: 'none', 
+                                            fontSize: '0.78rem', 
+                                            fontWeight: '800',
+                                            border: '1px solid #BFDBFE',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <ExternalLink size={14} /> Open in New Tab
+                                    </button>
+                                    <a 
+                                        href={previewAttachment.url} 
+                                        download={previewAttachment.name}
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        style={{ 
+                                            display: 'inline-flex', 
+                                            alignItems: 'center', 
+                                            gap: '4px', 
+                                            padding: '0.45rem 0.85rem', 
+                                            borderRadius: '10px', 
+                                            background: '#F1F5F9', 
+                                            color: '#334155', 
+                                            textDecoration: 'none', 
+                                            fontSize: '0.78rem', 
+                                            fontWeight: '800',
+                                            border: '1px solid #CBD5E1'
+                                        }}
+                                    >
+                                        <Download size={14} /> Download
+                                    </a>
+                                    <button 
+                                        onClick={() => setPreviewAttachment(null)}
+                                        style={{ 
+                                            background: '#F1F5F9', 
+                                            border: 'none', 
+                                            borderRadius: '10px', 
+                                            padding: '0.45rem', 
+                                            cursor: 'pointer', 
+                                            color: '#475569',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Viewer */}
+                            <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9', minHeight: '380px' }}>
+                                {previewAttachment.isImage ? (
+                                    <img 
+                                        src={previewAttachment.url} 
+                                        alt={previewAttachment.name} 
+                                        crossOrigin="anonymous"
+                                        style={{ maxWidth: '100%', maxHeight: '72vh', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', background: 'white' }} 
+                                    />
+                                ) : previewAttachment.isPdf ? (
+                                    <iframe 
+                                        src={previewAttachment.url} 
+                                        title={previewAttachment.name}
+                                        style={{ width: '100%', height: '72vh', border: 'none', borderRadius: '12px', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
+                                    />
+                                ) : (
+                                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                                        <FileText size={48} color="#64748B" style={{ marginBottom: '1rem' }} />
+                                        <p style={{ fontWeight: '800', color: '#1E293B', marginBottom: '0.5rem' }}>{previewAttachment.name}</p>
+                                        <a 
+                                            href={previewAttachment.url} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer" 
+                                            download={previewAttachment.name}
+                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.6rem 1.25rem', background: '#2563EB', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '850', fontSize: '0.85rem' }}
+                                        >
+                                            <Download size={16} /> Download File
+                                        </a>
+                                    </div>
+                                )}
+                                <div id="preview-fallback-box-1" style={{ display: 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
+                                    <AlertCircle size={40} color="#EF4444" style={{ marginBottom: '0.75rem' }} />
+                                    <p style={{ fontWeight: '800', color: '#1E293B', marginBottom: '0.25rem' }}>Unable to preview file inline</p>
+                                    <p style={{ fontSize: '0.8rem', color: '#64748B', marginBottom: '1rem' }}>The file may not be directly viewable or requires direct download.</p>
+                                    <a 
+                                        href={previewAttachment.url} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        download={previewAttachment.name}
+                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', background: '#2563EB', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '800', fontSize: '0.8rem' }}
+                                    >
+                                        <Download size={14} /> Download Attachment
+                                    </a>
+                                </div>
+                            </div>
                         </Motion.div>
                     </div>
                 )}

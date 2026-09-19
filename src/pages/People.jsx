@@ -191,8 +191,30 @@ const BusinessPeople = () => {
         }, 0);
     }, [personTx, personDetails]);
 
-    const people = useMemo(() => peopleRes.data || peopleRes || [], [peopleRes]);
-    const transactions = transactionsRes.data || transactionsRes || [];
+    const people = useMemo(() => {
+        const list = peopleRes.data || peopleRes || [];
+        return [...list].sort((a, b) => {
+            const aPinned = pinnedPeopleIds.includes(a.id);
+            const bPinned = pinnedPeopleIds.includes(b.id);
+            if (aPinned && !bPinned) return -1;
+            if (!aPinned && bPinned) return 1;
+            const dateA = new Date(a.updatedAt || a.updated_at || a.createdAt || a.created_at || a.date || 0).getTime();
+            const dateB = new Date(b.updatedAt || b.updated_at || b.createdAt || b.created_at || b.date || 0).getTime();
+            if (dateB !== dateA) return dateB - dateA;
+            return (Number(b.id) || 0) - (Number(a.id) || 0);
+        });
+    }, [peopleRes, pinnedPeopleIds]);
+
+    const transactions = useMemo(() => {
+        const list = transactionsRes.data || transactionsRes || [];
+        return [...list].sort((a, b) => {
+            const dateA = new Date(a.date || a.execution_date || a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime();
+            const dateB = new Date(b.date || b.execution_date || b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime();
+            if (dateB !== dateA) return dateB - dateA;
+            return (Number(b.id) || 0) - (Number(a.id) || 0);
+        });
+    }, [transactionsRes]);
+
     const reminders = remindersRes.data || remindersRes || [];
 
     const summary = useMemo(() => {
@@ -295,7 +317,50 @@ const BusinessPeople = () => {
 
     const createTxMutation = useMutation({
         mutationFn: (data) => peopleService.createTransaction(data.person_id, data),
-        onSuccess: (_, variables) => {
+        onSuccess: (res, variables) => {
+            const rawNew = res?.data?.data || res?.data || res || {};
+            const nowIso = new Date().toISOString();
+            const newRecord = {
+                ...rawNew,
+                person_id: variables.person_id,
+                type: variables.type || rawNew.type,
+                amount: variables.amount || rawNew.amount,
+                date: variables.date || rawNew.date,
+                description: variables.description || rawNew.description,
+                person_name: people.find(p => String(p.id) === String(variables.person_id))?.name || rawNew.person_name || 'Contact',
+                created_at: rawNew.created_at || nowIso,
+                updated_at: rawNew.updated_at || nowIso
+            };
+
+            // Prepend newRecord to queryClient cache so it appears first immediately
+            queryClient.setQueryData(['people-transactions-all'], (old) => {
+                const oldList = Array.isArray(old) ? old : (old?.data || []);
+                return [newRecord, ...oldList.filter(item => String(item.id) !== String(newRecord.id))];
+            });
+
+            if (variables.person_id) {
+                queryClient.setQueryData(['person-transactions', variables.person_id], (old) => {
+                    const oldList = Array.isArray(old) ? old : (old?.data || []);
+                    return [newRecord, ...oldList.filter(item => String(item.id) !== String(newRecord.id))];
+                });
+            }
+
+            // Bump contact's updated_at in cache so it immediately surfaces to top of contacts list
+            queryClient.setQueryData(['people-list', searchTerm], (old) => {
+                if (!old) return old;
+                const oldList = Array.isArray(old) ? old : (old?.data || []);
+                const target = oldList.find(p => String(p.id) === String(variables.person_id));
+                if (!target) return old;
+                const updatedPerson = {
+                    ...target,
+                    updated_at: nowIso,
+                    updatedAt: nowIso
+                };
+                const rest = oldList.filter(p => String(p.id) !== String(variables.person_id));
+                const nextList = [updatedPerson, ...rest];
+                return Array.isArray(old) ? nextList : { ...old, data: nextList };
+            });
+
             queryClient.invalidateQueries({ queryKey: ['people-transactions-all'] });
             queryClient.invalidateQueries({ queryKey: ['people-list'] });
             if (variables.person_id) {
@@ -336,12 +401,12 @@ const BusinessPeople = () => {
     });
 
     const createReminderMutation = useMutation({
-        mutationFn: (data) => peopleService.createReminder(data.person_id, data),
+        mutationFn: (data) => peopleService.createReminder(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['people-reminders-all'] });
             setIsReminderModalOpen(false);
             setReminderForm({ person_id: '', title: '', amount: '', due_date: new Date().toISOString().split('T')[0], notes: '' });
-            alert('Reminder dispatched successfully.');
+            alert('Repayment alert dispatched successfully.');
         }
     });
 
@@ -412,6 +477,60 @@ const BusinessPeople = () => {
         }
     };
 
+    const handleAmountChange = (e) => {
+        let val = e.target.value;
+
+        // Remove any character that is not a digit or decimal point
+        val = val.replace(/[^0-9.]/g, '');
+
+        // Prevent multiple decimal points
+        const parts = val.split('.');
+        if (parts.length > 2) {
+            val = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        // Restrict integer part strictly to 12 digits
+        let integerPart = parts[0] || '';
+        if (integerPart.length > 12) {
+            integerPart = integerPart.slice(0, 12);
+        }
+
+        // Restrict decimal part to 2 digits (if entered)
+        let decimalPart = parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '';
+
+        const finalValue = integerPart + decimalPart;
+
+        setTxForm(prev => ({
+            ...prev,
+            amount: finalValue
+        }));
+    };
+
+    const handleInlineTxAmountChange = (e) => {
+        let val = e.target.value;
+
+        val = val.replace(/[^0-9.]/g, '');
+
+        const parts = val.split('.');
+        if (parts.length > 2) {
+            val = parts[0] + '.' + parts.slice(1).join('');
+        }
+
+        let integerPart = parts[0] || '';
+        if (integerPart.length > 12) {
+            integerPart = integerPart.slice(0, 12);
+        }
+
+        let decimalPart = parts[1] !== undefined ? '.' + parts[1].slice(0, 2) : '';
+
+        const finalValue = integerPart + decimalPart;
+
+        setInlineTxForm(prev => ({
+            ...prev,
+            amount: finalValue
+        }));
+    };
+
     const handleSaveTx = (e) => {
         e.preventDefault();
         if (!txForm.person_id) return alert('Please select a contact.');
@@ -459,16 +578,35 @@ const BusinessPeople = () => {
 
     const handleSaveReminder = (e) => {
         e.preventDefault();
-        if (!reminderForm.person_id) return alert('Please select a contact.');
-        
+        if (!reminderForm.person_id) return alert('Please select a target contact.');
+        if (!reminderForm.due_date) return alert('Please select a maturity / due date.');
+
+        let amt = 0;
         if (reminderForm.amount !== undefined && reminderForm.amount !== null && reminderForm.amount !== '') {
-            const parsed = Number(reminderForm.amount);
-            if (isNaN(parsed) || parsed < 0) {
+            amt = Number(reminderForm.amount);
+            if (isNaN(amt) || amt < 0) {
                 return alert('Claim Cap must be a valid number greater than or equal to 0.');
             }
         }
-        
-        createReminderMutation.mutate(reminderForm);
+
+        const selectedPerson = people.find(p => String(p.id) === String(reminderForm.person_id));
+
+        const payload = {
+            contact_id: reminderForm.person_id,
+            person_id: reminderForm.person_id,
+            target_contact: selectedPerson ? selectedPerson.name : 'Contact',
+            person_name: selectedPerson ? selectedPerson.name : 'Contact',
+            contact_phone: selectedPerson ? selectedPerson.phone : '',
+            maturity_date: reminderForm.due_date,
+            due_date: reminderForm.due_date,
+            memo_label: reminderForm.title || 'Repayment Alert',
+            title: reminderForm.title || 'Repayment Alert',
+            claim_cap: amt,
+            amount: amt,
+            status: 'Pending'
+        };
+
+        createReminderMutation.mutate(payload);
     };
 
     const renderAvatar = (name, size = 42) => {
@@ -512,19 +650,30 @@ const BusinessPeople = () => {
         return Array.from(groups);
     }, [people]);
 
-    const filteredPeople = people.filter(p => {
-        const matchesSearch = (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                              (p.company || '').toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesGroup = groupFilter === 'All' || p.relationship === groupFilter;
-        const meta = getContactMeta(p.contact_info);
-        const matchesStatus = statusFilter === 'All' || meta.status === statusFilter;
-        return matchesSearch && matchesGroup && matchesStatus;
-    });
+    const filteredPeople = useMemo(() => {
+        return people.filter(p => {
+            const matchesSearch = (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                  (p.company || '').toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesGroup = groupFilter === 'All' || p.relationship === groupFilter;
+            const meta = getContactMeta(p.contact_info);
+            const matchesStatus = statusFilter === 'All' || meta.status === statusFilter;
+            return matchesSearch && matchesGroup && matchesStatus;
+        });
+    }, [people, searchTerm, groupFilter, statusFilter]);
 
-    const filteredTx = transactions.filter(t =>
-        (t.person_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (t.description || '').toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredTx = useMemo(() => {
+        return transactions
+            .filter(t =>
+                (t.person_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (t.description || '').toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            .sort((a, b) => {
+                const dateA = new Date(a.date || a.execution_date || a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime();
+                const dateB = new Date(b.date || b.execution_date || b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime();
+                if (dateB !== dateA) return dateB - dateA;
+                return (Number(b.id) || 0) - (Number(a.id) || 0);
+            });
+    }, [transactions, searchTerm]);
 
     return (
         <div style={{ padding: '1.25rem 2.5rem', background: '#F0F9F4', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
@@ -726,7 +875,10 @@ const BusinessPeople = () => {
                                         const bPinned = pinnedPeopleIds.includes(b.id);
                                         if (aPinned && !bPinned) return -1;
                                         if (!aPinned && bPinned) return 1;
-                                        return 0;
+                                        const dateA = new Date(a.updatedAt || a.updated_at || a.createdAt || a.created_at || a.date || 0).getTime();
+                                        const dateB = new Date(b.updatedAt || b.updated_at || b.createdAt || b.created_at || b.date || 0).getTime();
+                                        if (dateB !== dateA) return dateB - dateA;
+                                        return (Number(b.id) || 0) - (Number(a.id) || 0);
                                     })
                                     .map((p) => {
                                         const meta = getContactMeta(p.contact_info);
@@ -985,10 +1137,10 @@ const BusinessPeople = () => {
                         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead 
                                 columns={[
-                                    { key: 'due_date', label: 'Maturity / Due Date', placeholder: 'Due Date...' },
-                                    { key: 'person_name', label: 'Target Contact', placeholder: 'Contact...' },
-                                    { key: 'title', label: 'Memo Label', placeholder: 'Memo...' },
-                                    { key: 'amount', label: 'Claim Cap', placeholder: 'Claim...', align: 'right' },
+                                    { key: 'due_date', label: 'MATURITY / DUE DATE', placeholder: 'Due Date...' },
+                                    { key: 'person_name', label: 'TARGET CONTACT', placeholder: 'Contact...' },
+                                    { key: 'title', label: 'MEMO LABEL', placeholder: 'Memo...' },
+                                    { key: 'amount', label: 'CLAIM CAP', placeholder: 'Claim...', align: 'right' },
                                     { key: '_actions', label: '', noFilter: true }
                                 ]} 
                                 onFilterChange={setColFilters} 
@@ -1004,23 +1156,33 @@ const BusinessPeople = () => {
                                         <td style={{ padding: '1.5rem 2rem', color: '#E11D48', fontWeight: '800' }}>
                                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                                                 <Calendar size={14} />
-                                                {new Date(r.due_date).toLocaleDateString('en-IN')}
+                                                {new Date(r.maturity_date || r.due_date).toLocaleDateString('en-IN')}
                                             </span>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '800', color: '#1E293B' }}>{r.person_name}</td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '650' }}>{r.title}</td>
-                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right', fontWeight: '900', color: '#0F172A' }}>{(r.amount !== undefined && r.amount !== null && r.amount !== '') ? formatCurr(r.amount) : ''}</td>
+                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '800', color: '#1E293B' }}>{r.target_contact || r.person_name}</td>
+                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '650' }}>{r.memo_label || r.title}</td>
+                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right', fontWeight: '900', color: '#0F172A' }}>{formatCurr(r.claim_cap !== undefined ? r.claim_cap : r.amount)}</td>
                                         <td style={{ padding: '1.5rem 2rem', textAlign: 'right' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
                                                 <button 
-                                                    onClick={() => alert(`Dispatched WhatsApp alert reminder to client.`)}
+                                                    onClick={() => alert(`Dispatched WhatsApp alert reminder to ${r.target_contact || r.person_name}.`)}
                                                     style={{ border: 'none', background: '#F0FDF4', padding: '0.5rem 0.75rem', borderRadius: '8px', color: '#1B6B3A', fontWeight: '800', cursor: 'pointer', fontSize: '0.8rem' }}
                                                 >
-                                                    Alert
+                                                    Send
                                                 </button>
                                                 <button 
                                                     onClick={() => deleteReminderMutation.mutate(r)}
-                                                    style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer' }}
+                                                    style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', transition: 'color 0.15s' }}
+                                                    onMouseOver={(e) => (e.currentTarget.style.color = '#EF4444')}
+                                                    onMouseOut={(e) => (e.currentTarget.style.color = '#94A3B8')}
+                                                    title="Delete reminder"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                                <button 
+                                                    onClick={() => deleteReminderMutation.mutate(r)}
+                                                    style={{ background: 'none', border: 'none', color: '#10B981', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+                                                    title="Mark alert as completed"
                                                 >
                                                     <CheckCircle2 size={18} />
                                                 </button>
@@ -1191,7 +1353,16 @@ const BusinessPeople = () => {
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Value Cap Amount ({currency.symbol})</label>
-                                    <input required type="number" placeholder="0.00" value={txForm.amount} onChange={(e) => setTxForm({ ...txForm, amount: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1.1rem', fontWeight: '900' }} />
+                                    <input 
+                                        required 
+                                        type="text" 
+                                        inputMode="decimal"
+                                        maxLength={15}
+                                        placeholder="0.00" 
+                                        value={txForm.amount} 
+                                        onChange={handleAmountChange} 
+                                        style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1.1rem', fontWeight: '900' }} 
+                                    />
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Asset narrative / Memo</label>
@@ -1206,39 +1377,54 @@ const BusinessPeople = () => {
                 )}
             </AnimatePresence>
 
-            {/* Modal 3: Setup Alert / Reminder */}
+            {/* Modal 3: Setup Alert / Repayment Alert */}
             <AnimatePresence>
                 {isReminderModalOpen && (
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
                         <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Schedule Return Reminder</h3>
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Schedule Repayment Alert</h3>
                                 <button onClick={() => setIsReminderModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                             </div>
                             <form onSubmit={handleSaveReminder} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Dispatch to Contact</label>
-                                    <select required value={reminderForm.person_id} onChange={(e) => setReminderForm({ ...reminderForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Target Contact <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <select required value={reminderForm.person_id} onChange={(e) => setReminderForm({ ...reminderForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontWeight: '600' }}>
                                         <option value="">Select contact...</option>
                                         {people.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                                     </select>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr', gap: '0.75rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Reminder Title</label>
-                                        <input required placeholder="Repayment of Friendly Loan" type="text" value={reminderForm.title} onChange={(e) => setReminderForm({ ...reminderForm, title: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Memo Label <span style={{ color: '#EF4444' }}>*</span></label>
+                                        <input required placeholder="e.g. Loan Repayment Due" type="text" value={reminderForm.title} onChange={(e) => setReminderForm({ ...reminderForm, title: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Cap Value</label>
-                                        <input type="number" placeholder="0.00" value={reminderForm.amount} onChange={(e) => setReminderForm({ ...reminderForm, amount: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }} />
+                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Claim Cap (₹)</label>
+                                        <input 
+                                            type="text" 
+                                            inputMode="decimal"
+                                            placeholder="0.00" 
+                                            value={reminderForm.amount} 
+                                            onChange={(e) => {
+                                                let val = e.target.value.replace(/[^0-9.]/g, '');
+                                                const parts = val.split('.');
+                                                if (parts.length > 2) val = parts[0] + '.' + parts.slice(1).join('');
+                                                const intPart = parts[0].slice(0, 12);
+                                                const decPart = parts.length > 1 ? '.' + parts[1].slice(0, 2) : '';
+                                                val = intPart + decPart;
+                                                setReminderForm({ ...reminderForm, amount: val });
+                                            }} 
+                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }} 
+                                        />
                                     </div>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Execution Maturity Date</label>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Maturity / Due Date <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input required type="date" value={reminderForm.due_date} onChange={(e) => setReminderForm({ ...reminderForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer' }}>
-                                    Commit Reminder Flow
+                                <button type="submit" disabled={createReminderMutation.isPending} style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer' }}>
+                                    {createReminderMutation.isPending ? 'Scheduling Alert...' : 'Dispatch Repayment Alert'}
                                 </button>
                             </form>
                         </Motion.div>
@@ -1491,7 +1677,12 @@ const BusinessPeople = () => {
             </div>
         ) : (
             (() => {
-                const allTx = [...(personTx.data || personTx || [])].sort((a, b) => Number(a.id) - Number(b.id));
+                const allTx = [...(personTx.data || personTx || [])].sort((a, b) => {
+                    const dateA = new Date(a.date || a.execution_date || a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime();
+                    const dateB = new Date(b.date || b.execution_date || b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime();
+                    if (dateB !== dateA) return dateB - dateA;
+                    return (Number(b.id) || 0) - (Number(a.id) || 0);
+                });
 
                 const filtered = ledgerSearchTerm.trim()
                     ? allTx.filter(t => {
@@ -1743,7 +1934,16 @@ const BusinessPeople = () => {
                                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
                                                                 <div>
                                                                     <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>AMOUNT ({currency.symbol})</label>
-                                                                    <input required type="number" placeholder="0.00" value={inlineTxForm.amount} onChange={(e) => setInlineTxForm({ ...inlineTxForm, amount: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.9rem' }} />
+                                                                    <input 
+                                                                        required 
+                                                                        type="text" 
+                                                                        inputMode="decimal"
+                                                                        maxLength={15}
+                                                                        placeholder="0.00" 
+                                                                        value={inlineTxForm.amount} 
+                                                                        onChange={handleInlineTxAmountChange} 
+                                                                        style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.9rem' }} 
+                                                                    />
                                                                 </div>
                                                                 <div>
                                                                     <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>DATE</label>

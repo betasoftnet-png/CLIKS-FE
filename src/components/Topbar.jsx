@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Wallet, BookOpen, Users, SlidersHorizontal, Bell } from 'lucide-react';
 import '../App.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../context';
 import logoPng from '../assets/logo_new.png'; // Final branding
 
@@ -29,9 +29,9 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
     };
 
     const navItems = [
-        { name: 'Books', url: '/books/dashboard', icon: BookOpen, activeBase: '/books' },
-        { name: 'Payments', url: '/payments/planner', icon: Wallet, activeBase: '/payments' },
-        { name: 'Social', url: '/social/meetup', icon: Users, activeBase: '/social' },
+        { name: 'Books', url: '/books', icon: BookOpen, activeBase: '/books' },
+        { name: 'Payments', url: '/payments/transactions', icon: Wallet, activeBase: '/payments' },
+        { name: 'Social', url: '/social', icon: Users, activeBase: '/social' },
     ];
 
     return (
@@ -89,7 +89,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                 }}>
                     {navItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = item.name === 'Payments'
+                        const isItemActive = item.name === 'Payments'
                             ? ((location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments') || location.pathname === '/') && !location.pathname.startsWith('/payments/split-expense'))
                             : (item.name === 'Books'
                                 ? (location.pathname.startsWith('/books') || location.pathname.startsWith('/ca') || location.pathname.startsWith('/payments/split-expense'))
@@ -98,37 +98,42 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                                     : (item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false)));
 
                         return (
-                            <button
+                            <NavLink
                                 key={item.name}
-                                onClick={() => item.action ? item.action() : handleNavigation(item.url)}
+                                to={item.url}
                                 aria-label={item.name}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                    padding: '8px 20px',
-                                    borderRadius: '999px',
-                                    border: 'none',
-                                    background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                                    color: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                                    fontSize: '14px',
-                                    fontWeight: 500,
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s ease',
-                                    position: 'relative'
+                                className={({ isActive }) => `top-nav-link ${isActive || isItemActive ? 'active' : ''}`}
+                                style={({ isActive }) => {
+                                    const active = isActive || isItemActive;
+                                    return {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '8px 20px',
+                                        borderRadius: '999px',
+                                        border: 'none',
+                                        background: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                                        color: active ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                        cursor: 'pointer',
+                                        textDecoration: 'none',
+                                        transition: 'all 0.2s ease',
+                                        position: 'relative'
+                                    };
                                 }}
                                 onMouseEnter={(e) => {
-                                    if (!isActive) e.currentTarget.style.color = '#ffffff';
+                                    if (!isItemActive) e.currentTarget.style.color = '#ffffff';
                                 }}
                                 onMouseLeave={(e) => {
-                                    if (!isActive) e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
+                                    if (!isItemActive) e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)';
                                 }}
                             >
                                 <span className="hidden md:inline">{item.name}</span>
                                 <span className="md:hidden">
                                     <Icon size={18} />
                                 </span>
-                            </button>
+                            </NavLink>
                         );
                     })}
                 </div>

@@ -121,8 +121,8 @@ const BusinessPayments = () => {
     const [supplierForm, setSupplierForm] = useState({
         supplier_name: 'Delhi Distributors Ltd.',
         purchase_id: 'BILL-77091',
-        total_amount: 35000,
-        paid_amount: 10000,
+        total_amount: '',
+        paid_amount: '',
         payment_mode: 'Bank Transfer',
         transaction_reference: 'REF-88910B'
     });
@@ -130,7 +130,7 @@ const BusinessPayments = () => {
     const [transferForm, setTransferForm] = useState({
         from_acc_id: 'ACC-03',
         to_acc_id: 'ACC-01',
-        amount: 25000
+        amount: ''
     });
 
     const handleSaveCustomerPayment = (e) => {
@@ -157,9 +157,18 @@ const BusinessPayments = () => {
 
     const handleInternalTransfer = (e) => {
         e.preventDefault();
-        const transAmt = parseFloat(transferForm.amount) || 0;
-        const sourceAcc = accounts.find(a => a.bank_account_id === transferForm.from_acc_id);
+        if (transferForm.from_acc_id === transferForm.to_acc_id) {
+            alert('From Account and To Account cannot be identical!');
+            return;
+        }
 
+        const transAmt = parseFloat(transferForm.amount) || 0;
+        if (isNaN(transAmt) || transAmt <= 0) {
+            alert('Transfer amount must be strictly greater than 0.');
+            return;
+        }
+
+        const sourceAcc = accounts.find(a => a.bank_account_id === transferForm.from_acc_id);
         if (transAmt > (sourceAcc?.current_balance || 0)) {
             alert('Insufficient balance in source account to make internal transfer!');
             return;
@@ -534,12 +543,30 @@ const BusinessPayments = () => {
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Original Due Amount ({currency.symbol})</label>
-                                    <input required type="number" value={supplierForm.total_amount} onChange={(e) => setSupplierForm({ ...supplierForm, total_amount: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <input 
+                                        required 
+                                        type="number" 
+                                        min="0"
+                                        step="any"
+                                        placeholder="0"
+                                        value={supplierForm.total_amount} 
+                                        onChange={(e) => setSupplierForm({ ...supplierForm, total_amount: e.target.value })} 
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                    />
                                 </div>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Paid Amount (Outflow worth, {currency.symbol})</label>
-                                <input required type="number" value={supplierForm.paid_amount} onChange={(e) => setSupplierForm({ ...supplierForm, paid_amount: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                <input 
+                                    required 
+                                    type="number" 
+                                    min="0"
+                                    step="any"
+                                    placeholder="0"
+                                    value={supplierForm.paid_amount} 
+                                    onChange={(e) => setSupplierForm({ ...supplierForm, paid_amount: e.target.value })} 
+                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                />
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                                 <div>
@@ -585,13 +612,30 @@ const BusinessPayments = () => {
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>To Account</label>
                                     <select value={transferForm.to_acc_id} onChange={(e) => setTransferForm({ ...transferForm, to_acc_id: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
-                                        {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(a => <option key={a.bank_account_id} value={a.bank_account_id}>{a.bank_account_name}</option>)}
+                                        {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(a => (
+                                            <option 
+                                                key={a.bank_account_id} 
+                                                value={a.bank_account_id}
+                                                disabled={String(a.bank_account_id) === String(transferForm.from_acc_id)}
+                                            >
+                                                {a.bank_account_name}{String(a.bank_account_id) === String(transferForm.from_acc_id) ? ' (Source)' : ''}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Transfer Amount ({currency.symbol})</label>
-                                <input required type="number" value={transferForm.amount} onChange={(e) => setTransferForm({ ...transferForm, amount: parseFloat(e.target.value) || 0 })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                <input 
+                                    required 
+                                    type="number" 
+                                    min="0"
+                                    step="any"
+                                    placeholder="0"
+                                    value={transferForm.amount} 
+                                    onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })} 
+                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                />
                             </div>
 
                             <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>

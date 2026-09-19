@@ -26,7 +26,9 @@ const FinancialPlan = () => {
     const queryClient = useQueryClient();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterType, setFilterType] = useState('all'); // all, SEND, RECEIVE
+    const [activeFilter, setActiveFilter] = useState('ALL'); // ALL, SEND, RECEIVE
+    const filterType = activeFilter;
+    const setFilterType = setActiveFilter;
 
     const [formData, setFormData] = useState({
         person_id: '',
@@ -97,19 +99,88 @@ const FinancialPlan = () => {
         }
     };
 
-    const filteredPlans = plans.filter(p => {
-        const matchesSearch = p.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                             p.description?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesType = filterType === 'all' || p.type === filterType;
-        return matchesSearch && matchesType;
-    });
+    const metrics = React.useMemo(() => {
+        const schedulesList = plans || [];
+        let totalScheduled = schedulesList.length;
+        let toSendTotal = 0;
+        let toReceiveTotal = 0;
+        let pendingCount = 0;
+
+        schedulesList.forEach((item) => {
+            // 1. Sanitize amount safely
+            const rawAmt = item.amount ?? item.value ?? item.total_amount ?? 0;
+            const amount = typeof rawAmt === 'string' 
+                ? parseFloat(rawAmt.replace(/[^0-9.]/g, '')) || 0 
+                : Number(rawAmt) || 0;
+
+            // 2. Normalize direction / transaction type
+            const direction = String(item.direction || item.type || item.entry_type || item.flow || item.category || '').toUpperCase();
+            const isReceive = 
+                direction === 'RECEIVE' || 
+                direction === 'INWARD' || 
+                direction === 'INCOMING' || 
+                direction === 'IN' ||
+                item.is_receive === true ||
+                String(item.flow || '').toLowerCase() === 'in';
+
+            const isSend = 
+                direction === 'SEND' || 
+                direction === 'OUTWARD' || 
+                direction === 'OUTGOING' || 
+                direction === 'OUT' ||
+                item.is_send === true ||
+                String(item.flow || '').toLowerCase() === 'out';
+
+            // 3. Status checks
+            const status = String(item.status || '').toUpperCase();
+            if (status === 'PENDING') {
+                pendingCount += 1;
+            }
+
+            // 4. Accumulate totals
+            if (isReceive) {
+                toReceiveTotal += amount;
+            } else if (isSend) {
+                toSendTotal += amount;
+            }
+        });
+
+        return {
+            totalScheduled,
+            toSendTotal,
+            toReceiveTotal,
+            pendingCount
+        };
+    }, [plans]);
 
     const stats = {
-        totalScheduled: plans.length,
-        toSend: plans.filter(p => p.type === 'SEND' && p.status !== 'paid').reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0),
-        toReceive: plans.filter(p => p.type === 'RECEIVE' && p.status !== 'paid').reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0),
-        pendingCount: plans.filter(p => p.status !== 'paid').length
+        totalScheduled: metrics.totalScheduled,
+        toSend: metrics.toSendTotal,
+        toSendTotal: metrics.toSendTotal,
+        toReceive: metrics.toReceiveTotal,
+        toReceiveTotal: metrics.toReceiveTotal,
+        pendingCount: metrics.pendingCount
     };
+
+    const filteredPlans = React.useMemo(() => {
+        const schedulesList = plans || [];
+        return schedulesList.filter(p => {
+            const matchesSearch = !searchTerm || 
+                p.name?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                p.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                p.person_name?.toLowerCase().includes(searchTerm.toLowerCase());
+
+            const direction = String(p.direction || p.type || p.entry_type || p.flow || '').toUpperCase();
+            const isReceive = direction === 'RECEIVE' || direction === 'INWARD' || direction === 'INCOMING' || p.is_receive === true || String(p.flow || '').toLowerCase() === 'in';
+            const isSend = direction === 'SEND' || direction === 'OUTWARD' || direction === 'OUTGOING' || p.is_send === true || String(p.flow || '').toLowerCase() === 'out';
+
+            const active = (activeFilter || 'ALL').toUpperCase();
+            if (active === 'ALL') return matchesSearch;
+            if (active === 'SEND') return matchesSearch && isSend;
+            if (active === 'RECEIVE') return matchesSearch && isReceive;
+            return matchesSearch;
+        });
+    }, [plans, searchTerm, activeFilter]);
 
     return (
         <div style={{ padding: '1.25rem 2.5rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
@@ -146,8 +217,8 @@ const FinancialPlan = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
                 {[
                     { label: 'Total Scheduled', value: stats.totalScheduled, icon: CalendarIcon, color: '#1B6B3A', bg: '#DCF2E4' },
-                    { label: 'To Send', value: `₹${stats.toSend.toLocaleString()}`, icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
-                    { label: 'To Receive', value: `₹${stats.toReceive.toLocaleString()}`, icon: ArrowDownRight, color: '#10B981', bg: '#D1FAE5' },
+                    { label: 'Total sended', value: `₹${stats.toSend.toLocaleString()}`, icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
+                    { label: 'Total received', value: `₹${stats.toReceive.toLocaleString()}`, icon: ArrowDownRight, color: '#10B981', bg: '#D1FAE5' },
                     { label: 'Pending Task', value: stats.pendingCount, icon: Clock, color: '#F59E0B', bg: '#FEF3C7' }
                 ].map((stat, idx) => (
                     <div key={idx} style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -165,23 +236,45 @@ const FinancialPlan = () => {
             {/* Filters and List */}
             <div style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '28px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                 <div style={{ padding: '1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', gap: '0.75rem' }}>
-                        {['all', 'SEND', 'RECEIVE'].map(type => (
-                            <button 
-                                key={type}
-                                onClick={() => setFilterType(type)}
-                                style={{ 
-                                    padding: '0.5rem 1.25rem', borderRadius: '10px', 
-                                    background: filterType === type ? '#F0FDF4' : 'transparent',
-                                    color: filterType === type ? '#16A34A' : '#64748B',
-                                    border: '1px solid',
-                                    borderColor: filterType === type ? '#BBF7D0' : 'transparent',
-                                    fontWeight: '700', cursor: 'pointer', fontSize: '0.85rem'
-                                }}
-                            >
-                                {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
-                            </button>
-                        ))}
+                    {/* Subtab Filter Switcher */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => setActiveFilter('ALL')}
+                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                                activeFilter === 'ALL'
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
+                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
+                            }`}
+                        >
+                            All
+                        </button>
+
+                        {/* Send Filter Button */}
+                        <button
+                            type="button"
+                            onClick={() => setActiveFilter('SEND')}
+                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                                activeFilter === 'SEND'
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
+                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
+                            }`}
+                        >
+                            Send
+                        </button>
+
+                        {/* Receive Filter Button */}
+                        <button
+                            type="button"
+                            onClick={() => setActiveFilter('RECEIVE')}
+                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                                activeFilter === 'RECEIVE'
+                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
+                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
+                            }`}
+                        >
+                            Receive
+                        </button>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.5rem 1rem', borderRadius: '12px', width: '300px' }}>
                         <Search size={18} color="#94A3B8" />
@@ -204,16 +297,19 @@ const FinancialPlan = () => {
                         </div>
                     ) : (
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem' }}>
-                            {filteredPlans.map(plan => (
+                            {filteredPlans.map(plan => {
+                                const direction = String(plan.direction || plan.type || plan.entry_type || plan.flow || '').toUpperCase();
+                                const isSend = direction === 'SEND' || direction === 'OUTWARD' || direction === 'OUTGOING' || direction === 'OUT' || plan.is_send === true || String(plan.flow || '').toLowerCase() === 'out';
+                                return (
                                 <div key={plan.id} style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ 
                                             width: '50px', height: '50px', borderRadius: '15px', 
-                                            background: plan.type === 'SEND' ? '#FEE2E2' : '#DCF2E4',
-                                            color: plan.type === 'SEND' ? '#EF4444' : '#1B6B3A',
+                                            background: isSend ? '#FEE2E2' : '#DCF2E4',
+                                            color: isSend ? '#EF4444' : '#1B6B3A',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center'
                                         }}>
-                                            {plan.type === 'SEND' ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
+                                            {isSend ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
                                         </div>
                                         <div>
                                             <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#1E293B' }}>{plan.name}</h4>
@@ -230,7 +326,7 @@ const FinancialPlan = () => {
                                     <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '2rem' }}>
                                         <div>
                                             <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
-                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: plan.type === 'SEND' ? '#EF4444' : '#10B981' }}>
+                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: isSend ? '#EF4444' : '#10B981' }}>
                                                 ₹{parseFloat(plan.amount).toLocaleString()}
                                             </h4>
                                         </div>
@@ -254,7 +350,7 @@ const FinancialPlan = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            );})}
                         </div>
                     )}
                 </div>
@@ -271,7 +367,15 @@ const FinancialPlan = () => {
                         <form 
                             onSubmit={(e) => {
                                 e.preventDefault();
-                                createMutation.mutate(formData);
+                                const parsedAmount = parseFloat(formData.amount);
+                                if (isNaN(parsedAmount) || parsedAmount <= 0) {
+                                    alert('Payment amount must be strictly greater than 0.');
+                                    return;
+                                }
+                                createMutation.mutate({
+                                    ...formData,
+                                    amount: parsedAmount
+                                });
                             }}
                             style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
                         >
@@ -335,9 +439,22 @@ const FinancialPlan = () => {
                                     <input 
                                         required 
                                         type="number" 
-                                        placeholder="0.00" 
+                                        min="0"
+                                        step="any"
+                                        placeholder="0" 
                                         value={formData.amount} 
-                                        onChange={e => setFormData({...formData, amount: e.target.value})} 
+                                        onKeyDown={(e) => {
+                                            if (e.key === '-' || e.key === '+' || e.key === 'e' || e.key === 'E') {
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                        onChange={e => {
+                                            const val = e.target.value;
+                                            if (val !== '' && Number(val) < 0) return;
+                                            if (val === '' || parseFloat(val) >= 0) {
+                                                setFormData({...formData, amount: val});
+                                            }
+                                        }}
                                         style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '700' }} 
                                     />
                                 </div>
@@ -365,12 +482,15 @@ const FinancialPlan = () => {
 
                             <button 
                                 type="submit" 
-                                disabled={createMutation.isLoading}
+                                disabled={createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0}
                                 style={{ 
                                     width: '100%', padding: '1.1rem', borderRadius: '18px', 
-                                    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: (!formData.amount || Number(formData.amount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', 
-                                    marginTop: '0.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem'
+                                    marginTop: '0.5rem', 
+                                    cursor: (createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0) ? 'not-allowed' : 'pointer', 
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                                    opacity: (createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0) ? 0.6 : 1
                                 }}
                             >
                                 {createMutation.isLoading ? <Loader2 className="animate-spin" /> : 'Schedule Payment'}

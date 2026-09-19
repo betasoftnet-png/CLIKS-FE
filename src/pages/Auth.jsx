@@ -51,8 +51,8 @@ const Auth = () => {
             localStorage.setItem('bnx_auth_token', bnxToken);
 
             // 2. Check if this user arrived via a referral link
-            //    The ref code is stored in sessionStorage when Landing redirects to B2Auth
-            const pendingRefCode = sessionStorage.getItem('cliks_pending_ref');
+            //    The ref code is stored in sessionStorage / localStorage when Landing redirects to B2Auth
+            const pendingRefCode = sessionStorage.getItem('cliks_pending_ref') || localStorage.getItem('cliks_referral_code');
 
             // 3. Perform SSO Login with backend
             await ssoLogin(bnxToken);

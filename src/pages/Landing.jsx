@@ -77,13 +77,25 @@ const Landing = () => {
         );
     }
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref') || urlParams.get('referral');
+        if (refCode && refCode.trim()) {
+            const clean = refCode.trim().toUpperCase();
+            localStorage.setItem('cliks_referral_code', clean);
+            sessionStorage.setItem('cliks_pending_ref', clean);
+        }
+    }, []);
+
     const handleLogin = (e) => {
         if (e) e.preventDefault();
         // Capture referral code from URL (?ref=CODE) and persist across the OAuth redirect
         const urlParams = new URLSearchParams(window.location.search);
-        const refCode = urlParams.get('ref');
+        const refCode = urlParams.get('ref') || urlParams.get('referral') || localStorage.getItem('cliks_referral_code');
         if (refCode && refCode.trim()) {
-            sessionStorage.setItem('cliks_pending_ref', refCode.trim());
+            const clean = refCode.trim().toUpperCase();
+            localStorage.setItem('cliks_referral_code', clean);
+            sessionStorage.setItem('cliks_pending_ref', clean);
         }
         // Redirect directly to B2Auth — skip the intermediate /auth page.
         // The /auth route is still needed to receive the OAuth callback (redirect_uri).

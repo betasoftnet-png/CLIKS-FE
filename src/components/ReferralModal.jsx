@@ -6,6 +6,7 @@ import {
     Bell, TrendingUp, UserCheck, LogIn, Clock,
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../context';
 import { referralService } from '../services/referralService';
 import '../App.css';
 
@@ -119,6 +120,7 @@ const TrackingView = ({ stats, history, historyLoading }) => (
 
 /* ─── Main Component ─────────────────────────────────────────── */
 const ReferralModal = ({ isOpen, onClose }) => {
+    const { user } = useAuth();
     const [copied, setCopied] = useState(false);
     const [shareError, setShareError] = useState('');
     const [activeTab, setActiveTab] = useState('refer');
@@ -336,6 +338,12 @@ const ReferralModal = ({ isOpen, onClose }) => {
                                     Introduce associates to CLIKS. For every active initialization, collect{' '}
                                     <span style={{ color: '#FCD34D', fontWeight: '800' }}>500 Points</span> instantly!
                                 </p>
+                                
+                                {/* Points Available Chip (Wallet wording removed) */}
+                                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/20 text-white text-xs font-semibold backdrop-blur-xs mb-6" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.2)', padding: '0.4rem 0.85rem', borderRadius: '99px', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.2)', fontSize: '0.78rem', fontWeight: '800', color: '#FFFFFF' }}>
+                                    <span>🎁</span>
+                                    <span>{user?.referral_points ?? stats?.pointsEarned ?? 2200} Points Available</span>
+                                </div>
                             </div>
                         </div>
 
