@@ -62,6 +62,16 @@ const Landing = () => {
         };
     }, []);
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref') || urlParams.get('referral');
+        if (refCode && refCode.trim()) {
+            const clean = refCode.trim().toUpperCase();
+            localStorage.setItem('cliks_referral_code', clean);
+            sessionStorage.setItem('cliks_pending_ref', clean);
+        }
+    }, []);
+
     if (loading) {
         return (
             <div style={{
@@ -76,16 +86,6 @@ const Landing = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const refCode = urlParams.get('ref') || urlParams.get('referral');
-        if (refCode && refCode.trim()) {
-            const clean = refCode.trim().toUpperCase();
-            localStorage.setItem('cliks_referral_code', clean);
-            sessionStorage.setItem('cliks_pending_ref', clean);
-        }
-    }, []);
 
     const handleLogin = (e) => {
         if (e) e.preventDefault();
