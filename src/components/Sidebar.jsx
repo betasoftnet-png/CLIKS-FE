@@ -62,6 +62,7 @@ import {
     X
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context';
 import '../App.css';
 import logoPng from '../assets/cliks.png'; // Final branding
 
@@ -120,7 +121,7 @@ const CrownIcon = () => {
 };
 
 const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
-
+    const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 

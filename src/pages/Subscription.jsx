@@ -17,8 +17,10 @@ import { apiClient } from '../api/client';
 import '../App.css';
 import { customConfirm } from '../utils/customConfirm';
 import { formatCurrency } from '../lib/formatCurrency';
+import { useAuth } from '../context';
 
 const Subscription = () => {
+    const { user } = useAuth();
     const currency = { code: 'INR' };
     const [activeCategory, setActiveCategory] = useState('ca');
     const [betaSubCategory, setBetaSubCategory] = useState('investor'); 
