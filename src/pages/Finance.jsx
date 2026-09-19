@@ -428,15 +428,21 @@ const BusinessPayments = () => {
                     <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0 }}>
                         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
-        { key: 'receipt_id', label: 'Receipt ID', placeholder: 'e.g. RCP-001' },
-        { key: 'date', label: 'Date', placeholder: 'e.g. 2026-05' },
-        { key: 'customer_name', label: 'Customer', placeholder: 'Name' },
-        { key: 'invoice_linked', label: 'Invoice Linked', placeholder: 'INV-' },
-        { key: 'total', label: 'Total Original', placeholder: 'e.g. 5000' },
-        { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000' },
-        { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI' },
-        { key: 'status', label: 'Reconciliation', placeholder: 'Status' }
-    ]} onFilterChange={setColFilters} />
+                                { key: 'customer_name', label: 'CUSTOMER NAME', placeholder: 'Name' },
+                                { key: 'invoice_id', label: 'INVOICE LINKED ID', placeholder: 'ID' },
+                                { key: 'pending_amount', label: 'OVERDUE BALANCE', placeholder: 'Balance' },
+                                { key: 'due_date', label: 'DUE DATE', placeholder: 'Date' },
+                                { key: 'overdue_days', label: 'OVERDUE PERIOD', placeholder: 'Days' },
+                                { key: 'reminder_sent', label: 'REMINDER STATUS', placeholder: 'Status' },
+                                { 
+                                    key: 'actions', 
+                                    label: 'ACTIONS', 
+                                    placeholder: '', 
+                                    noFilter: true,
+                                    className: 'min-w-[170px] text-right',
+                                    style: { minWidth: '170px', textAlign: 'right' }
+                                }
+                            ]} onFilterChange={setColFilters} />
                         <tbody>
                             {overdues.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((ov) => (
                                 <tr key={ov.invoice_id} style={{ borderBottom: '1px solid #F8FAFC' }}>
@@ -448,12 +454,46 @@ const BusinessPayments = () => {
                                         <span style={{ padding: '0.25rem 0.5rem', borderRadius: '6px', background: '#FEF2F2', color: '#EF4444', fontWeight: '800', fontSize: '0.75rem' }}>{ov.overdue_days} Days Overdue</span>
                                     </td>
                                     <td style={{ padding: '1rem', color: '#64748B', fontWeight: '700' }}>{ov.reminder_sent}</td>
-                                    <td style={{ padding: '1rem', textAlign: 'right' }}>
+                                    <td className="whitespace-nowrap text-right" style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap', minWidth: '170px' }}>
                                         <button 
+                                            type="button"
                                             onClick={() => sendWhatsAppReminder(ov.customer_name)}
-                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 1rem', borderRadius: '10px', background: '#10B981', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer' }}
+                                            title="Automated WhatsApp & SMS Reminders - Coming Soon"
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 border border-gray-200 transition-all hover:bg-gray-200 whitespace-nowrap"
+                                            style={{ 
+                                                display: 'inline-flex', 
+                                                alignItems: 'center', 
+                                                gap: '0.375rem', 
+                                                padding: '0.35rem 0.75rem', 
+                                                borderRadius: '9999px', 
+                                                background: '#F1F5F9', 
+                                                color: '#64748B', 
+                                                border: '1px solid #E2E8F0', 
+                                                fontWeight: '600', 
+                                                fontSize: '0.75rem', 
+                                                cursor: 'pointer',
+                                                whiteSpace: 'nowrap',
+                                                flexShrink: 0
+                                            }}
                                         >
-                                            <MessageSquare size={14} /> Send Reminder
+                                            <Send size={12} className="text-gray-400 flex-shrink-0" style={{ color: '#94A3B8', flexShrink: 0 }} />
+                                            <span style={{ whiteSpace: 'nowrap' }}>Send Reminder</span>
+                                            <span 
+                                                className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-200 text-gray-600 uppercase tracking-wider whitespace-nowrap"
+                                                style={{ 
+                                                    fontSize: '0.62rem', 
+                                                    background: '#E2E8F0', 
+                                                    padding: '1px 5px', 
+                                                    borderRadius: '4px', 
+                                                    color: '#475569',
+                                                    fontWeight: '750',
+                                                    textTransform: 'uppercase',
+                                                    letterSpacing: '0.04em',
+                                                    whiteSpace: 'nowrap'
+                                                }}
+                                            >
+                                                Soon
+                                            </span>
                                         </button>
                                     </td>
                                 </tr>
