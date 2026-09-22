@@ -2008,6 +2008,7 @@ const SplitExpense = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        </div>
                                                     );
                                                 })}
                                             </div>
