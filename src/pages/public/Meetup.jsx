@@ -73,7 +73,8 @@ const CATEGORY_THEMES = {
 
 const Meetup = () => {
     const queryClient = useQueryClient();
-    const [filter, setFilter] = useState(SHOW_DEAL_MARKETPLACE ? 'Active Deals' : 'All Events');
+    const [filter, setFilter] = useState(SHOW_DEAL_MARKETPLACE ? 'Active Deals Marketplace' : 'All Events');
+    const [sectorFilter, setSectorFilter] = useState('All Sectors');
     const [searchTerm, setSearchTerm] = useState('');
     
     // Modals & Navigation
@@ -237,7 +238,7 @@ const Meetup = () => {
         const evtDate = new Date(event.date);
 
         if (SHOW_DEAL_MARKETPLACE) {
-            if (filter === 'My Studio') {
+            if (filter === 'My Studio (Founder View)') {
                 if (event.user_id !== currentUser.id && event.has_joined !== 1) return false;
             }
         } else {
@@ -374,15 +375,15 @@ const Meetup = () => {
                         </div>
                     )}
 
-                    {/* Header Presentation Board (Solid Chocolate Brown Rebranded) */}
+                    {/* Hero Banner — Deep Navy Blue */}
                     <div style={{
-                        background: '#3A231C',
+                        background: '#172554',
                         borderRadius: '16px',
                         padding: '1.5rem 2rem',
                         color: 'white',
                         position: 'relative',
                         overflow: 'visible',
-                        boxShadow: '0 8px 24px rgba(58, 35, 28, 0.15)',
+                        boxShadow: '0 8px 24px rgba(23, 37, 84, 0.18)',
                         marginBottom: '1.25rem'
                     }}>
                         <div style={{ position: 'absolute', top: '-40%', right: '-10%', width: '300px', height: '300px', borderRadius: '50%', background: 'rgba(255, 255, 255, 0.02)', filter: 'blur(70px)', pointerEvents: 'none' }} />
@@ -402,17 +403,17 @@ const Meetup = () => {
                                         display: 'inline-flex',
                                         alignItems: 'center',
                                         gap: '0.4rem',
-                                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                                        color: '#E0E7FF'
+                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                        color: 'white'
                                     }}>
-                                        <TrendingUp size={12} /> VENTURE CONNECT
+                                        📈 CAPITAL MATRIX &amp; VENTURE CONNECT
                                     </span>
                                 </div>
                                 <h1 style={{ fontSize: '1.8rem', fontWeight: '950', letterSpacing: '-0.02em', lineHeight: 1.2, margin: 0 }}>
-                                    BETA Club Deal Marketplace
+                                    SME Deal Marketplace
                                 </h1>
-                                <p style={{ margin: '0.4rem 0 0.8rem 0', fontSize: '0.85rem', color: '#D7CCC8', fontWeight: '600', maxWidth: '550px', lineHeight: 1.4 }}>
-                                    Connect directly with verified founders, review pitches, and contact owners instantly.
+                                <p style={{ margin: '0.4rem 0 0.8rem 0', fontSize: '0.85rem', color: '#BFDBFE', fontWeight: '600', maxWidth: '550px', lineHeight: 1.4 }}>
+                                    Connect directly with verified founders, review pitch decks, and unlock investment deals.
                                 </p>
                                 <div style={{ position: 'relative', display: 'inline-block' }}>
                                     <button 
@@ -439,7 +440,7 @@ const Meetup = () => {
                                             {gpsState ? (
                                                 `${cityName ? `${cityName}, ` : ''}${gpsState}`
                                             ) : (
-                                                'Tiruvallur, Tamil Nadu'
+                                                '📍 Select Region / Lock GPS'
                                             )}
                                         </span>
                                         <span style={{ fontSize: '0.55rem', opacity: 0.8, marginLeft: '2px' }}>▼</span>
@@ -518,46 +519,47 @@ const Meetup = () => {
                             <button 
                                 onClick={() => setIsCreateModalOpen(true)}
                                 style={{
-                                    background: '#DDB892',
-                                    color: '#3A231C',
+                                    background: '#059669',
+                                    color: 'white',
                                     border: 'none',
-                                    padding: '0.75rem 1.5rem',
-                                    borderRadius: '10px',
+                                    padding: '0.625rem 1.25rem',
+                                    borderRadius: '16px',
                                     fontWeight: '900',
-                                    fontSize: '0.88rem',
+                                    fontSize: '0.75rem',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.5rem',
-                                    boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-                                    transition: 'transform 0.2s ease'
+                                    boxShadow: '0 4px 15px rgba(5, 150, 105, 0.3)',
+                                    transition: 'all 0.2s ease'
                                 }}
-                                onMouseOver={e => e.currentTarget.style.transform = 'scale(1.02)'}
-                                onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                onMouseOver={e => { e.currentTarget.style.background = '#047857'; e.currentTarget.style.transform = 'scale(1.02)'; }}
+                                onMouseOut={e => { e.currentTarget.style.background = '#059669'; e.currentTarget.style.transform = 'scale(1)'; }}
                             >
-                                <Plus size={16} strokeWidth={3} /> List Your Venture
+                                🚀 List Your Venture
                             </button>
                         </div>
                     </div>
 
-                    {/* Search and Navigation Panel */}
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1.25rem' }}>
-                        <div style={{ display: 'flex', gap: '0.35rem', background: '#E2E8F0', padding: '0.3rem', borderRadius: '12px', border: '1px solid #CBD5E1', boxShadow: '0 2px 6px rgba(0,0,0,0.01)' }}>
-                            {['Active Deals', 'My Studio'].map((tab) => (
+                    {/* Search, Tabs and Filter Panel */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem', background: '#e2e8f0', padding: '0.25rem', borderRadius: '12px', border: '1px solid #CBD5E1' }}>
+                            {['Active Deals Marketplace', 'My Studio (Founder View)'].map((tab) => (
                                 <button
                                     key={tab}
                                     onClick={() => setFilter(tab)}
                                     style={{
-                                        padding: '0.45rem 1.25rem',
-                                        borderRadius: '8px',
-                                        fontSize: '0.78rem',
+                                        padding: '0.5rem 1.25rem',
+                                        borderRadius: '9999px',
+                                        fontSize: '0.75rem',
                                         fontWeight: '800',
                                         cursor: 'pointer',
-                                        border: 'none',
-                                        background: filter === tab ? 'white' : 'transparent',
-                                        color: '#1E293B',
-                                        boxShadow: filter === tab ? '0 2px 6px rgba(0,0,0,0.08)' : 'none',
-                                        transition: 'all 0.2s ease'
+                                        border: filter === tab ? '1px solid #E5E7EB' : 'none',
+                                        background: filter === tab ? '#F9FAFB' : 'transparent',
+                                        color: filter === tab ? '#111827' : '#6B7280',
+                                        boxShadow: filter === tab ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                                        transition: 'all 0.2s ease',
+                                        whiteSpace: 'nowrap'
                                     }}
                                 >
                                     {tab}
@@ -565,25 +567,49 @@ const Meetup = () => {
                             ))}
                         </div>
 
-                        <div style={{ position: 'relative', flex: 1, maxWidth: '300px' }}>
-                            <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
-                            <input 
-                                type="text"
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                                placeholder="Search deals..."
+                        <div style={{ display: 'flex', gap: '0.5rem', flex: 1, minWidth: '260px', maxWidth: '520px' }}>
+                            <div style={{ position: 'relative', flex: 1 }}>
+                                <Search size={15} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                                <input 
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={e => setSearchTerm(e.target.value)}
+                                    placeholder="Search deals by title, sector, problem, or keywords..."
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.5rem 1rem 0.5rem 2.2rem',
+                                        borderRadius: '12px',
+                                        border: '1px solid #E2E8F0',
+                                        outline: 'none',
+                                        fontSize: '0.78rem',
+                                        fontWeight: '600',
+                                        color: '#1E293B',
+                                        background: 'white',
+                                        boxSizing: 'border-box'
+                                    }}
+                                />
+                            </div>
+                            <select
+                                value={sectorFilter}
+                                onChange={e => setSectorFilter(e.target.value)}
                                 style={{
-                                    width: '100%',
-                                    padding: '0.55rem 1rem 0.55rem 2.3rem',
-                                    borderRadius: '10px',
+                                    width: '176px',
+                                    background: 'white',
                                     border: '1px solid #E2E8F0',
+                                    borderRadius: '12px',
+                                    padding: '0.5rem 0.75rem',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '700',
+                                    color: '#374151',
                                     outline: 'none',
-                                    fontSize: '0.82rem',
-                                    fontWeight: '600',
-                                    color: '#1E293B',
-                                    boxShadow: '0 4px 15px rgba(0,0,0,0.02)'
+                                    cursor: 'pointer',
+                                    flexShrink: 0
                                 }}
-                            />
+                            >
+                                {['All Sectors', 'Technology', 'Retail & Commerce', 'Finance'].map(opt => (
+                                    <option key={opt} value={opt}>{opt}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
 
@@ -604,97 +630,73 @@ const Meetup = () => {
                             </p>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
                             {sortedEvents.map((event) => {
                                 const isHost = event.user_id === currentUser.id;
                                 const hasJoined = event.has_joined === 1;
                                 const category = event.category || 'Technology';
-                                
+                                const displayCategory = category.toUpperCase() === 'NETWORKING' ? 'Retail & Commerce' : category;
+
                                 return (
                                     <div key={event.id} style={{
                                         background: 'white',
                                         borderRadius: '16px',
                                         overflow: 'hidden',
                                         border: '1px solid #E2E8F0',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.02)',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                                        padding: '1.5rem',
+                                        padding: '1.25rem',
                                         cursor: 'default'
                                     }}
                                     onMouseOver={e => {
-                                        e.currentTarget.style.transform = 'translateY(-4px)';
-                                        e.currentTarget.style.boxShadow = '0 12px 24px rgba(0,0,0,0.05)';
+                                        e.currentTarget.style.transform = 'translateY(-3px)';
+                                        e.currentTarget.style.boxShadow = '0 10px 22px rgba(0,0,0,0.06)';
                                     }}
                                     onMouseOut={e => {
                                         e.currentTarget.style.transform = 'translateY(0)';
-                                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.02)';
+                                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.03)';
                                     }}>
-                                        {/* Card Cover Header (Category and Verified badge) */}
+                                        {/* Card Header Row: Category badge + Location pill */}
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                                             <span style={{
-                                                fontSize: '0.68rem',
-                                                fontWeight: '850',
-                                                color: '#A13F3F',
-                                                background: '#FFF0F0',
-                                                padding: '0.3rem 0.6rem',
-                                                borderRadius: '6px',
-                                                letterSpacing: '0.03em',
-                                                textTransform: 'uppercase'
+                                                fontSize: '0.625rem',
+                                                fontWeight: '800',
+                                                color: '#2563EB',
+                                                background: '#EFF6FF',
+                                                padding: '0.25rem 0.625rem',
+                                                borderRadius: '9999px',
+                                                border: '1px solid #DBEAFE',
+                                                textTransform: 'capitalize'
                                             }}>
-                                                {category.toUpperCase() === 'NETWORKING' ? 'RETAIL & COMMERCE' : category.toUpperCase()}
+                                                {displayCategory}
                                             </span>
-                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', color: '#10B981', fontSize: '0.72rem', fontWeight: '850' }}>
-                                                <BadgeCheck size={14} color="#10B981" /> VERIFIED
+                                            <span style={{ fontSize: '0.6875rem', color: '#9CA3AF', fontWeight: '500' }}>
+                                                📍 {event.location ? event.location.split(',').pop()?.trim() || 'India' : 'India'}
                                             </span>
                                         </div>
 
-                                        <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#0F172A', marginBottom: '0.4rem', letterSpacing: '-0.02em', lineHeight: 1.3 }}>
+                                        {/* Venture / Founder Name */}
+                                        <h3 style={{ fontSize: '1.1rem', fontWeight: '900', color: '#0F172A', marginBottom: '0.25rem', letterSpacing: '-0.01em', lineHeight: 1.3 }}>
                                             {event.title}
                                         </h3>
+                                        {event.location && (
+                                            <p style={{ fontSize: '0.8rem', color: '#64748B', margin: '0 0 1rem 0', fontWeight: '500' }}>
+                                                {event.location}
+                                            </p>
+                                        )}
 
-                                        <p style={{ fontSize: '0.85rem', color: '#64748B', marginBottom: '1rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', fontWeight: '500', lineHeight: 1.45, minHeight: '40px' }}>
-                                            {event.description}
-                                        </p>
-
-                                        {/* Location */}
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748B', fontWeight: '650', fontSize: '0.82rem', marginBottom: '1.25rem' }}>
-                                            <MapPin size={13} style={{ color: '#94A3B8', flexShrink: 0 }} />
-                                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{event.location || 'Chennai, Tamil Nadu'}</span>
-                                        </div>
-
-                                        {/* Goal & Equity details */}
-                                        <div style={{ 
-                                            background: '#F8FAFC', 
-                                            padding: '0.75rem 1rem', 
-                                            borderRadius: '12px', 
-                                            border: '1px solid #F1F5F9', 
-                                            display: 'grid', 
-                                            gridTemplateColumns: '1fr 1fr', 
-                                            gap: '0.5rem', 
-                                            marginBottom: '1.25rem' 
-                                        }}>
-                                            <div>
-                                                <span style={{ display: 'block', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>GOAL</span>
-                                                <span style={{ fontSize: '0.95rem', fontWeight: '850', color: '#1E293B' }}>{(!event.price || event.price === 'Free') ? '₹5,00,000' : event.price}</span>
-                                            </div>
-                                            <div style={{ textAlign: 'right' }}>
-                                                <span style={{ display: 'block', fontSize: '0.65rem', color: '#94A3B8', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>EQUITY</span>
-                                                <span style={{ fontSize: '0.95rem', fontWeight: '850', color: '#10B981' }}>{(event.time && event.time.includes('%')) ? event.time : '5%'}</span>
-                                            </div>
-                                        </div>
-
-                                        {/* Connect action */}
+                                        {/* CTA Button */}
                                         <div style={{ marginTop: 'auto' }}>
                                             {isHost ? (
                                                 <div style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
-                                                    <div style={{ flex: 1, padding: '0.65rem', borderRadius: '10px', background: '#FEF3C7', color: '#D97706', fontWeight: '850', fontSize: '0.78rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                                                    <div style={{ flex: 1, padding: '0.65rem', borderRadius: '12px', background: '#FEF3C7', color: '#D97706', fontWeight: '850', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
                                                         <Crown size={14} /> My Venture
                                                     </div>
                                                     <button 
                                                         onClick={() => { setRosterMeetupId(event.id); setIsRosterModalOpen(true); }}
-                                                        style={{ border: '1px solid #E2E8F0', padding: '0.65rem', borderRadius: '10px', background: 'white', color: '#1F2937', fontSize: '0.78rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
+                                                        style={{ border: '1px solid #E2E8F0', padding: '0.65rem', borderRadius: '12px', background: 'white', color: '#1F2937', fontSize: '0.75rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer' }}
                                                     >
                                                         <Eye size={13} /> Connections
                                                     </button>
@@ -704,20 +706,20 @@ const Meetup = () => {
                                                     disabled
                                                     style={{
                                                         width: '100%',
-                                                        padding: '0.75rem',
-                                                        borderRadius: '10px',
+                                                        padding: '0.625rem',
+                                                        borderRadius: '12px',
                                                         border: 'none',
                                                         background: '#E2E8F0',
                                                         color: '#64748B',
-                                                        fontWeight: '850',
-                                                        fontSize: '0.82rem',
+                                                        fontWeight: '800',
+                                                        fontSize: '0.75rem',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
                                                         gap: '4px'
                                                     }}
                                                 >
-                                                    <BadgeCheck size={14} color="#10B981" /> Connected
+                                                    🔒 Connected
                                                 </button>
                                             ) : (
                                                 <button 
@@ -725,23 +727,25 @@ const Meetup = () => {
                                                     disabled={joinMutation.isPending}
                                                     style={{
                                                         width: '100%',
-                                                        padding: '0.75rem',
-                                                        borderRadius: '10px',
+                                                        padding: '0.625rem',
+                                                        borderRadius: '12px',
                                                         border: 'none',
-                                                        background: '#0F172A',
+                                                        background: '#172554',
                                                         color: 'white',
-                                                        fontWeight: '850',
+                                                        fontWeight: '800',
                                                         cursor: 'pointer',
-                                                        fontSize: '0.82rem',
+                                                        fontSize: '0.75rem',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
                                                         gap: '6px',
-                                                        boxShadow: '0 4px 12px rgba(15, 23, 42, 0.15)'
+                                                        boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                                                        transition: 'background 0.2s ease'
                                                     }}
+                                                    onMouseOver={e => e.currentTarget.style.background = '#1e3a8a'}
+                                                    onMouseOut={e => e.currentTarget.style.background = '#172554'}
                                                 >
-                                                    <span>Connect</span>
-                                                    <ArrowRight size={14} />
+                                                    🔒 Connect / View Pitch (1 Quota)
                                                 </button>
                                             )}
                                         </div>

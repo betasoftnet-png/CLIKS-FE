@@ -673,12 +673,12 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
                     {/* Badge 1: BOOK ELITE */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, flex: 1 }}>
                         <div style={{
-                            width: '38px',
-                            height: '38px',
+                            width: '36px',
+                            height: '36px',
                             borderRadius: '50%',
-                            background: 'transparent',
+                            background: 'rgba(0,0,0,0.4)',
                             border: '2px solid #F59E0B',
                             display: 'flex',
                             flexDirection: 'column',
@@ -686,26 +686,29 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
-                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
-                            <span style={{ fontSize: '0.42rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
+                            <span style={{ fontSize: '0.6rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.38rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
                         </div>
-                        <div style={{ textAlign: 'left' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em' }}>
-                                BOOK ELITE
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                BOOK
                             </span>
-                            <span style={{ fontSize: '0.62rem', fontWeight: '700', color: '#10B981' }}>
-                                Active Plan
+                            <span style={{ fontSize: '0.6rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
+                                ELITE
                             </span>
                         </div>
                     </div>
 
+                    {/* Center Divider */}
+                    <div style={{ width: '1px', height: '24px', background: '#334155', flexShrink: 0, margin: '0 2px' }} />
+
                     {/* Badge 2: FIN-PRO SOLO */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, flex: 1, justifyContent: 'flex-end' }}>
                         <div style={{
-                            width: '38px',
-                            height: '38px',
+                            width: '36px',
+                            height: '36px',
                             borderRadius: '50%',
-                            background: 'transparent',
+                            background: 'rgba(0,0,0,0.4)',
                             border: '2px solid #F59E0B',
                             display: 'flex',
                             flexDirection: 'column',
@@ -713,15 +716,15 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
-                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
-                            <span style={{ fontSize: '0.42rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
+                            <span style={{ fontSize: '0.6rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.38rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
                         </div>
-                        <div style={{ textAlign: 'left' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em' }}>
-                                FIN-PRO SOLO
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                FIN-PRO
                             </span>
-                            <span style={{ fontSize: '0.62rem', fontWeight: '700', color: '#10B981' }}>
-                                Active Plan
+                            <span style={{ fontSize: '0.6rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
+                                SOLO
                             </span>
                         </div>
                     </div>
