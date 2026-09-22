@@ -153,12 +153,12 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             const params = new URLSearchParams(search);
             const qpage = params.get('page');
             // Support /social/:page path-based routing
-            if (path === '/social/beta-club') return 'Beta Club';
-            if (path === '/social/meetup') return SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup';
+            if (path === '/social/beta-club') return 'PARTNER LAUNCH DESK';
+            if (path === '/social/meetup') return 'PARTNER LAUNCH DESK';
             if (path === '/social/trading') return 'Trading docs';
             // Legacy ?page= query param support
-            if (qpage === 'investors') return 'Beta Club';
-            if (qpage === 'meetup') return SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup';
+            if (qpage === 'investors') return 'PARTNER LAUNCH DESK';
+            if (qpage === 'meetup') return 'PARTNER LAUNCH DESK';
             if (qpage === 'trading') return 'Trading docs';
         }
 
@@ -568,18 +568,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showPublicSidebar && (
                     <>
-                        {/* Meetup */}
+                        {/* PARTNER LAUNCH DESK */}
                         <button
-                            className={`sidebar-item ${(activeItem === (SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup')) ? 'active' : ''}`}
-                            onClick={() => handleItemClick(SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup', '/social/meetup')}
+                            className={`sidebar-item ${(activeItem === 'PARTNER LAUNCH DESK') ? 'active' : ''}`}
+                            onClick={() => handleItemClick('PARTNER LAUNCH DESK', '/social/meetup')}
                         >
                             <div className="flex items-center gap-3">
-                                {SHOW_BETA_CLUB_UI ? (
-                                    <CrownIcon />
-                                ) : (
-                                    <Handshake size={20} style={{ color: activeItem === 'Meetup' ? '#ffffff' : '#1B6B3A' }} />
-                                )}
-                                <span className="sidebar-label sidebar-item-beta-club-text">{SHOW_BETA_CLUB_UI ? 'Beta Club' : 'Meetup'}</span>
+                                <CrownIcon />
+                                <span className="sidebar-label sidebar-item-beta-club-text">PARTNER LAUNCH DESK</span>
                             </div>
                         </button>
 
@@ -653,207 +649,84 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 flexShrink: 0,
                 background: '#FFFFFF'
             }}>
-                {/* Storage Card - Relocated with exact matching design and modal popup */}
-                <div 
-                    onClick={() => setIsStorageModalOpen(true)}
-                    title="Click to view Storage Allocation & Breakdown"
+                {/* Subscription Badge: Dark rounded card holding two gold circular badges */}
+                <button
+                    type="button"
+                    onClick={() => handleItemClick('Subscription', '/subscription')}
                     style={{
                         width: '100%',
-                        backgroundColor: '#EFF6FF',
-                        borderRadius: '12px',
                         padding: '0.75rem 0.85rem',
+                        background: '#0f172a',
+                        color: '#FFFFFF',
+                        border: '1px solid #1e293b',
+                        cursor: 'pointer',
+                        borderRadius: '16px',
+                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                        transition: 'all 0.2s ease',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        border: '1px solid #DBEAFE',
-                        boxSizing: 'border-box',
-                        flexShrink: 0,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
+                        gap: '0.5rem',
+                        boxSizing: 'border-box'
                     }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#E0F2FE';
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#EFF6FF';
-                        e.currentTarget.style.transform = 'translateY(0)';
-                    }}
+                    onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                    onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
-                    {/* Left Info Column */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-                            <Cloud size={18} color="#2563EB" strokeWidth={2.2} />
-                            <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#1E293B' }}>
-                                Storage
-                            </span>
-                        </div>
-                        <div style={{ fontSize: '0.75rem', fontWeight: '500', color: '#475569' }}>
-                            {`${storageData.usedFormatted} of ${storageData.totalCapacityFormatted} used`}
-                        </div>
-                    </div>
-
-                    {/* Right Neat Circular Progress Ring with % Inside */}
-                    {(() => {
-                        const storagePercent = storageData.usedPercent || 0;
-                        const radius = 15;
-                        const circ = 2 * Math.PI * radius;
-                        const strokeDashoffset = circ * (1 - storagePercent / 100);
-
-                        return (
-                            <div style={{
-                                position: 'relative',
-                                width: '38px',
-                                height: '38px',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }}>
-                                <svg width="38" height="38" viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)' }}>
-                                    <circle
-                                        cx="18"
-                                        cy="18"
-                                        r={radius}
-                                        fill="none"
-                                        stroke="#DBEAFE"
-                                        strokeWidth="3"
-                                    />
-                                    <circle
-                                        cx="18"
-                                        cy="18"
-                                        r={radius}
-                                        fill="none"
-                                        stroke="#2563EB"
-                                        strokeWidth="3"
-                                        strokeDasharray={circ}
-                                        strokeDashoffset={strokeDashoffset}
-                                        strokeLinecap="round"
-                                        style={{ transition: 'stroke-dashoffset 0.3s ease' }}
-                                    />
-                                </svg>
-                                <span style={{
-                                    position: 'absolute',
-                                    fontSize: '0.72rem',
-                                    fontWeight: '800',
-                                    color: '#2563EB'
-                                }}>
-                                    {Math.round(storagePercent)}%
-                                </span>
-                            </div>
-                        );
-                    })()}
-                </div>
-                {/* Unified Subscription Conversion Card rendered for all 3 modes */}
-                {(showBooksSidebar || showFinanceSidebar || showPublicSidebar) && (
-                    <button
-                        onClick={() => handleItemClick('Subscription', '/subscription')}
-                        style={{
-                            width: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '0.5rem 0.6rem 0.5rem 0.85rem',
-                            background: 'linear-gradient(135deg, #1E3A8A 0%, #172554 100%)',
-                            color: '#FFFFFF',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontWeight: '750',
-                            fontSize: '0.85rem',
-                            borderRadius: '12px',
-                            boxShadow: '0 4px 12px rgba(30, 58, 138, 0.25)',
-                            transition: 'all 0.2s ease',
-                            minHeight: '52px'
-                        }}
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                    >
-                        {(() => {
-                            const subs = user?.active_subscriptions || {};
-                            const activeBoxes = [];
-                            // [1] Business Plan (Starter Plan)
-                            const isBusinessActive = Boolean(
-                                subs.business?.active ||
-                                user?.tier ||
-                                user?.business_plan ||
-                                user?.active_plans?.business
-                            );
-                            if (isBusinessActive || activeBoxes.length === 0) {
-                                activeBoxes.push({ type: 'business', label: `Business: ${subs.business?.plan || user?.tier || 'Starter Plan'}` });
-                            }
-
-                            // [2] FIN-PRO Plan
-                            const isFinProActive = Boolean(
-                                subs.fin_pro?.active ||
-                                user?.finpro_plan || 
-                                user?.ca_plan || 
-                                user?.active_plans?.finpro || 
-                                localStorage.getItem('cliks_finpro_active') === 'true'
-                            );
-                            if (isFinProActive) activeBoxes.push({ type: 'finpro', label: `FIN-PRO: ${subs.fin_pro?.plan || 'Active'}` });
-
-                            // PLD plans (Investor Club / Products & Ideas) are deactivated from active subscriptions
-
-
-                            const displayCardTitle = activeBoxes.length > 1 ? 'Multi-Suite Active' : (user?.tier || 'Get Subscription');
-
-                            return (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <div style={{ background: 'rgba(251, 191, 36, 0.15)', color: '#FBBF24', padding: '6px', borderRadius: '8px', display: 'flex' }}>
-                                        <Crown size={18} strokeWidth={2.5} />
-                                    </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', marginBottom: '2px' }}>
-                                            {activeBoxes.map((box, idx) => {
-                                                const isRedBox = idx === 3 || box.type === 'poster';
-                                                return (
-                                                    <div 
-                                                        key={idx}
-                                                        title={box.label}
-                                                        style={{
-                                                            width: '11px',
-                                                            height: '11px',
-                                                            borderRadius: '2px',
-                                                            border: isRedBox ? '1.5px solid #EF4444' : '1.5px solid #FFFFFF',
-                                                            backgroundColor: isRedBox ? '#EF4444' : 'transparent',
-                                                            boxSizing: 'border-box',
-                                                            transition: 'all 0.2s ease'
-                                                        }}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                        <span 
-                                            title={activeBoxes.map(b => b.label).join(' | ')}
-                                            style={{ textShadow: '0 1px 2px rgba(0,0,0,0.1)', color: '#FBBF24', fontSize: '0.82rem', fontWeight: '800', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}
-                                        >
-                                            {displayCardTitle}
-                                        </span>
-                                    </div>
-                                </div>
-                            );
-                        })()}
-
+                    {/* Badge 1: BOOK ELITE */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <div style={{
-                            position: 'relative',
-                            width: '40px',
-                            height: '40px',
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '50%',
+                            background: 'transparent',
+                            border: '2px solid #F59E0B',
                             display: 'flex',
+                            flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
-                            <svg width="40" height="40" viewBox="0 0 40 40" style={{ transform: 'rotate(-90deg)', position: 'absolute', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))' }}>
-                                <circle cx="20" cy="20" r="18" fill="#FFFFFF" stroke="rgba(255,255,255,0.25)" strokeWidth="3" />
-                                <circle cx="20" cy="20" r="18" fill="none" stroke="#FBBF24" strokeWidth="3" strokeDasharray="113" strokeDashoffset={113 * (1 - 20 / 30)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 0.5s ease-out' }} />
-                            </svg>
-                            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, marginTop: '1px' }}>
-                                <span style={{ color: '#1E3A8A', fontSize: '0.72rem', fontWeight: '900', lineHeight: 1 }}>20</span>
-                                <span style={{ color: '#1E3A8A', fontSize: '0.45rem', fontWeight: '800', textTransform: 'uppercase', opacity: 0.9 }}>Days</span>
-                            </div>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.42rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
                         </div>
-                    </button>
-                )}
+                        <div style={{ textAlign: 'left' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em' }}>
+                                BOOK ELITE
+                            </span>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '700', color: '#10B981' }}>
+                                Active Plan
+                            </span>
+                        </div>
+                    </div>
+
+                    {/* Badge 2: FIN-PRO SOLO */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '50%',
+                            background: 'transparent',
+                            border: '2px solid #F59E0B',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                        }}>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.42rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
+                        </div>
+                        <div style={{ textAlign: 'left' }}>
+                            <span style={{ fontSize: '0.75rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em' }}>
+                                FIN-PRO SOLO
+                            </span>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '700', color: '#10B981' }}>
+                                Active Plan
+                            </span>
+                        </div>
+                    </div>
+                </button>
+
                 {/* Bottom Settings Block */}
                 <button
                     onClick={() => handleItemClick('Settings', '/books/settings')}

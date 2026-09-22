@@ -340,17 +340,17 @@ export default function BetaClub({ openAuthModal = null }) {
             fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif'
         }}>
             
-            {/* Top Dark-Blue Banner */}
+            {/* Top Deep Navy Blue Banner */}
             <div style={{
                 flexShrink: 0,
-                background: '#1E3A8A',
+                background: '#172554',
                 borderRadius: '20px',
                 padding: '1.5rem 2rem',
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                boxShadow: '0 10px 25px -5px rgba(30, 58, 138, 0.15)',
+                boxShadow: '0 10px 25px -5px rgba(23, 37, 84, 0.2)',
                 marginBottom: '1.25rem',
                 position: 'relative'
             }}>
@@ -369,7 +369,29 @@ export default function BetaClub({ openAuthModal = null }) {
 
                 {/* Banner Right Buttons */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                    <button 
+                    <button
+                        type="button"
+                        onClick={() => alert('Region Locked: Global / India GPS Active')}
+                        style={{
+                            padding: '0.75rem 1.15rem',
+                            borderRadius: '12px',
+                            background: 'rgba(255, 255, 255, 0.12)',
+                            color: 'white',
+                            fontWeight: '700',
+                            fontSize: '0.875rem',
+                            border: '1px solid rgba(255, 255, 255, 0.25)',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            transition: 'all 0.2s'
+                        }}
+                    >
+                        <span>Select Region / Lock GPS</span>
+                        <span style={{ fontSize: '0.7rem' }}>▼</span>
+                    </button>
+
+                    <button
                         type="button"
                         onClick={() => setShowCreateModal(true)} 
                         style={{ 
@@ -493,13 +515,13 @@ export default function BetaClub({ openAuthModal = null }) {
                                     <button
                                         type="button"
                                         onClick={(e) => e.preventDefault()}
-                                        className="w-full mt-2 py-2.5 px-4 bg-[#1E3A8A] hover:bg-[#172554] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
-                                        style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem 1rem', background: '#1E3A8A', color: 'white', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', border: 'none', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}
+                                        className="w-full mt-2 py-2.5 px-4 bg-[#172554] hover:bg-[#0f172a] text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
+                                        style={{ width: '100%', marginTop: '0.5rem', padding: '0.75rem 1rem', background: '#172554', color: 'white', borderRadius: '12px', fontSize: '0.75rem', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', border: 'none', cursor: 'pointer', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}
                                     >
                                         <svg className="w-4 h-4" style={{ width: '16px', height: '16px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                         </svg>
-                                        Connect / View Pitch (1 Quota)
+                                        🔒 Connect / View Pitch (1 Quota)
                                     </button>
                                 </div>
                             ))}
