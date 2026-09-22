@@ -76,6 +76,7 @@ export default function BetaClub({ openAuthModal = null }) {
 
     // Location State
     const [isLocationMenuOpen, setIsLocationMenuOpen] = useState(false);
+    const [selectedRegion, setSelectedRegion] = useState('Select Region / Lock GPS');
     const [gpsState, setGpsState] = useState(null);
     const [cityName, setCityName] = useState(null);
     const [pincode, setPincode] = useState(null);
@@ -368,28 +369,118 @@ export default function BetaClub({ openAuthModal = null }) {
                 </div>
 
                 {/* Banner Right Buttons */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                    <button
-                        type="button"
-                        onClick={() => alert('Region Locked: Global / India GPS Active')}
-                        style={{
-                            padding: '0.75rem 1.15rem',
-                            borderRadius: '12px',
-                            background: 'rgba(255, 255, 255, 0.12)',
-                            color: 'white',
-                            fontWeight: '700',
-                            fontSize: '0.875rem',
-                            border: '1px solid rgba(255, 255, 255, 0.25)',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.4rem',
-                            transition: 'all 0.2s'
-                        }}
-                    >
-                        <span>Select Region / Lock GPS</span>
-                        <span style={{ fontSize: '0.7rem' }}>▼</span>
-                    </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap', position: 'relative' }}>
+                    <div style={{ position: 'relative' }}>
+                        <button
+                            type="button"
+                            onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
+                            style={{
+                                padding: '0.75rem 1.15rem',
+                                borderRadius: '12px',
+                                background: 'rgba(255, 255, 255, 0.12)',
+                                color: 'white',
+                                fontWeight: '700',
+                                fontSize: '0.875rem',
+                                border: '1px solid rgba(255, 255, 255, 0.25)',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.4rem',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            <span>{selectedRegion}</span>
+                            <span style={{ fontSize: '0.7rem' }}>▼</span>
+                        </button>
+
+                        {/* Floating Region / GPS Dropdown Menu */}
+                        {isLocationMenuOpen && (
+                            <div style={{
+                                position: 'absolute',
+                                right: 0,
+                                top: 'calc(100% + 8px)',
+                                background: '#FFFFFF',
+                                borderRadius: '16px',
+                                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                                border: '1px solid #E2E8F0',
+                                padding: '0.5rem',
+                                zIndex: 100,
+                                minWidth: '220px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '0.25rem'
+                            }}>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        if (navigator.geolocation) {
+                                            navigator.geolocation.getCurrentPosition(
+                                                () => {
+                                                    setSelectedRegion('📍 Auto-Detected (GPS)');
+                                                    setIsLocationMenuOpen(false);
+                                                },
+                                                () => {
+                                                    setSelectedRegion('📍 Chennai, Tamil Nadu');
+                                                    setIsLocationMenuOpen(false);
+                                                }
+                                            );
+                                        } else {
+                                            setSelectedRegion('📍 Chennai, Tamil Nadu');
+                                            setIsLocationMenuOpen(false);
+                                        }
+                                    }}
+                                    style={{
+                                        padding: '0.65rem 0.85rem',
+                                        borderRadius: '10px',
+                                        background: '#EFF6FF',
+                                        color: '#2563EB',
+                                        border: 'none',
+                                        fontWeight: '800',
+                                        fontSize: '0.8rem',
+                                        textAlign: 'left',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.4rem'
+                                    }}
+                                >
+                                    ⚡ Detect GPS Location
+                                </button>
+                                <div style={{ height: '1px', background: '#F1F5F9', margin: '2px 0' }} />
+                                {[
+                                    '📍 Chennai, Tamil Nadu',
+                                    '📍 Mumbai, Maharashtra',
+                                    '📍 Bengaluru, Karnataka',
+                                    '📍 Delhi NCR'
+                                ].map(loc => (
+                                    <button
+                                        key={loc}
+                                        type="button"
+                                        onClick={() => {
+                                            setSelectedRegion(loc);
+                                            setIsLocationMenuOpen(false);
+                                        }}
+                                        style={{
+                                            padding: '0.55rem 0.85rem',
+                                            borderRadius: '10px',
+                                            background: 'transparent',
+                                            color: '#334155',
+                                            border: 'none',
+                                            fontWeight: '700',
+                                            fontSize: '0.8rem',
+                                            textAlign: 'left',
+                                            cursor: 'pointer',
+                                            transition: 'background 0.15s'
+                                        }}
+                                        onMouseOver={(e) => e.currentTarget.style.background = '#F8FAFC'}
+                                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                                    >
+                                        {loc}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                     <button
                         type="button"
@@ -541,53 +632,55 @@ export default function BetaClub({ openAuthModal = null }) {
                             <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#334155' }}>No Pitches Submitted Yet</h3>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
-                            {studioPitches.map(pitch => (
-                                <div key={pitch.id} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.03)' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                                        {/* Dynamic Status Badge */}
-                                        {(() => {
-                                            const status = (pitch.review_status || pitch.status || '').toLowerCase();
-                                            const isAccepted = status === 'published' || status === 'accepted' || status === 'approved' || status === 'active';
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+                {studioPitches.map(pitch => {
+                    const status = (pitch.review_status || pitch.status || '').toLowerCase();
+                    const isAccepted = status === 'published' || status === 'accepted' || status === 'approved' || status === 'active';
+                    const isRevision = status === 'rejected' || status === 'needs revision' || status === 'revision';
 
-                                            if (isAccepted) {
-                                                return (
-                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ecfdf5', color: '#047857', border: '1px solid #a7f3d0', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>
-                                                        <svg className="w-3.5 h-3.5 text-emerald-600" style={{ width: '14px', height: '14px', color: '#059669' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        admin accepted your idea
-                                                    </span>
-                                                );
-                                            }
-
-                                            if (status === 'rejected' || status === 'needs revision') {
-                                                return (
-                                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fef2f2', color: '#b91c1c', border: '1px solid #fecaca', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>
-                                                        <AlertTriangle size={13} /> Needs Revision
-                                                    </span>
-                                                );
-                                            }
-
-                                            return (
-                                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fffbeb', color: '#b45309', border: '1px solid #fde68a', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.75rem', fontWeight: 600 }}>
-                                                    <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" style={{ width: '8px', height: '8px', borderRadius: '9999px', background: '#fbbf24', display: 'inline-block' }}></span>
-                                                    Pending for Admin Review
-                                                </span>
-                                            );
-                                        })()}
-                                    </div>
-                                    <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.35rem' }}>{pitch.title || pitch.company_name}</h3>
-                                    <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '0.75rem' }}>{pitch.description}</p>
-                                    {pitch.status === 'REJECTED' && (
-                                        <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', padding: '0.75rem', borderRadius: '10px', marginBottom: '1rem' }}>
-                                            <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#991b1b' }}>⚠️ Admin Audit Remarks:</div>
-                                            <p style={{ fontSize: '0.825rem', color: '#7f1d1d', margin: 0 }}>{pitch.admin_remarks || 'Please review guidelines.'}</p>
-                                        </div>
+                    return (
+                        <div key={pitch.id} style={{ background: 'white', borderRadius: '16px', padding: '1.25rem', border: '1px solid #e2e8f0', boxShadow: '0 2px 6px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                                    {/* Top Left Badge */}
+                                    {isAccepted ? (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#ECFDF5', color: '#047857', border: '1px solid #A7F3D0', padding: '0.2rem 0.6rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: '800' }}>
+                                            ✓ admin accepted your idea
+                                        </span>
+                                    ) : isRevision ? (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#FFF1F2', color: '#E11D48', border: '1px solid #FECDD3', padding: '0.2rem 0.6rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: '800' }}>
+                                            ⚠️ Needs Revision
+                                        </span>
+                                    ) : (
+                                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#FFFBEB', color: '#B45309', border: '1px solid #FDE68A', padding: '0.2rem 0.6rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: '800' }}>
+                                            ⏳ Under Admin Review
+                                        </span>
                                     )}
+
+                                    {/* Top Right Sector Tag */}
+                                    <span style={{ padding: '0.2rem 0.6rem', borderRadius: '9999px', background: '#EFF6FF', color: '#2563EB', fontSize: '0.72rem', fontWeight: '800', border: '1px solid #DBEAFE' }}>
+                                        {pitch.sector || pitch.industry || 'Technology'}
+                                    </span>
                                 </div>
-                            ))}
+
+                                <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: '#0f172a', marginBottom: '0.35rem' }}>
+                                    {pitch.venture_name || pitch.title || pitch.company_name}
+                                </h3>
+                                <p style={{ fontSize: '0.85rem', color: '#475569', marginBottom: '0.75rem', lineHeight: 1.5 }}>
+                                    {pitch.description || pitch.headline_pitch || 'Venture roadmap submitted for investor connect.'}
+                                </p>
+
+                                {isRevision && (pitch.admin_remarks || pitch.remarks) && (
+                                    <div style={{ background: '#FFF1F2', border: '1px solid #FECDD3', padding: '0.75rem', borderRadius: '12px', marginTop: '0.5rem' }}>
+                                        <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#9F1239' }}>⚠️ Admin Feedback Notes:</div>
+                                        <p style={{ fontSize: '0.825rem', color: '#881337', margin: 0, marginTop: '2px' }}>{pitch.admin_remarks || pitch.remarks}</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
+                    );
+                })}
+            </div>
                     )}
                 </div>
             )}
