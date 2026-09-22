@@ -8,6 +8,7 @@ import {
     Receipt,
     Calendar,
     ChevronRight,
+    ChevronDown,
     Trash2,
     X,
     ChevronLeft,
@@ -157,6 +158,13 @@ const SplitExpense = () => {
     });
 
     const [previewAttachment, setPreviewAttachment] = useState(null);
+    const [expandedExpenseIds, setExpandedExpenseIds] = useState([]);
+
+    const toggleExpenseExpand = (expenseId) => {
+        setExpandedExpenseIds(prev =>
+            prev.includes(expenseId) ? prev.filter(id => id !== expenseId) : [...prev, expenseId]
+        );
+    };
 
     // Custom Pay Modal State
     const [isCustomPayModalOpen, setIsCustomPayModalOpen] = useState(false);
@@ -1413,6 +1421,8 @@ const SplitExpense = () => {
                                                             ? { bg: '#EFF6FF', color: '#2563EB', border: '#BFDBFE' }
                                                             : { bg: '#F5F3FF', color: '#7C3AED', border: '#DDD6FE' });
 
+                                                    const isExpanded = expandedExpenseIds.includes(e.id);
+
                                                     return (
                                                         <div 
                                                             key={e.id} 
@@ -1422,36 +1432,79 @@ const SplitExpense = () => {
                                                                 borderRadius: '16px', 
                                                                 border: '1px solid #F1F5F9', 
                                                                 padding: '1rem 1.25rem', 
-                                                                display: 'flex', 
-                                                                alignItems: 'center', 
-                                                                justifyContent: 'space-between',
-                                                                gap: '1rem',
                                                                 boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
                                                                 position: 'relative'
                                                             }}
                                                         >
-                                                            {/* Left info: Icon & Content */}
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flex: 1, minWidth: 0 }}>
-                                                                {/* Icon indicator */}
-                                                                <div 
-                                                                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                                                                        isSettlement ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-gray-50 text-slate-600 border border-gray-100'
-                                                                    }`}
-                                                                    style={{ 
-                                                                        width: '40px', 
-                                                                        height: '40px', 
-                                                                        borderRadius: '12px', 
-                                                                        background: isSettlement ? '#ECFDF5' : '#F8FAFC', 
-                                                                        color: isSettlement ? '#059669' : '#475569', 
-                                                                        border: isSettlement ? '1px solid #A7F3D0' : '1px solid #E2E8F0',
-                                                                        display: 'flex', 
-                                                                        alignItems: 'center', 
-                                                                        justifyContent: 'center', 
-                                                                        flexShrink: 0 
-                                                                    }}
-                                                                >
-                                                                    {isSettlement ? <Check size={19} strokeWidth={2.5} /> : <Receipt size={19} />}
-                                                                </div>
+                                                            {/* Header Card (Clickable Row to Toggle) */}
+                                                            <div
+                                                                onClick={() => toggleExpenseExpand(e.id)}
+                                                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', cursor: 'pointer' }}
+                                                            >
+                                                                {/* Left info: Toggle Chevron, Icon & Content */}
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flex: 1, minWidth: 0 }}>
+                                                                    {/* Dropdown Chevron Button */}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={(ev) => {
+                                                                            ev.stopPropagation();
+                                                                            toggleExpenseExpand(e.id);
+                                                                        }}
+                                                                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                                                                        style={{
+                                                                            width: '28px',
+                                                                            height: '28px',
+                                                                            borderRadius: '8px',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                            color: '#94A3B8',
+                                                                            border: 'none',
+                                                                            background: 'transparent',
+                                                                            cursor: 'pointer',
+                                                                            flexShrink: 0,
+                                                                            transition: 'all 0.15s'
+                                                                        }}
+                                                                        title={isExpanded ? 'Collapse session' : 'Expand session'}
+                                                                        onMouseOver={(ev) => {
+                                                                            ev.currentTarget.style.color = '#334155';
+                                                                            ev.currentTarget.style.background = '#F1F5F9';
+                                                                        }}
+                                                                        onMouseOut={(ev) => {
+                                                                            ev.currentTarget.style.color = '#94A3B8';
+                                                                            ev.currentTarget.style.background = 'transparent';
+                                                                        }}
+                                                                    >
+                                                                        <ChevronDown
+                                                                            size={16}
+                                                                            strokeWidth={2.5}
+                                                                            style={{
+                                                                                transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                                                                                transition: 'transform 0.2s ease-in-out'
+                                                                            }}
+                                                                        />
+                                                                    </button>
+
+                                                                    {/* Icon indicator */}
+                                                                    <div
+                                                                        className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                                                            isSettlement ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-gray-50 text-slate-600 border border-gray-100'
+                                                                        }`}
+                                                                        style={{
+                                                                            width: '40px',
+                                                                            height: '40px',
+                                                                            borderRadius: '12px',
+                                                                            background: isSettlement ? '#ECFDF5' : '#F8FAFC',
+                                                                            color: isSettlement ? '#059669' : '#475569',
+                                                                            border: isSettlement ? '1px solid #A7F3D0' : '1px solid #E2E8F0',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                            flexShrink: 0
+                                                                        }}
+                                                                    >
+                                                                        {isSettlement ? <Check size={19} strokeWidth={2.5} /> : <Receipt size={19} />}
+                                                                    </div>
 
                                                                 {/* Details */}
                                                                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
@@ -1589,7 +1642,10 @@ const SplitExpense = () => {
                                                                     {!isSettlement && (
                                                                         <button 
                                                                             type="button"
-                                                                            onClick={() => openEditExpenseModal(e)}
+                                                                            onClick={(ev) => {
+                                                                                ev.stopPropagation();
+                                                                                openEditExpenseModal(e);
+                                                                            }}
                                                                             title="Edit Expense"
                                                                             style={{ 
                                                                                 background: 'transparent', 
@@ -1617,7 +1673,10 @@ const SplitExpense = () => {
                                                                     )}
                                                                     <button 
                                                                         type="button"
-                                                                        onClick={() => handleDeleteExpense(e.id)}
+                                                                        onClick={(ev) => {
+                                                                            ev.stopPropagation();
+                                                                            handleDeleteExpense(e.id);
+                                                                        }}
                                                                         title="Delete Expense"
                                                                         style={{ 
                                                                             background: 'transparent', 
