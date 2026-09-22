@@ -590,7 +590,13 @@ export default function BetaClub({ openAuthModal = null }) {
                                                 {deal.sector || deal.industry || 'General'}
                                             </span>
                                             <span className="flex items-center gap-1 text-xs text-gray-500 font-medium" style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#64748b', fontWeight: '500' }}>
-                                                <span className="text-red-500" style={{ color: '#ef4444' }}>📍</span> {deal.location || 'India'}
+                                                <span className="text-red-500" style={{ color: '#ef4444' }}>📍</span> {(() => {
+                                                    const rawLoc = deal.location || 'India';
+                                                    if (rawLoc.includes('http') || rawLoc.toLowerCase().includes('zoom') || rawLoc.toLowerCase().includes('meet')) {
+                                                        return 'India';
+                                                    }
+                                                    return rawLoc;
+                                                })()}
                                             </span>
                                         </div>
 
