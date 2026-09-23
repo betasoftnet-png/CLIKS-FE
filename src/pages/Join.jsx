@@ -13,6 +13,7 @@ import {
     EyeOff,
     AlertCircle
 } from 'lucide-react';
+import { apiClient } from '../api/client';
 import { useAuth } from '../context';
 import { referralService } from '../services/referralService';
 import logoPng from '../assets/cliks.png';
@@ -81,32 +82,36 @@ const Join = () => {
         setIsSubmitting(true);
 
         try {
-            // Apply referral code if present
-            if (referralCode.trim()) {
-                const cleanCode = referralCode.trim().toUpperCase();
-                localStorage.setItem('cliks_referral_code', cleanCode);
-                sessionStorage.setItem('cliks_pending_ref', cleanCode);
-                try {
-                    await referralService.apply(cleanCode);
-                    setSuccessMsg('Referral accepted! 200 Welcome Points awarded.');
-                } catch (refErr) {
-                    console.warn('[Join] Referral notice:', refErr.message);
+            const payload = {
+                fullName: fullName.trim(),
+                businessName: companyName?.trim() || '',
+                email: email.trim().toLowerCase(),
+                password: password,
+                referralCode: referralCode?.trim() || refFromUrl || '',
+            };
+
+            const res = await apiClient.post('/auth/register', payload);
+            if (res && (res.status === 200 || res.status === 201 || res.data?.success)) {
+                const token = res.data?.token || res.data?.data?.token;
+                if (token) {
+                    localStorage.setItem('books_auth_token', token);
+                    localStorage.setItem('token', token);
+                    if (res.data?.user || res.data?.data?.user) {
+                        localStorage.setItem('user', JSON.stringify(res.data.user || res.data.data.user));
+                    }
                 }
-            }
-
-            if (typeof mockLogin === 'function') {
-                mockLogin();
+                setSuccessMsg('Account created successfully! Welcome to Cliks.');
+                setTimeout(() => {
+                    navigate('/books/dashboard', { replace: true });
+                }, 800);
             } else {
-                localStorage.setItem('books_auth_token', `cliks-token-${Date.now()}`);
+                setErrorMsg(res?.data?.message || 'Registration failed. Please check your details.');
+                setIsSubmitting(false);
             }
-
-            setTimeout(() => {
-                navigate('/books/dashboard', { replace: true });
-            }, 800);
-
         } catch (err) {
             console.error('[Join] Registration error:', err);
-            setErrorMsg(err.message || 'Registration failed. Please try again.');
+            const msg = err.response?.data?.message || err.message || 'Registration failed. Please try again.';
+            setErrorMsg(msg);
             setIsSubmitting(false);
         }
     };
