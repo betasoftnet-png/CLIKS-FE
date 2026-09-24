@@ -475,15 +475,7 @@ const FinancialPlan = () => {
                                 </div>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Description (Optional)</label>
-                                <textarea 
-                                    placeholder="Add any notes..." 
-                                    value={formData.description} 
-                                    onChange={e => setFormData({...formData, description: e.target.value})} 
-                                    style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', minHeight: '80px', resize: 'none' }} 
-                                />
-                            </div>
+
 
                             <button 
                                 type="submit" 

@@ -106,6 +106,10 @@ const Wallet = () => {
             alert(`Minimum load amount is ${formatCurrency(500)}.`);
             return;
         }
+        if (amt > 500000) {
+            alert(`Maximum load amount per transaction is ${formatCurrency(500000)}.`);
+            return;
+        }
 
         try {
             setIsProcessing(true);
@@ -188,7 +192,10 @@ const Wallet = () => {
         };
 
         setBalance(prev => prev + amt);
-        setHistory(prev => [newTx, ...prev]);
+        setHistory(prev => {
+            if (prev.some(t => t.id === txnId)) return prev;
+            return [newTx, ...prev];
+        });
         setAddForm({ amount: '', description: '' });
         setIsModalOpen(false);
     };
@@ -430,6 +437,7 @@ const Wallet = () => {
                                             autoFocus
                                             type="number" 
                                             min="500"
+                                            max="500000"
                                             placeholder="500.00"
                                             value={addForm.amount} 
                                             onChange={(e) => setAddForm({ ...addForm, amount: e.target.value })} 

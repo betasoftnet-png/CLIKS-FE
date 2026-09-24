@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { paymentService } from '../services/paymentService';
+import { apiClient } from '../api/client';
 import '../App.css';
 import { useCurrency } from '../context';
 
@@ -44,6 +45,24 @@ const BusinessPayments = () => {
     const { data: reportsData = { receivables: [], payables: [], accounts: [] } } = useQuery({
         queryKey: ['paymentReports'],
         queryFn: () => paymentService.getReports()
+    });
+
+    const { data: customersList = [] } = useQuery({
+        queryKey: ['customersList'],
+        queryFn: async () => {
+            try {
+                const res = await apiClient.get('/sales/customers').catch(() => apiClient.get('/customers'));
+                const raw = res?.data?.data ?? res?.data;
+                if (Array.isArray(raw)) return raw;
+                if (raw?.customers && Array.isArray(raw.customers)) return raw.customers;
+                if (raw?.rows && Array.isArray(raw.rows)) return raw.rows;
+                if (raw?.items && Array.isArray(raw.items)) return raw.items;
+                return [];
+            } catch (err) {
+                console.warn('Failed to fetch customers list:', err);
+                return [];
+            }
+        }
     });
 
     // Mutations
@@ -144,7 +163,8 @@ const BusinessPayments = () => {
         }
 
         if (paidAmt > totalAmt) {
-            paidAmt = totalAmt;
+            alert('Paid amount cannot exceed the original invoice amount.');
+            return;
         }
 
         receiveMutation.mutate({
@@ -337,7 +357,7 @@ const BusinessPayments = () => {
         { key: 'date', label: 'Date', placeholder: 'e.g. 2026-05' },
         { key: 'customer_name', label: 'Customer', placeholder: 'Name' },
         { key: 'invoice_linked', label: 'Invoice Linked', placeholder: 'INV-' },
-        { key: 'total', label: 'Total Original', placeholder: 'e.g. 5000' },
+        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000' },
         { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000' },
         { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI' },
         { key: 'status', label: 'Reconciliation', placeholder: 'Status' }
@@ -378,7 +398,7 @@ const BusinessPayments = () => {
         { key: 'date', label: 'Date', placeholder: 'e.g. 2026-05' },
         { key: 'customer_name', label: 'Customer', placeholder: 'Name' },
         { key: 'invoice_linked', label: 'Invoice Linked', placeholder: 'INV-' },
-        { key: 'total', label: 'Total Original', placeholder: 'e.g. 5000' },
+        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000' },
         { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000' },
         { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI' },
         { key: 'status', label: 'Reconciliation', placeholder: 'Status' }
@@ -528,9 +548,19 @@ const BusinessPayments = () => {
                             <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Select Customer Profile</label>
                                 <select value={customerForm.customer_name} onChange={(e) => setCustomerForm({ ...customerForm, customer_name: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
-                                    <option>Acme Corporates (Rahul Dev)</option>
-                                    <option>Karan Johar Tech</option>
-                                    <option>Sharma Retail Store</option>
+                                    {customersList.length > 0 ? (
+                                        customersList.map((c, idx) => {
+                                            const name = c.name || c.customer_name || c.party_name || `Customer #${idx + 1}`;
+                                            const details = c.company ? ` (${c.company})` : (c.phone ? ` (${c.phone})` : '');
+                                            return <option key={c.id || idx} value={name}>{name}{details}</option>;
+                                        })
+                                    ) : (
+                                        <>
+                                            <option>Acme Corporates (Rahul Dev)</option>
+                                            <option>Karan Johar Tech</option>
+                                            <option>Sharma Retail Store</option>
+                                        </>
+                                    )}
                                 </select>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>

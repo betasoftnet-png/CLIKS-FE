@@ -35,72 +35,124 @@ import { config } from '../lib/config';
 // Initial Seed Data for Split Groups
 const INITIAL_SPLITS = [];
 
-// Strict URL normalizer using real backend asset origin
-const resolveAttachmentUrl = (filePath) => {
-    if (!filePath) return '';
+export const getBackendBaseUrl = () => {
+    const envApi = config.api.baseUrl || (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_API_BASE_URL : '');
+    if (envApi && (envApi.startsWith('http://') || envApi.startsWith('https://'))) {
+        return envApi.replace(/\/api\/v1\/?$/, '').replace(/\/api\/?$/, '').replace(/\/+$/, '');
+    }
+    if (typeof window !== 'undefined') {
+        const host = window.location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') {
+            return 'http://localhost:3000';
+        }
+        if (host.includes('cliksbusiness.com')) {
+            return 'https://cliksbusiness.com';
+        }
+        return window.location.origin;
+    }
+    return 'http://localhost:3000';
+};
 
-    // 1. If it's already a complete absolute URL pointing to http:// or https://
+export const resolveFileUrl = (filePath) => {
+    if (!filePath) return '';
+    // If it's already an external or local scheme, clean up any wrong domain
+    if (filePath.startsWith('blob:') || filePath.startsWith('data:')) {
+        return filePath;
+    }
+    const backendBase = getBackendBaseUrl();
     if (filePath.startsWith('http://') || filePath.startsWith('https://')) {
-        // If it mistakenly points to the frontend domain, redirect to real backend asset host
-        if (filePath.includes('cliksbusiness.com/uploads/')) {
-            return filePath.replace('https://cliksbusiness.com', 'https://cliks.beta-softnet.com')
-                           .replace('http://cliksbusiness.com', 'https://cliks.beta-softnet.com');
+        // If an old stored URL points to consumer domain cliks.beta-softnet.com, re-route it to proper backend host
+        if (filePath.includes('cliks.beta-softnet.com/uploads/')) {
+            const relPath = filePath.split('cliks.beta-softnet.com')[1];
+            const cleanRel = relPath.startsWith('/uploads') ? `/api${relPath}` : relPath;
+            return `${backendBase}${cleanRel}`;
         }
         return filePath;
     }
+    const cleanPath = filePath.startsWith('/') ? filePath : `/uploads/${filePath}`;
+    const normalizedPath = cleanPath.startsWith('/api/uploads') 
+        ? cleanPath 
+        : cleanPath.startsWith('/uploads')
+            ? `/api${cleanPath}`
+            : `/api/uploads/${cleanPath.replace(/^\/+/, '')}`;
+    return `${backendBase}${normalizedPath}`;
+};
+export const getDirectAttachmentUrl = resolveFileUrl;
+export const resolveAttachmentUrl = resolveFileUrl;
 
-    // 2. Base upload endpoint:
-    // Strictly resolve against real backend host (cliks.beta-softnet.com) or localhost during local dev
-    let baseOrigin = 'https://cliks.beta-softnet.com';
+export const isPdfFile = (urlOrName = '') => {
+    return /\.pdf(\?.*)?$/i.test(urlOrName);
+};
 
-    if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
-        baseOrigin = 'http://localhost:3000';
+export const isImageFile = (urlOrName = '') => {
+    return /\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(urlOrName);
+};
+
+export const openAttachmentInNewTab = (attachment) => {
+    if (!attachment) return;
+    const rawUrl = typeof attachment === 'string' ? attachment : attachment.url;
+    const name = (typeof attachment === 'object' ? attachment.name : '') || 'Attachment Preview';
+    if (!rawUrl) return;
+
+    const fileUrl = resolveFileUrl(rawUrl);
+    const isPdf = isPdfFile(fileUrl || name);
+
+    if (isPdf) {
+        window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    } else {
+        const newTab = window.open('', '_blank');
+        if (newTab) {
+            newTab.document.write(`<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${name.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0f19;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+        }
+        img {
+            max-width: 96vw;
+            max-height: 96vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+    </style>
+</head>
+<body>
+    <img src="${fileUrl}" alt="${name.replace(/"/g, '&quot;')}" />
+</body>
+</html>`);
+            newTab.document.close();
+        } else {
+            window.open(fileUrl, '_blank');
+        }
     }
+};
 
-    const cleanPath = filePath.replace(/^\/?(uploads\/)?/, '');
-    return `${baseOrigin}/uploads/${cleanPath}`;
+export const getViewableUrl = (rawFilePath) => {
+    if (!rawFilePath) return '';
+    return resolveFileUrl(rawFilePath);
 };
 
 // Pure calculation function to compute total outlay across both list cards and details view
 export const calculateGroupOutlay = (expenses) => {
     return (expenses || [])
-        .filter(item => !item.isSettlement && item.type !== 'SETTLEMENT' && item.type !== 'REPAYMENT' && (!item.title || !item.title.toLowerCase().startsWith('settlement')))
+        .filter(item => isPrimaryExpense(item))
         .reduce((sum, item) => sum + Number(item.amount || 0), 0);
-};
-
-// Helper to find specific unsettled expenses paid by creditor for a debt
-export const getEligibleExpensesForDebt = (debt, expenses = [], participants = []) => {
-    if (!debt || !expenses) return [];
-    
-    // Non-settlement expenses paid by the creditor (debt.to)
-    const creditorExpenses = expenses.filter(exp => 
-        !exp.isSettlement && 
-        exp.type !== 'SETTLEMENT' && 
-        exp.type !== 'REPAYMENT' && 
-        (!exp.title || !exp.title.toLowerCase().startsWith('settlement')) &&
-        exp.paidBy === debt.to
-    );
-
-    const pool = creditorExpenses.length > 0 ? creditorExpenses : expenses.filter(exp => 
-        !exp.isSettlement && 
-        exp.type !== 'SETTLEMENT' && 
-        exp.type !== 'REPAYMENT' && 
-        (!exp.title || !exp.title.toLowerCase().startsWith('settlement'))
-    );
-
-    return pool.map(exp => {
-        let memberShare = 0;
-        if (exp.shares && exp.shares[debt.from] !== undefined) {
-            memberShare = parseFloat(exp.shares[debt.from]) || 0;
-        } else {
-            const numParts = (participants && participants.length) || 1;
-            memberShare = Math.round(((parseFloat(exp.amount) || 0) / numParts) * 100) / 100;
-        }
-        return {
-            ...exp,
-            memberShare: memberShare > 0 ? memberShare : (parseFloat(exp.amount) || 0)
-        };
-    });
 };
 
 export const formatCurrencyUniversal = (amount, currencyCode) => {
@@ -117,7 +169,215 @@ export const formatCurrencyUniversal = (amount, currencyCode) => {
     }
 };
 
-const SplitExpense = () => {
+// Helper to find specific unsettled expenses paid by creditor for a debt
+export const getEligibleExpensesForDebt = (debt, expenses = [], participants = []) => {
+    if (!debt || !expenses) return [];
+    
+    // Non-settlement expenses paid by the creditor (debt.to)
+    const creditorExpenses = expenses.filter(exp => 
+        isPrimaryExpense(exp) &&
+        exp.paidBy === debt.to
+    );
+
+    const pool = creditorExpenses.length > 0 ? creditorExpenses : expenses.filter(exp => isPrimaryExpense(exp));
+
+    return pool.map(exp => {
+        let memberShare = 0;
+        if (exp.shares && exp.shares[debt.from] !== undefined) {
+            memberShare = parseFloat(exp.shares[debt.from]) || 0;
+        } else {
+            const numParts = (participants && participants.length) || 1;
+            memberShare = Math.round(((parseFloat(exp.amount) || 0) / numParts) * 100) / 100;
+        }
+        return {
+            ...exp,
+            memberShare: memberShare > 0 ? memberShare : (parseFloat(exp.amount) || 0)
+        };
+    });
+};
+
+export const isPrimaryExpense = (item) => {
+    if (!item) return false;
+    if (item.isSettlement === true || item.is_settlement === true) return false;
+    if (item.type === 'SETTLEMENT' || item.type === 'REPAYMENT') return false;
+    if (typeof item.title === 'string' && item.title.toLowerCase().trim().startsWith('settlement')) return false;
+    return true;
+};
+
+export const isSettlementLinkedToExpense = (settlement, exp, allPrimaryExpenses = []) => {
+    if (!settlement || !exp) return false;
+    if (settlement.linked_expense_id && String(settlement.linked_expense_id) === String(exp.id)) return true;
+    if (settlement.expenseId && String(settlement.expenseId) === String(exp.id)) return true;
+    if (settlement.relatedExpenseId && String(settlement.relatedExpenseId) === String(exp.id)) return true;
+    if (settlement.linkedExpenseId && String(settlement.linkedExpenseId) === String(exp.id)) return true;
+    if (settlement.title && exp.title) {
+        const sTitle = settlement.title.toLowerCase().trim();
+        const expTitle = exp.title.toLowerCase().trim();
+        const titleMatch = sTitle.match(/^settlement\s+for\s+(.*?):\s*/);
+        if (titleMatch && titleMatch[1]) {
+            const extracted = titleMatch[1].trim().toLowerCase();
+            if (extracted === expTitle || expTitle.includes(extracted) || extracted.includes(expTitle)) {
+                return true;
+            }
+        }
+        if (expTitle && (sTitle.includes(`for ${expTitle}:`) || sTitle.includes(`for ${expTitle}`) || sTitle.includes(expTitle))) {
+            return true;
+        }
+    }
+    // Fallback 1: If only 1 primary expense exists in the ticket, link settlement to it
+    if (allPrimaryExpenses && allPrimaryExpenses.length === 1 && String(allPrimaryExpenses[0].id) === String(exp.id)) {
+        return true;
+    }
+
+    // Fallback 2: If settlement has no explicit expense in title or IDs, link to the matching debt session
+    if (allPrimaryExpenses && allPrimaryExpenses.length > 1) {
+        const sTitle = (settlement.title || '').toLowerCase().trim();
+        // If settlement mentions another primary expense in title, do not link to this one
+        const mentionsOther = allPrimaryExpenses.some(otherExp => {
+            if (String(otherExp.id) === String(exp.id)) return false;
+            const oTitle = (otherExp.title || '').toLowerCase().trim();
+            return oTitle && (sTitle.includes(`for ${oTitle}:`) || sTitle.includes(`for ${oTitle}`));
+        });
+        if (!mentionsOther) {
+            let recipient = null;
+            if (settlement.shares && typeof settlement.shares === 'object') {
+                recipient = Object.keys(settlement.shares).find(k => k !== settlement.paidBy && (parseFloat(settlement.shares[k]) || 0) > 0);
+            }
+            if (!recipient && settlement.title) {
+                const match = settlement.title.match(/paid\s+(.+)$/i);
+                if (match && match[1]) recipient = match[1].trim();
+            }
+
+            if (recipient && exp.paidBy === recipient) {
+                const eligibleForRecipient = allPrimaryExpenses.filter(pe => pe.paidBy === recipient);
+                if (eligibleForRecipient.length === 1) return true;
+                const expAmt = parseFloat(exp.amount) || 0;
+                const sAmt = parseFloat(settlement.amount) || 0;
+                if (Math.abs(sAmt - (expAmt / 2)) < 0.01 || Math.abs(sAmt - expAmt) < 0.01) return true;
+            }
+        }
+    }
+    return false;
+};
+
+// Calculate session-specific balances and simplified debts for an individual primary expense
+export const calculateSessionBalances = (expense, linkedSettlements = [], participants = []) => {
+    if (!expense) return { members: {}, debts: [] };
+
+    const balances = {};
+    const baseParticipants = (participants && participants.length > 0)
+        ? [...participants]
+        : (expense.shares ? Object.keys(expense.shares) : [expense.paidBy]);
+
+    if (expense.paidBy && !baseParticipants.includes(expense.paidBy)) {
+        baseParticipants.push(expense.paidBy);
+    }
+
+    baseParticipants.forEach(p => {
+        balances[p] = 0;
+    });
+
+    const payer = expense.paidBy;
+    const totalAmt = parseFloat(expense.amount) || 0;
+
+    // Credit the payer
+    if (balances[payer] !== undefined) {
+        balances[payer] += totalAmt;
+    } else {
+        balances[payer] = totalAmt;
+    }
+
+    // Debit each member's share
+    if (expense.shares && Object.keys(expense.shares).length > 0) {
+        Object.keys(expense.shares).forEach(member => {
+            const share = parseFloat(expense.shares[member]) || 0;
+            if (balances[member] !== undefined) {
+                balances[member] -= share;
+            } else {
+                balances[member] = -share;
+            }
+        });
+    } else {
+        const count = baseParticipants.length > 0 ? baseParticipants.length : 1;
+        const equalShare = totalAmt / count;
+        baseParticipants.forEach(p => {
+            balances[p] = (balances[p] || 0) - equalShare;
+        });
+    }
+
+    // Apply linked settlements
+    (linkedSettlements || []).forEach(s => {
+        const sAmt = parseFloat(s.amount) || 0;
+        const sPayer = s.paidBy;
+
+        // Credit settlement payer
+        if (balances[sPayer] !== undefined) {
+            balances[sPayer] += sAmt;
+        } else {
+            balances[sPayer] = sAmt;
+        }
+
+        // Debit settlement recipient (creditor receiving reimbursement)
+        let recipient = null;
+        if (s.shares && Object.keys(s.shares).length > 0) {
+            recipient = Object.keys(s.shares).find(k => k !== sPayer && (parseFloat(s.shares[k]) || 0) > 0);
+        }
+        if (!recipient) {
+            recipient = expense.paidBy;
+        }
+
+        if (balances[recipient] !== undefined) {
+            balances[recipient] -= sAmt;
+        } else {
+            balances[recipient] = -sAmt;
+        }
+    });
+
+    // Simplify debts for this session
+    const tempBalances = { ...balances };
+    const debts = [];
+    const allMembers = Object.keys(tempBalances);
+
+    while (true) {
+        let debtor = null;
+        let creditor = null;
+        let maxDebit = 0;
+        let maxCredit = 0;
+
+        allMembers.forEach(p => {
+            const bal = tempBalances[p];
+            if (bal < -0.01 && bal < maxDebit) {
+                maxDebit = bal;
+                debtor = p;
+            }
+            if (bal > 0.01 && bal > maxCredit) {
+                maxCredit = bal;
+                creditor = p;
+            }
+        });
+
+        if (!debtor || !creditor) break;
+
+        const amtToSettle = Math.min(-maxDebit, maxCredit);
+        tempBalances[debtor] += amtToSettle;
+        tempBalances[creditor] -= amtToSettle;
+
+        debts.push({
+            from: debtor,
+            to: creditor,
+            amount: Math.round(amtToSettle * 100) / 100,
+            expenseId: expense.id,
+            expenseTitle: expense.title
+        });
+    }
+
+    return {
+        members: balances,
+        debts: debts
+    };
+};
+
+const BusinessSplitCollect = () => {
     const { currency } = useCurrency();
     // ── State Management ───────────────────────────────────────────────────
     const [splits, setSplits] = useState([]);
@@ -143,6 +403,21 @@ const SplitExpense = () => {
     const [editingGroupId, setEditingGroupId] = useState(null);
     const [isAddExpenseModalOpen, setIsAddExpenseModalOpen] = useState(false);
     const [editingExpenseId, setEditingExpenseId] = useState(null);
+    const [previewAttachment, setPreviewAttachment] = useState(null);
+    const [expandedExpenseIds, setExpandedExpenseIds] = useState([]);
+    const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
+
+    const toggleExpenseExpand = (expenseId) => {
+        setExpandedExpenseIds(prev =>
+            prev.includes(expenseId) ? prev.filter(id => id !== expenseId) : [...prev, expenseId]
+        );
+    };
+
+    // Custom Pay Modal State
+    const [isCustomPayModalOpen, setIsCustomPayModalOpen] = useState(false);
+    const [customPayDebt, setCustomPayDebt] = useState(null);
+    const [customPayExpenseId, setCustomPayExpenseId] = useState('');
+    const [customPayAmount, setCustomPayAmount] = useState('');
     
     // Group Form State
     const [groupForm, setGroupForm] = useState({
@@ -167,26 +442,10 @@ const SplitExpense = () => {
         date: new Date().toISOString().split('T')[0],
         attachmentName: '',
         attachmentFile: null,
+        attachmentSizeKb: null,
         splitType: 'equal', // equal, custom
         shares: {} // Custom shares per participant
     });
-
-    const [previewAttachment, setPreviewAttachment] = useState(null);
-    const [expandedExpenseIds, setExpandedExpenseIds] = useState([]);
-    const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
-    const [isSettleExpanded, setIsSettleExpanded] = useState(true);
-
-    const toggleExpenseExpand = (expenseId) => {
-        setExpandedExpenseIds(prev =>
-            prev.includes(expenseId) ? prev.filter(id => id !== expenseId) : [...prev, expenseId]
-        );
-    };
-
-    // Custom Pay Modal State
-    const [isCustomPayModalOpen, setIsCustomPayModalOpen] = useState(false);
-    const [customPayDebt, setCustomPayDebt] = useState(null);
-    const [customPayExpenseId, setCustomPayExpenseId] = useState('');
-    const [customPayAmount, setCustomPayAmount] = useState('');
 
     // Fetch splits from backend on mount
     useEffect(() => {
@@ -215,7 +474,7 @@ const SplitExpense = () => {
 
     // Filtered Splits List
     const filteredSplits = splits.filter(s =>
-        (s.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (s.description || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -309,7 +568,7 @@ const SplitExpense = () => {
     };
 
     const handleDeleteGroup = async (groupId) => {
-        if (window.confirm('Are you sure you want to delete this split group? All logged expenses will be lost.')) {
+        if (await window.confirm('Are you sure you want to delete this split group? All logged expenses will be lost.')) {
             try {
                 await splitExpenseService.deleteSplit(groupId);
             } catch (err) {
@@ -336,6 +595,7 @@ const SplitExpense = () => {
             date: new Date().toISOString().split('T')[0],
             attachmentName: '',
             attachmentFile: null,
+            attachmentSizeKb: null,
             splitType: 'equal',
             shares: initialShares
         });
@@ -357,8 +617,9 @@ const SplitExpense = () => {
             amount: expense.amount.toString(),
             paidBy: expense.paidBy,
             date: expense.date,
-            attachmentName: expense.attachment || '',
+            attachmentName: expense.documentName || (expense.attachment ? expense.attachment.split('/').pop().replace(/^\d+_/, '') : '') || expense.attachment || '',
             attachmentFile: null,
+            attachmentSizeKb: null,
             splitType: expense.splitType || 'equal',
             shares: initialShares
         });
@@ -371,29 +632,39 @@ const SplitExpense = () => {
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
+        const file = e.target.files?.[0];
         if (!file) return;
 
-        if (file.size > 5 * 1024 * 1024) {
-            alert('File size exceeds the 5MB limit.');
+        const validTypes = ['image/png', 'image/jpeg', 'image/webp', 'application/pdf'];
+        const isValidType = validTypes.includes(file.type) || /\.(png|jpe?g|webp|pdf)$/i.test(file.name);
+        if (!isValidType) {
+            alert('Please select a valid image (PNG, JPG, WEBP) or PDF file.');
             return;
         }
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            setExpenseForm(prev => ({
-                ...prev,
-                attachmentName: file.name,
-                attachmentFile: {
-                    name: file.name,
-                    content: reader.result.split(',')[1] // Get base64 content
-                }
-            }));
-        };
-        reader.onerror = () => {
-            alert('Failed to read file.');
-        };
-        reader.readAsDataURL(file);
+        if (file.size > 20 * 1024 * 1024) {
+            alert('File size exceeds the 20MB limit.');
+            return;
+        }
+
+        const sizeKb = (file.size / 1024).toFixed(1);
+        setExpenseForm(prev => ({
+            ...prev,
+            attachmentName: file.name,
+            attachmentFile: file,
+            attachmentSizeKb: sizeKb
+        }));
+    };
+
+    const handleRemoveFile = () => {
+        setExpenseForm(prev => ({
+            ...prev,
+            attachmentName: '',
+            attachmentFile: null,
+            attachmentSizeKb: null
+        }));
+        const inputEl = document.getElementById('expense-attachment-input');
+        if (inputEl) inputEl.value = '';
     };
 
     const handleAmountChange = (e) => {
@@ -461,16 +732,27 @@ const SplitExpense = () => {
             }
         }
 
-        let uploadedFilename = expenseForm.attachmentName || null;
+        let uploadedAttachment = expenseForm.attachmentName || null;
+        let uploadedDocUrl = '';
+        let uploadedDocName = expenseForm.attachmentName || '';
+
         if (expenseForm.attachmentFile) {
             try {
-                const uploadRes = await splitExpenseService.uploadAttachment(expenseForm.attachmentFile);
-                uploadedFilename = uploadRes.filename;
+                const formData = new FormData();
+                formData.append('file', expenseForm.attachmentFile);
+                const uploadRes = await splitExpenseService.uploadAttachment(formData);
+                uploadedDocUrl = uploadRes?.url || (uploadRes?.data && uploadRes.data.url) || '';
+                uploadedDocName = uploadRes?.filename || (uploadRes?.data && uploadRes.data.filename) || expenseForm.attachmentName;
+                uploadedAttachment = uploadedDocUrl || uploadedDocName || expenseForm.attachmentName;
             } catch (err) {
                 console.error("Failed to upload document:", err);
                 alert("Attachment upload failed: " + (err.response?.data?.message || err.message || "Unknown error"));
                 return;
             }
+        } else if (expenseForm.attachmentName) {
+            uploadedDocName = expenseForm.attachmentName;
+            uploadedDocUrl = expenseForm.attachmentName.startsWith('/') ? expenseForm.attachmentName : `/uploads/${expenseForm.attachmentName}`;
+            uploadedAttachment = uploadedDocUrl;
         }
 
         if (editingExpenseId) {
@@ -480,7 +762,9 @@ const SplitExpense = () => {
                 amount: amount,
                 paidBy: expenseForm.paidBy,
                 date: expenseForm.date,
-                attachment: uploadedFilename,
+                attachment: uploadedAttachment,
+                documentName: uploadedDocName,
+                documentUrl: uploadedDocUrl,
                 splitType: expenseForm.splitType,
                 shares: finalShares
             };
@@ -521,7 +805,9 @@ const SplitExpense = () => {
             amount: amount,
             paidBy: expenseForm.paidBy,
             date: expenseForm.date,
-            attachment: uploadedFilename,
+            attachment: uploadedAttachment,
+            documentName: uploadedDocName,
+            documentUrl: uploadedDocUrl,
             splitType: expenseForm.splitType,
             shares: finalShares
         };
@@ -557,7 +843,7 @@ const SplitExpense = () => {
     };
 
     const handleDeleteExpense = async (expenseId) => {
-        if (window.confirm('Delete this expense?')) {
+        if (await window.confirm('Delete this expense?')) {
             try {
                 await splitExpenseService.deleteExpense(selectedSplitId, expenseId);
             } catch (err) {
@@ -573,17 +859,10 @@ const SplitExpense = () => {
                 return s;
             });
             setSplits(updatedSplits);
+            try {
+                localStorage.setItem('cliks_splits_data', JSON.stringify(updatedSplits));
+            } catch {}
         }
-    };
-
-    // Simulated Attachment Upload
-    const _triggerSimulatedUpload = () => {
-        const fileNames = ['invoice_rent.pdf', 'dinner_bill_482.jpg', 'uber_receipt.png', 'supplies_list.pdf', 'grocery_slip.jpg'];
-        const randomName = fileNames[Math.floor(Math.random() * fileNames.length)];
-        setExpenseForm({
-            ...expenseForm,
-            attachmentName: randomName
-        });
     };
 
     // ── Debts & Balances Calculations ──────────────────────────────────────
@@ -591,7 +870,8 @@ const SplitExpense = () => {
         if (!activeSplit) return { members: {}, debts: [], totalSpent: 0 };
 
         const balances = {};
-        activeSplit.participants.forEach(p => {
+        const participants = activeSplit.participants || [];
+        participants.forEach(p => {
             balances[p] = 0;
         });
 
@@ -600,21 +880,76 @@ const SplitExpense = () => {
         const totalGroupOutlay = calculateGroupOutlay(activeSplit.expenses);
         const totalSpent = totalGroupOutlay;
 
-        activeSplit.expenses.forEach(exp => {
+        const allExpenses = activeSplit.expenses || [];
+        const allPrimaries = allExpenses.filter(item => isPrimaryExpense(item));
+        const allSettlements = allExpenses.filter(item => !isPrimaryExpense(item));
+
+        allExpenses.forEach(exp => {
             const payer = exp.paidBy;
             const amt = parseFloat(exp.amount) || 0;
 
-            // Credit the payer
-            if (balances[payer] !== undefined) {
-                balances[payer] += amt;
-            }
-
-            // Debit everyone who shared
-            Object.keys(exp.shares || {}).forEach(member => {
-                if (balances[member] !== undefined) {
-                    balances[member] -= parseFloat(exp.shares[member]) || 0;
+            if (isPrimaryExpense(exp)) {
+                // Primary Expense: Credit the payer
+                if (balances[payer] !== undefined) {
+                    balances[payer] += amt;
+                } else {
+                    balances[payer] = amt;
                 }
-            });
+
+                // Debit everyone who shared
+                const hasExplicitShares = exp.shares && typeof exp.shares === 'object' && Object.keys(exp.shares).length > 0;
+                if (hasExplicitShares) {
+                    Object.keys(exp.shares).forEach(member => {
+                        const share = parseFloat(exp.shares[member]) || 0;
+                        if (balances[member] !== undefined) {
+                            balances[member] -= share;
+                        } else {
+                            balances[member] = -share;
+                        }
+                    });
+                } else {
+                    const count = participants.length > 0 ? participants.length : 1;
+                    const equalShare = amt / count;
+                    participants.forEach(p => {
+                        if (balances[p] !== undefined) {
+                            balances[p] -= equalShare;
+                        } else {
+                            balances[p] = -equalShare;
+                        }
+                    });
+                }
+            } else {
+                // Settlement / Repayment Transaction
+                // Credit the settlement payer
+                if (balances[payer] !== undefined) {
+                    balances[payer] += amt;
+                } else {
+                    balances[payer] = amt;
+                }
+
+                // Debit the recipient
+                let recipient = null;
+                if (exp.shares && typeof exp.shares === 'object' && Object.keys(exp.shares).length > 0) {
+                    recipient = Object.keys(exp.shares).find(k => k !== payer && (parseFloat(exp.shares[k]) || 0) > 0);
+                }
+                if (!recipient && exp.title) {
+                    const match = exp.title.match(/paid\s+(.+)$/i);
+                    if (match && match[1]) {
+                        recipient = match[1].trim();
+                    }
+                }
+                if (!recipient && participants.length === 2) {
+                    recipient = participants.find(p => p !== payer);
+                }
+
+                if (recipient) {
+                    if (balances[recipient] !== undefined) {
+                        balances[recipient] -= amt;
+                    } else {
+                        balances[recipient] = -amt;
+                    }
+                }
+            }
         });
 
         // Deep copy balances for debt simplification
@@ -622,7 +957,7 @@ const SplitExpense = () => {
         const debts = [];
 
         // Simplify debts algorithm (Splitwise style)
-        const participants = Object.keys(tempBalances);
+        const memberKeys = Object.keys(tempBalances);
         
         while (true) {
             let debtor = null;
@@ -630,7 +965,7 @@ const SplitExpense = () => {
             let maxDebit = 0;
             let maxCredit = 0;
 
-            participants.forEach(p => {
+            memberKeys.forEach(p => {
                 const bal = tempBalances[p];
                 if (bal < -0.01 && bal < maxDebit) {
                     maxDebit = bal;
@@ -648,10 +983,19 @@ const SplitExpense = () => {
             tempBalances[debtor] += amtToSettle;
             tempBalances[creditor] -= amtToSettle;
 
+            // Link debt to matching primary expense session if identifiable
+            const matchingSession = allPrimaries.find(pe => {
+                const linked = allSettlements.filter(s => isSettlementLinkedToExpense(s, pe, allPrimaries));
+                const sess = calculateSessionBalances(pe, linked, participants);
+                return sess.debts.some(sd => sd.from === debtor && sd.to === creditor);
+            });
+
             debts.push({
                 from: debtor,
                 to: creditor,
-                amount: Math.round(amtToSettle * 100) / 100
+                amount: Math.round(amtToSettle * 100) / 100,
+                expenseId: matchingSession?.id,
+                expenseTitle: matchingSession?.title
             });
         }
 
@@ -665,11 +1009,47 @@ const SplitExpense = () => {
     // Handle instant settlement log
     const handleSettleDebt = async (debt) => {
         if (!activeSplit) return;
-        if (window.confirm(`Mark settlement: does ${debt.from} paid ${activeSplit.currencySymbol}${debt.amount.toLocaleString()} to ${debt.to}?`)) {
+        if (await window.confirm(`Mark settlement: does ${debt.from} paid ${activeSplit.currencySymbol}${debt.amount.toLocaleString()} to ${debt.to}?`)) {
+            const allPrimaries = (activeSplit.expenses || []).filter(item => isPrimaryExpense(item));
+            let targetExpense = null;
+
+            if (debt.expenseId) {
+                targetExpense = allPrimaries.find(e => String(e.id) === String(debt.expenseId));
+            }
+
+            if (!targetExpense) {
+                // Find primary expense session where this debt originates
+                const candidates = [];
+                for (const exp of allPrimaries) {
+                    const linked = (activeSplit.expenses || []).filter(item => !isPrimaryExpense(item) && isSettlementLinkedToExpense(item, exp, allPrimaries));
+                    const sess = calculateSessionBalances(exp, linked, activeSplit.participants);
+                    const matchingDebt = sess.debts.find(d => d.from === debt.from && d.to === debt.to);
+                    if (matchingDebt) {
+                        candidates.push({ exp, debt: matchingDebt, diff: Math.abs(matchingDebt.amount - debt.amount) });
+                    }
+                }
+                if (candidates.length > 0) {
+                    candidates.sort((a, b) => a.diff - b.diff);
+                    targetExpense = candidates[0].exp;
+                }
+            }
+
+            if (!targetExpense) {
+                const eligible = getEligibleExpensesForDebt(debt, activeSplit.expenses, activeSplit.participants);
+                if (eligible.length > 0) {
+                    targetExpense = eligible[0];
+                } else if (allPrimaries.length === 1) {
+                    targetExpense = allPrimaries[0];
+                }
+            }
+
+            const targetExpenseId = targetExpense ? targetExpense.id : (debt.expenseId || null);
+            const expenseTitle = targetExpense ? targetExpense.title : (debt.expenseTitle || null);
+
             // Settle creates a custom expense compensating the debt
             const settlementExpense = {
                 id: 'exp-settle-' + Date.now(),
-                title: `Settlement: ${debt.from} paid ${debt.to}`,
+                title: expenseTitle ? `Settlement for ${expenseTitle}: ${debt.from} paid ${debt.to}` : `Settlement: ${debt.from} paid ${debt.to}`,
                 amount: debt.amount,
                 paidBy: debt.from,
                 date: new Date().toISOString().split('T')[0],
@@ -677,6 +1057,9 @@ const SplitExpense = () => {
                 splitType: 'custom',
                 isSettlement: true,
                 type: 'SETTLEMENT',
+                linked_expense_id: targetExpenseId,
+                expenseId: targetExpenseId,
+                relatedExpenseId: targetExpenseId,
                 shares: {
                     [debt.to]: debt.amount
                 }
@@ -691,16 +1074,31 @@ const SplitExpense = () => {
 
             try {
                 const createdSettlement = await splitExpenseService.addExpense(selectedSplitId, settlementExpense);
+                const finalSettlement = {
+                    ...createdSettlement,
+                    title: settlementExpense.title,
+                    amount: settlementExpense.amount,
+                    paidBy: settlementExpense.paidBy,
+                    shares: settlementExpense.shares,
+                    isSettlement: true,
+                    type: 'SETTLEMENT',
+                    linked_expense_id: targetExpenseId,
+                    expenseId: targetExpenseId,
+                    relatedExpenseId: targetExpenseId
+                };
                 const updatedSplits = splits.map(s => {
                     if (s.id === selectedSplitId) {
                         return {
                             ...s,
-                            expenses: [createdSettlement, ...s.expenses]
+                            expenses: [finalSettlement, ...s.expenses]
                         };
                     }
                     return s;
                 });
                 setSplits(updatedSplits);
+                try {
+                    localStorage.setItem('cliks_splits_data', JSON.stringify(updatedSplits));
+                } catch {}
                 alert('Settlement logged perfectly!');
             } catch (err) {
                 console.error("Error saving settlement to backend:", err);
@@ -715,6 +1113,9 @@ const SplitExpense = () => {
                     return s;
                 });
                 setSplits(updatedSplits);
+                try {
+                    localStorage.setItem('cliks_splits_data', JSON.stringify(updatedSplits));
+                } catch {}
                 alert('Settlement logged perfectly!');
             }
         }
@@ -723,9 +1124,17 @@ const SplitExpense = () => {
     const openCustomPayModal = (debt) => {
         setCustomPayDebt(debt);
         const eligible = getEligibleExpensesForDebt(debt, activeSplit?.expenses || [], activeSplit?.participants || []);
-        if (eligible.length > 0) {
+        if (debt.expenseId) {
+            setCustomPayExpenseId(debt.expenseId);
+            const chosen = eligible.find(e => String(e.id) === String(debt.expenseId));
+            const rawShare = chosen ? (parseFloat(chosen.memberShare) || debt.amount) : debt.amount;
+            const amountToPay = customPayDebt ? Math.min(rawShare, customPayDebt.amount) : rawShare;
+            setCustomPayAmount(String(amountToPay));
+        } else if (eligible.length > 0) {
             setCustomPayExpenseId(eligible[0].id);
-            setCustomPayAmount(String(eligible[0].memberShare || debt.amount));
+            const rawShare = parseFloat(eligible[0].memberShare) || debt.amount;
+            const amountToPay = Math.min(rawShare, debt.amount);
+            setCustomPayAmount(String(amountToPay));
         } else {
             setCustomPayExpenseId('general');
             setCustomPayAmount(String(debt.amount));
@@ -738,7 +1147,9 @@ const SplitExpense = () => {
         const eligible = getEligibleExpensesForDebt(customPayDebt, activeSplit?.expenses || [], activeSplit?.participants || []);
         const chosen = eligible.find(e => String(e.id) === String(expId));
         if (chosen) {
-            setCustomPayAmount(String(chosen.memberShare || customPayDebt?.amount || ''));
+            const rawShare = parseFloat(chosen.memberShare) || (customPayDebt?.amount || 0);
+            const amountToPay = customPayDebt ? Math.min(rawShare, customPayDebt.amount) : rawShare;
+            setCustomPayAmount(String(amountToPay));
         }
     };
 
@@ -752,9 +1163,26 @@ const SplitExpense = () => {
             return;
         }
 
+        if (customPayDebt && payAmt > customPayDebt.amount) {
+            alert(`Payment amount cannot exceed the debtor's net outstanding debt of ${activeSplit.currencySymbol || '₹'}${customPayDebt.amount.toLocaleString()}.`);
+            return;
+        }
+
         const eligible = getEligibleExpensesForDebt(customPayDebt, activeSplit.expenses, activeSplit.participants);
-        const chosenExp = eligible.find(exp => String(exp.id) === String(customPayExpenseId));
-        const expenseTitle = chosenExp ? chosenExp.title : 'Expense';
+        let chosenExp = eligible.find(exp => String(exp.id) === String(customPayExpenseId));
+        if (!chosenExp && customPayExpenseId !== 'general') {
+            chosenExp = activeSplit.expenses.find(exp => String(exp.id) === String(customPayExpenseId));
+        }
+        if (!chosenExp && customPayDebt.expenseId) {
+            chosenExp = activeSplit.expenses.find(exp => String(exp.id) === String(customPayDebt.expenseId));
+        }
+        const allPrimaries = (activeSplit.expenses || []).filter(item => isPrimaryExpense(item));
+        if (!chosenExp && allPrimaries.length === 1) {
+            chosenExp = allPrimaries[0];
+        }
+
+        const targetExpenseId = chosenExp ? chosenExp.id : (customPayExpenseId !== 'general' && customPayExpenseId ? customPayExpenseId : (customPayDebt.expenseId || (allPrimaries.length === 1 ? allPrimaries[0].id : null)));
+        const expenseTitle = chosenExp ? chosenExp.title : (customPayDebt.expenseTitle || 'Expense');
 
         // Requirement: Settlement for [Expense Title]: [From] paid [To]
         const settlementTitle = `Settlement for ${expenseTitle}: ${customPayDebt.from} paid ${customPayDebt.to}`;
@@ -769,6 +1197,9 @@ const SplitExpense = () => {
             splitType: 'custom',
             isSettlement: true,
             type: 'SETTLEMENT',
+            linked_expense_id: targetExpenseId,
+            expenseId: targetExpenseId,
+            relatedExpenseId: targetExpenseId,
             shares: {
                 [customPayDebt.to]: payAmt
             }
@@ -783,16 +1214,31 @@ const SplitExpense = () => {
 
         try {
             const createdSettlement = await splitExpenseService.addExpense(selectedSplitId, settlementExpense);
+            const finalSettlement = {
+                ...createdSettlement,
+                title: settlementExpense.title,
+                amount: settlementExpense.amount,
+                paidBy: settlementExpense.paidBy,
+                shares: settlementExpense.shares,
+                isSettlement: true,
+                type: 'SETTLEMENT',
+                linked_expense_id: targetExpenseId,
+                expenseId: targetExpenseId,
+                relatedExpenseId: targetExpenseId
+            };
             const updatedSplits = splits.map(s => {
                 if (s.id === selectedSplitId) {
                     return {
                         ...s,
-                        expenses: [createdSettlement, ...s.expenses]
+                        expenses: [finalSettlement, ...s.expenses]
                     };
                 }
                 return s;
             });
             setSplits(updatedSplits);
+            try {
+                localStorage.setItem('cliks_splits_data', JSON.stringify(updatedSplits));
+            } catch {}
             alert(`✨ Settlement for "${expenseTitle}" logged successfully!`);
         } catch (err) {
             console.error("Error saving custom settlement to backend:", err);
@@ -806,6 +1252,9 @@ const SplitExpense = () => {
                 return s;
             });
             setSplits(updatedSplits);
+            try {
+                localStorage.setItem('cliks_splits_data', JSON.stringify(updatedSplits));
+            } catch {}
             alert(`✨ Settlement for "${expenseTitle}" logged successfully!`);
         } finally {
             setIsCustomPayModalOpen(false);
@@ -1338,503 +1787,253 @@ const SplitExpense = () => {
                                 </div>
                             </div>
 
-                            {/* Expandable Summary Card */}
-                            <div
-                                style={{
-                                    background: '#FFFFFF',
-                                    borderRadius: '24px',
-                                    border: '1.5px solid #E2E8F0',
-                                    padding: '1.25rem 1.5rem',
-                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
-                                }}
-                            >
-                                {/* Summary Header Row */}
-                                <div
-                                    onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                        <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '900', color: '#0F172A' }}>
-                                            Summary
-                                        </h3>
-                                        <span style={{
-                                            fontSize: '0.68rem',
-                                            fontWeight: '850',
-                                            background: '#EFF6FF',
-                                            color: '#2563EB',
-                                            border: '1px solid #BFDBFE',
-                                            padding: '2px 8px',
-                                            borderRadius: '9999px',
-                                            textTransform: 'uppercase'
-                                        }}>
-                                            {activeSplit.currency || 'USD'}
-                                        </span>
-                                    </div>
+                            {/* ── 2-COLUMN SPLIT LAYOUT ── */}
+                            {(() => {
+                                const allExpenses = activeSplit.expenses || [];
+                                const splitSettlements = allExpenses.filter(item => !isPrimaryExpense(item));
+                                const totalSettledAmount = splitSettlements.reduce((sum, s) => sum + (parseFloat(s.amount) || 0), 0);
+                                const currSym = activeSplit.currencySymbol || '₹';
 
-                                    <button
-                                        type="button"
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            setIsSummaryExpanded(!isSummaryExpanded);
-                                        }}
-                                        style={{
-                                            background: 'transparent',
-                                            border: 'none',
-                                            color: '#64748B',
-                                            cursor: 'pointer',
-                                            padding: '4px',
-                                            borderRadius: '8px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}
-                                        title={isSummaryExpanded ? 'Collapse summary' : 'Expand summary'}
-                                    >
-                                        <ChevronDown
-                                            size={18}
-                                            strokeWidth={2.5}
-                                            style={{
-                                                transform: isSummaryExpanded ? 'rotate(0deg)' : 'rotate(-180deg)',
-                                                transition: 'transform 0.2s ease'
-                                            }}
-                                        />
-                                    </button>
-                                </div>
-
-                                {/* Members List Accordion Content */}
-                                {isSummaryExpanded && (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
-                                        {activeSplit.participants.map(m => {
-                                            const allExpenses = activeSplit.expenses || [];
-                                            const primaryExpenses = allExpenses.filter(e => !e.isSettlement && e.type !== 'SETTLEMENT' && e.type !== 'REPAYMENT' && (!e.title || !e.title.toLowerCase().startsWith('settlement')));
-                                            const settlementExpenses = allExpenses.filter(e => e.isSettlement || e.type === 'SETTLEMENT' || e.type === 'REPAYMENT' || (e.title && e.title.toLowerCase().startsWith('settlement')));
-
-                                            // Initial Audit Totals (Primary non-settlement expenses)
-                                            const paid = primaryExpenses
-                                                .filter(e => e.paidBy === m)
-                                                .reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
-
-                                            const charged = primaryExpenses.reduce((sum, e) => {
-                                                let share = 0;
-                                                if (e.shares && e.shares[m] !== undefined) {
-                                                    share = parseFloat(e.shares[m]) || 0;
-                                                } else if (e.splitType && !e.splitType.toLowerCase().includes('equal')) {
-                                                    share = parseFloat(e.shares?.[m]) || 0;
-                                                } else {
-                                                    const numParticipants = activeSplit.participants?.length || 1;
-                                                    share = (parseFloat(e.amount) || 0) / numParticipants;
-                                                }
-                                                return sum + share;
-                                            }, 0);
-
-                                            // Settlements Paid (m was debtor who paid money)
-                                            const settledPaid = settlementExpenses
-                                                .filter(s => s.paidBy === m || s.from === m)
-                                                .reduce((sum, s) => sum + (parseFloat(s.amount) || 0), 0);
-
-                                            // Settlements Received (m was creditor who received money)
-                                            const settledReceived = settlementExpenses
-                                                .reduce((sum, s) => {
-                                                    let rec = 0;
-                                                    if (s.shares && s.shares[m] !== undefined) {
-                                                        rec = parseFloat(s.shares[m]) || 0;
-                                                    } else if (s.to === m || s.creditor === m) {
-                                                        rec = parseFloat(s.amount) || 0;
-                                                    }
-                                                    return sum + rec;
-                                                }, 0);
-
-                                            // Live Net Balance after settlements
-                                            let net = (paid + settledPaid) - (charged + settledReceived);
-                                            const isSettled = Math.abs(net) < 0.01;
-                                            if (isSettled) net = 0;
-
-                                            const isPositive = net > 0.001;
-
-                                            return (
-                                                <div
-                                                    key={m}
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        alignItems: 'center',
-                                                        padding: '0.65rem 0.85rem',
-                                                        borderRadius: '12px',
-                                                        background: '#F8FAFC',
-                                                        border: '1px solid #F1F5F9'
-                                                    }}
-                                                >
-                                                    <div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                                                            <span style={{ fontSize: '0.92rem', fontWeight: '850', color: '#1E293B' }}>
-                                                                {m}
-                                                            </span>
-                                                            {isSettled && (
-                                                                <span style={{
-                                                                    display: 'inline-flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '3px',
-                                                                    fontSize: '0.65rem',
-                                                                    fontWeight: '800',
-                                                                    background: '#ECFDF5',
-                                                                    color: '#059669',
-                                                                    border: '1px solid #A7F3D0',
-                                                                    padding: '1px 6px',
-                                                                    borderRadius: '9999px'
-                                                                }}>
-                                                                    <Check size={11} strokeWidth={2.5} /> Settled
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>
-                                                            Charged {formatCurrencyUniversal(charged, activeSplit.currency)}, Paid {formatCurrencyUniversal(paid, activeSplit.currency)}
-                                                        </span>
-                                                    </div>
-
-                                                    <div style={{ textAlign: 'right' }}>
-                                                        <span style={{
-                                                            fontSize: '0.98rem',
-                                                            fontWeight: '950',
-                                                            color: isSettled ? '#64748B' : (isPositive ? '#059669' : '#DC2626')
-                                                        }}>
-                                                            {isSettled ? formatCurrencyUniversal(0, activeSplit.currency) : `${isPositive ? '+' : ''}${formatCurrencyUniversal(net, activeSplit.currency)}`}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Expandable "How to settle?" Card */}
-                            <div
-                                style={{
-                                    background: '#FFFFFF',
-                                    borderRadius: '24px',
-                                    border: '1.5px solid #E2E8F0',
-                                    padding: '1.25rem 1.5rem',
-                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
-                                }}
-                            >
-                                {/* Header Row */}
-                                <div
-                                    onClick={() => setIsSettleExpanded(!isSettleExpanded)}
-                                    style={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        cursor: 'pointer'
-                                    }}
-                                >
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                        <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '900', color: '#0F172A' }}>
-                                            How to settle?
-                                        </h3>
-                                        <span style={{
-                                            fontSize: '0.68rem',
-                                            fontWeight: '850',
-                                            background: '#ECFDF5',
-                                            color: '#059669',
-                                            border: '1px solid #A7F3D0',
-                                            padding: '2px 8px',
-                                            borderRadius: '9999px',
-                                            textTransform: 'uppercase'
-                                        }}>
-                                            {calculatedBalances.debts.length} {calculatedBalances.debts.length === 1 ? 'Transfer' : 'Transfers'}
-                                        </span>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        onClick={(ev) => {
-                                            ev.stopPropagation();
-                                            setIsSettleExpanded(!isSettleExpanded);
-                                        }}
-                                        style={{
-                                            background: 'transparent',
-                                            border: 'none',
-                                            color: '#64748B',
-                                            cursor: 'pointer',
-                                            padding: '4px',
-                                            borderRadius: '8px',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center'
-                                        }}
-                                        title={isSettleExpanded ? 'Collapse settlement instructions' : 'Expand settlement instructions'}
-                                    >
-                                        <ChevronDown
-                                            size={18}
-                                            strokeWidth={2.5}
-                                            style={{
-                                                transform: isSettleExpanded ? 'rotate(0deg)' : 'rotate(-180deg)',
-                                                transition: 'transform 0.2s ease'
-                                            }}
-                                        />
-                                    </button>
-                                </div>
-
-                                {/* Content Accordion */}
-                                {isSettleExpanded && (
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
-                                        {calculatedBalances.debts.length === 0 ? (
-                                            <div style={{ textAlign: 'center', padding: '0.85rem 0', color: '#059669', fontWeight: '750', fontSize: '0.88rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                                                <Check size={18} strokeWidth={2.5} /> All accounts completely settled!
-                                            </div>
-                                        ) : (
-                                            calculatedBalances.debts.map((d, dIdx) => (
-                                                <div
-                                                    key={dIdx}
-                                                    style={{
-                                                        display: 'flex',
-                                                        justifyContent: 'space-between',
-                                                        alignItems: 'center',
-                                                        padding: '0.65rem 0.85rem',
-                                                        borderRadius: '12px',
-                                                        background: '#F8FAFC',
-                                                        border: '1px solid #F1F5F9'
-                                                    }}
-                                                >
-                                                    <div>
-                                                        <span style={{ fontSize: '0.92rem', fontWeight: '850', color: '#1E293B', display: 'block' }}>
-                                                            {d.from}
-                                                        </span>
-                                                        <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>
-                                                            should pay to <strong style={{ color: '#0F172A', fontWeight: '750' }}>{d.to}</strong>
-                                                        </span>
-                                                    </div>
-
-                                                    <div style={{ textAlign: 'right' }}>
-                                                        <span style={{
-                                                            fontSize: '0.98rem',
-                                                            fontWeight: '950',
-                                                            color: '#2563EB'
-                                                        }}>
-                                                            {formatCurrencyUniversal(d.amount, activeSplit.currency)}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            ))
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            {/* Grid Split Content */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1.25fr 0.75fr', gap: '1.5rem', alignItems: 'start' }}>
+                                return (
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6">
+                                        {/* ── Left Column (lg:col-span-6): LOGGED EXPENSES ── */}
+                                        <div className="lg:col-span-6">
+                            {/* Sessions Content: Each primary expense creates its own self-contained session section */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                 
-                                {/* LEFT SIDE: Ledger Expenses List */}
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '900', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.02em' }}>Logged Expenses</h3>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            {/* Search Toggle */}
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                                <AnimatePresence>
-                                                    {showDetailSearch && (
-                                                        <Motion.input
-                                                            initial={{ width: 0, opacity: 0 }}
-                                                            animate={{ width: 140, opacity: 1 }}
-                                                            exit={{ width: 0, opacity: 0 }}
-                                                            type="text"
-                                                            placeholder="Search expenses..."
-                                                            value={detailSearchQuery}
-                                                            onChange={(e) => setDetailSearchQuery(e.target.value)}
-                                                            style={{
-                                                                padding: '0.35rem 0.65rem',
-                                                                borderRadius: '8px',
-                                                                border: '1px solid #CBD5E1',
-                                                                fontSize: '0.75rem',
-                                                                outline: 'none',
-                                                                fontWeight: '600'
-                                                            }}
-                                                        />
-                                                    )}
-                                                </AnimatePresence>
-                                                <button 
-                                                    onClick={() => {
-                                                        setShowDetailSearch(!showDetailSearch);
-                                                        if (showDetailSearch) setDetailSearchQuery('');
-                                                     }}
-                                                     title="Search expenses"
-                                                     style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                                 >
-                                                     <Search size={14} />
-                                                 </button>
-                                             </div>
+                                {/* Top Action Bar */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                        <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '900', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                            Logged Expenses
+                                        </h3>
+                                        <span style={{ 
+                                            fontSize: '0.7rem', 
+                                            fontWeight: '750', 
+                                            background: '#F1F5F9', 
+                                            color: '#475569', 
+                                            padding: '2px 8px', 
+                                            borderRadius: '9999px',
+                                            border: '1px solid #E2E8F0'
+                                        }}>
+                                            {(activeSplit.expenses || []).filter(item => isPrimaryExpense(item)).length} {((activeSplit.expenses || []).filter(item => isPrimaryExpense(item)).length === 1) ? 'Session' : 'Sessions'}
+                                        </span>
+                                    </div>
 
-                                             {/* Share Icon */}
-                                             <button 
-                                                 onClick={handleShareGroup}
-                                                 title="Share Split Summary"
-                                                 style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                             >
-                                                 <Share2 size={14} />
-                                             </button>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        {/* Search Toggle */}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                            <AnimatePresence>
+                                                {showDetailSearch && (
+                                                    <Motion.input
+                                                        initial={{ width: 0, opacity: 0 }}
+                                                        animate={{ width: 150, opacity: 1 }}
+                                                        exit={{ width: 0, opacity: 0 }}
+                                                        type="text"
+                                                        placeholder="Search expenses..."
+                                                        value={detailSearchQuery}
+                                                        onChange={(e) => setDetailSearchQuery(e.target.value)}
+                                                        style={{
+                                                            padding: '0.35rem 0.65rem',
+                                                            borderRadius: '8px',
+                                                            border: '1px solid #CBD5E1',
+                                                            fontSize: '0.75rem',
+                                                            outline: 'none',
+                                                            fontWeight: '600'
+                                                        }}
+                                                    />
+                                                )}
+                                            </AnimatePresence>
+                                            <button 
+                                                onClick={() => {
+                                                    setShowDetailSearch(!showDetailSearch);
+                                                    if (showDetailSearch) setDetailSearchQuery('');
+                                                }}
+                                                title="Search expenses"
+                                                style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            >
+                                                <Search size={14} />
+                                            </button>
+                                        </div>
 
-                                             {/* PDF Download Icon */}
-                                             <button 
-                                                 onClick={handleDownloadPDF}
-                                                 title="Download Statement (PDF)"
-                                                 style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                                             >
-                                                 <Download size={14} />
-                                             </button>
-                                         </div>
-                                     </div>
-                                    
-                                    {(() => {
-                                        const filteredExpenses = (activeSplit.expenses || []).filter(e => {
-                                            if (!detailSearchQuery.trim()) return true;
-                                            const term = detailSearchQuery.toLowerCase().trim();
-                                            return (e.title || '').toLowerCase().includes(term) ||
-                                                   (e.paidBy || '').toLowerCase().includes(term) ||
-                                                   String(e.amount).includes(term) ||
-                                                   (e.attachment || '').toLowerCase().includes(term);
-                                        });
-                                        return filteredExpenses.length === 0 ? (
+                                        {/* Share Icon */}
+                                        <button 
+                                            onClick={handleShareGroup}
+                                            title="Share Split Summary"
+                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            <Share2 size={14} />
+                                        </button>
+
+                                        {/* PDF Download Icon */}
+                                        <button 
+                                            onClick={handleDownloadPDF}
+                                            title="Download Statement (PDF)"
+                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        >
+                                            <Download size={14} />
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                {(() => {
+                                    // Separate primary expenses and settlements
+                                    const allItems = activeSplit.expenses || [];
+                                    const primaryExpenses = allItems.filter(item => isPrimaryExpense(item));
+                                    const settlements = allItems.filter(item => !isPrimaryExpense(item));
+
+                                    // Filter primary expenses by search query (or if any of its linked settlements match)
+                                    const filteredPrimaryExpenses = primaryExpenses.filter(e => {
+                                        if (!detailSearchQuery.trim()) return true;
+                                        const term = detailSearchQuery.toLowerCase().trim();
+                                        const matchesExp = e.title.toLowerCase().includes(term) ||
+                                               e.paidBy.toLowerCase().includes(term) ||
+                                               String(e.amount).includes(term) ||
+                                               (e.attachment || '').toLowerCase().includes(term);
+                                        if (matchesExp) return true;
+                                        return settlements.some(s => isSettlementLinkedToExpense(s, e, primaryExpenses) && (
+                                            s.title.toLowerCase().includes(term) ||
+                                            s.paidBy.toLowerCase().includes(term) ||
+                                            String(s.amount).includes(term)
+                                        ));
+                                    });
+
+                                    // Settlements not linked to any primary expense
+                                    const generalSettlements = settlements.filter(s => {
+                                        const isLinked = primaryExpenses.some(exp => isSettlementLinkedToExpense(s, exp, primaryExpenses));
+                                        if (isLinked) return false;
+                                        if (!detailSearchQuery.trim()) return true;
+                                        const term = detailSearchQuery.toLowerCase().trim();
+                                        return s.title.toLowerCase().includes(term) ||
+                                               s.paidBy.toLowerCase().includes(term) ||
+                                               String(s.amount).includes(term);
+                                    });
+
+                                    const hasItems = filteredPrimaryExpenses.length > 0 || generalSettlements.length > 0;
+
+                                    if (!hasItems) {
+                                        return (
                                             <div style={{ border: '2px dashed #E2E8F0', borderRadius: '24px', background: 'white', padding: '3.5rem 2rem', textAlign: 'center' }}>
                                                 <Receipt size={36} style={{ color: '#CBD5E1', marginBottom: '0.75rem' }} />
                                                 <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#334155', margin: '0 0 0.15rem 0' }}>No Expenses Found</h4>
                                                 <p style={{ fontSize: '0.8rem', color: '#64748B', maxWidth: '280px', margin: '0 auto' }}>
                                                     {activeSplit.expenses.length === 0 
-                                                        ? 'Click "Add Expense" to record dinners, travel costs, or team bills in this split ticket.'
+                                                        ? 'Click "+ Add Expense" to record dinners, travel costs, or team bills in this split ticket.'
                                                         : `No expenses match your search query "${detailSearchQuery}".`
                                                     }
                                                 </p>
                                             </div>
-                                        ) : (
-                                            <div className="space-y-3" style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                                {filteredExpenses.map(e => {
-                                                    const isSettlement = e.isSettlement || e.type === 'SETTLEMENT' || e.type === 'REPAYMENT' || (e.title && e.title.toLowerCase().startsWith('settlement'));
-                                                    
-                                                    // Determine split type badge
-                                                    const splitBadgeText = isSettlement 
-                                                        ? 'Settlement' 
-                                                        : (e.splitType && !e.splitType.toLowerCase().includes('equal') ? 'Custom Split' : 'Equal Split');
-                                                    
-                                                    const badgeStyle = isSettlement
-                                                        ? { bg: '#ECFDF5', color: '#059669', border: '#A7F3D0' }
-                                                        : (splitBadgeText === 'Equal Split'
-                                                            ? { bg: '#EFF6FF', color: '#2563EB', border: '#BFDBFE' }
-                                                            : { bg: '#F5F3FF', color: '#7C3AED', border: '#DDD6FE' });
+                                        );
+                                    }
 
-                                                    const isExpanded = expandedExpenseIds.includes(e.id);
+                                    return (
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {/* Primary Expenses: Each in its own self-contained session section */}
+                                            {filteredPrimaryExpenses.map(e => {
+                                                // Determine split type badge
+                                                const splitBadgeText = e.splitType && !e.splitType.toLowerCase().includes('equal') ? 'Custom Split' : 'Equal Split';
+                                                const badgeStyle = splitBadgeText === 'Equal Split'
+                                                    ? { bg: '#EFF6FF', color: '#2563EB', border: '#BFDBFE' }
+                                                    : { bg: '#F5F3FF', color: '#7C3AED', border: '#DDD6FE' };
 
-                                                    return (
-                                                        <div 
-                                                            key={e.id} 
-                                                            className="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm transition-all duration-200 hover:shadow-md hover:border-gray-200"
-                                                            style={{ 
-                                                                background: '#FFFFFF', 
-                                                                borderRadius: '16px', 
-                                                                border: '1px solid #F1F5F9', 
-                                                                padding: '1rem 1.25rem', 
-                                                                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
-                                                                position: 'relative'
-                                                            }}
+                                                const linkedSettlements = settlements.filter(s => isSettlementLinkedToExpense(s, e, primaryExpenses));
+                                                const sessionBalances = calculateSessionBalances(e, linkedSettlements, activeSplit.participants);
+                                                const isExpanded = expandedExpenseIds.includes(e.id);
+
+                                                return (
+                                                    <div 
+                                                        key={e.id} 
+                                                        className="bg-white border rounded-3xl p-6 shadow-sm mb-6 transition-all duration-200 hover:shadow-md"
+                                                        style={{
+                                                            background: '#FFFFFF',
+                                                            borderRadius: '24px',
+                                                            border: '1px solid #E2E8F0',
+                                                            padding: '1.5rem',
+                                                            marginBottom: '1.5rem',
+                                                            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)'
+                                                        }}
+                                                    >
+                                                        {/* Header Card (Clickable Row to Toggle) */}
+                                                        <div
+                                                            onClick={() => toggleExpenseExpand(e.id)}
+                                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', cursor: 'pointer' }}
                                                         >
-                                                            {/* Header Card (Clickable Row to Toggle) */}
-                                                            <div
-                                                                onClick={() => toggleExpenseExpand(e.id)}
-                                                                style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', cursor: 'pointer' }}
-                                                            >
-                                                                {/* Left info: Toggle Chevron, Icon & Content */}
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flex: 1, minWidth: 0 }}>
-                                                                    {/* Dropdown Chevron Button */}
-                                                                    <button
-                                                                        type="button"
-                                                                        onClick={(ev) => {
-                                                                            ev.stopPropagation();
-                                                                            toggleExpenseExpand(e.id);
-                                                                        }}
-                                                                        className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                                                            {/* Left: Toggle Chevron, Receipt Icon & Content */}
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flex: 1, minWidth: '240px' }}>
+                                                                {/* Dropdown Chevron Button */}
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={(ev) => {
+                                                                        ev.stopPropagation();
+                                                                        toggleExpenseExpand(e.id);
+                                                                    }}
+                                                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                                                                    style={{
+                                                                        width: '28px',
+                                                                        height: '28px',
+                                                                        borderRadius: '8px',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        color: '#94A3B8',
+                                                                        border: 'none',
+                                                                        background: 'transparent',
+                                                                        cursor: 'pointer',
+                                                                        flexShrink: 0,
+                                                                        transition: 'all 0.15s'
+                                                                    }}
+                                                                    title={isExpanded ? 'Collapse session' : 'Expand session'}
+                                                                    onMouseOver={(ev) => {
+                                                                        ev.currentTarget.style.color = '#334155';
+                                                                        ev.currentTarget.style.background = '#F1F5F9';
+                                                                    }}
+                                                                    onMouseOut={(ev) => {
+                                                                        ev.currentTarget.style.color = '#94A3B8';
+                                                                        ev.currentTarget.style.background = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    <ChevronDown
+                                                                        size={16}
+                                                                        strokeWidth={2.5}
                                                                         style={{
-                                                                            width: '28px',
-                                                                            height: '28px',
-                                                                            borderRadius: '8px',
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            justifyContent: 'center',
-                                                                            color: '#94A3B8',
-                                                                            border: 'none',
-                                                                            background: 'transparent',
-                                                                            cursor: 'pointer',
-                                                                            flexShrink: 0,
-                                                                            transition: 'all 0.15s'
+                                                                            transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                                                                            transition: 'transform 0.2s ease-in-out'
                                                                         }}
-                                                                        title={isExpanded ? 'Collapse session' : 'Expand session'}
-                                                                        onMouseOver={(ev) => {
-                                                                            ev.currentTarget.style.color = '#334155';
-                                                                            ev.currentTarget.style.background = '#F1F5F9';
-                                                                        }}
-                                                                        onMouseOut={(ev) => {
-                                                                            ev.currentTarget.style.color = '#94A3B8';
-                                                                            ev.currentTarget.style.background = 'transparent';
-                                                                        }}
-                                                                    >
-                                                                        <ChevronDown
-                                                                            size={16}
-                                                                            strokeWidth={2.5}
-                                                                            style={{
-                                                                                transform: isExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
-                                                                                transition: 'transform 0.2s ease-in-out'
-                                                                            }}
-                                                                        />
-                                                                    </button>
+                                                                    />
+                                                                </button>
 
-                                                                    {/* Icon indicator */}
-                                                                    <div
-                                                                        className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                                                                            isSettlement ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-gray-50 text-slate-600 border border-gray-100'
-                                                                        }`}
-                                                                        style={{
-                                                                            width: '40px',
-                                                                            height: '40px',
-                                                                            borderRadius: '12px',
-                                                                            background: isSettlement ? '#ECFDF5' : '#F8FAFC',
-                                                                            color: isSettlement ? '#059669' : '#475569',
-                                                                            border: isSettlement ? '1px solid #A7F3D0' : '1px solid #E2E8F0',
-                                                                            display: 'flex',
-                                                                            alignItems: 'center',
-                                                                            justifyContent: 'center',
-                                                                            flexShrink: 0
-                                                                        }}
-                                                                    >
-                                                                        {isSettlement ? <Check size={19} strokeWidth={2.5} /> : <Receipt size={19} />}
-                                                                    </div>
+                                                                <div
+                                                                    style={{ 
+                                                                        width: '42px', 
+                                                                        height: '42px', 
+                                                                        borderRadius: '12px', 
+                                                                        background: '#F8FAFC', 
+                                                                        color: '#475569', 
+                                                                        border: '1px solid #E2E8F0',
+                                                                        display: 'flex', 
+                                                                        alignItems: 'center', 
+                                                                        justifyContent: 'center', 
+                                                                        flexShrink: 0 
+                                                                    }}
+                                                                >
+                                                                    <Receipt size={20} />
+                                                                </div>
 
-                                                                {/* Details */}
-                                                                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+                                                                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
                                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                                                         <h4 
-                                                                            className="font-bold text-gray-900"
                                                                             style={{ 
                                                                                 margin: 0, 
-                                                                                fontSize: '0.95rem', 
+                                                                                fontSize: '1rem', 
                                                                                 fontWeight: '800', 
-                                                                                color: isSettlement ? '#065F46' : '#0F172A',
+                                                                                color: '#0F172A',
                                                                                 letterSpacing: '-0.01em'
                                                                             }}
                                                                         >
                                                                             {e.title}
                                                                         </h4>
 
-                                                                        {/* Distinct tag badge for "Equal Split", "Custom Split", or "Settlement" */}
                                                                         <span 
-                                                                            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
-                                                                                isSettlement 
-                                                                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                                                                                    : (splitBadgeText === 'Equal Split' 
-                                                                                        ? 'bg-blue-50 text-blue-700 border border-blue-200' 
-                                                                                        : 'bg-purple-50 text-purple-700 border border-purple-200')
-                                                                            }`}
                                                                             style={{
                                                                                 display: 'inline-flex',
                                                                                 alignItems: 'center',
@@ -1852,13 +2051,12 @@ const SplitExpense = () => {
                                                                     </div>
 
                                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                                                        <span style={{ fontSize: '0.72rem', fontWeight: '500', color: '#64748B' }}>
+                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '500', color: '#64748B' }}>
                                                                             Paid by <strong style={{ color: '#1E293B', fontWeight: '750' }}>{e.paidBy}</strong>
                                                                         </span>
                                                                         
                                                                         <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#CBD5E1' }} />
                                                                         
-                                                                        {/* Date pill / metadata */}
                                                                         <span 
                                                                             style={{ 
                                                                                 display: 'inline-flex', 
@@ -1876,64 +2074,59 @@ const SplitExpense = () => {
                                                                             <Calendar size={11} style={{ color: '#94A3B8' }} /> {e.date}
                                                                         </span>
 
-                                                                        {e.attachment && (() => {
-                                                                            const fileUrl = resolveAttachmentUrl(e.attachment);
-                                                                            const isPdf = e.attachment.toLowerCase().endsWith('.pdf');
-                                                                            const isImage = /\.(jpe?g|png|webp|gif|svg)$/i.test(e.attachment);
-                                                                            return (
-                                                                                <>
-                                                                                    <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#CBD5E1' }} />
-                                                                                    <button 
-                                                                                        type="button"
-                                                                                        title={`Preview Document: ${e.attachment}`}
-                                                                                        onClick={(evt) => {
-                                                                                            evt.stopPropagation();
-                                                                                            setPreviewAttachment({
-                                                                                                url: fileUrl,
-                                                                                                name: e.attachment,
-                                                                                                isPdf,
-                                                                                                isImage
-                                                                                            });
-                                                                                        }}
-                                                                                        style={{ 
-                                                                                            border: '1px solid #BFDBFE', 
-                                                                                            fontSize: '0.68rem', 
-                                                                                            fontWeight: '750', 
-                                                                                            color: '#2563EB', 
-                                                                                            background: '#EFF6FF', 
-                                                                                            padding: '1px 8px', 
-                                                                                            borderRadius: '6px', 
-                                                                                            display: 'inline-flex', 
-                                                                                            alignItems: 'center', 
-                                                                                            gap: '4px', 
-                                                                                            cursor: 'pointer', 
-                                                                                            maxWidth: '160px',
-                                                                                            transition: 'all 0.15s' 
-                                                                                        }}
-                                                                                        onMouseOver={(evt) => evt.currentTarget.style.background = '#DBEAFE'}
-                                                                                        onMouseOut={(evt) => evt.currentTarget.style.background = '#EFF6FF'}
-                                                                                    >
-                                                                                        <FileText size={11} style={{ flexShrink: 0 }} />
-                                                                                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                                                            {e.attachment.length > 20 ? e.attachment.substring(0, 17) + '...' : e.attachment}
-                                                                                        </span>
-                                                                                    </button>
-                                                                                </>
-                                                                            );
-                                                                        })()}
+                                                                        {(e.attachment || e.documentUrl) && (
+                                                                            <>
+                                                                                <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: '#CBD5E1' }} />
+                                                                                <button
+                                                                                    type="button"
+                                                                                    onClick={(ev) => {
+                                                                                        ev.stopPropagation();
+                                                                                        const targetDoc = e.documentUrl || e.attachment;
+                                                                                        const resolvedUrl = resolveFileUrl(targetDoc);
+                                                                                        const cleanName = e.documentName || (e.attachment ? e.attachment.split('/').pop().replace(/^\d+_/, '') : 'Document');
+                                                                                        setPreviewAttachment({
+                                                                                            url: resolvedUrl,
+                                                                                            name: cleanName
+                                                                                        });
+                                                                                    }}
+                                                                                    style={{
+                                                                                        display: 'inline-flex',
+                                                                                        alignItems: 'center',
+                                                                                        gap: '4px',
+                                                                                        background: '#EFF6FF',
+                                                                                        color: '#2563EB',
+                                                                                        border: '1px solid #BFDBFE',
+                                                                                        padding: '1px 8px',
+                                                                                        borderRadius: '6px',
+                                                                                        fontSize: '0.68rem',
+                                                                                        fontWeight: '750',
+                                                                                        cursor: 'pointer',
+                                                                                        maxWidth: '160px',
+                                                                                        transition: 'all 0.15s'
+                                                                                    }}
+                                                                                    title="Click to view attachment inline"
+                                                                                    onMouseOver={(ev) => ev.currentTarget.style.background = '#DBEAFE'}
+                                                                                    onMouseOut={(ev) => ev.currentTarget.style.background = '#EFF6FF'}
+                                                                                >
+                                                                                    <FileText size={11} style={{ flexShrink: 0 }} />
+                                                                                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                                                        {e.documentName || (e.attachment ? e.attachment.split('/').pop().replace(/^\d+_/, '') : 'Attachment')}
+                                                                                    </span>
+                                                                                </button>
+                                                                            </>
+                                                                        )}
                                                                     </div>
                                                                 </div>
                                                             </div>
 
-                                                            {/* Amount & Actions */}
+                                                            {/* Right: Amount & Actions */}
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexShrink: 0 }}>
                                                                 <div style={{ textAlign: 'right' }}>
                                                                     <span 
-                                                                        className="font-black"
                                                                         style={{ 
-                                                                            fontSize: '1.1rem', 
+                                                                            fontSize: '1.2rem', 
                                                                             fontWeight: '900', 
-                                                                            color: isSettlement ? '#059669' : '#0F172A',
+                                                                            color: '#0F172A',
                                                                             letterSpacing: '-0.02em',
                                                                             display: 'block'
                                                                         }}
@@ -1943,38 +2136,36 @@ const SplitExpense = () => {
                                                                 </div>
 
                                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
-                                                                    {!isSettlement && (
-                                                                        <button 
-                                                                            type="button"
-                                                                            onClick={(ev) => {
-                                                                                ev.stopPropagation();
-                                                                                openEditExpenseModal(e);
-                                                                            }}
-                                                                            title="Edit Expense"
-                                                                            style={{ 
-                                                                                background: 'transparent', 
-                                                                                border: 'none', 
-                                                                                color: '#94A3B8', 
-                                                                                cursor: 'pointer', 
-                                                                                padding: '6px', 
-                                                                                borderRadius: '8px',
-                                                                                display: 'flex', 
-                                                                                alignItems: 'center', 
-                                                                                justifyContent: 'center',
-                                                                                transition: 'all 0.15s'
-                                                                            }}
-                                                                            onMouseOver={(ev) => {
-                                                                                ev.currentTarget.style.color = '#16A34A';
-                                                                                ev.currentTarget.style.background = '#F0FDF4';
-                                                                            }}
-                                                                            onMouseOut={(ev) => {
-                                                                                ev.currentTarget.style.color = '#94A3B8';
-                                                                                ev.currentTarget.style.background = 'transparent';
-                                                                            }}
-                                                                        >
-                                                                            <Pencil size={14} />
-                                                                        </button>
-                                                                    )}
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={(ev) => {
+                                                                            ev.stopPropagation();
+                                                                            openEditExpenseModal(e);
+                                                                        }}
+                                                                        title="Edit Expense"
+                                                                        style={{ 
+                                                                            background: 'transparent', 
+                                                                            border: 'none', 
+                                                                            color: '#94A3B8', 
+                                                                            cursor: 'pointer', 
+                                                                            padding: '6px', 
+                                                                            borderRadius: '8px',
+                                                                            display: 'flex', 
+                                                                            alignItems: 'center', 
+                                                                            justifyContent: 'center',
+                                                                            transition: 'all 0.15s'
+                                                                        }}
+                                                                        onMouseOver={(ev) => {
+                                                                            ev.currentTarget.style.color = '#16A34A';
+                                                                            ev.currentTarget.style.background = '#F0FDF4';
+                                                                        }}
+                                                                        onMouseOut={(ev) => {
+                                                                            ev.currentTarget.style.color = '#94A3B8';
+                                                                            ev.currentTarget.style.background = 'transparent';
+                                                                        }}
+                                                                    >
+                                                                        <Pencil size={14} />
+                                                                    </button>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={(ev) => {
@@ -2008,119 +2199,756 @@ const SplitExpense = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        );
-                                    })()}
-                                </div>
 
-                                {/* RIGHT SIDE: Balances, Debts, Settlement */}
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                                    
-                                    {/* 1. Net Balances Breakdown */}
-                                    <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #E2E8F0', padding: '1.5rem' }}>
-                                        <h3 style={{ margin: '0 0 1rem 0', fontSize: '0.85rem', fontWeight: '900', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Individual Balances</h3>
-                                        
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                            {activeSplit.participants.map(m => {
-                                                const bal = calculatedBalances.members[m] || 0;
-                                                return (
-                                                    <div key={m} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                        <span style={{ fontWeight: '800', color: '#1F2937', fontSize: '0.85rem' }}>{m}</span>
-                                                        <span style={{ 
-                                                            fontWeight: '950', 
-                                                            fontSize: '0.88rem', 
-                                                            color: bal > 0.01 ? '#059669' : bal < -0.01 ? '#DC2626' : '#64748B' 
-                                                        }}>
-                                                            {bal > 0.01 ? '+' : ''}{activeSplit.currencySymbol}{bal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                                                        </span>
+                                                        {/* Sub-Grid (2 Columns) - Collapsible Accordion Content */}
+                                                        {isExpanded && (
+                                                            <div
+                                                                style={{
+                                                                    display: 'grid',
+                                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                                                                    gap: '1.25rem',
+                                                                    marginTop: '1.25rem',
+                                                                    paddingTop: '1.25rem',
+                                                                    borderTop: '1px solid #F1F5F9',
+                                                                    alignItems: 'start'
+                                                                }}
+                                                            >
+                                                                {/* Left Column: Balances & Simplified Debts */}
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                                    {/* 1. INDIVIDUAL BALANCES card */}
+                                                                    <div style={{ background: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '1.15rem' }}>
+                                                                        <h5 style={{ margin: '0 0 0.75rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                                            Individual Balances
+                                                                        </h5>
+
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                                                                            {activeSplit.participants.map(m => {
+                                                                                const bal = sessionBalances.members[m] || 0;
+                                                                                return (
+                                                                                    <div key={m} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                                                        <span style={{ fontWeight: '750', color: '#334155', fontSize: '0.82rem' }}>{m}</span>
+                                                                                        <span style={{
+                                                                                            fontWeight: '900',
+                                                                                            fontSize: '0.82rem',
+                                                                                            color: bal > 0.01 ? '#059669' : bal < -0.01 ? '#DC2626' : '#64748B'
+                                                                                        }}>
+                                                                                            {bal > 0.01 ? '+' : ''}{activeSplit.currencySymbol || '₹'}{bal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                );
+                                                                            })}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* 2. SIMPLIFIED DEBTS dark box */}
+                                                                    <div style={{ background: '#0F172A', borderRadius: '18px', padding: '1.15rem', color: 'white', boxShadow: '0 8px 18px rgba(15,23,42,0.12)' }}>
+                                                                        <h5 style={{ margin: '0 0 0.85rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                                            Simplified Debts
+                                                                        </h5>
+
+                                                                        {sessionBalances.debts.length === 0 ? (
+                                                                            <div style={{ textAlign: 'center', padding: '0.75rem 0' }}>
+                                                                                <Check size={22} color="#34D399" style={{ marginBottom: '0.35rem' }} />
+                                                                                <p style={{ margin: 0, fontSize: '0.78rem', color: '#94A3B8', fontWeight: '600' }}>✓ All accounts completely settled!</p>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                                                                                {sessionBalances.debts.map((d, dIdx) => (
+                                                                                    <div
+                                                                                        key={dIdx}
+                                                                                        style={{
+                                                                                            background: 'rgba(255,255,255,0.04)',
+                                                                                            padding: '0.7rem 0.85rem',
+                                                                                            borderRadius: '12px',
+                                                                                            border: '1px solid rgba(255,255,255,0.07)',
+                                                                                            display: 'flex',
+                                                                                            justifyContent: 'space-between',
+                                                                                            alignItems: 'center',
+                                                                                            gap: '0.5rem',
+                                                                                            flexWrap: 'wrap'
+                                                                                        }}
+                                                                                    >
+                                                                                        <div>
+                                                                                            <div style={{ fontSize: '0.78rem', fontWeight: '750', color: '#F8FAFC' }}>
+                                                                                                {d.from} owes {d.to}
+                                                                                            </div>
+                                                                                            <div style={{ fontSize: '0.95rem', fontWeight: '950', color: '#38BDF8', marginTop: '1px' }}>
+                                                                                                {activeSplit.currencySymbol || '₹'}{d.amount.toLocaleString()}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                                                            <button
+                                                                                                type="button"
+                                                                                                onClick={() => openCustomPayModal(d)}
+                                                                                                style={{
+                                                                                                    border: '1px solid rgba(255,255,255,0.18)',
+                                                                                                    background: 'rgba(255,255,255,0.08)',
+                                                                                                    color: '#F8FAFC',
+                                                                                                    padding: '0.35rem 0.65rem',
+                                                                                                    borderRadius: '8px',
+                                                                                                    fontWeight: '800',
+                                                                                                    fontSize: '0.7rem',
+                                                                                                    cursor: 'pointer',
+                                                                                                    transition: 'all 0.15s'
+                                                                                                }}
+                                                                                                onMouseOver={(ev) => ev.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+                                                                                                onMouseOut={(ev) => ev.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                                                                                            >
+                                                                                                Custom Pay
+                                                                                            </button>
+                                                                                            <button
+                                                                                                type="button"
+                                                                                                onClick={() => handleSettleDebt(d)}
+                                                                                                style={{
+                                                                                                    border: 'none',
+                                                                                                    background: '#34D399',
+                                                                                                    color: '#064E3B',
+                                                                                                    padding: '0.35rem 0.65rem',
+                                                                                                    borderRadius: '8px',
+                                                                                                    fontWeight: '900',
+                                                                                                    fontSize: '0.7rem',
+                                                                                                    cursor: 'pointer',
+                                                                                                    boxShadow: '0 4px 10px rgba(52, 211, 153, 0.2)'
+                                                                                                }}
+                                                                                            >
+                                                                                                Settle
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Right Column: List of Settlement Cards linked to this specific expense */}
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.15rem' }}>
+                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                                            <Check size={14} strokeWidth={2.5} /> Settlements ({linkedSettlements.length})
+                                                                        </span>
+                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#059669' }}>
+                                                                            Settled: {activeSplit.currencySymbol || '₹'}{linkedSettlements.reduce((sum, s) => sum + (parseFloat(s.amount) || 0), 0).toLocaleString()}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    {linkedSettlements.length === 0 ? (
+                                                                        <div style={{
+                                                                            background: '#F8FAFC',
+                                                                            border: '1.5px dashed #E2E8F0',
+                                                                            borderRadius: '18px',
+                                                                            padding: '2rem 1.25rem',
+                                                                            textAlign: 'center',
+                                                                            display: 'flex',
+                                                                            flexDirection: 'column',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center'
+                                                                        }}>
+                                                                            <Check size={24} style={{ color: '#CBD5E1', marginBottom: '0.5rem' }} />
+                                                                            <div style={{ fontSize: '0.82rem', fontWeight: '750', color: '#64748B' }}>No settlements yet</div>
+                                                                            <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '2px' }}>Settling dues will record payment receipts here.</div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        linkedSettlements.map(s => (
+                                                                            <div
+                                                                                key={s.id}
+                                                                                style={{
+                                                                                    background: '#F0FDF4',
+                                                                                    border: '1px solid #BBF7D0',
+                                                                                    borderRadius: '16px',
+                                                                                    padding: '0.75rem 1rem',
+                                                                                    display: 'flex',
+                                                                                    alignItems: 'center',
+                                                                                    justifyContent: 'space-between',
+                                                                                    gap: '0.75rem'
+                                                                                }}
+                                                                            >
+                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                                    <div style={{
+                                                                                        width: '32px',
+                                                                                        height: '32px',
+                                                                                        borderRadius: '10px',
+                                                                                        background: '#DCFCE7',
+                                                                                        color: '#059669',
+                                                                                        border: '1px solid #86EFAC',
+                                                                                        display: 'flex',
+                                                                                        alignItems: 'center',
+                                                                                        justifyContent: 'center',
+                                                                                        flexShrink: 0
+                                                                                    }}>
+                                                                                        <Check size={16} strokeWidth={2.5} />
+                                                                                    </div>
+                                                                                    <div style={{ minWidth: 0 }}>
+                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                                                                                            <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                                                {s.title}
+                                                                                            </span>
+                                                                                            <span style={{
+                                                                                                display: 'inline-flex',
+                                                                                                alignItems: 'center',
+                                                                                                padding: '1px 6px',
+                                                                                                borderRadius: '9999px',
+                                                                                                fontSize: '0.62rem',
+                                                                                                fontWeight: '750',
+                                                                                                background: '#DCFCE7',
+                                                                                                color: '#059669',
+                                                                                                border: '1px solid #86EFAC'
+                                                                                            }}>
+                                                                                                Settlement
+                                                                                            </span>
+                                                                                        </div>
+                                                                                        <div style={{ fontSize: '0.7rem', color: '#16A34A', fontWeight: '600', marginTop: '1px' }}>
+                                                                                            Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                                                                                    <span style={{ fontSize: '0.95rem', fontWeight: '900', color: '#059669' }}>
+                                                                                        +{activeSplit.currencySymbol || '₹'}{(parseFloat(s.amount) || 0).toLocaleString()}
+                                                                                    </span>
+                                                                                    <button
+                                                                                        type="button"
+                                                                                        onClick={() => handleDeleteExpense(s.id)}
+                                                                                        title="Delete Settlement"
+                                                                                        style={{
+                                                                                            background: 'transparent',
+                                                                                            border: 'none',
+                                                                                            color: '#94A3B8',
+                                                                                            cursor: 'pointer',
+                                                                                            padding: '4px',
+                                                                                            borderRadius: '6px',
+                                                                                            display: 'flex',
+                                                                                            alignItems: 'center',
+                                                                                            justifyContent: 'center',
+                                                                                            transition: 'all 0.15s'
+                                                                                        }}
+                                                                                        onMouseOver={(ev) => ev.currentTarget.style.color = '#EF4444'}
+                                                                                        onMouseOut={(ev) => ev.currentTarget.style.color = '#94A3B8'}
+                                                                                    >
+                                                                                        <X size={15} />
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+                                                                        ))
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 );
                                             })}
-                                        </div>
-                                    </div>
 
-                                    {/* 2. Simplified Settlements / Debts */}
-                                    <div style={{ background: '#0F172A', borderRadius: '24px', padding: '1.5rem', color: 'white', boxShadow: '0 12px 24px rgba(15,23,42,0.1)' }}>
-                                        <h3 style={{ margin: '0 0 1.25rem 0', fontSize: '0.85rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Simplified Debts</h3>
-
-                                        {calculatedBalances.debts.length === 0 ? (
-                                            <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-                                                <Check size={28} color="#34D399" style={{ marginBottom: '0.5rem' }} />
-                                                <p style={{ margin: 0, fontSize: '0.8rem', color: '#94A3B8', fontWeight: '600' }}>All accounts completely settled!</p>
-                                            </div>
-                                        ) : (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-                                                {calculatedBalances.debts.map((d, index) => (
-                                                    <div 
-                                                        key={index}
-                                                        style={{ 
-                                                            background: 'rgba(255,255,255,0.03)', 
-                                                            padding: '0.85rem 1rem', 
-                                                            borderRadius: '16px', 
-                                                            border: '1px solid rgba(255,255,255,0.06)',
-                                                            display: 'flex',
-                                                            justifyContent: 'space-between',
-                                                            alignItems: 'center'
-                                                        }}
-                                                    >
-                                                        <div>
-                                                            <div style={{ fontSize: '0.85rem', fontWeight: '750', color: '#F8FAFC' }}>
-                                                                {d.from} owes {d.to}
-                                                            </div>
-                                                            <div style={{ fontSize: '1rem', fontWeight: '950', color: '#38BDF8', marginTop: '2px' }}>
-                                                                {activeSplit.currencySymbol}{d.amount.toLocaleString()}
-                                                            </div>
+                                            {/* Unlinked / General Settlements Card (if any) */}
+                                            {generalSettlements.length > 0 && (
+                                                <div 
+                                                    className="bg-white border rounded-3xl p-6 shadow-sm mb-6"
+                                                    style={{
+                                                        background: '#FFFFFF',
+                                                        borderRadius: '24px',
+                                                        border: '1px solid #E2E8F0',
+                                                        padding: '1.5rem',
+                                                        marginBottom: '1.5rem',
+                                                        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)'
+                                                    }}
+                                                >
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem' }}>
+                                                        <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                            <Check size={18} strokeWidth={2.5} />
                                                         </div>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                            <button 
-                                                                type="button"
-                                                                onClick={() => openCustomPayModal(d)}
-                                                                style={{ 
-                                                                    border: '1px solid rgba(255,255,255,0.18)', 
-                                                                    background: 'rgba(255,255,255,0.08)', 
-                                                                    color: '#F8FAFC', 
-                                                                    padding: '0.45rem 0.85rem', 
-                                                                    borderRadius: '10px', 
-                                                                    fontWeight: '800', 
-                                                                    fontSize: '0.75rem', 
-                                                                    cursor: 'pointer',
-                                                                    transition: 'all 0.15s'
-                                                                }}
-                                                                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
-                                                                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
-                                                            >
-                                                                Custom Pay
-                                                            </button>
-                                                            <button 
-                                                                type="button"
-                                                                onClick={() => handleSettleDebt(d)}
-                                                                style={{ 
-                                                                    border: 'none', 
-                                                                    background: '#34D399', 
-                                                                    color: '#064E3B', 
-                                                                    padding: '0.45rem 0.85rem', 
-                                                                    borderRadius: '10px', 
-                                                                    fontWeight: '900', 
-                                                                    fontSize: '0.75rem', 
-                                                                    cursor: 'pointer',
-                                                                    boxShadow: '0 4px 10px rgba(52, 211, 153, 0.2)'
-                                                                }}
-                                                            >
-                                                                Settle Debt
-                                                            </button>
+                                                        <div>
+                                                            <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#065F46' }}>Other Settlements</h4>
+                                                            <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748B' }}>Direct or group debt settlements</p>
                                                         </div>
                                                     </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
 
-                                </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                        {generalSettlements.map(s => (
+                                                            <div 
+                                                                key={s.id}
+                                                                style={{
+                                                                    background: '#F0FDF4',
+                                                                    border: '1px solid #BBF7D0',
+                                                                    borderRadius: '16px',
+                                                                    padding: '0.75rem 1rem',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'space-between',
+                                                                    gap: '0.75rem'
+                                                                }}
+                                                            >
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                    <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#DCFCE7', color: '#059669', border: '1px solid #86EFAC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                                        <Check size={16} strokeWidth={2.5} />
+                                                                    </div>
+                                                                    <div style={{ minWidth: 0 }}>
+                                                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#065F46' }}>
+                                                                            {s.title}
+                                                                        </div>
+                                                                        <div style={{ fontSize: '0.7rem', color: '#16A34A', fontWeight: '600' }}>
+                                                                            Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
 
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                                                                    <span style={{ fontSize: '0.95rem', fontWeight: '900', color: '#059669' }}>
+                                                                        +{activeSplit.currencySymbol || '₹'}{(parseFloat(s.amount) || 0).toLocaleString()}
+                                                                    </span>
+                                                                    <button 
+                                                                        type="button"
+                                                                        onClick={() => handleDeleteExpense(s.id)}
+                                                                        title="Delete Settlement"
+                                                                        style={{ 
+                                                                            background: 'transparent', 
+                                                                            border: 'none', 
+                                                                            color: '#94A3B8', 
+                                                                            cursor: 'pointer', 
+                                                                            padding: '4px', 
+                                                                            borderRadius: '6px' 
+                                                                        }}
+                                                                        onMouseOver={(ev) => ev.currentTarget.style.color = '#EF4444'}
+                                                                        onMouseOut={(ev) => ev.currentTarget.style.color = '#94A3B8'}
+                                                                    >
+                                                                        <X size={15} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
                             </div>
+                                        </div>
+
+                                        {/* ── Right Column (lg:col-span-6 space-y-4) ── */}
+                                        <div className="lg:col-span-6 space-y-4">
+                                            {/* Card 1 (Top): Summary Card */}
+                                            <div
+                                                className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm"
+                                                style={{
+                                                    background: '#FFFFFF',
+                                                    borderRadius: '24px',
+                                                    border: '1.5px solid #E2E8F0',
+                                                    padding: '1.25rem 1.5rem',
+                                                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
+                                                }}
+                                            >
+                                                {/* Summary Header Row */}
+                                                <div
+                                                    onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                >
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                                                        <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '900', color: '#0F172A' }}>
+                                                            Summary
+                                                        </h3>
+                                                        <span
+                                                            className="text-xs font-black uppercase tracking-wider bg-blue-50 text-blue-600 border border-blue-200 px-2.5 py-0.5 rounded-full"
+                                                            style={{
+                                                                fontSize: '0.68rem',
+                                                                fontWeight: '850',
+                                                                background: '#EFF6FF',
+                                                                color: '#2563EB',
+                                                                border: '1px solid #BFDBFE',
+                                                                padding: '2px 8px',
+                                                                borderRadius: '9999px',
+                                                                textTransform: 'uppercase'
+                                                            }}
+                                                        >
+                                                            {activeSplit.currency || 'INR'}
+                                                        </span>
+                                                    </div>
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={(ev) => {
+                                                            ev.stopPropagation();
+                                                            setIsSummaryExpanded(!isSummaryExpanded);
+                                                        }}
+                                                        style={{
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            color: '#64748B',
+                                                            cursor: 'pointer',
+                                                            padding: '4px',
+                                                            borderRadius: '8px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center'
+                                                        }}
+                                                        title={isSummaryExpanded ? 'Collapse summary' : 'Expand summary'}
+                                                    >
+                                                        <ChevronDown
+                                                            size={18}
+                                                            strokeWidth={2.5}
+                                                            style={{
+                                                                transform: isSummaryExpanded ? 'rotate(0deg)' : 'rotate(-180deg)',
+                                                                transition: 'transform 0.2s ease'
+                                                            }}
+                                                        />
+                                                    </button>
+                                                </div>
+
+                                                {/* Members List Accordion Content */}
+                                                {isSummaryExpanded && (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
+                                                        {activeSplit.participants.map(m => {
+                                                            const primaryExpenses = allExpenses.filter(item => isPrimaryExpense(item));
+
+                                                            // Initial Audit Totals (Primary non-settlement expenses)
+                                                            const paid = primaryExpenses
+                                                                .filter(e => e.paidBy === m)
+                                                                .reduce((sum, e) => sum + (parseFloat(e.amount) || 0), 0);
+
+                                                            const charged = primaryExpenses.reduce((sum, e) => {
+                                                                let share = 0;
+                                                                if (e.shares && e.shares[m] !== undefined) {
+                                                                    share = parseFloat(e.shares[m]) || 0;
+                                                                } else if (e.splitType && !e.splitType.toLowerCase().includes('equal')) {
+                                                                    share = parseFloat(e.shares?.[m]) || 0;
+                                                                } else {
+                                                                    const numParticipants = activeSplit.participants?.length || 1;
+                                                                    share = (parseFloat(e.amount) || 0) / numParticipants;
+                                                                }
+                                                                return sum + share;
+                                                            }, 0);
+
+                                                            // Live Net Balance from calculatedBalances.members
+                                                            const rawNet = calculatedBalances.members[m] !== undefined ? calculatedBalances.members[m] : (paid - charged);
+                                                            const isSettled = Math.abs(rawNet) < 0.01;
+                                                            const net = isSettled ? 0 : rawNet;
+                                                            const isPositive = net > 0.001;
+
+                                                            return (
+                                                                <div
+                                                                    key={m}
+                                                                    className="bg-gray-50/60 border border-gray-100 rounded-2xl p-3.5 flex items-center justify-between"
+                                                                    style={{
+                                                                        background: 'rgba(249, 250, 251, 0.6)',
+                                                                        borderRadius: '16px',
+                                                                        border: '1px solid #F1F5F9',
+                                                                        padding: '0.85rem 1rem',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'space-between'
+                                                                    }}
+                                                                >
+                                                                    <div>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                                                                            <span style={{ fontSize: '0.92rem', fontWeight: '850', color: '#1E293B' }}>
+                                                                                {m}
+                                                                            </span>
+                                                                            {isSettled && (
+                                                                                <span
+                                                                                    className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-0.5 rounded-full text-[11px] font-bold"
+                                                                                    style={{
+                                                                                        display: 'inline-flex',
+                                                                                        alignItems: 'center',
+                                                                                        gap: '3px',
+                                                                                        fontSize: '0.68rem',
+                                                                                        fontWeight: '800',
+                                                                                        background: '#ECFDF5',
+                                                                                        color: '#059669',
+                                                                                        border: '1px solid #A7F3D0',
+                                                                                        padding: '1px 7px',
+                                                                                        borderRadius: '9999px'
+                                                                                    }}
+                                                                                >
+                                                                                    <Check size={11} strokeWidth={2.5} /> Settled
+                                                                                </span>
+                                                                            )}
+                                                                        </div>
+                                                                        <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600', marginTop: '2px' }}>
+                                                                            Charged {currSym}{charged.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}, Paid {currSym}{paid.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div style={{ textAlign: 'right' }}>
+                                                                        <span style={{
+                                                                            fontSize: '1rem',
+                                                                            fontWeight: '950',
+                                                                            color: isSettled ? '#64748B' : (isPositive ? '#059669' : '#DC2626')
+                                                                        }}>
+                                                                            {isSettled ? `${currSym}0.00` : `${isPositive ? '+' : '-'}${currSym}${Math.abs(net).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Card 2 (Middle): SIMPLIFIED DEBTS Container */}
+                                            <div 
+                                                className="bg-[#0b1329] text-white rounded-3xl p-6 shadow-md"
+                                                style={{
+                                                    background: '#0b1329',
+                                                    color: '#FFFFFF',
+                                                    borderRadius: '24px',
+                                                    padding: '1.5rem',
+                                                    boxShadow: '0 8px 24px rgba(11, 19, 41, 0.18)'
+                                                }}
+                                            >
+                                                <h5 
+                                                    className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4"
+                                                    style={{ margin: '0 0 1rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.06em' }}
+                                                >
+                                                    SIMPLIFIED DEBTS
+                                                </h5>
+
+                                                {calculatedBalances.debts.length === 0 ? (
+                                                    <div 
+                                                        className="flex flex-col items-center justify-center py-6 text-center"
+                                                        style={{ textAlign: 'center', padding: '1.5rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                                    >
+                                                        <div 
+                                                            className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2"
+                                                            style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}
+                                                        >
+                                                            <Check size={22} color="#34D399" strokeWidth={3} />
+                                                        </div>
+                                                        <p 
+                                                            className="text-sm font-bold text-slate-300 m-0"
+                                                            style={{ margin: 0, fontSize: '0.85rem', color: '#CBD5E1', fontWeight: '750' }}
+                                                        >
+                                                            ✓ All accounts completely settled!
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                        {calculatedBalances.debts.map((d, dIdx) => (
+                                                            <div
+                                                                key={dIdx}
+                                                                style={{
+                                                                    background: 'rgba(255,255,255,0.04)',
+                                                                    padding: '0.85rem 1rem',
+                                                                    borderRadius: '16px',
+                                                                    border: '1px solid rgba(255,255,255,0.08)',
+                                                                    display: 'flex',
+                                                                    justifyContent: 'space-between',
+                                                                    alignItems: 'center',
+                                                                    gap: '0.75rem',
+                                                                    flexWrap: 'wrap'
+                                                                }}
+                                                            >
+                                                                <div>
+                                                                    <div style={{ fontSize: '0.82rem', fontWeight: '750', color: '#F8FAFC' }}>
+                                                                        {d.from} owes <strong style={{ color: '#FFFFFF' }}>{d.to}</strong>
+                                                                    </div>
+                                                                    <div style={{ fontSize: '1.05rem', fontWeight: '950', color: '#38BDF8', marginTop: '2px' }}>
+                                                                        {currSym}{d.amount.toLocaleString()}
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => openCustomPayModal(d)}
+                                                                        style={{
+                                                                            border: '1px solid rgba(255,255,255,0.2)',
+                                                                            background: 'rgba(255,255,255,0.08)',
+                                                                            color: '#F8FAFC',
+                                                                            padding: '0.4rem 0.75rem',
+                                                                            borderRadius: '8px',
+                                                                            fontWeight: '800',
+                                                                            fontSize: '0.72rem',
+                                                                            cursor: 'pointer',
+                                                                            transition: 'all 0.15s'
+                                                                        }}
+                                                                        onMouseOver={(ev) => ev.currentTarget.style.background = 'rgba(255,255,255,0.16)'}
+                                                                        onMouseOut={(ev) => ev.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+                                                                    >
+                                                                        Custom Pay
+                                                                    </button>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleSettleDebt(d)}
+                                                                        style={{
+                                                                            border: 'none',
+                                                                            background: '#34D399',
+                                                                            color: '#064E3B',
+                                                                            padding: '0.4rem 0.85rem',
+                                                                            borderRadius: '8px',
+                                                                            fontWeight: '900',
+                                                                            fontSize: '0.72rem',
+                                                                            cursor: 'pointer',
+                                                                            boxShadow: '0 4px 10px rgba(52, 211, 153, 0.2)'
+                                                                        }}
+                                                                    >
+                                                                        Settle
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Card 3 (Bottom): SETTLEMENTS Section */}
+                                            <div className="flex flex-col gap-3">
+                                                {/* Top row */}
+                                                <div 
+                                                    className="flex items-center justify-between px-1"
+                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.25rem' }}
+                                                >
+                                                    <span 
+                                                        className="flex items-center gap-1.5 text-xs font-black text-emerald-600 uppercase tracking-wider"
+                                                        style={{ fontSize: '0.75rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}
+                                                    >
+                                                        <Check size={14} strokeWidth={2.5} /> SETTLEMENTS ({splitSettlements.length})
+                                                    </span>
+                                                    <span 
+                                                        className="text-xs font-bold text-emerald-600"
+                                                        style={{ fontSize: '0.75rem', fontWeight: '800', color: '#059669' }}
+                                                    >
+                                                        Settled: {currSym}{totalSettledAmount.toLocaleString()}
+                                                    </span>
+                                                </div>
+
+                                                {/* Settlements Container */}
+                                                {splitSettlements.length === 0 ? (
+                                                    <div 
+                                                        className="h-[68px] min-h-[68px] flex items-center justify-center bg-emerald-50/50 border border-emerald-200 rounded-2xl px-4 text-center"
+                                                        style={{ 
+                                                            height: '68px',
+                                                            minHeight: '68px',
+                                                            boxSizing: 'border-box',
+                                                            background: 'rgba(236, 253, 245, 0.5)', 
+                                                            border: '1px solid #A7F3D0', 
+                                                            borderRadius: '16px', 
+                                                            padding: '0 1rem', 
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            textAlign: 'center' 
+                                                        }}
+                                                    >
+                                                        <div style={{ fontSize: '0.85rem', fontWeight: '750', color: '#065F46' }}>No settlements recorded yet</div>
+                                                    </div>
+                                                ) : (
+                                                    <div 
+                                                        className="flex flex-col gap-2.5 pr-1.5 max-h-[226px] overflow-y-auto" 
+                                                        style={{ 
+                                                            display: 'flex', 
+                                                            flexDirection: 'column', 
+                                                            gap: '0.625rem',
+                                                            maxHeight: '226px',
+                                                            overflowY: 'auto',
+                                                            paddingRight: '6px',
+                                                            scrollbarWidth: 'thin',
+                                                            scrollbarColor: '#CBD5E1 transparent'
+                                                        }}
+                                                    >
+                                                        {splitSettlements.map(s => (
+                                                            <div
+                                                                key={s.id}
+                                                                className="h-[68px] min-h-[68px] shrink-0 bg-emerald-50/50 border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-sm transition-all"
+                                                                style={{
+                                                                    height: '68px',
+                                                                    minHeight: '68px',
+                                                                    flexShrink: 0,
+                                                                    boxSizing: 'border-box',
+                                                                    background: 'rgba(236, 253, 245, 0.5)',
+                                                                    border: '1px solid #A7F3D0',
+                                                                    borderRadius: '16px',
+                                                                    padding: '0.85rem 1rem',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'space-between',
+                                                                    gap: '0.75rem'
+                                                                }}
+                                                            >
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                    {/* Emerald checkmark square icon */}
+                                                                    <div 
+                                                                        className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 border border-emerald-300 flex items-center justify-center flex-shrink-0"
+                                                                        style={{
+                                                                            width: '36px',
+                                                                            height: '36px',
+                                                                            borderRadius: '12px',
+                                                                            background: '#DCFCE7',
+                                                                            color: '#059669',
+                                                                            border: '1px solid #86EFAC',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                            flexShrink: 0
+                                                                        }}
+                                                                    >
+                                                                        <Check size={18} strokeWidth={2.5} />
+                                                                    </div>
+                                                                    <div style={{ minWidth: 0 }}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                                                                            <span style={{ fontSize: '0.88rem', fontWeight: '850', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                                {s.title}
+                                                                            </span>
+                                                                            <span 
+                                                                                className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 border border-emerald-300"
+                                                                                style={{
+                                                                                    display: 'inline-flex',
+                                                                                    alignItems: 'center',
+                                                                                    padding: '1px 7px',
+                                                                                    borderRadius: '9999px',
+                                                                                    fontSize: '0.62rem',
+                                                                                    fontWeight: '750',
+                                                                                    background: '#DCFCE7',
+                                                                                    color: '#059669',
+                                                                                    border: '1px solid #86EFAC'
+                                                                                }}
+                                                                            >
+                                                                                Settlement
+                                                                            </span>
+                                                                        </div>
+                                                                        <div style={{ fontSize: '0.72rem', color: '#16A34A', fontWeight: '600', marginTop: '2px' }}>
+                                                                            Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                                                                    <span style={{ fontSize: '1rem', fontWeight: '950', color: '#059669' }}>
+                                                                        +{currSym}{(parseFloat(s.amount) || 0).toLocaleString()}
+                                                                    </span>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleDeleteExpense(s.id)}
+                                                                        title="Delete Settlement"
+                                                                        style={{
+                                                                            background: 'transparent',
+                                                                            border: 'none',
+                                                                            color: '#94A3B8',
+                                                                            cursor: 'pointer',
+                                                                            padding: '4px',
+                                                                            borderRadius: '6px',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                            transition: 'all 0.15s'
+                                                                        }}
+                                                                        onMouseOver={(ev) => ev.currentTarget.style.color = '#EF4444'}
+                                                                        onMouseOut={(ev) => ev.currentTarget.style.color = '#94A3B8'}
+                                                                    >
+                                                                        <X size={16} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })()}
                         </Motion.div>
                     )}
                 </AnimatePresence>
@@ -2309,61 +3137,68 @@ const SplitExpense = () => {
                                     </div>
                                 </div> {/* End Grid */}
 
-                                {/* Attachment Upload Panel */}
+                                {/* ATTACH YOUR EXPENSES */}
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Expense Attachment</label>
+                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                                        ATTACH YOUR EXPENSES
+                                    </label>
+                                    
                                     <input 
-                                        type="file" 
-                                        id="real-expense-file-input" 
-                                        style={{ display: 'none' }} 
+                                        id="expense-attachment-input"
+                                        type="file"
+                                        accept="image/png,image/jpeg,image/webp,application/pdf"
+                                        style={{ display: 'none' }}
                                         onChange={handleFileChange}
                                     />
-                                    <div 
-                                        onClick={() => document.getElementById('real-expense-file-input').click()}
-                                        style={{ border: '2px dashed #CBD5E1', borderRadius: '14px', padding: '0.75rem', background: '#F8FAFC', textAlign: 'center', cursor: 'pointer', color: '#475569', transition: 'border-color 0.2s' }}
-                                        onMouseOver={(e) => e.currentTarget.style.borderColor = '#1B6B3A'}
-                                        onMouseOut={(e) => e.currentTarget.style.borderColor = '#CBD5E1'}
-                                    >
-                                        {expenseForm.attachmentName ? (
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                                                <FileText size={16} color="#2563EB" />
-                                                <span style={{ fontSize: '0.78rem', fontWeight: '800', color: '#1E293B' }}>
-                                                    {expenseForm.attachmentName}
-                                                </span>
-                                                <button
-                                                    type="button"
-                                                    onClick={(ev) => {
-                                                        ev.stopPropagation();
-                                                        const att = expenseForm.attachmentName;
-                                                        const fileUrl = resolveAttachmentUrl(att);
-                                                        setPreviewAttachment({
-                                                            url: fileUrl,
-                                                            name: att,
-                                                            isPdf: att.toLowerCase().endsWith('.pdf'),
-                                                            isImage: /\.(jpe?g|png|webp|gif|svg)$/i.test(att)
-                                                        });
-                                                    }}
-                                                    style={{
-                                                        background: '#EFF6FF',
-                                                        border: '1px solid #BFDBFE',
-                                                        borderRadius: '6px',
-                                                        padding: '2px 8px',
-                                                        fontSize: '0.72rem',
-                                                        fontWeight: '800',
-                                                        color: '#2563EB',
-                                                        cursor: 'pointer'
-                                                    }}
-                                                >
-                                                    Preview
-                                                </button>
+
+                                    {expenseForm.attachmentFile || expenseForm.attachmentName ? (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1rem', background: '#ECFDF5', border: '1.5px solid #A7F3D0', borderRadius: '12px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                                                <FileText size={18} style={{ color: '#059669', flexShrink: 0 }} />
+                                                <div style={{ minWidth: 0 }}>
+                                                    <div style={{ fontSize: '0.82rem', fontWeight: '850', color: '#064E3B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                        {expenseForm.attachmentName}
+                                                    </div>
+                                                    {expenseForm.attachmentSizeKb && (
+                                                        <div style={{ fontSize: '0.68rem', fontWeight: '750', color: '#047857' }}>
+                                                            {expenseForm.attachmentSizeKb} KB
+                                                        </div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        ) : (
-                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                                                <Upload size={16} />
-                                                <span style={{ fontSize: '0.78rem', fontWeight: '750' }}>Click to upload invoice / receipt copy</span>
-                                            </div>
-                                        )}
-                                    </div>
+                                            <button 
+                                                type="button" 
+                                                onClick={handleRemoveFile}
+                                                style={{ border: 'none', background: '#D1FAE5', color: '#065F46', padding: '4px', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '8px' }}
+                                                title="Remove attachment"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div 
+                                            onClick={() => document.getElementById('expense-attachment-input')?.click()}
+                                            style={{ 
+                                                border: '1.5px dashed #CBD5E1', 
+                                                borderRadius: '12px', 
+                                                padding: '0.9rem', 
+                                                textAlign: 'center', 
+                                                cursor: 'pointer', 
+                                                background: '#FFFFFF',
+                                                transition: 'all 0.2s',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                gap: '4px'
+                                            }}
+                                            onMouseOver={(e) => { e.currentTarget.style.borderColor = '#10B981'; e.currentTarget.style.background = '#F0FDF4'; }}
+                                            onMouseOut={(e) => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.background = '#FFFFFF'; }}
+                                        >
+                                            <Upload size={18} style={{ color: '#059669' }} />
+                                            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#334155' }}>Click to upload invoice / receipt copy</span>
+                                            <span style={{ fontSize: '0.68rem', color: '#94A3B8', fontWeight: '600' }}>Supports PNG, JPG, WEBP, or PDF (up to 20MB)</span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Split Type Protocol */}
@@ -2588,7 +3423,7 @@ const SplitExpense = () => {
                                                             </div>
                                                             <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '0.75rem' }}>
                                                                 <span style={{ fontSize: '0.65rem', fontWeight: '800', color: isSelected ? '#047857' : '#64748B', display: 'block', textTransform: 'uppercase' }}>
-                                                                    Your Share
+                                                                    Member Share
                                                                 </span>
                                                                 <span style={{ fontSize: '0.88rem', fontWeight: '900', color: isSelected ? '#059669' : '#0F172A' }}>
                                                                     {activeSplit.currencySymbol || '₹'}{exp.memberShare.toLocaleString()}
@@ -2616,7 +3451,11 @@ const SplitExpense = () => {
                                                     type="button"
                                                     onClick={() => {
                                                         const exp = eligibleExpenses.find(e => String(e.id) === String(customPayExpenseId));
-                                                        if (exp) setCustomPayAmount(String(exp.memberShare));
+                                                        if (exp && customPayDebt) {
+                                                            const rawShare = parseFloat(exp.memberShare) || customPayDebt.amount;
+                                                            const amountToPay = Math.min(rawShare, customPayDebt.amount);
+                                                            setCustomPayAmount(String(amountToPay));
+                                                        }
                                                     }}
                                                     style={{ background: 'none', border: 'none', color: '#059669', fontSize: '0.72rem', fontWeight: '850', cursor: 'pointer', padding: 0 }}
                                                 >
@@ -2632,10 +3471,23 @@ const SplitExpense = () => {
                                                 required
                                                 type="number" 
                                                 min="0.01" 
+                                                max={customPayDebt.amount}
                                                 step="any"
                                                 placeholder="0.00"
                                                 value={customPayAmount}
-                                                onChange={(e) => setCustomPayAmount(e.target.value)}
+                                                onChange={(e) => {
+                                                    const val = e.target.value;
+                                                    if (val === '') {
+                                                        setCustomPayAmount('');
+                                                        return;
+                                                    }
+                                                    const num = parseFloat(val);
+                                                    if (customPayDebt && num > customPayDebt.amount) {
+                                                        setCustomPayAmount(String(customPayDebt.amount));
+                                                    } else {
+                                                        setCustomPayAmount(val);
+                                                    }
+                                                }}
                                                 style={{
                                                     width: '100%',
                                                     padding: '0.75rem 1rem 0.75rem 2.25rem',
@@ -2651,6 +3503,11 @@ const SplitExpense = () => {
                                                 onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
                                             />
                                         </div>
+                                        {customPayDebt && Number(customPayAmount) >= customPayDebt.amount && (
+                                            <div style={{ fontSize: '0.68rem', color: '#059669', fontWeight: '700', marginTop: '0.3rem' }}>
+                                                Capped at debtor's net outstanding debt ({activeSplit.currencySymbol || '₹'}{customPayDebt.amount.toLocaleString()})
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Action Buttons */}
@@ -2667,18 +3524,18 @@ const SplitExpense = () => {
                                         </button>
                                         <button 
                                             type="submit" 
-                                            disabled={!customPayAmount || Number(customPayAmount) <= 0}
+                                            disabled={!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)}
                                             style={{ 
                                                 flex: 1.5, 
                                                 padding: '0.8rem', 
                                                 borderRadius: '14px', 
                                                 border: 'none', 
-                                                background: (!customPayAmount || Number(customPayAmount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #059669 0%, #047857 100%)', 
+                                                background: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? '#94A3B8' : 'linear-gradient(135deg, #059669 0%, #047857 100%)', 
                                                 color: 'white', 
                                                 fontWeight: '850', 
                                                 fontSize: '0.85rem', 
-                                                cursor: (!customPayAmount || Number(customPayAmount) <= 0) ? 'not-allowed' : 'pointer',
-                                                boxShadow: (!customPayAmount || Number(customPayAmount) <= 0) ? 'none' : '0 4px 14px rgba(5, 150, 105, 0.25)' 
+                                                cursor: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? 'not-allowed' : 'pointer',
+                                                boxShadow: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? 'none' : '0 4px 14px rgba(5, 150, 105, 0.25)' 
                                             }}
                                         >
                                             Record Settlement
@@ -2695,16 +3552,17 @@ const SplitExpense = () => {
             <AnimatePresence>
                 {previewAttachment && (
                     <div 
+                        className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
                         style={{ 
                             position: 'fixed', 
                             inset: 0, 
-                            background: 'rgba(15, 23, 42, 0.75)', 
+                            background: 'rgba(2, 6, 23, 0.85)', 
                             backdropFilter: 'blur(8px)', 
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center', 
-                            zIndex: 2000,
-                            padding: '1.5rem'
+                            zIndex: 1100,
+                            padding: '1rem'
                         }}
                         onClick={() => setPreviewAttachment(null)}
                     >
@@ -2713,81 +3571,54 @@ const SplitExpense = () => {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
                             onClick={(e) => e.stopPropagation()}
+                            className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
                             style={{ 
-                                background: 'white', 
+                                background: '#FFFFFF', 
                                 width: '100%', 
-                                maxWidth: '850px', 
+                                maxWidth: '42rem', // max-w-2xl
                                 maxHeight: '90vh', 
                                 borderRadius: '24px', 
-                                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.35)', 
+                                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.45)', 
+                                overflow: 'hidden', 
                                 display: 'flex', 
-                                flexDirection: 'column', 
-                                overflow: 'hidden' 
+                                flexDirection: 'column' 
                             }}
                         >
-                            {/* Header */}
-                            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                    <div style={{ width: '34px', height: '34px', borderRadius: '10px', background: '#EFF6FF', color: '#2563EB', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <FileText size={18} />
-                                    </div>
-                                    <div>
-                                        <h3 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#1E293B', margin: 0, maxWidth: '400px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                            {previewAttachment.name}
-                                        </h3>
-                                        <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '700' }}>
-                                            {previewAttachment.isPdf ? 'PDF Document Preview' : (previewAttachment.isImage ? 'Image Preview' : 'Document Attachment')}
-                                        </span>
-                                    </div>
+                            {/* Modal Header */}
+                            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0, background: '#FAFAFA' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
+                                    <FileText size={18} style={{ color: '#059669', flexShrink: 0 }} />
+                                    <h3 style={{ fontSize: '0.95rem', fontWeight: '900', color: '#0F172A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                        {previewAttachment.name || 'Expense Attachment'}
+                                    </h3>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    {previewAttachment.url && (
+                                        <a 
+                                            href={previewAttachment.url}
+                                            download={previewAttachment.name || 'document'}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ 
+                                                display: 'inline-flex', 
+                                                alignItems: 'center', 
+                                                gap: '5px', 
+                                                padding: '0.45rem 0.85rem', 
+                                                borderRadius: '10px', 
+                                                background: '#ECFDF5', 
+                                                color: '#065F46', 
+                                                textDecoration: 'none', 
+                                                fontSize: '0.78rem', 
+                                                fontWeight: '850',
+                                                border: '1px solid #A7F3D0',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <Download size={13} /> Download
+                                        </a>
+                                    )}
                                     <button 
-                                        type="button"
-                                        onClick={() => {
-                                            if (previewAttachment?.url) {
-                                                window.open(previewAttachment.url, '_blank', 'noopener,noreferrer');
-                                            }
-                                        }}
-                                        style={{ 
-                                            display: 'inline-flex', 
-                                            alignItems: 'center', 
-                                            gap: '4px', 
-                                            padding: '0.45rem 0.85rem', 
-                                            borderRadius: '10px', 
-                                            background: '#EFF6FF', 
-                                            color: '#2563EB', 
-                                            textDecoration: 'none', 
-                                            fontSize: '0.78rem', 
-                                            fontWeight: '800',
-                                            border: '1px solid #BFDBFE',
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        <ExternalLink size={14} /> Open in New Tab
-                                    </button>
-                                    <a 
-                                        href={previewAttachment.url} 
-                                        download={previewAttachment.name}
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        style={{ 
-                                            display: 'inline-flex', 
-                                            alignItems: 'center', 
-                                            gap: '4px', 
-                                            padding: '0.45rem 0.85rem', 
-                                            borderRadius: '10px', 
-                                            background: '#F1F5F9', 
-                                            color: '#334155', 
-                                            textDecoration: 'none', 
-                                            fontSize: '0.78rem', 
-                                            fontWeight: '800',
-                                            border: '1px solid #CBD5E1'
-                                        }}
-                                    >
-                                        <Download size={14} /> Download
-                                    </a>
-                                    <button 
-                                        onClick={() => setPreviewAttachment(null)}
                                         style={{ 
                                             background: '#F1F5F9', 
                                             border: 'none', 
@@ -2798,57 +3629,45 @@ const SplitExpense = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center'
-                                        }}
+                                        }} 
+                                        onClick={() => setPreviewAttachment(null)}
+                                        title="Close preview"
                                     >
                                         <X size={18} />
                                     </button>
                                 </div>
                             </div>
 
-                            {/* Viewer */}
-                            <div style={{ flex: 1, overflowY: 'auto', padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9', minHeight: '380px' }}>
-                                {previewAttachment.isImage ? (
+                            {/* Modal Content */}
+                            <div style={{ flex: 1, padding: '1rem', background: '#0F172A', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'auto', minHeight: '340px' }}>
+                                {isPdfFile(previewAttachment.url || previewAttachment.name) ? (
+                                    <div className="w-full h-full flex flex-col items-center justify-center">
+                                        <iframe 
+                                            src={previewAttachment.url}
+                                            title="PDF Preview"
+                                            className="w-full h-[500px]"
+                                            style={{ width: '100%', height: '500px', border: 'none', borderRadius: '12px', background: 'white' }}
+                                        />
+                                        <div className="mt-2 text-center text-xs text-slate-400">
+                                            If PDF preview does not display,{' '}
+                                            <a 
+                                                href={previewAttachment.url} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                download={previewAttachment.name || 'document.pdf'}
+                                                className="font-bold text-emerald-400 hover:underline"
+                                            >
+                                                click here to download or open directly
+                                            </a>.
+                                        </div>
+                                    </div>
+                                ) : (
                                     <img 
                                         src={previewAttachment.url} 
-                                        alt={previewAttachment.name} 
-                                        crossOrigin="anonymous"
-                                        style={{ maxWidth: '100%', maxHeight: '72vh', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', background: 'white' }} 
+                                        alt={previewAttachment.name || 'Expense Attachment'} 
+                                        style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 8px 24px rgba(0,0,0,0.5)' }}
                                     />
-                                ) : previewAttachment.isPdf ? (
-                                    <iframe 
-                                        src={previewAttachment.url} 
-                                        title={previewAttachment.name}
-                                        style={{ width: '100%', height: '72vh', border: 'none', borderRadius: '12px', background: 'white', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
-                                    />
-                                ) : (
-                                    <div style={{ textAlign: 'center', padding: '2rem' }}>
-                                        <FileText size={48} color="#64748B" style={{ marginBottom: '1rem' }} />
-                                        <p style={{ fontWeight: '800', color: '#1E293B', marginBottom: '0.5rem' }}>{previewAttachment.name}</p>
-                                        <a 
-                                            href={previewAttachment.url} 
-                                            target="_blank" 
-                                            rel="noopener noreferrer" 
-                                            download={previewAttachment.name}
-                                            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.6rem 1.25rem', background: '#2563EB', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '850', fontSize: '0.85rem' }}
-                                        >
-                                            <Download size={16} /> Download File
-                                        </a>
-                                    </div>
                                 )}
-                                <div id="preview-fallback-box-1" style={{ display: 'none', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', textAlign: 'center' }}>
-                                    <AlertCircle size={40} color="#EF4444" style={{ marginBottom: '0.75rem' }} />
-                                    <p style={{ fontWeight: '800', color: '#1E293B', marginBottom: '0.25rem' }}>Unable to preview file inline</p>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748B', marginBottom: '1rem' }}>The file may not be directly viewable or requires direct download.</p>
-                                    <a 
-                                        href={previewAttachment.url} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer" 
-                                        download={previewAttachment.name}
-                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0.5rem 1rem', background: '#2563EB', color: 'white', borderRadius: '10px', textDecoration: 'none', fontWeight: '800', fontSize: '0.8rem' }}
-                                    >
-                                        <Download size={14} /> Download Attachment
-                                    </a>
-                                </div>
                             </div>
                         </Motion.div>
                     </div>
@@ -2859,4 +3678,4 @@ const SplitExpense = () => {
     );
 };
 
-export default SplitExpense;
+export default BusinessSplitCollect;

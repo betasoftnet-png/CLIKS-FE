@@ -87,10 +87,12 @@ const BusinessPeople = () => {
     const [shareModalData, setShareModalData] = useState(null); // { person, balance }
     const [shareAmount, setShareAmount] = useState('');
     const [shareDate, setShareDate] = useState(new Date().toISOString().split('T')[0]);
+    const [isSubmittingAlert, setIsSubmittingAlert] = useState(false);
 
     React.useEffect(() => {
         if (shareModalData) {
-            setShareAmount(Math.abs(parseFloat(shareModalData.balance) || 0).toString());
+            const verifiedBalance = Math.max(0, Math.abs(parseFloat(shareModalData.balance) || 0));
+            setShareAmount(verifiedBalance.toString());
             setShareDate(new Date().toISOString().split('T')[0]);
         }
     }, [shareModalData]);
@@ -216,6 +218,54 @@ const BusinessPeople = () => {
     }, [transactionsRes]);
 
     const reminders = remindersRes.data || remindersRes || [];
+
+    const displayAlerts = useMemo(() => {
+        const list = Array.isArray(reminders) ? [...reminders] : [];
+        const seenIds = new Set();
+        const seenComposite = new Set();
+        const uniqueAlerts = [];
+
+        for (const a of list) {
+            if (!a) continue;
+
+            const idKey = a.id !== undefined && a.id !== null ? String(a.id) : null;
+            if (idKey && seenIds.has(idKey)) {
+                continue;
+            }
+
+            const targetContact = String(a.target_contact || a.person_name || '').trim().toLowerCase();
+            const memoLabel = String(a.memo_label || a.title || '').trim().toLowerCase();
+            const rawCap = a.claim_cap !== undefined ? a.claim_cap : (a.amount !== undefined ? a.amount : 0);
+            const claimCap = Number(rawCap) || 0;
+            const rawDate = a.maturity_date || a.due_date || a.maturityDate || a.date || '';
+            const maturityDate = String(rawDate).slice(0, 10);
+
+            const compositeKey = `${targetContact}__${memoLabel}__${claimCap}__${maturityDate}`;
+            if (seenComposite.has(compositeKey)) {
+                continue;
+            }
+
+            if (idKey) seenIds.add(idKey);
+            seenComposite.add(compositeKey);
+            uniqueAlerts.push(a);
+        }
+
+        return uniqueAlerts.sort((a, b) => {
+            const createdB = b.createdAt || b.created_at;
+            const createdA = a.createdAt || a.created_at;
+            if (createdB && createdA) {
+                const diff = new Date(createdB).getTime() - new Date(createdA).getTime();
+                if (diff !== 0) return diff;
+            }
+            const dateB = b.maturityDate || b.maturity_date || b.due_date || b.date;
+            const dateA = a.maturityDate || a.maturity_date || a.due_date || a.date;
+            if (dateB && dateA) {
+                const diff = new Date(dateB).getTime() - new Date(dateA).getTime();
+                if (diff !== 0) return diff;
+            }
+            return (Number(b.id) || 0) - (Number(a.id) || 0);
+        });
+    }, [reminders]);
 
     const summary = useMemo(() => {
         const totalContacts = people.length;
@@ -407,6 +457,9 @@ const BusinessPeople = () => {
             setIsReminderModalOpen(false);
             setReminderForm({ person_id: '', title: '', amount: '', due_date: new Date().toISOString().split('T')[0], notes: '' });
             alert('Repayment alert dispatched successfully.');
+        },
+        onSettled: () => {
+            setIsSubmittingAlert(false);
         }
     });
 
@@ -578,6 +631,7 @@ const BusinessPeople = () => {
 
     const handleSaveReminder = (e) => {
         e.preventDefault();
+        if (isSubmittingAlert || createReminderMutation.isPending) return;
         if (!reminderForm.person_id) return alert('Please select a target contact.');
         if (!reminderForm.due_date) return alert('Please select a maturity / due date.');
 
@@ -606,6 +660,7 @@ const BusinessPeople = () => {
             status: 'Pending'
         };
 
+        setIsSubmittingAlert(true);
         createReminderMutation.mutate(payload);
     };
 
@@ -1141,9 +1196,9 @@ const BusinessPeople = () => {
                             <tbody>
                                 {isRemindersLoading ? (
                                     <tr><td colSpan={5} style={{ padding: '4rem', textAlign: 'center', color: '#64748B' }}>Resolving dispatch statuses...</td></tr>
-                                ) : reminders.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).length === 0 ? (
+                                ) : displayAlerts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).length === 0 ? (
                                     <tr><td colSpan={5} style={{ padding: '4rem', textAlign: 'center', color: '#94A3B8' }}>Zero pending alerts scheduled.</td></tr>
-                                ) : reminders.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((r) => (
+                                ) : displayAlerts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((r) => (
                                     <tr key={r.id} style={{ borderBottom: '1px solid #F8FAFC' }}>
                                         <td style={{ padding: '1.5rem 2rem', color: '#E11D48', fontWeight: '800' }}>
                                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
@@ -1396,8 +1451,8 @@ const BusinessPeople = () => {
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Maturity / Due Date <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input required type="date" value={reminderForm.due_date} onChange={(e) => setReminderForm({ ...reminderForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" disabled={createReminderMutation.isPending} style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer' }}>
-                                    {createReminderMutation.isPending ? 'Scheduling Alert...' : 'Dispatch Repayment Alert'}
+                                <button type="submit" disabled={isSubmittingAlert || createReminderMutation.isPending} style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: isSubmittingAlert || createReminderMutation.isPending ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: isSubmittingAlert || createReminderMutation.isPending ? 'not-allowed' : 'pointer' }}>
+                                    {isSubmittingAlert || createReminderMutation.isPending ? 'Scheduling Alert...' : 'Dispatch Repayment Alert'}
                                 </button>
                             </form>
                         </Motion.div>
@@ -2185,10 +2240,11 @@ const BusinessPeople = () => {
                                             <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.45rem' }}>Outstanding Amount ({currency.symbol})</label>
                                             <div style={{ position: 'relative' }}>
                                                 <input 
-                                                    type="number" 
-                                                    value={shareAmount} 
-                                                    onChange={(e) => setShareAmount(e.target.value)} 
-                                                    style={{ width: '100%', padding: '0.85rem 1rem', paddingLeft: '2rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.15rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: 'white' }} 
+                                                    type="text" 
+                                                    readOnly
+                                                    disabled
+                                                    value={parseFloat(shareAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
+                                                    style={{ width: '100%', padding: '0.85rem 1rem', paddingLeft: '2rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.15rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: '#F1F5F9', cursor: 'not-allowed', boxSizing: 'border-box' }} 
                                                 />
                                                 <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontWeight: '900', fontSize: '1.25rem', color: '#94A3B8' }}>{currency.symbol}</span>
                                             </div>

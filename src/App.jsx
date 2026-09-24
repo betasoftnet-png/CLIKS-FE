@@ -44,6 +44,7 @@ const PeopleRecords = React.lazy(() => import('./pages/people/PeopleRecords'));
 const PersonProfile = React.lazy(() => import('./pages/people/PersonProfile'));
 const SplitExpense = React.lazy(() => import('./pages/SplitExpense'));
 const Segregation = React.lazy(() => import('./pages/Segregation'));
+const Referral = React.lazy(() => import('./pages/Referral'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const Settings = React.lazy(() => import('./pages/Settings'));
 const FAQ = React.lazy(() => import('./pages/FAQ'));
@@ -96,19 +97,27 @@ function AuthenticatedApp() {
                 <Route path="/finance/expenses" element={<Expenses />} />
                 <Route path="/finance/budgets" element={<Budgets />} />
                 <Route path="/finance/accounts" element={<Accounts />} />
-                <Route path="/payments/transactions" element={<Transactions />} />
+                <Route path="/finance/transactions" element={<Transactions />} />
                 <Route path="/finance/planned-payments" element={<PlannedPayments />} />
                 <Route path="/finance/savings" element={<Savings />} />
                 <Route path="/finance/investments" element={<Investments />} />
                 <Route path="/finance/debts" element={<Debts />} />
 
-                {/* Payments Routes shifted from Books */}
+                {/* Payments Routes */}
+                <Route path="/payments/transactions" element={<Finance />} />
+                <Route path="/payments/transaction" element={<Finance />} />
+                <Route path="/payments/people" element={<People />} />
                 <Route path="/payments/wallet" element={<Wallet />} />
+                <Route path="/payments/plan" element={<FinancialPlan />} />
                 <Route path="/payments/planner" element={<FinancialPlan />} />
-
                 <Route path="/payments/segregation" element={<Segregation />} />
                 <Route path="/payments/split-expense" element={<SplitExpense />} />
+                <Route path="/payments/split-collect" element={<SplitExpense />} />
                 <Route path="/payments/rewards-offers" element={<Rewards />} />
+
+                {/* Referral Routes */}
+                <Route path="/referral" element={<Referral />} />
+                <Route path="/refer-earn" element={<Referral />} />
 
                 {/* Books Section */}
                 <Route path="/books/finance" element={<Navigate to="/books/accounting" replace />} />

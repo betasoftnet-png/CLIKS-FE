@@ -80,6 +80,7 @@ const Segregation = () => {
     }, []);
     const [searchTerm, setSearchTerm] = useState('');
     const [showSearch, setShowSearch] = useState(false);
+    const [categoryFilter, setCategoryFilter] = useState('all');
 
     // Fetch Singular Wallet Details & History
     const { data: historyWalletRes, isLoading: isHistoryLoading } = useQuery({
@@ -165,14 +166,20 @@ const Segregation = () => {
         setError('');
     };
 
-    const isWalletClaimed = (wallet) => Boolean(
-        wallet?.isClaimed || 
-        wallet?.status === 'completed' || 
-        wallet?.status === 'claimed' || 
-        wallet?.status === 'FULLY CLAIMED' || 
-        String(wallet?.status || '').toLowerCase() === 'completed' ||
-        String(wallet?.status || '').toLowerCase() === 'claimed'
-    );
+    const isWalletClaimed = (wallet) => {
+        const saved = parseFloat(wallet?.current_amount || 0);
+        const target = parseFloat(wallet?.target_amount || 0);
+        const isCompleted = (target > 0 && saved >= target);
+        return Boolean(
+            wallet?.isClaimed || 
+            wallet?.status === 'completed' || 
+            wallet?.status === 'claimed' || 
+            wallet?.status === 'FULLY CLAIMED' || 
+            String(wallet?.status || '').toLowerCase() === 'completed' ||
+            String(wallet?.status || '').toLowerCase() === 'claimed' ||
+            isCompleted
+        );
+    };
 
     const openEditModal = (wallet) => {
         if (isWalletClaimed(wallet)) {
@@ -223,20 +230,69 @@ const Segregation = () => {
 
     const handleAddSubmit = (e) => {
         e.preventDefault();
+        if (!selectedWallet) return;
+        const currentSaved = parseFloat(selectedWallet.current_amount || 0);
+        const targetCeiling = parseFloat(selectedWallet.target_amount || 0);
+        const remainingTarget = Math.max(0, targetCeiling - currentSaved);
+
         if (!addAmount || Number(addAmount) <= 0) return alert("Enter a valid allocation amount greater than 0.");
-        const amt = parseFloat(addAmount);
+        let amt = parseFloat(addAmount);
         if (isNaN(amt) || amt <= 0) return alert("Enter a valid allocation amount greater than 0.");
+
+        if (amt > remainingTarget) {
+            amt = remainingTarget;
+        }
+
         addMoneyMutation.mutate({ id: selectedWallet.id, amount: amt });
     };
 
     // Derived Statistics
     const wallets = Array.isArray(responseData) ? responseData : [];
-    const activeWallets = wallets.filter(w => w.status !== 'completed').length;
+    const activeWallets = wallets.filter(w => !isWalletClaimed(w)).length;
     const totalAllocated = wallets.reduce((sum, w) => sum + parseFloat(w.current_amount || 0), 0);
     const totalTarget = wallets.reduce((sum, w) => sum + parseFloat(w.target_amount || 0), 0);
     const globalProgress = totalTarget > 0 ? Math.round((totalAllocated / totalTarget) * 100) : 0;
 
+    const categoryCounts = React.useMemo(() => {
+        let inProgress = 0;
+        let targetMet = 0;
+        let claimed = 0;
+
+        wallets.forEach(w => {
+            const isClaimed = isWalletClaimed(w);
+            const saved = parseFloat(w.current_amount || 0);
+            const target = parseFloat(w.target_amount || 0);
+
+            if (isClaimed) {
+                claimed++;
+            } else if (target > 0 && saved >= target) {
+                targetMet++;
+            } else {
+                inProgress++;
+            }
+        });
+
+        return {
+            all: wallets.length,
+            inProgress,
+            targetMet,
+            claimed
+        };
+    }, [wallets]);
+
     const filteredWallets = wallets.filter(wallet => {
+        // 1. Category Filter
+        const isClaimed = isWalletClaimed(wallet);
+        const saved = parseFloat(wallet.current_amount || 0);
+        const target = parseFloat(wallet.target_amount || 0);
+        const isTargetMet = !isClaimed && target > 0 && saved >= target;
+        const isInProgress = !isClaimed && (target === 0 || saved < target);
+
+        if (categoryFilter === 'in_progress' && !isInProgress) return false;
+        if (categoryFilter === 'target_met' && !isTargetMet) return false;
+        if (categoryFilter === 'claimed' && !isClaimed) return false;
+
+        // 2. Search Term Filter
         if (!searchTerm.trim()) return true;
         const term = searchTerm.toLowerCase();
         return (
@@ -381,6 +437,39 @@ const Segregation = () => {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Container Category Filter Pill Navigation Bar */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+                {[
+                    { key: 'all', label: `All Containers [${categoryCounts.all}]` },
+                    { key: 'in_progress', label: `In Progress [${categoryCounts.inProgress}]` },
+                    { key: 'target_met', label: `Target Met [${categoryCounts.targetMet}]` },
+                    { key: 'claimed', label: `Claimed [${categoryCounts.claimed}]` }
+                ].map(pill => {
+                    const isActive = categoryFilter === pill.key;
+                    return (
+                        <button
+                            key={pill.key}
+                            type="button"
+                            onClick={() => setCategoryFilter(pill.key)}
+                            style={{
+                                padding: '0.5rem 1.15rem',
+                                borderRadius: '9999px',
+                                fontWeight: '800',
+                                fontSize: '0.85rem',
+                                border: isActive ? 'none' : '1px solid #E2E8F0',
+                                background: isActive ? '#064E3B' : 'white',
+                                color: isActive ? 'white' : '#475569',
+                                cursor: 'pointer',
+                                transition: 'all 0.15s ease',
+                                boxShadow: isActive ? '0 4px 12px rgba(6, 78, 59, 0.2)' : 'none'
+                            }}
+                        >
+                            {pill.label}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Dynamic Masonry/Grid of Purpose Wallets */}
