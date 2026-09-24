@@ -127,12 +127,13 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
     // Determine active item based on path
     const getActiveItemFromPath = (path, search) => {
-        if (path === '/payments/wallet' || path.includes('/payments/wallet/')) return 'Wallet';
-        if (path === '/payments/planner' || path.includes('/payments/planner/')) return 'Planner';
+        if (path.includes('/payments/people')) return 'People';
+        if (path.includes('/payments/transaction')) return 'Transaction';
         if (path.includes('/payments/segregation')) return 'Segregation';
-        if (path.includes('/payments/split-expense')) return 'Split Expenses';
+        if (path.includes('/payments/split-collect') || path.includes('/payments/split-expense')) return 'Split & Collect';
+        if (path.includes('/payments/planner') || path.includes('/payments/plan')) return 'Planner';
+        if (path === '/payments/wallet' || path.includes('/payments/wallet/')) return 'Wallet';
         if (path.includes('/payments/rewards-offers')) return 'Rewards & Offers';
-        if (path === '/payments/transactions') return 'Transactions';
 
         if (path.includes('/books/dashboard')) return 'Books Dashboard';
         if (path.includes('/books/stock')) return 'Stock';
@@ -235,9 +236,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         if (onItemClick) onItemClick();
     };
 
-    // Show Finance sidebar for root, home (redirect), and finance paths
-    const showFinanceSidebar = (location.pathname === '/' || location.pathname.startsWith('/home') || location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments')) && !location.pathname.startsWith('/payments/split-expense');
-    const showBooksSidebar = (location.pathname.startsWith('/books') && location.pathname !== '/books/profile') || location.pathname === '/auditor' || location.pathname.startsWith('/ca') || location.pathname.startsWith('/payments/split-expense') || location.pathname === '/subscription';
+    // Show Finance sidebar for root, home (redirect), and finance/payments paths
+    const showFinanceSidebar = location.pathname === '/' || location.pathname.startsWith('/home') || location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments');
+    const showBooksSidebar = (location.pathname.startsWith('/books') && location.pathname !== '/books/profile') || location.pathname === '/auditor' || location.pathname.startsWith('/ca') || location.pathname === '/subscription';
     const showPublicSidebar = location.pathname.startsWith('/public') || location.pathname.startsWith('/social');
 
 
@@ -308,40 +309,29 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             <Plus size={15} strokeWidth={3} /> Add Money
                         </button>
 
-                        {/* Planner */}
+                        {/* 1. People */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Planner' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Planner', '/payments/planner')}
+                            className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('People', '/payments/people')}
                         >
                             <div className="flex items-center gap-3">
-                                <CalendarClock size={20} style={{ color: activeItem === 'Planner' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Planner</span>
+                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">People</span>
                             </div>
                         </button>
 
-                        {/* Wallet */}
+                        {/* 2. Transaction */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Wallet' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Wallet', '/payments/wallet')}
+                            className={`sidebar-item ${activeItem === 'Transaction' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Transaction', '/payments/transaction')}
                         >
                             <div className="flex items-center gap-3">
-                                <Wallet size={20} style={{ color: activeItem === 'Wallet' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Wallet</span>
+                                <CreditCard size={20} style={{ color: activeItem === 'Transaction' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Transaction</span>
                             </div>
                         </button>
 
-                        {/* Transactions */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Transactions' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Transactions', '/payments/transactions')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <ArrowLeftRight size={20} style={{ color: activeItem === 'Transactions' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Transactions</span>
-                            </div>
-                        </button>
-
-                        {/* Segregation */}
+                        {/* 3. Segregation */}
                         <button
                             className={`sidebar-item ${activeItem === 'Segregation' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Segregation', '/payments/segregation')}
@@ -352,14 +342,25 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* Rewards & Offers */}
+                        {/* 4. Split & Collect */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Rewards & Offers' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Rewards & Offers', '/payments/rewards-offers')}
+                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
                         >
                             <div className="flex items-center gap-3">
-                                <Gift size={20} style={{ color: activeItem === 'Rewards & Offers' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Rewards & Offers</span>
+                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Split & Collect</span>
+                            </div>
+                        </button>
+
+                        {/* 5. Planner */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Planner' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Planner', '/payments/plan')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Calendar size={20} style={{ color: activeItem === 'Planner' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Planner</span>
                             </div>
                         </button>
                     </>
@@ -445,14 +446,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 5. Split Expenses */}
+                        {/* 5. Split & Collect */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Split Expenses' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Split Expenses', '/payments/split-expense')}
+                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
                         >
                             <div className="flex items-center gap-3">
-                                <Split size={20} style={{ color: activeItem === 'Split Expenses' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Split Expenses</span>
+                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Split & Collect</span>
                             </div>
                         </button>
 

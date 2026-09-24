@@ -241,11 +241,10 @@ const FinancialPlan = () => {
                         <button
                             type="button"
                             onClick={() => setActiveFilter('ALL')}
-                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                                activeFilter === 'ALL'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
-                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
-                            }`}
+                            className={activeFilter === 'ALL'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
+                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
+                            }
                         >
                             All
                         </button>
@@ -254,11 +253,10 @@ const FinancialPlan = () => {
                         <button
                             type="button"
                             onClick={() => setActiveFilter('SEND')}
-                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                                activeFilter === 'SEND'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
-                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
-                            }`}
+                            className={activeFilter === 'SEND'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
+                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
+                            }
                         >
                             Send
                         </button>
@@ -267,11 +265,10 @@ const FinancialPlan = () => {
                         <button
                             type="button"
                             onClick={() => setActiveFilter('RECEIVE')}
-                            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                                activeFilter === 'RECEIVE'
-                                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 font-bold'
-                                    : 'bg-white text-gray-600 hover:text-gray-900 border border-gray-200'
-                            }`}
+                            className={activeFilter === 'RECEIVE'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
+                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
+                            }
                         >
                             Receive
                         </button>
@@ -300,26 +297,39 @@ const FinancialPlan = () => {
                             {filteredPlans.map(plan => {
                                 const direction = String(plan.direction || plan.type || plan.entry_type || plan.flow || '').toUpperCase();
                                 const isSend = direction === 'SEND' || direction === 'OUTWARD' || direction === 'OUTGOING' || direction === 'OUT' || plan.is_send === true || String(plan.flow || '').toLowerCase() === 'out';
+                                
+                                const personMatch = (people || []).find(p => String(p.id) === String(plan.person_id));
+                                const contactName = plan.contactName || plan.person_name || plan.person?.name || personMatch?.name;
+                                const displayTitle = plan.referenceName || plan.name || 'Untitled Plan';
+                                const displayDate = plan.scheduledDate || plan.due_date;
+                                const statusText = (plan.status || 'PENDING').toUpperCase();
+                                const formattedAmount = parseFloat(plan.amount || 0).toLocaleString();
+
                                 return (
                                 <div key={plan.id} style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ 
                                             width: '50px', height: '50px', borderRadius: '15px', 
-                                            background: isSend ? '#FEE2E2' : '#DCF2E4',
-                                            color: isSend ? '#EF4444' : '#1B6B3A',
+                                            background: '#FFF1F2',
+                                            color: '#E11D48',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center'
                                         }}>
-                                            {isSend ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
+                                            <ArrowUpRight size={24} />
                                         </div>
                                         <div>
-                                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#1E293B' }}>{plan.name}</h4>
-                                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '0.25rem' }}>
+                                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#1E293B' }}>{displayTitle}</h4>
+                                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.25rem', flexWrap: 'wrap' }}>
                                                 <span style={{ fontSize: '0.8rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '600' }}>
-                                                    <Clock size={14} /> {new Date(plan.due_date).toLocaleDateString()}
+                                                    <Clock size={14} /> {displayDate ? new Date(displayDate).toLocaleDateString() : 'No date'}
                                                 </span>
                                                 <span style={{ fontSize: '0.8rem', color: '#1B6B3A', background: '#DCF2E4', padding: '0.1rem 0.5rem', borderRadius: '6px', fontWeight: '750' }}>
-                                                    {plan.status.toUpperCase()}
+                                                    {statusText}
                                                 </span>
+                                                {contactName && (
+                                                    <span style={{ fontSize: '0.8rem', color: '#0369A1', background: '#E0F2FE', padding: '0.1rem 0.5rem', borderRadius: '6px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                        <User size={12} /> {contactName}
+                                                    </span>
+                                                )}
                                             </div>
                                             {(plan.description || plan.notes) && (
                                                 <p className="text-xs text-gray-500 mt-1 line-clamp-2" style={{ margin: '0.25rem 0 0 0', fontSize: '0.75rem', color: '#64748B' }}>
@@ -331,8 +341,8 @@ const FinancialPlan = () => {
                                     <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '2rem' }}>
                                         <div>
                                             <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
-                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: isSend ? '#EF4444' : '#10B981' }}>
-                                                ₹{parseFloat(plan.amount).toLocaleString()}
+                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: '#E11D48' }}>
+                                                ₹{formattedAmount}
                                             </h4>
                                         </div>
                                         <div style={{ display: 'flex', gap: '0.5rem' }}>

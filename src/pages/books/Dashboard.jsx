@@ -376,7 +376,7 @@ const BooksDashboard = () => {
                                 <p style={{ fontSize: '0.8rem', opacity: 0.85, marginBottom: '1.25rem', fontWeight: '500', lineHeight: '1.5' }}>
                                     Manage complex bill cost splits among groups, monitor personal accounting logs, and reconcile joint statements.
                                 </p>
-                                <Link to="/payments/split-expense" style={{ textDecoration: 'none' }}>
+                                <Link to="/payments/split-collect" style={{ textDecoration: 'none' }}>
                                     <button style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: 'white', color: '#064E3B', border: 'none', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', transition: 'all 0.2s' }}>
                                         View Joint Expenses <ArrowRight size={16} />
                                     </button>
