@@ -112,7 +112,7 @@ function AuthenticatedApp() {
                 <Route path="/payments/planner" element={<FinancialPlan />} />
                 <Route path="/payments/segregation" element={<Segregation />} />
                 <Route path="/payments/split-collect" element={<SplitExpense />} />
-                <Route path="/payments/split-expense" element={<Navigate to="/payments/split-collect" replace />} />
+                <Route path="/payments/split-expense" element={<SplitExpense />} />
                 <Route path="/payments/rewards-offers" element={<Rewards />} />
 
                 {/* Referral Routes */}
