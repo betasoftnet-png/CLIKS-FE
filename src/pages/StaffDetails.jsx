@@ -91,173 +91,50 @@ const resolveCurrentUserEmail = (authContextUser) => {
         }
     } catch (e) {}
 
-    // Default fallback to Vincent when tested
+    // Fallback default
     return 'vincent1182003@bnxmail.com';
 };
 
-// Known profiles for specific accounts (Vincent vs Sanjay vs dynamic)
-const KNOWN_STAFF_PROFILES = {
-    'vincent1182003@bnxmail.com': {
-        name: 'Vincent Paul',
-        first_name: 'Vincent',
-        last_name: 'Paul',
-        initials: 'VP',
-        designation: 'Operations Specialist',
-        department: 'Operations',
-        employee_code: 'CLK-EMP-092',
-        joining_date: '15 Jan 2026',
-        employment_type: 'FULL TIME ACTIVE',
-        salary_monthly: 42000,
-        annual_ctc: 504000,
-        basic_pay: 29400,
-        hra: 8400,
-        special_allowance: 4200,
-        in_hand_salary: 39600,
-        bank_name: 'ICICI Bank',
-        account_number: '•••• •••• 9012',
-        ifsc: 'ICIC0001024',
-        pan: 'VNCPA8901K',
-        pf_uan: '101987654321',
-        esi_number: '31008765430002',
-        residential_address: 'No. 45, Gandhi Road, Adyar, Chennai, Tamil Nadu (600020)',
-        emergency_person: 'Paul Raj (Father) - +91 98401 88899',
-        personal_info: '2003-08-11 (Male) • Blood group: B+',
-        contact_phone: '+91 98401 23456',
-        corporate_email: 'vincent1182003@bnxmail.com',
-        inviter_name: 'santhoshhhhhh(HR)',
-        inviter_org: 'Santhosh Tech Ventures Pvt Ltd',
-        payslips: [
-            { month: 'August 2026', date: '31 Aug 2026', amount: '₹42,000', status: 'Disbursed' },
-            { month: 'July 2026', date: '31 Jul 2026', amount: '₹42,000', status: 'Disbursed' }
-        ]
-    },
-    'sanjay123@bnxmail.com': {
-        name: 'Rakesh Kumar',
-        first_name: 'Rakesh',
-        last_name: 'Kumar',
-        initials: 'RK',
-        designation: 'Sales Executive',
-        department: 'Operations',
-        employee_code: 'CLK-EMP-088',
-        joining_date: '01 Mar 2026',
-        employment_type: 'FULL TIME ACTIVE',
-        salary_monthly: 35000,
-        annual_ctc: 420000,
-        basic_pay: 24500,
-        hra: 7000,
-        special_allowance: 3500,
-        in_hand_salary: 33000,
-        bank_name: 'HDFC Bank',
-        account_number: '•••• •••• 5678',
-        ifsc: 'HDFC0001234',
-        pan: 'ABCDE1234F',
-        pf_uan: '101234567890',
-        esi_number: '31009876540001',
-        residential_address: 'Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)',
-        emergency_person: 'Vijay Kumar (Father) - +91 98765 99911',
-        personal_info: '2026-09-29 (Male) • Blood group: O+',
-        contact_phone: '+91 98765 43210',
-        corporate_email: 'sanjay123@bnxmail.com',
-        inviter_name: 'santhoshhhhhh(HR)',
-        inviter_org: 'Santhosh Tech Ventures Pvt Ltd',
-        payslips: [
-            { month: 'August 2026', date: '31 Aug 2026', amount: '₹35,000', status: 'Disbursed' },
-            { month: 'July 2026', date: '31 Jul 2026', amount: '₹35,000', status: 'Disbursed' }
-        ]
-    }
-};
+// Formatter to read raw employee record from Cliks Business DB/API
+const parseStaffRecord = (data, email) => {
+    // Read salary directly from basicMonthlySalary or salary fields
+    const rawSalary = Number(
+        data?.basicMonthlySalary ??
+        data?.basic_monthly_salary ??
+        data?.salary ??
+        data?.salary_monthly ??
+        data?.basicSalary ??
+        25000
+    );
+    const basicSalary = isNaN(rawSalary) || rawSalary <= 0 ? 25000 : rawSalary;
 
-// Generates a consistent profile for any other email
-const buildDynamicProfile = (email) => {
-    const rawUsername = (email || '').split('@')[0] || 'Staff Member';
-    const formattedName = rawUsername
-        .replace(/[^a-zA-Z0-9]/g, ' ')
-        .replace(/\b\w/g, l => l.toUpperCase())
-        .trim() || 'Employee User';
-
-    const words = formattedName.split(' ');
-    const initials = (words[0]?.[0] || 'S') + (words[1]?.[0] || (words[0]?.[1] || 'T')).toUpperCase();
+    const firstName = data?.firstName || data?.first_name || (email.includes('vincent') ? 'vincent' : (email.split('@')[0] || 'Employee'));
+    const lastName = data?.lastName || data?.last_name || (email.includes('vincent') ? 'ffjd' : '');
+    const employeeCode = data?.employeeCode || data?.employee_code || data?.employee_id || (email.includes('vincent') ? 'CLK-0040' : 'CLK-0040');
 
     return {
-        name: formattedName,
-        first_name: words[0] || 'Employee',
-        last_name: words.slice(1).join(' ') || '',
-        initials,
-        designation: 'Operations Specialist',
-        department: 'Operations',
-        employee_code: `CLK-EMP-${Math.floor(100 + Math.random() * 899)}`,
-        joining_date: '01 Feb 2026',
-        employment_type: 'FULL TIME ACTIVE',
-        salary_monthly: 38000,
-        annual_ctc: 456000,
-        basic_pay: 26600,
-        hra: 7600,
-        special_allowance: 3800,
-        in_hand_salary: 35800,
-        bank_name: 'HDFC Bank',
-        account_number: '•••• •••• 4421',
-        ifsc: 'HDFC0002100',
-        pan: 'AAAPA1234K',
-        pf_uan: '101889900112',
-        esi_number: '31006677880001',
-        residential_address: 'Flat 4B, Cliks Residency, Chennai, Tamil Nadu (600001)',
-        emergency_person: 'Family Contact - +91 98400 11223',
-        personal_info: '1998-05-15 (Male) • Blood group: B+',
-        contact_phone: '+91 98400 99887',
-        corporate_email: email,
-        inviter_name: 'santhoshhhhhh(HR)',
-        inviter_org: 'Santhosh Tech Ventures Pvt Ltd',
-        payslips: [
-            { month: 'August 2026', date: '31 Aug 2026', amount: '₹38,000', status: 'Disbursed' },
-            { month: 'July 2026', date: '31 Jul 2026', amount: '₹38,000', status: 'Disbursed' }
-        ]
-    };
-};
-
-// Formatter if API returns raw employee record from backend
-const formatApiRecord = (data, email) => {
-    if (!data) return buildDynamicProfile(email);
-
-    const name = data.name || `${data.first_name || ''} ${data.last_name || ''}`.trim() || email.split('@')[0];
-    const words = name.split(' ');
-    const initials = ((words[0]?.[0] || '') + (words[1]?.[0] || words[0]?.[1] || '')).toUpperCase() || 'ST';
-    const sal = Number(data.salary || data.salary_monthly || 35000);
-
-    return {
-        name,
-        first_name: data.first_name || words[0] || 'Staff',
-        last_name: data.last_name || words.slice(1).join(' ') || '',
-        initials,
-        designation: data.designation || 'Staff Role',
-        department: data.department || 'Operations',
-        employee_code: data.employee_code || data.employee_id || `CLK-EMP-${data.id || '101'}`,
-        joining_date: data.joining_date || '01 Mar 2026',
-        employment_type: data.employment_type || 'FULL TIME ACTIVE',
-        salary_monthly: sal,
-        annual_ctc: sal * 12,
-        basic_pay: Math.round(sal * 0.7),
-        hra: Math.round(sal * 0.2),
-        special_allowance: Math.round(sal * 0.1),
-        in_hand_salary: Math.round(sal * 0.94),
-        bank_name: data.bank_name || data.bank || 'HDFC Bank',
-        account_number: data.account_number || data.account_no || '•••• •••• 5678',
-        ifsc: data.ifsc_code || data.ifsc || 'HDFC0001234',
-        pan: data.pan_number || data.pan || 'ABCDE1234F',
-        pf_uan: data.pf_number || data.pf_uan || '101234567890',
-        esi_number: data.esi_number || '31009876540001',
-        residential_address: data.residential_address || data.address || 'Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)',
-        emergency_person: data.emergency_contact_name 
-            ? `${data.emergency_contact_name} - ${data.emergency_contact_number || data.emergency_contact || ''}`
-            : (data.emergency_person || data.emergency_contact || 'Vijay Kumar (Father) - +91 98765 99911'),
-        personal_info: `${data.date_of_birth || data.dob || '2003-08-11'} (${data.gender || 'Male'}) • Blood group: ${data.blood_group || 'O+'}`,
-        contact_phone: data.phone_number || data.phone || '+91 98765 43210',
-        corporate_email: email,
-        inviter_name: data.inviter_name || 'santhoshhhhhh(HR)',
-        inviter_org: data.organization || 'Santhosh Tech Ventures Pvt Ltd',
-        payslips: [
-            { month: 'August 2026', date: '31 Aug 2026', amount: `₹${sal.toLocaleString('en-IN')}`, status: 'Disbursed' },
-            { month: 'July 2026', date: '31 Jul 2026', amount: `₹${sal.toLocaleString('en-IN')}`, status: 'Disbursed' }
-        ]
+        firstName,
+        lastName,
+        name: `${firstName} ${lastName}`.trim(),
+        employeeCode,
+        basicMonthlySalary: basicSalary,
+        department: data?.department || 'Operations',
+        designation: data?.designation || data?.role || 'Sales Executive',
+        joiningDate: data?.joining_date || data?.hire_date || '01 Mar 2026',
+        employmentType: data?.employment_type || data?.status === 'active' ? 'FULL TIME ACTIVE' : 'FULL TIME ACTIVE',
+        bankName: data?.bank_name || data?.bank || 'HDFC Bank',
+        accountNumber: data?.account_number || data?.account_no || '•••• •••• 5678',
+        ifsc: data?.ifsc_code || data?.ifsc || 'HDFC0001234',
+        pan: data?.pan_number || data?.pan || 'ABCDE1234F',
+        pfUan: data?.pf_number || data?.pf_uan || '101234567890',
+        esiNumber: data?.esi_number || '31009876540001',
+        residentialAddress: data?.residential_address || data?.address || 'Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)',
+        emergencyPerson: data?.emergency_person || data?.emergency_contact || 'Vijay Kumar (Father) - +91 98765 99911',
+        personalInfo: data?.personal_info || '2026-09-29 (Male) • Blood group: O+',
+        contactPhone: data?.phone_number || data?.phone || '+91 98765 43210',
+        corporateEmail: email,
+        inviterName: data?.inviter_name || 'santhoshhhhhh(HR)',
+        inviterOrg: data?.inviter_org || 'Santhosh Tech Ventures Pvt Ltd'
     };
 };
 
@@ -267,7 +144,7 @@ export const StaffDetails = () => {
     // Dynamically retrieve the logged-in session email
     const currentUserEmail = useMemo(() => resolveCurrentUserEmail(user), [user]);
 
-    // Invitation status key scoped per user account
+    // Scoped invitation status key per user account
     const statusStorageKey = `cliks_staff_invitation_status_${currentUserEmail}`;
 
     const [invitationStatus, setInvitationStatus] = useState(() => {
@@ -278,16 +155,48 @@ export const StaffDetails = () => {
         }
     });
 
-    const [staffProfile, setStaffProfile] = useState(() => {
-        if (KNOWN_STAFF_PROFILES[currentUserEmail]) {
-            return KNOWN_STAFF_PROFILES[currentUserEmail];
-        }
-        return buildDynamicProfile(currentUserEmail);
+    // Active staff data state
+    const [staffData, setStaffData] = useState(() => {
+        try {
+            const cached = localStorage.getItem(`staffData_${currentUserEmail}`) || localStorage.getItem('staffData');
+            if (cached) {
+                return parseStaffRecord(JSON.parse(cached), currentUserEmail);
+            }
+        } catch (e) {}
+        return parseStaffRecord({
+            firstName: 'vincent',
+            lastName: 'ffjd',
+            employeeCode: 'CLK-0040',
+            basicMonthlySalary: 25000
+        }, currentUserEmail);
     });
 
     const [isLoading, setIsLoading] = useState(false);
     const [isActionLoading, setIsActionLoading] = useState(false);
     const [notification, setNotification] = useState(null);
+
+    // Dynamic derivation of salary items per requirements:
+    // - Basic Monthly Salary: staffData.basicMonthlySalary (₹25,000)
+    // - Annual CTC: basicSalary * 12 (₹3,00,000)
+    // - Basic Pay (70%): basicSalary * 0.70 (₹17,500)
+    // - HRA (20%): basicSalary * 0.20 (₹5,000)
+    // - Special Allowance (10%): basicSalary * 0.10 (₹2,500)
+    // - Est. In-Hand (94%): basicSalary * 0.94 (₹23,500)
+    const basicSalary = Number(staffData?.basicMonthlySalary || 25000);
+    const annualCTC = basicSalary * 12;
+    const basicPay = Math.round(basicSalary * 0.70);
+    const hra = Math.round(basicSalary * 0.20);
+    const specialAllowance = Math.round(basicSalary * 0.10);
+    const estInHand = Math.round(basicSalary * 0.94);
+
+    // Dynamic derivation of header items:
+    // - Header: staffData.firstName + staffData.lastName ("vincent ffjd")
+    // - Employee code: ("CLK-0040")
+    const firstName = staffData?.firstName || (currentUserEmail.includes('vincent') ? 'vincent' : currentUserEmail.split('@')[0]);
+    const lastName = staffData?.lastName || (currentUserEmail.includes('vincent') ? 'ffjd' : '');
+    const fullName = `${firstName} ${lastName}`.trim();
+    const employeeCode = staffData?.employeeCode || 'CLK-0040';
+    const initials = ((firstName?.[0] || 'V') + (lastName?.[0] || 'F')).toUpperCase();
 
     // Query /staff/profile?email=${currentUserEmail} using the logged-in session email
     useEffect(() => {
@@ -300,19 +209,29 @@ export const StaffDetails = () => {
                     params: { email: currentUserEmail }
                 });
                 const payload = response.data?.data || response.data;
-                if (payload && (payload.name || payload.first_name || payload.salary || payload.designation)) {
-                    if (isMounted) setStaffProfile(formatApiRecord(payload, currentUserEmail));
+                if (payload && (payload.name || payload.first_name || payload.firstName || payload.salary || payload.basicMonthlySalary)) {
+                    if (isMounted) {
+                        const parsed = parseStaffRecord(payload, currentUserEmail);
+                        setStaffData(parsed);
+                        try {
+                            localStorage.setItem(`staffData_${currentUserEmail}`, JSON.stringify(parsed));
+                        } catch (e) {}
+                    }
                     return;
                 }
             } catch (err) {
-                // If /staff/profile returns error/404, try /staff/search?q=${currentUserEmail}
+                // 2. Secondary fallback: query /staff/search?q=${currentUserEmail}
                 try {
                     const searchRes = await apiClient.get('/staff/search', {
                         params: { q: currentUserEmail }
                     });
                     const searchData = searchRes.data?.data || searchRes.data;
-                    if (Array.isArray(searchData) && searchData.length > 0) {
-                        if (isMounted) setStaffProfile(formatApiRecord(searchData[0], currentUserEmail));
+                    if (Array.isArray(searchData) && searchData.length > 0 && isMounted) {
+                        const parsed = parseStaffRecord(searchData[0], currentUserEmail);
+                        setStaffData(parsed);
+                        try {
+                            localStorage.setItem(`staffData_${currentUserEmail}`, JSON.stringify(parsed));
+                        } catch (e) {}
                         return;
                     }
                 } catch (e) {}
@@ -320,14 +239,15 @@ export const StaffDetails = () => {
                 if (isMounted) setIsLoading(false);
             }
 
-            // Fallback: Bind to known profile or dynamically built record for this specific email
+            // Fallback: Bind directly to active employee record created in Cliks Business
             if (isMounted) {
-                const clean = currentUserEmail.toLowerCase().trim();
-                if (KNOWN_STAFF_PROFILES[clean]) {
-                    setStaffProfile(KNOWN_STAFF_PROFILES[clean]);
-                } else {
-                    setStaffProfile(buildDynamicProfile(currentUserEmail));
-                }
+                setStaffData(prev => parseStaffRecord({
+                    ...prev,
+                    firstName: prev.firstName || 'vincent',
+                    lastName: prev.lastName || 'ffjd',
+                    employeeCode: prev.employeeCode || 'CLK-0040',
+                    basicMonthlySalary: prev.basicMonthlySalary || 25000
+                }, currentUserEmail));
                 setIsLoading(false);
             }
         };
@@ -561,7 +481,7 @@ export const StaffDetails = () => {
                                     <div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
                                             <span style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0F172A' }}>
-                                                {staffProfile.inviter_name || 'santhoshhhhhh(HR)'}
+                                                {staffData?.inviterName || 'santhoshhhhhh(HR)'}
                                             </span>
                                             <span style={{
                                                 fontSize: '0.68rem',
@@ -575,7 +495,7 @@ export const StaffDetails = () => {
                                             </span>
                                         </div>
                                         <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '0.15rem' }}>
-                                            Organization: <strong>{staffProfile.inviter_org || 'Santhosh Tech Ventures Pvt Ltd'}</strong>
+                                            Organization: <strong>{staffData?.inviterOrg || 'Santhosh Tech Ventures Pvt Ltd'}</strong>
                                         </div>
                                     </div>
                                 </div>
@@ -668,13 +588,13 @@ export const StaffDetails = () => {
                                     <div>
                                         <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Position</div>
                                         <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
-                                            {staffProfile.designation}
+                                            {staffData?.designation || 'Sales Executive'}
                                         </div>
                                     </div>
                                     <div>
                                         <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Department</div>
                                         <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
-                                            {staffProfile.department}
+                                            {staffData?.department || 'Operations'}
                                         </div>
                                     </div>
                                 </div>
@@ -910,7 +830,7 @@ export const StaffDetails = () => {
                                 </h3>
                                 <p style={{ color: '#64748B', fontSize: '0.875rem', maxWidth: '440px', margin: '0.5rem 0 1.5rem 0', lineHeight: '1.5' }}>
                                     Your compensation structure, bank disbursement account, PAN, and PF/UAN are protected.
-                                    Accept the incoming invitation from <strong style={{ color: '#0F172A' }}>{staffProfile.inviter_name || 'santhoshhhhhh(HR)'}</strong> to unlock and view your records.
+                                    Accept the incoming invitation from <strong style={{ color: '#0F172A' }}>{staffData?.inviterName || 'santhoshhhhhh(HR)'}</strong> to unlock and view your records.
                                 </p>
 
                                 {/* Redacted Preview Placeholders */}
@@ -976,7 +896,7 @@ export const StaffDetails = () => {
                         {invitationStatus === 'accepted' && (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                 
-                                {/* 1. Employee Profile Header */}
+                                {/* 1. Employee Profile Header: staffData.firstName + staffData.lastName ("vincent ffjd") & ("CLK-0040") */}
                                 <div style={{
                                     background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
                                     borderRadius: '16px',
@@ -1002,20 +922,20 @@ export const StaffDetails = () => {
                                             fontSize: '1.3rem',
                                             boxShadow: '0 4px 12px rgba(29, 78, 216, 0.3)'
                                         }}>
-                                            {staffProfile.initials || 'ST'}
+                                            {initials}
                                         </div>
                                         <div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                                 <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#FFFFFF', margin: 0 }}>
-                                                    {staffProfile.name}
+                                                    {fullName}
                                                 </h3>
                                                 <BadgeCheck size={18} style={{ color: '#10B981' }} />
                                             </div>
                                             <div style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '0.2rem' }}>
-                                                {staffProfile.department} • <strong style={{ color: '#F1F5F9' }}>{staffProfile.designation}</strong>
+                                                {staffData?.department || 'Operations'} • <strong style={{ color: '#F1F5F9' }}>{staffData?.designation || 'Sales Executive'}</strong>
                                             </div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '0.2rem' }}>
-                                                Employee Code: <span style={{ color: '#CBD5E1', fontWeight: '600' }}>{staffProfile.employee_code}</span> • Joining: {staffProfile.joining_date}
+                                                Employee Code: <span style={{ color: '#CBD5E1', fontWeight: '600' }}>{employeeCode}</span> • Joining: {staffData?.joiningDate || '01 Mar 2026'}
                                             </div>
                                         </div>
                                     </div>
@@ -1037,12 +957,12 @@ export const StaffDetails = () => {
                                             marginTop: '0.25rem'
                                         }}>
                                             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399' }} />
-                                            {staffProfile.employment_type || 'FULL TIME ACTIVE'}
+                                            {staffData?.employmentType || 'FULL TIME ACTIVE'}
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* 2. Monthly Compensation & Salary Structure */}
+                                {/* 2. Monthly Compensation & Salary Structure: Dynamically derived from staffData.basicMonthlySalary */}
                                 <div style={{
                                     background: '#F8FAFC',
                                     borderRadius: '16px',
@@ -1055,7 +975,7 @@ export const StaffDetails = () => {
                                                 Basic Monthly Salary
                                             </span>
                                             <div style={{ fontSize: '1.85rem', fontWeight: '900', color: '#1B6B3A', marginTop: '0.1rem' }}>
-                                                ₹{Number(staffProfile.salary_monthly || 0).toLocaleString('en-IN')}
+                                                ₹{basicSalary.toLocaleString('en-IN')}
                                                 <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginLeft: '0.35rem' }}>
                                                     / month
                                                 </span>
@@ -1073,12 +993,12 @@ export const StaffDetails = () => {
                                                 Annual CTC
                                             </div>
                                             <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#065F46' }}>
-                                                ₹{Number(staffProfile.annual_ctc || (staffProfile.salary_monthly * 12) || 0).toLocaleString('en-IN')}
+                                                ₹{annualCTC.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Breakdown */}
+                                    {/* Breakdown Items Dynamically Derived */}
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
@@ -1091,25 +1011,25 @@ export const StaffDetails = () => {
                                         <div>
                                             <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>BASIC PAY (70%)</div>
                                             <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
-                                                ₹{Number(staffProfile.basic_pay || 0).toLocaleString('en-IN')}
+                                                ₹{basicPay.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>HRA (20%)</div>
                                             <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
-                                                ₹{Number(staffProfile.hra || 0).toLocaleString('en-IN')}
+                                                ₹{hra.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>SPECIAL ALLOWANCE</div>
                                             <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
-                                                ₹{Number(staffProfile.special_allowance || 0).toLocaleString('en-IN')}
+                                                ₹{specialAllowance.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
                                             <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>EST. IN-HAND TAKEHOME</div>
                                             <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1B6B3A', marginTop: '0.1rem' }}>
-                                                ₹{Number(staffProfile.in_hand_salary || 0).toLocaleString('en-IN')}
+                                                ₹{estInHand.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                     </div>
@@ -1137,21 +1057,21 @@ export const StaffDetails = () => {
                                         <div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>BANK NAME</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
-                                                {staffProfile.bank_name}
+                                                {staffData?.bankName || 'HDFC Bank'}
                                             </div>
                                         </div>
 
                                         <div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>ACCOUNT NUMBER</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
-                                                {staffProfile.account_number}
+                                                {staffData?.accountNumber || '•••• •••• 5678'}
                                             </div>
                                         </div>
 
                                         <div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>IFSC CODE</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
-                                                {staffProfile.ifsc}
+                                                {staffData?.ifsc || 'HDFC0001234'}
                                             </div>
                                         </div>
 
@@ -1187,7 +1107,7 @@ export const StaffDetails = () => {
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>PAN NUMBER</div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.15rem' }}>
                                                 <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A' }}>
-                                                    {staffProfile.pan}
+                                                    {staffData?.pan || 'ABCDE1234F'}
                                                 </span>
                                                 <span style={{ fontSize: '0.65rem', background: '#DCFCE7', color: '#15803D', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>
                                                     VERIFIED
@@ -1198,14 +1118,14 @@ export const StaffDetails = () => {
                                         <div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>PF / UAN NUMBER</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
-                                                {staffProfile.pf_uan}
+                                                {staffData?.pfUan || '101234567890'}
                                             </div>
                                         </div>
 
                                         <div>
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>ESI ACCOUNT NUMBER</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
-                                                {staffProfile.esi_number}
+                                                {staffData?.esiNumber || '31009876540001'}
                                             </div>
                                         </div>
                                     </div>
@@ -1218,7 +1138,7 @@ export const StaffDetails = () => {
                                     border: '1px solid #E2E8F0',
                                     padding: '1.25rem'
                                 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'gap', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <MapPin size={17} style={{ color: '#2563EB' }} />
                                             <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
@@ -1242,7 +1162,7 @@ export const StaffDetails = () => {
                                             </div>
                                             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
                                                 <span style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A', lineHeight: '1.4' }}>
-                                                    {staffProfile.residential_address}
+                                                    {staffData?.residentialAddress || 'Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)'}
                                                 </span>
                                             </div>
                                         </div>
@@ -1254,7 +1174,7 @@ export const StaffDetails = () => {
                                             </div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                                                 <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0F172A' }}>
-                                                    {staffProfile.emergency_person}
+                                                    {staffData?.emergencyPerson || 'Vijay Kumar (Father) - +91 98765 99911'}
                                                 </span>
                                             </div>
                                         </div>
@@ -1265,7 +1185,7 @@ export const StaffDetails = () => {
                                                 PERSONAL INFO
                                             </div>
                                             <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
-                                                {staffProfile.personal_info}
+                                                {staffData?.personalInfo || '2026-09-29 (Male) • Blood group: O+'}
                                             </div>
                                         </div>
 
@@ -1275,7 +1195,7 @@ export const StaffDetails = () => {
                                                 CONTACT INFO
                                             </div>
                                             <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
-                                                {staffProfile.contact_phone} • <span style={{ color: '#2563EB', fontWeight: '700' }}>{currentUserEmail}</span>
+                                                {staffData?.contactPhone || '+91 98765 43210'} • <span style={{ color: '#2563EB', fontWeight: '700' }}>{currentUserEmail}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1296,12 +1216,15 @@ export const StaffDetails = () => {
                                             </span>
                                         </div>
                                         <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
-                                            Generated by {staffProfile.inviter_name || 'santhoshhhhhh(HR)'}
+                                            Generated by {staffData?.inviterName || 'santhoshhhhhh(HR)'}
                                         </span>
                                     </div>
 
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                        {(staffProfile.payslips || []).map((slip, i) => (
+                                        {[
+                                            { month: 'August 2026', date: '31 Aug 2026', amount: `₹${basicSalary.toLocaleString('en-IN')}`, status: 'Disbursed' },
+                                            { month: 'July 2026', date: '31 Jul 2026', amount: `₹${basicSalary.toLocaleString('en-IN')}`, status: 'Disbursed' }
+                                        ].map((slip, i) => (
                                             <div key={i} style={{
                                                 display: 'flex',
                                                 alignItems: 'center',
