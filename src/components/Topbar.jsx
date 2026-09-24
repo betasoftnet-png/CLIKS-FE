@@ -90,9 +90,9 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isItemActive = item.name === 'Payments'
-                            ? ((location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments') || location.pathname === '/') && !location.pathname.startsWith('/payments/split-expense') && !location.pathname.startsWith('/payments/split-collect'))
+                            ? (location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments') || location.pathname === '/')
                             : (item.name === 'Books'
-                                ? (location.pathname.startsWith('/books') || location.pathname.startsWith('/ca') || location.pathname.startsWith('/payments/split-expense') || location.pathname.startsWith('/payments/split-collect'))
+                                ? (location.pathname.startsWith('/books') || location.pathname.startsWith('/ca'))
                                 : (item.activeBase
                                     ? (location.pathname.startsWith(item.activeBase) || (item.name === 'Social' && location.pathname.startsWith('/public')))
                                     : (item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false)));

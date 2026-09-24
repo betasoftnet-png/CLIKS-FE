@@ -101,6 +101,14 @@ const BooksDashboard = () => {
         );
     }
 
+    const contactsCount = typeof stats?.people === 'object' && stats?.people !== null
+        ? (Array.isArray(stats.people) ? stats.people.length : (stats.people.total ?? stats.people.count ?? Object.keys(stats.people).length ?? 0))
+        : (Number(stats?.people) || 0);
+
+    const segregationsCount = typeof stats?.wallets === 'object' && stats?.wallets !== null
+        ? (stats.wallets.total ?? 0)
+        : (Number(stats?.segregation_count ?? stats?.segregations) || 0);
+
     const metrics = [
         { 
             label: t('totalIncome', 'Total Income'), 
@@ -132,14 +140,14 @@ const BooksDashboard = () => {
         },
         { 
             label: t('activePeople', 'Active People'), 
-            value: `${stats?.people || 0} Contacts`, 
+            value: `${contactsCount} Contacts`, 
             change: t('live', 'Live'), 
             icon: Users, 
             color: '#D97706' 
         },
         { 
             label: t('activeSegregations', 'Active Segregations'), 
-            value: `${stats?.segregation_count || 0} Records`, 
+            value: `${segregationsCount} Records`, 
             change: t('live', 'Live'), 
             icon: SplitSquareVertical, 
             color: '#059669'

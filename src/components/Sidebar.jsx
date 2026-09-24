@@ -446,17 +446,6 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 5. Split & Collect */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Split & Collect</span>
-                            </div>
-                        </button>
-
                         {/* 5. Report (Points to /books layout) */}
                         <button
                             className={`sidebar-item ${activeItem === 'Report' ? 'active' : ''}`}
