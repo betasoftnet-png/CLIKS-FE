@@ -56,7 +56,7 @@ const SimpleBilling = React.lazy(() => import('./pages/books/SimpleBilling'));
 const BillingRecords = React.lazy(() => import('./pages/books/BillingRecords'));
 const Accounting = React.lazy(() => import('./pages/books/Accounting'));
 const PurchaseDetails = React.lazy(() => import('./pages/books/PurchaseDetails'));
-const StaffDetails = React.lazy(() => import('./pages/books/StaffDetails'));
+const StaffDetails = React.lazy(() => import('./pages/StaffDetails'));
 
 
 import './App.css';
