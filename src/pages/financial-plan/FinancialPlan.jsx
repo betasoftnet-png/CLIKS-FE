@@ -105,6 +105,8 @@ const FinancialPlan = () => {
         let toSendTotal = 0;
         let toReceiveTotal = 0;
         let pendingCount = 0;
+        let sendCount = 0;
+        let receiveCount = 0;
 
         schedulesList.forEach((item) => {
             // 1. Sanitize amount safely
@@ -140,8 +142,10 @@ const FinancialPlan = () => {
             // 4. Accumulate totals
             if (isReceive) {
                 toReceiveTotal += amount;
+                receiveCount += 1;
             } else if (isSend) {
                 toSendTotal += amount;
+                sendCount += 1;
             }
         });
 
@@ -149,7 +153,9 @@ const FinancialPlan = () => {
             totalScheduled,
             toSendTotal,
             toReceiveTotal,
-            pendingCount
+            pendingCount,
+            sendCount,
+            receiveCount
         };
     }, [plans]);
 
@@ -159,7 +165,9 @@ const FinancialPlan = () => {
         toSendTotal: metrics.toSendTotal,
         toReceive: metrics.toReceiveTotal,
         toReceiveTotal: metrics.toReceiveTotal,
-        pendingCount: metrics.pendingCount
+        pendingCount: metrics.pendingCount,
+        sendCount: metrics.sendCount,
+        receiveCount: metrics.receiveCount
     };
 
     const filteredPlans = React.useMemo(() => {
@@ -235,51 +243,126 @@ const FinancialPlan = () => {
 
             {/* Filters and List */}
             <div style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '28px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div style={{ padding: '1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                     {/* Subtab Filter Switcher */}
-                    <div className="flex items-center gap-2">
+                    <div style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        background: '#F1F5F9',
+                        padding: '4px',
+                        borderRadius: '16px',
+                        border: '1px solid #E2E8F0',
+                        gap: '4px'
+                    }}>
                         <button
                             type="button"
                             onClick={() => setActiveFilter('ALL')}
-                            className={activeFilter === 'ALL'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
-                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
-                            }
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.45rem',
+                                padding: '0.55rem 1.15rem',
+                                borderRadius: '12px',
+                                border: 'none',
+                                background: activeFilter === 'ALL' ? 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)' : 'transparent',
+                                color: activeFilter === 'ALL' ? '#FFFFFF' : '#64748B',
+                                fontWeight: '800',
+                                fontSize: '0.82rem',
+                                cursor: 'pointer',
+                                boxShadow: activeFilter === 'ALL' ? '0 4px 10px rgba(27, 107, 58, 0.25)' : 'none',
+                                transition: 'all 0.2s ease'
+                            }}
                         >
-                            All
+                            <Filter size={14} style={{ color: activeFilter === 'ALL' ? '#FFFFFF' : '#64748B' }} />
+                            <span>All</span>
+                            <span style={{
+                                padding: '0.15rem 0.5rem',
+                                borderRadius: '999px',
+                                fontSize: '0.7rem',
+                                fontWeight: '800',
+                                background: activeFilter === 'ALL' ? 'rgba(255, 255, 255, 0.22)' : '#E2E8F0',
+                                color: activeFilter === 'ALL' ? '#FFFFFF' : '#475569'
+                            }}>
+                                {stats.totalScheduled || 0}
+                            </span>
                         </button>
 
                         {/* Send Filter Button */}
                         <button
                             type="button"
                             onClick={() => setActiveFilter('SEND')}
-                            className={activeFilter === 'SEND'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
-                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
-                            }
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.45rem',
+                                padding: '0.55rem 1.15rem',
+                                borderRadius: '12px',
+                                border: 'none',
+                                background: activeFilter === 'SEND' ? '#DC2626' : 'transparent',
+                                color: activeFilter === 'SEND' ? '#FFFFFF' : '#64748B',
+                                fontWeight: '800',
+                                fontSize: '0.82rem',
+                                cursor: 'pointer',
+                                boxShadow: activeFilter === 'SEND' ? '0 4px 10px rgba(220, 38, 38, 0.25)' : 'none',
+                                transition: 'all 0.2s ease'
+                            }}
                         >
-                            Send
+                            <ArrowUpRight size={15} style={{ color: activeFilter === 'SEND' ? '#FFFFFF' : '#EF4444' }} />
+                            <span>Send</span>
+                            <span style={{
+                                padding: '0.15rem 0.5rem',
+                                borderRadius: '999px',
+                                fontSize: '0.7rem',
+                                fontWeight: '800',
+                                background: activeFilter === 'SEND' ? 'rgba(255, 255, 255, 0.25)' : '#FEE2E2',
+                                color: activeFilter === 'SEND' ? '#FFFFFF' : '#B91C1C'
+                            }}>
+                                {stats.sendCount || 0}
+                            </span>
                         </button>
 
-                        {/* Receive Filter Button */}
+                        {/* Received Filter Button */}
                         <button
                             type="button"
                             onClick={() => setActiveFilter('RECEIVE')}
-                            className={activeFilter === 'RECEIVE'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full px-4 py-1.5 text-xs font-bold transition-all cursor-pointer'
-                                : 'text-gray-500 hover:text-gray-900 px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer'
-                            }
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.45rem',
+                                padding: '0.55rem 1.15rem',
+                                borderRadius: '12px',
+                                border: 'none',
+                                background: activeFilter === 'RECEIVE' ? '#059669' : 'transparent',
+                                color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#64748B',
+                                fontWeight: '800',
+                                fontSize: '0.82rem',
+                                cursor: 'pointer',
+                                boxShadow: activeFilter === 'RECEIVE' ? '0 4px 10px rgba(5, 150, 105, 0.25)' : 'none',
+                                transition: 'all 0.2s ease'
+                            }}
                         >
-                            Receive
+                            <ArrowDownRight size={15} style={{ color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#10B981' }} />
+                            <span>Received</span>
+                            <span style={{
+                                padding: '0.15rem 0.5rem',
+                                borderRadius: '999px',
+                                fontSize: '0.7rem',
+                                fontWeight: '800',
+                                background: activeFilter === 'RECEIVE' ? 'rgba(255, 255, 255, 0.25)' : '#DCF2E4',
+                                color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#15803D'
+                            }}>
+                                {stats.receiveCount || 0}
+                            </span>
                         </button>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.5rem 1rem', borderRadius: '12px', width: '300px' }}>
+
+                    <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.55rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', width: '280px' }}>
                         <Search size={18} color="#94A3B8" />
                         <input 
                             placeholder="Search schedules..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ background: 'transparent', border: 'none', outline: 'none', marginLeft: '0.75rem', width: '100%', fontSize: '0.9rem' }}
+                            style={{ background: 'transparent', border: 'none', outline: 'none', marginLeft: '0.75rem', width: '100%', fontSize: '0.85rem', color: '#1E293B', fontWeight: '500' }}
                         />
                     </div>
                 </div>

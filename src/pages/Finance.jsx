@@ -38,6 +38,14 @@ const BusinessPayments = () => {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
     const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
+    const [toast, setToast] = useState(null);
+
+    React.useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 4000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
 
     const queryClient = useQueryClient();
 
@@ -71,7 +79,10 @@ const BusinessPayments = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
             setIsPaymentModalOpen(false);
-            alert('Customer payment recorded and committed successfully.');
+            setToast({
+                message: 'Customer payment recorded and committed successfully.',
+                type: 'success'
+            });
         }
     });
 
@@ -769,6 +780,54 @@ const BusinessPayments = () => {
                             </button>
                         </form>
                     </div>
+                </div>
+            )}
+
+            {/* In-app Toast Notification Banner (Bottom-Right UI) */}
+            {toast && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        bottom: '24px',
+                        right: '24px',
+                        zIndex: 99999,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '0.85rem 1.25rem',
+                        background: toast.type === 'error' ? '#FEF2F2' : '#0F172A',
+                        color: toast.type === 'error' ? '#991B1B' : '#FFFFFF',
+                        border: toast.type === 'error' ? '1px solid #FECACA' : '1px solid rgba(255,255,255,0.12)',
+                        borderRadius: '14px',
+                        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        maxWidth: '420px',
+                        animation: 'fadeIn 0.2s ease-out'
+                    }}
+                >
+                    {toast.type === 'error' ? (
+                        <AlertCircle size={18} style={{ color: '#EF4444', flexShrink: 0 }} />
+                    ) : (
+                        <CheckCircle2 size={18} style={{ color: '#10B981', flexShrink: 0 }} />
+                    )}
+                    <span style={{ flex: 1, lineHeight: '1.4' }}>{toast.message}</span>
+                    <button
+                        onClick={() => setToast(null)}
+                        aria-label="Close notification"
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'inherit',
+                            cursor: 'pointer',
+                            padding: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            opacity: 0.7
+                        }}
+                    >
+                        <X size={15} />
+                    </button>
                 </div>
             )}
         </div>

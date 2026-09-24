@@ -43,19 +43,44 @@ const Segregation = () => {
         enabled: !!uid && uid !== 'guest' 
     });
 
+    const [toast, setToast] = useState(null);
+    const showToast = (message, type = 'success') => {
+        setToast({ message, type });
+    };
+
+    React.useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3500);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
+
     const goalCreateMutation = useMutation({ 
         mutationFn: (data) => financePlusService.createGoal(data), 
-        onSuccess: () => queryClient.invalidateQueries(['finance-goals']) 
+        onSuccess: () => {
+            queryClient.invalidateQueries(['finance-goals']);
+            showToast("Goal created successfully!");
+        }
     });
     
     const goalUpdateMutation = useMutation({ 
         mutationFn: ({ id, data }) => financePlusService.updateGoal(id, data), 
-        onSuccess: () => queryClient.invalidateQueries(['finance-goals']) 
+        onSuccess: (res, variables) => {
+            queryClient.setQueryData(['finance-goals'], old => {
+                if (!Array.isArray(old)) return old;
+                return old.map(g => g.id === variables.id ? { ...g, ...variables.data } : g);
+            });
+            queryClient.invalidateQueries(['finance-goals']);
+            showToast("Goal updated successfully!");
+        }
     });
     
     const goalDeleteMutation = useMutation({ 
         mutationFn: (id) => financePlusService.deleteGoal(id), 
-        onSuccess: () => queryClient.invalidateQueries(['finance-goals']) 
+        onSuccess: () => {
+            queryClient.invalidateQueries(['finance-goals']);
+            showToast("Goal removed.");
+        }
     });
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isAddMoneyModalOpen, setIsAddMoneyModalOpen] = useState(false);
@@ -106,22 +131,32 @@ const Segregation = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['purpose-wallets'] });
             closeCreateModal();
-            alert("✨ New Purpose Wallet established successfully!");
+            showToast("New Purpose Wallet established successfully!");
         },
         onError: (err) => {
-            alert(err?.response?.data?.message || "Failed to create new purpose wallet.");
+            showToast(err?.response?.data?.message || "Failed to create new purpose wallet.", "error");
         }
     });
 
     const addMoneyMutation = useMutation({
         mutationFn: ({ id, amount }) => goalWalletService.addMoney(id, parseFloat(amount)),
-        onSuccess: () => {
+        onSuccess: (res, variables) => {
+            queryClient.setQueryData(['purpose-wallets'], (old) => {
+                if (!Array.isArray(old)) return old;
+                return old.map(w => {
+                    if (w.id === variables.id) {
+                        const newCurrent = parseFloat(w.current_amount || 0) + parseFloat(variables.amount);
+                        return { ...w, current_amount: newCurrent };
+                    }
+                    return w;
+                });
+            });
             queryClient.invalidateQueries({ queryKey: ['purpose-wallets'] });
             closeAddMoneyModal();
-            alert("💰 Funds allocated successfully!");
+            showToast("Funds allocated successfully!");
         },
         onError: (err) => {
-            alert(err?.response?.data?.message || "Allocation failed.");
+            showToast(err?.response?.data?.message || "Allocation failed.", "error");
         }
     });
 
@@ -129,10 +164,10 @@ const Segregation = () => {
         mutationFn: goalWalletService.claimWallet,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['purpose-wallets'] });
-            alert("🎉 Congratulations! Wallet target achieved and claimed successfully!");
+            showToast("Congratulations! Wallet target achieved and claimed successfully!");
         },
         onError: (err) => {
-            alert(err?.response?.data?.message || "Could not claim. Ensure target threshold is reached.");
+            showToast(err?.response?.data?.message || "Could not claim. Ensure target threshold is reached.", "error");
         }
     });
 
@@ -145,15 +180,47 @@ const Segregation = () => {
 
     const updateMutation = useMutation({
         mutationFn: ({ id, data }) => goalWalletService.updateWallet(id, data),
-        onSuccess: () => {
+        onSuccess: (updatedWallet, variables) => {
+            // Local state immediately updates without requiring a full page refresh
+            queryClient.setQueryData(['purpose-wallets'], (old) => {
+                if (!Array.isArray(old)) return old;
+                return old.map(w => {
+                    if (w.id === variables.id) {
+                        return {
+                            ...w,
+                            ...(updatedWallet || {}),
+                            name: variables.data.name || w.name,
+                            target_amount: Number(variables.data.target_amount ?? variables.data.targetCap ?? w.target_amount),
+                            description: variables.data.description ?? w.description
+                        };
+                    }
+                    return w;
+                });
+            });
             queryClient.invalidateQueries({ queryKey: ['purpose-wallets'] });
             closeCreateModal();
-            alert("✨ Purpose Wallet updated successfully!");
+            showToast("Target wallet updated successfully!");
         },
         onError: (err) => {
-            alert(err?.response?.data?.message || "Failed to update purpose wallet.");
+            showToast(err?.response?.data?.message || "Failed to update purpose wallet.", "error");
         }
     });
+
+    const handleUpdateWallet = (id, targetCap, extraData = {}) => {
+        const cleanCap = Number(targetCap);
+        if (isNaN(cleanCap) || cleanCap <= 0) {
+            showToast("Target amount must be strictly greater than 0", "error");
+            return;
+        }
+        updateMutation.mutate({
+            id,
+            data: {
+                ...extraData,
+                target_amount: cleanCap,
+                targetCap: cleanCap
+            }
+        });
+    };
 
     const targetAmount = formData.target_amount;
     const isTargetAmountValid = Boolean(targetAmount && Number(targetAmount) > 0);
@@ -183,7 +250,7 @@ const Segregation = () => {
 
     const openEditModal = (wallet) => {
         if (isWalletClaimed(wallet)) {
-            return alert("Fully claimed wallets cannot be edited.");
+            return showToast("Fully claimed wallets cannot be edited.", "error");
         }
         setEditingWalletId(wallet.id);
         const roundedTarget = Math.round(parseFloat(wallet.target_amount || 0));
@@ -198,7 +265,7 @@ const Segregation = () => {
 
     const openAddMoneyModal = (wallet) => {
         if (isWalletClaimed(wallet)) {
-            return alert("Funds cannot be added to a fully claimed wallet.");
+            return showToast("Funds cannot be added to a fully claimed wallet.", "error");
         }
         setSelectedWallet(wallet);
         setIsAddMoneyModalOpen(true);
@@ -216,15 +283,15 @@ const Segregation = () => {
             setError("Target amount must be strictly greater than 0");
             return; // Prevent API post completely
         }
-        const amt = parseInt(targetAmount, 10);
+        const amt = Number(targetAmount);
         if (isNaN(amt) || amt <= 0) {
             setError("Target amount must be strictly greater than 0");
             return;
         }
         if (editingWalletId) {
-            updateMutation.mutate({ id: editingWalletId, data: { ...formData, target_amount: amt } });
+            handleUpdateWallet(editingWalletId, amt, formData);
         } else {
-            createMutation.mutate({ ...formData, target_amount: amt });
+            createMutation.mutate({ ...formData, target_amount: amt, targetCap: amt });
         }
     };
 
@@ -235,9 +302,9 @@ const Segregation = () => {
         const targetCeiling = parseFloat(selectedWallet.target_amount || 0);
         const remainingTarget = Math.max(0, targetCeiling - currentSaved);
 
-        if (!addAmount || Number(addAmount) <= 0) return alert("Enter a valid allocation amount greater than 0.");
+        if (!addAmount || Number(addAmount) <= 0) return showToast("Enter a valid allocation amount greater than 0.", "error");
         let amt = parseFloat(addAmount);
-        if (isNaN(amt) || amt <= 0) return alert("Enter a valid allocation amount greater than 0.");
+        if (isNaN(amt) || amt <= 0) return showToast("Enter a valid allocation amount greater than 0.", "error");
 
         if (amt > remainingTarget) {
             amt = remainingTarget;
@@ -833,6 +900,7 @@ const Segregation = () => {
                     onUpdate={(id, data) => goalUpdateMutation.mutate({ id, data })}
                     onDelete={id => goalDeleteMutation.mutate(id)}
                     currencySymbol={currency.symbol}
+                    onToast={showToast}
                 />
             </div>
             </div>
@@ -1094,6 +1162,52 @@ const Segregation = () => {
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+
+            {/* In-app Toast Banner (Bottom-Right UI) */}
+            {toast && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        bottom: '24px',
+                        right: '24px',
+                        zIndex: 99999,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.75rem',
+                        padding: '0.85rem 1.25rem',
+                        background: toast.type === 'error' ? '#FEF2F2' : '#0F172A',
+                        color: toast.type === 'error' ? '#991B1B' : '#FFFFFF',
+                        border: toast.type === 'error' ? '1px solid #FECACA' : '1px solid rgba(255,255,255,0.12)',
+                        borderRadius: '14px',
+                        boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
+                        fontWeight: 600,
+                        fontSize: '0.9rem',
+                        maxWidth: '400px'
+                    }}
+                >
+                    {toast.type === 'error' ? (
+                        <AlertCircle size={18} style={{ color: '#EF4444', flexShrink: 0 }} />
+                    ) : (
+                        <CheckCircle2 size={18} style={{ color: '#10B981', flexShrink: 0 }} />
+                    )}
+                    <span style={{ flex: 1, lineHeight: '1.4' }}>{toast.message}</span>
+                    <button
+                        onClick={() => setToast(null)}
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'inherit',
+                            cursor: 'pointer',
+                            padding: '2px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            opacity: 0.7
+                        }}
+                    >
+                        <X size={15} />
+                    </button>
                 </div>
             )}
         </div>
