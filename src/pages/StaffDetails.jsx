@@ -641,6 +641,10 @@ export const StaffDetails = () => {
                                         <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>PAN & PF INFO</span>
                                         <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••</span>
                                     </div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>ADDRESS & EMERGENCY</span>
+                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
+                                    </div>
                                 </div>
 
                                 <button
@@ -893,6 +897,76 @@ export const StaffDetails = () => {
                                             <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>ESI ACCOUNT NUMBER</div>
                                             <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
                                                 31009876540001
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 4b. Residential Address & Emergency Contacts */}
+                                <div style={{
+                                    background: '#FFFFFF',
+                                    borderRadius: '16px',
+                                    border: '1px solid #E2E8F0',
+                                    padding: '1.25rem'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <MapPin size={17} style={{ color: '#2563EB' }} />
+                                            <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
+                                                Residential Address & Emergency Contacts
+                                            </span>
+                                        </div>
+                                        <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#1E40AF', background: '#DBEAFE', padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
+                                            HR SUBMITTED RECORD
+                                        </span>
+                                    </div>
+
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                                        gap: '1rem'
+                                    }}>
+                                        {/* RESIDENTIAL ADDRESS */}
+                                        <div>
+                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                                RESIDENTIAL ADDRESS
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
+                                                <span style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A', lineHeight: '1.4' }}>
+                                                    Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* EMERGENCY PERSON */}
+                                        <div>
+                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                                EMERGENCY PERSON
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0F172A' }}>
+                                                    Vijay Kumar (Father) - +91 98765 99911
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        {/* PERSONAL INFO */}
+                                        <div>
+                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                                PERSONAL INFO
+                                            </div>
+                                            <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
+                                                2026-09-29 (Male) • Blood group: <strong style={{ color: '#DC2626' }}>O+</strong>
+                                            </div>
+                                        </div>
+
+                                        {/* CONTACT INFO */}
+                                        <div>
+                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                                CONTACT INFO
+                                            </div>
+                                            <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
+                                                +91 98765 43210 • <span style={{ color: '#2563EB', fontWeight: '700' }}>sanjay123@bnxmail.com</span>
                                             </div>
                                         </div>
                                     </div>
