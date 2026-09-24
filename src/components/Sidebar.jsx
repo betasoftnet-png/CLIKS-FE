@@ -27,6 +27,7 @@ import {
     Plus,
     Bell,
     Users,
+    UserCheck,
     Eye,
     ArrowLeftRight,
     Receipt,
@@ -138,6 +139,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         if (path.includes('/books/dashboard')) return 'Books Dashboard';
         if (path.includes('/books/stock')) return 'Stock';
         if (path.includes('/books/people')) return 'People';
+        if (path.includes('/books/finance/staff-details') || path.includes('/staff-details')) return 'Staff details';
         if (path.includes('/books/finance')) return 'Finance';
         if (path === '/books' || path === '/books/') return 'Report';
         if (path.includes('/books/track/simple-billing') || path.includes('/books/money-tracker')) return 'Simple Billing';
@@ -382,15 +384,15 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         {/* 2. Finance (Collapsible) */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
                             <button
-                                className={`sidebar-item ${isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' ? 'active' : ''}`}
+                                className={`sidebar-item ${isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details' ? 'active' : ''}`}
                                 onClick={() => setIsFinanceOpen(!isFinanceOpen)}
                                 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}
                             >
                                 <div className="flex items-center gap-3">
-                                    <PiggyBank size={20} style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details') ? '#ffffff' : '#1B6B3A' }} />
+                                    <PiggyBank size={20} style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details') ? '#ffffff' : '#1B6B3A' }} />
                                     <span className="sidebar-label">Finance</span>
                                 </div>
-                                <div style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details') ? '#ffffff' : '#1B6B3A', opacity: 0.7, paddingRight: '4px' }}>
+                                <div style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details') ? '#ffffff' : '#1B6B3A', opacity: 0.7, paddingRight: '4px' }}>
                                     {isFinanceOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                                 </div>
                             </button>
@@ -418,6 +420,18 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                         <div className="flex items-center gap-3">
                                             <ShoppingCart size={18} style={{ color: activeItem === 'Purchase details' ? '#ffffff' : '#1B6B3A' }} />
                                             <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Purchase details</span>
+                                        </div>
+                                    </button>
+
+                                    {/* Staff details */}
+                                    <button
+                                        className={`sidebar-item ${activeItem === 'Staff details' ? 'active' : ''}`}
+                                        onClick={() => handleItemClick('Staff details', '/books/finance/staff-details')}
+                                        style={{ height: '36px' }}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <UserCheck size={18} style={{ color: activeItem === 'Staff details' ? '#ffffff' : '#1B6B3A' }} />
+                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Staff details</span>
                                         </div>
                                     </button>
                                 </div>

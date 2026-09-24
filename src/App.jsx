@@ -56,6 +56,7 @@ const SimpleBilling = React.lazy(() => import('./pages/books/SimpleBilling'));
 const BillingRecords = React.lazy(() => import('./pages/books/BillingRecords'));
 const Accounting = React.lazy(() => import('./pages/books/Accounting'));
 const PurchaseDetails = React.lazy(() => import('./pages/books/PurchaseDetails'));
+const StaffDetails = React.lazy(() => import('./pages/books/StaffDetails'));
 
 
 import './App.css';
@@ -139,6 +140,7 @@ function AuthenticatedApp() {
                 <Route path="/books/track/billing-records" element={<BillingRecords />} />
                 <Route path="/books/accounting" element={<Accounting />} />
                 <Route path="/books/purchase-details" element={<PurchaseDetails />} />
+                <Route path="/books/finance/staff-details" element={<StaffDetails />} />
 
                 {/* Public / Social Section */}
                 <Route path="/public" element={<Public />} />
