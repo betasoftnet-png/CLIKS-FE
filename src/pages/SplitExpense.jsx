@@ -1796,8 +1796,8 @@ const BusinessSplitCollect = () => {
 
                                 return (
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start mt-6">
-                                        {/* ── Left Column (lg:col-span-6): LOGGED EXPENSES ── */}
-                                        <div className="lg:col-span-6">
+                                        {/* ── Left Column (lg:col-span-6 space-y-4): LOGGED EXPENSES ── */}
+                                        <div className="lg:col-span-6 space-y-4">
                             {/* Sessions Content: Each primary expense creates its own self-contained session section */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                                 

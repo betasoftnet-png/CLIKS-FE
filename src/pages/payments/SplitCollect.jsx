@@ -11,7 +11,7 @@ import SplitExpense, {
     isPrimaryExpense, 
     isSettlementLinkedToExpense, 
     calculateSessionBalances 
-} from './SplitExpense';
+} from '../SplitExpense';
 
 export default SplitExpense;
 export { 
