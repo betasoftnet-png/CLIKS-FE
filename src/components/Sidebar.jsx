@@ -128,17 +128,16 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
     // Determine active item based on path
     const getActiveItemFromPath = (path, search) => {
-        if (path.includes('/payments/people')) return 'People';
         if (path.includes('/payments/transaction')) return 'Transaction';
         if (path.includes('/payments/segregation')) return 'Segregation';
-        if (path.includes('/payments/split-collect') || path.includes('/payments/split-expense')) return 'Split & Collect';
         if (path.includes('/payments/planner') || path.includes('/payments/plan')) return 'Planner';
         if (path === '/payments/wallet' || path.includes('/payments/wallet/')) return 'Wallet';
         if (path.includes('/payments/rewards-offers')) return 'Rewards & Offers';
 
         if (path.includes('/books/dashboard')) return 'Books Dashboard';
         if (path.includes('/books/stock')) return 'Stock';
-        if (path.includes('/books/people')) return 'People';
+        if (path.includes('/books/people') || path.includes('/payments/people')) return 'People';
+        if (path.includes('/books/split-collect') || path.includes('/books/split-expense') || path.includes('/payments/split-collect') || path.includes('/payments/split-expense')) return 'Split & Collect';
         if (path.includes('/books/finance/staff-details') || path.includes('/staff-details')) return 'Staff details';
         if (path.includes('/books/finance')) return 'Finance';
         if (path === '/books' || path === '/books/') return 'Report';
@@ -283,49 +282,10 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 {showFinanceSidebar && (
                     <>
-                        {/* High-visibility Glassmorphic "Add Money" Button */}
-                        <button
-                            onClick={() => handleItemClick('Wallet', '/payments/wallet?addMoney=true')}
-                            style={{
-                                width: 'calc(100% - 1.5rem)',
-                                margin: '0 0.75rem 0.75rem 0.75rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '0.5rem',
-                                padding: '0.65rem 1rem',
-                                background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
-                                color: '#FFFFFF',
-                                borderRadius: '10px',
-                                border: 'none',
-                                cursor: 'pointer',
-                                fontWeight: '800',
-                                fontSize: '0.82rem',
-                                boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)',
-                                transition: 'all 0.2s ease',
-                                flexShrink: 0
-                            }}
-                            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
-                            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                        >
-                            <Plus size={15} strokeWidth={3} /> Add Money
-                        </button>
-
-                        {/* 1. People */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('People', '/payments/people')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">People</span>
-                            </div>
-                        </button>
-
-                        {/* 2. Transaction */}
+                        {/* 1. Transaction */}
                         <button
                             className={`sidebar-item ${activeItem === 'Transaction' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Transaction', '/payments/transaction')}
+                            onClick={() => handleItemClick('Transaction', '/payments/transactions')}
                         >
                             <div className="flex items-center gap-3">
                                 <CreditCard size={20} style={{ color: activeItem === 'Transaction' ? '#ffffff' : '#1B6B3A' }} />
@@ -333,7 +293,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 3. Segregation */}
+                        {/* 2. Segregation */}
                         <button
                             className={`sidebar-item ${activeItem === 'Segregation' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Segregation', '/payments/segregation')}
@@ -344,18 +304,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 4. Split & Collect */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Split & Collect</span>
-                            </div>
-                        </button>
-
-                        {/* 5. Planner */}
+                        {/* 3. Planner */}
                         <button
                             className={`sidebar-item ${activeItem === 'Planner' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Planner', '/payments/plan')}
@@ -460,7 +409,18 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 5. Report (Points to /books layout) */}
+                        {/* 5. Split & Collect */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Split & Collect', '/books/split-collect')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Split & Collect</span>
+                            </div>
+                        </button>
+
+                        {/* 6. Report (Points to /books layout) */}
                         <button
                             className={`sidebar-item ${activeItem === 'Report' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Report', '/books')}

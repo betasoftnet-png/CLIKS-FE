@@ -23,11 +23,11 @@ const SEARCH_INDEX = [
     { label: 'Dashboard',        path: '/books/dashboard',           icon: LayoutDashboard, category: 'Books',    keywords: ['dashboard', 'home', 'overview', 'console', 'books'] },
     { label: 'Stock',            path: '/books/stock',               icon: TrendingUp,      category: 'Books',    keywords: ['stock', 'inventory', 'assets', 'items'] },
     { label: 'People',           path: '/books/people',              icon: Users,           category: 'Books',    keywords: ['people', 'contacts', 'customers', 'clients', 'persons'] },
+    { label: 'Split & Collect',  path: '/books/split-collect',       icon: Split,           category: 'Books',    keywords: ['split', 'collect', 'expense', 'share', 'bill'] },
     { label: 'Report',           path: '/books',                     icon: BarChart3,        category: 'Books',    keywords: ['report', 'analytics', 'summary'] },
     { label: 'FIN-PRO Audit',    path: '/ca',                        icon: Briefcase,       category: 'FIN-PRO',  keywords: ['finpro', 'fin-pro', 'audit', 'ca', 'chartered', 'auditor'] },
 
     // ── Payments ───────────────────────────────────────────────
-    { label: 'Split & Collect',   path: '/payments/split-collect',    icon: Split,           category: 'Payments', keywords: ['split', 'collect', 'expense', 'share', 'bill'] },
     { label: 'Planner',          path: '/payments/planner',          icon: Calendar,        category: 'Payments', keywords: ['planner', 'financial plan', 'plan', 'payments'] },
     { label: 'Wallet',           path: '/payments/wallet',           icon: Wallet,          category: 'Payments', keywords: ['wallet', 'money', 'balance', 'add money'] },
     { label: 'Transactions',     path: '/payments/transactions',     icon: ArrowLeftRight,  category: 'Payments', keywords: ['transaction', 'history', 'transfer', 'payment'] },

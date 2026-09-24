@@ -107,13 +107,13 @@ function AuthenticatedApp() {
                 {/* Payments Routes */}
                 <Route path="/payments/transactions" element={<Finance />} />
                 <Route path="/payments/transaction" element={<Finance />} />
-                <Route path="/payments/people" element={<People />} />
+                <Route path="/payments/people" element={<Navigate to="/books/people" replace />} />
                 <Route path="/payments/wallet" element={<Wallet />} />
                 <Route path="/payments/plan" element={<FinancialPlan />} />
                 <Route path="/payments/planner" element={<FinancialPlan />} />
                 <Route path="/payments/segregation" element={<Segregation />} />
-                <Route path="/payments/split-collect" element={<SplitExpense />} />
-                <Route path="/payments/split-expense" element={<SplitExpense />} />
+                <Route path="/payments/split-collect" element={<Navigate to="/books/split-collect" replace />} />
+                <Route path="/payments/split-expense" element={<Navigate to="/books/split-collect" replace />} />
                 <Route path="/payments/rewards-offers" element={<Rewards />} />
 
                 {/* Referral Routes */}
@@ -132,6 +132,8 @@ function AuthenticatedApp() {
                 <Route path="/books/people/transactions" element={<PeopleTransactions />} />
                 <Route path="/books/people/reminders" element={<PeopleReminders />} />
                 <Route path="/books/people/records" element={<PeopleRecords />} />
+                <Route path="/books/split-collect" element={<SplitExpense />} />
+                <Route path="/books/split-expense" element={<Navigate to="/books/split-collect" replace />} />
                 <Route path="/books/settings" element={<Settings />} />
                 <Route path="/books/faq" element={<FAQ />} />
                 <Route path="/books/money-tracker" element={<Navigate to="/books/track/simple-billing" replace />} />

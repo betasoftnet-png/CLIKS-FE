@@ -37,7 +37,7 @@ const MASTER_SHORTCUTS = [
     { id: 'people_hub', label: 'People Hub', path: '/people', icon: Users, color: '#2563EB' },
     { id: 'expenses', label: 'Expenses', path: '/finance/expenses', icon: FileText, color: '#DC2626' },
     { id: 'budgets', label: 'Budgets & Planning', path: '/finance/budgets', icon: PiggyBank, color: '#D97706' },
-    { id: 'split_collect', label: 'Split & Collect', path: '/payments/split-collect', icon: Wallet, color: '#059669' },
+    { id: 'split_collect', label: 'Split & Collect', path: '/books/split-collect', icon: Wallet, color: '#059669' },
     { id: 'segregation', label: 'Segregation', path: '/finance/segregation', icon: SplitSquareVertical, color: '#7C3AED' },
     { id: 'planner', label: 'Planner & Reminders', path: '/planner', icon: Calendar, color: '#0284C7' },
     { id: 'rewards', label: 'Rewards & Benefits', path: '/payments/rewards', icon: Award, color: '#E11D48' },
