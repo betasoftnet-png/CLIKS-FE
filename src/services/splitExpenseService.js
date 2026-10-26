@@ -12,17 +12,30 @@ export const splitExpenseService = {
     updateSplit: async (id, data) => await apiClient.patch(`/split-expenses/${id}`, data).then(res => res.data.data || res.data),
     deleteSplit: async (id) => await apiClient.delete(`/split-expenses/${id}`).then(res => res.data.data || res.data),
 
+    // Invitations & Roles
+    respondInvite: async (splitId, data) => await apiClient.patch(`/split-expenses/${splitId}/respond-invite`, data).then(res => res.data.data || res.data),
+    updateMemberRole: async (splitId, data) => await apiClient.patch(`/split-expenses/${splitId}/member-role`, data).then(res => res.data.data || res.data),
+    inviteMember: async (splitId, data) => await apiClient.post(`/split-expenses/${splitId}/invite`, data).then(res => res.data.data || res.data),
+
     // Participants
     getParticipants: async (splitId) => await apiClient.get(`/split-expenses/${splitId}/participants`).then(res => res.data.data || res.data),
     addParticipant: async (splitId, data) => await apiClient.post(`/split-expenses/${splitId}/participants`, data).then(res => res.data.data || res.data),
     updateParticipant: async (splitId, participantId, data) => await apiClient.patch(`/split-expenses/${splitId}/participants/${participantId}`, data).then(res => res.data.data || res.data),
-    deleteParticipant: async (splitId, participantId) => await apiClient.delete(`/split-expenses/${splitId}/participants/${participantId}`).then(res => res.data.data || res.data),
-    settleParticipant: async (splitId, participantId) => await apiClient.patch(`/split-expenses/${splitId}/participants/${participantId}/settle`).then(res => res.data.data || res.data),
+    deleteParticipant: async (splitId, participantId) => await apiClient.delete(`/split-expenses/${splitId}/participants/${encodeURIComponent(participantId)}`).then(res => res.data.data || res.data),
+    settleParticipant: async (splitId, participantId) => await apiClient.patch(`/split-expenses/${splitId}/participants/${encodeURIComponent(participantId)}/settle`).then(res => res.data.data || res.data),
+    
     // Expenses
     addExpense: async (splitId, data) => await apiClient.post(`/split-expenses/${splitId}/expenses`, data).then(res => res.data.data || res.data),
     deleteExpense: async (splitId, expenseId) => await apiClient.delete(`/split-expenses/${splitId}/expenses/${expenseId}`).then(res => res.data.data || res.data),
     updateExpense: async (splitId, expenseId, data) => await apiClient.patch(`/split-expenses/${splitId}/expenses/${expenseId}`, data).then(res => res.data.data || res.data),
-    uploadAttachment: async (fileData) => await apiClient.post('/split-expenses/upload', fileData).then(res => res.data.data || res.data),
+    uploadAttachment: async (fileData) => {
+        let payload = fileData;
+        if (typeof File !== 'undefined' && fileData instanceof File) {
+            payload = new FormData();
+            payload.append('file', fileData);
+        }
+        return await apiClient.post('/split-expenses/upload', payload).then(res => res.data?.data || res.data || res);
+    },
 };
 
 export default splitExpenseService;
