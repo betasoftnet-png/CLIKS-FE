@@ -55,9 +55,27 @@ const PeopleOverview = () => {
     });
 
     // ── Handlers ────────────────────────────────────────────────────────────
+    const [formError, setFormError] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
-        createMutation.mutate(newPerson);
+        setFormError('');
+
+        const cleanEmail = newPerson.email ? newPerson.email.trim().toLowerCase() : '';
+        if (!cleanEmail) {
+            setFormError('Email is required. Only official @bnxmail.com domain emails are accepted.');
+            return;
+        }
+
+        const bnxmailRegex = /^[a-zA-Z0-9._%+-]+@bnxmail\.com$/i;
+        if (!bnxmailRegex.test(cleanEmail)) {
+            setFormError('Only official @bnxmail.com domain emails are permitted.');
+            return;
+        }
+
+        createMutation.mutate({
+            ...newPerson,
+            email: cleanEmail
+        });
     };
 
     const handleDelete = (e, id) => {
@@ -283,17 +301,23 @@ const PeopleOverview = () => {
                                             </div>
                                         </div>
                                         <div className="form-group-premium">
-                                            <label>Email</label>
+                                            <label>Email (bnxmail) <span style={{ color: '#EF4444' }}>*</span></label>
                                             <div className="input-with-icon">
                                                 <Mail size={16} />
                                                 <input 
+                                                    required
                                                     type="email" 
-                                                    placeholder="michael@dm.com"
+                                                    placeholder="username@bnxmail.com"
                                                     className="premium-input"
                                                     value={newPerson.email}
                                                     onChange={(e) => setNewPerson({...newPerson, email: e.target.value})}
                                                 />
                                             </div>
+                                            {formError && (
+                                                <span style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: '700', marginTop: '4px', display: 'block' }}>
+                                                    {formError}
+                                                </span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
