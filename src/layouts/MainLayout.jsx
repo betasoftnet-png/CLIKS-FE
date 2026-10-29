@@ -21,7 +21,6 @@ const MainLayout = ({ children }) => {
     const [isContactOpen, setIsContactOpen] = useState(false);
     const [isNotesOpen, setIsNotesOpen] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
     const toggleSidebar  = () => setIsSidebarOpen(prev => !prev);
     const toggleAudit    = () => setIsAuditOpen(prev => !prev);
@@ -30,7 +29,7 @@ const MainLayout = ({ children }) => {
     // Right margin grows as panels open, making every page shrink automatically
     const rightOffset =
         (isToolbarOpen ? TOOLBAR_W : 0) +
-        (isToolbarOpen && (isCalcOpen || isLauncherOpen || isContactOpen || isNotesOpen || isCalendarOpen || isWeatherOpen) ? CALC_W : 0);
+        (isToolbarOpen && (isCalcOpen || isLauncherOpen || isContactOpen || isNotesOpen || isCalendarOpen) ? CALC_W : 0);
 
     return (
         <div className={`app-root select-none ${isSidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
@@ -56,7 +55,6 @@ const MainLayout = ({ children }) => {
                         setIsContactOpen(false);
                         setIsNotesOpen(false);
                         setIsCalendarOpen(false);
-                        setIsWeatherOpen(false);
                     }}
                     onItemClick={() => {
                         if (window.innerWidth <= 768) {
@@ -103,7 +101,6 @@ const MainLayout = ({ children }) => {
                     setIsContactOpen(false);
                     setIsNotesOpen(false);
                     setIsCalendarOpen(false);
-                    setIsWeatherOpen(false);
                 }}
                 onLauncherToggle={() => {
                     setIsLauncherOpen(prev => !prev);
@@ -111,7 +108,6 @@ const MainLayout = ({ children }) => {
                     setIsContactOpen(false);
                     setIsNotesOpen(false);
                     setIsCalendarOpen(false);
-                    setIsWeatherOpen(false);
                 }}
                 isLauncherOpen={isLauncherOpen}
                 onLauncherClose={() => setIsLauncherOpen(false)}
@@ -122,7 +118,6 @@ const MainLayout = ({ children }) => {
                     setIsLauncherOpen(false);
                     setIsNotesOpen(false);
                     setIsCalendarOpen(false);
-                    setIsWeatherOpen(false);
                 }}
                 onContactClose={() => setIsContactOpen(false)}
                 isNotesOpen={isNotesOpen}
@@ -132,7 +127,6 @@ const MainLayout = ({ children }) => {
                     setIsLauncherOpen(false);
                     setIsContactOpen(false);
                     setIsCalendarOpen(false);
-                    setIsWeatherOpen(false);
                 }}
                 onNotesClose={() => setIsNotesOpen(false)}
                 isCalendarOpen={isCalendarOpen}
@@ -142,19 +136,8 @@ const MainLayout = ({ children }) => {
                     setIsLauncherOpen(false);
                     setIsContactOpen(false);
                     setIsNotesOpen(false);
-                    setIsWeatherOpen(false);
                 }}
                 onCalendarClose={() => setIsCalendarOpen(false)}
-                isWeatherOpen={isWeatherOpen}
-                onWeatherToggle={() => {
-                    setIsWeatherOpen(prev => !prev);
-                    setIsCalcOpen(false);
-                    setIsLauncherOpen(false);
-                    setIsContactOpen(false);
-                    setIsNotesOpen(false);
-                    setIsCalendarOpen(false);
-                }}
-                onWeatherClose={() => setIsWeatherOpen(false)}
             />
 
             <ReferralModal isOpen={isReferralOpen} onClose={() => setIsReferralOpen(false)} />

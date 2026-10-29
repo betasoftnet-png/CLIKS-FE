@@ -6,14 +6,12 @@ import {
     Calculator,
     Contact,
     StickyNote,
-    CloudSun,
     X
 } from 'lucide-react';
 import { CalcPopover } from './common/CalcPopover';
 import ContactPanel from './ContactPanel';
 import NotesPanel from './NotesPanel';
 import CalendarPanel from './CalendarPanel';
-import WeatherPanel from './WeatherPanel';
 
 /* ─── Inline Calculator Panel ─────────────────────────────────────── */
 const CalcPanel = ({ onClose }) => {
@@ -39,10 +37,7 @@ const RightSidebar = ({
     onNotesClose,
     isCalendarOpen = false,
     onCalendarToggle,
-    onCalendarClose,
-    isWeatherOpen = false,
-    onWeatherToggle,
-    onWeatherClose
+    onCalendarClose
 }) => {
     const navigate = useNavigate();
 
@@ -53,9 +48,8 @@ const RightSidebar = ({
             if (onContactClose) onContactClose();
             if (onNotesClose) onNotesClose();
             if (onCalendarClose) onCalendarClose();
-            if (onWeatherClose) onWeatherClose();
         }
-    }, [isVisible, onCalcClose, onContactClose, onNotesClose, onCalendarClose, onWeatherClose]);
+    }, [isVisible, onCalcClose, onContactClose, onNotesClose, onCalendarClose]);
 
     // Escape key closes calc or contact panel
     useEffect(() => {
@@ -65,12 +59,11 @@ const RightSidebar = ({
                 if (isContactOpen && onContactClose) onContactClose();
                 if (isNotesOpen && onNotesClose) onNotesClose();
                 if (isCalendarOpen && onCalendarClose) onCalendarClose();
-                if (isWeatherOpen && onWeatherClose) onWeatherClose();
             }
         };
         document.addEventListener('keydown', handler);
         return () => document.removeEventListener('keydown', handler);
-    }, [isCalcOpen, onCalcClose, isContactOpen, onContactClose, isNotesOpen, onNotesClose, isCalendarOpen, onCalendarClose, isWeatherOpen, onWeatherClose]);
+    }, [isCalcOpen, onCalcClose, isContactOpen, onContactClose, isNotesOpen, onNotesClose, isCalendarOpen, onCalendarClose]);
 
     const topIcons = [
         {
@@ -112,14 +105,6 @@ const RightSidebar = ({
             icon: <StickyNote size={20} />,
             action: () => { if (onNotesToggle) onNotesToggle(); },
             active: isNotesOpen,
-        },
-        {
-            id: 'weather',
-            title: 'Weather',
-            iconClass: 'icon-launcher',
-            icon: <CloudSun size={20} />,
-            action: () => { if (onWeatherToggle) onWeatherToggle(); },
-            active: isWeatherOpen,
         },
     ];
 
@@ -201,20 +186,6 @@ const RightSidebar = ({
                     />
                     <div className="calc-panel" style={{ width: '400px' }}>
                         <CalendarPanel onClose={onCalendarClose} />
-                    </div>
-                </>
-            )}
-
-            {/* Weather Panel */}
-            {isVisible && isWeatherOpen && (
-                <>
-                    <div
-                        className="launcher-overlay"
-                        onClick={onWeatherClose}
-                        aria-hidden="true"
-                    />
-                    <div className="calc-panel" style={{ width: '400px' }}>
-                        <WeatherPanel onClose={onWeatherClose} />
                     </div>
                 </>
             )}
