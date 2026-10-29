@@ -523,7 +523,7 @@ const Subscription = () => {
                     const currentCategoryKey = activeCategory === 'betaclub' ? (betaSubCategory === 'investor' ? 'betaclub_investor' : 'betaclub_product') : activeCategory;
                     const activeModulePlan = 
                         currentCategoryKey === 'business' ? (user?.active_subscriptions?.business?.plan || user?.tier || 'Starter Plan') :
-                        currentCategoryKey === 'ca' ? (user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan || (localStorage.getItem('cliks_finpro_active') === 'true' ? 'Fin-Pro Solo' : null)) :
+                        currentCategoryKey === 'ca' ? (user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan || null) :
                         currentCategoryKey === 'betaclub_investor' ? (user?.active_subscriptions?.investor?.plan || user?.investor_plan || (localStorage.getItem('cliks_investor_active') === 'true' ? 'Basic Investor' : null)) :
                         currentCategoryKey === 'betaclub_product' ? (user?.active_subscriptions?.poster?.plan || user?.poster_plan || (localStorage.getItem('cliks_poster_active') === 'true' ? 'Monthly Innovator' : null)) : null;
 

@@ -44,7 +44,14 @@ export const caService = {
     addTeamRequest: (email, role) => apiClient.post('/ca/team-requests', { email, role }).then(res => res.data.data || res.data),
     acceptTeamRequest: (id) => apiClient.post(`/ca/team-requests/${id}/accept`).then(res => res.data.data || res.data),
     rejectTeamRequest: (id) => apiClient.post(`/ca/team-requests/${id}/reject`).then(res => res.data.data || res.data),
-    cancelTeamRequest: (id) => apiClient.delete(`/ca/team-requests/${id}`).then(res => res.data.data || res.data)
+    cancelTeamRequest: (id) => apiClient.delete(`/ca/team-requests/${id}`).then(res => res.data.data || res.data),
+
+    // ICAI Verification & FIN-PRO Subscription Backend API
+    submitIcaiVerification: (data) => apiClient.post('/ca/icai-verification', data).then(res => res.data.data || res.data),
+    getIcaiVerification: () => apiClient.get('/ca/icai-verification').then(res => res.data.data || res.data),
+    activateFinproSubscription: (data) => apiClient.post('/ca/finpro-subscription', data).then(res => res.data.data || res.data),
+    getFinproSubscription: () => apiClient.get('/ca/finpro-subscription').then(res => res.data.data || res.data),
+    simulateVerifyIcai: () => apiClient.post('/ca/icai-verification/simulate-verify').then(res => res.data.data || res.data)
 };
 
 export default caService;
