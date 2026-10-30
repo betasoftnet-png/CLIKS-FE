@@ -97,6 +97,8 @@ function buildHeaders(customHeaders = {}) {
 // Core Request Function
 // ---------------------------------------------------------------------------
 
+let unauthorizedDispatchTimer = null;
+
 /**
  * Execute an API request.
  * 
@@ -153,13 +155,21 @@ async function request(endpoint, options = {}) {
         clearTimeout(timeoutId);
         throw await normalizeError(error);
     }
-
     clearTimeout(timeoutId);
 
     // Handle error responses (304 is technically not 'ok' but is a success for caching)
     if (!response.ok && response.status !== 304) {
         if (response.status === 401 && typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent('auth:unauthorized', { detail: { status: 401 } }));
+            const isSilentEndpoint = endpoint.includes('/presence/') || 
+                                     endpoint.includes('/logout') || 
+                                     endpoint.includes('/auth/login') ||
+                                     endpoint.includes('/auth/sso');
+            if (!isSilentEndpoint && !unauthorizedDispatchTimer) {
+                unauthorizedDispatchTimer = setTimeout(() => {
+                    unauthorizedDispatchTimer = null;
+                }, 2000);
+                window.dispatchEvent(new CustomEvent('auth:unauthorized', { detail: { status: 401, endpoint } }));
+            }
         }
         throw await normalizeError(null, response);
     }
