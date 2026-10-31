@@ -7,9 +7,9 @@ import ReferralModal from '../components/ReferralModal';
 import RightSidebar from '../components/RightSidebar';
 import '../App.css';
 
-// Width constants — must match App.css
-const TOOLBAR_W = 72;   // .rightpanel width
-const CALC_W    = 400;  // .calc-panel width
+// Width constants — must match App.css and cliks-bus-fe
+const TOOLBAR_W = 64;   // Right toolbar width
+const CALC_W    = 400;  // Docked drawer width
 
 const MainLayout = ({ children }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);

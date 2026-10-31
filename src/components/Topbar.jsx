@@ -218,21 +218,17 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     {/* Sliders / filter icon — far right, toggles the quick-access toolbar */}
                     <button
                         onClick={onToggleToolbar}
-                        title={isToolbarOpen ? 'Hide toolbar' : 'Show toolbar'}
+                        title={isToolbarOpen ? 'Close Toolbar' : 'Open Toolbar'}
                         aria-pressed={isToolbarOpen}
                         style={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            width: '44px',
-                            height: '44px',
-                            borderRadius: '12px',
-                            background: isToolbarOpen
-                                ? 'rgba(255,255,255,0.22)'
-                                : 'rgba(255,255,255,0.08)',
-                            border: isToolbarOpen
-                                ? '1px solid rgba(255,255,255,0.35)'
-                                : '1px solid rgba(255,255,255,0.12)',
+                            width: '36px',
+                            height: '36px',
+                            borderRadius: '11px',
+                            backgroundColor: isToolbarOpen ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.1)',
+                            border: '1px solid rgba(255, 255, 255, 0.2)',
                             color: '#ffffff',
                             cursor: 'pointer',
                             flexShrink: 0,
@@ -240,12 +236,12 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                             outline: 'none',
                         }}
                         onMouseEnter={(e) => {
-                            if (!isToolbarOpen) e.currentTarget.style.background = 'rgba(255,255,255,0.16)';
+                            if (!isToolbarOpen) e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.18)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.background = isToolbarOpen
-                                ? 'rgba(255,255,255,0.22)'
-                                : 'rgba(255,255,255,0.08)';
+                            e.currentTarget.style.backgroundColor = isToolbarOpen
+                                ? 'rgba(255, 255, 255, 0.25)'
+                                : 'rgba(255, 255, 255, 0.1)';
                         }}
                     >
                         <SlidersHorizontal size={18} />
