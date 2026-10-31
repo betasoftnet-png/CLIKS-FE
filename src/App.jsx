@@ -87,7 +87,7 @@ function AuthenticatedApp() {
               <Routes location={location}>
                 {/* Root Redirect */}
                 <Route path="/" element={<Navigate to="/books/dashboard" replace />} />
-                <Route path="/payments" element={<Navigate to="/payments/transactions" replace />} />
+                <Route path="/payments" element={<Navigate to="/payments/people" replace />} />
                 <Route path="/social" element={<Navigate to="/social/meetup" replace />} />
                 
                 {/* Finance (formerly Home) Section */}
@@ -104,9 +104,14 @@ function AuthenticatedApp() {
                 <Route path="/finance/debts" element={<Debts />} />
 
                 {/* Payments Routes */}
+                <Route path="/payments/people" element={<People />} />
+                <Route path="/payments/people/overview" element={<PeopleOverview />} />
+                <Route path="/payments/people/:id" element={<PersonProfile />} />
+                <Route path="/payments/people/transactions" element={<PeopleTransactions />} />
+                <Route path="/payments/people/reminders" element={<PeopleReminders />} />
+                <Route path="/payments/people/records" element={<PeopleRecords />} />
                 <Route path="/payments/transactions" element={<Finance />} />
                 <Route path="/payments/transaction" element={<Finance />} />
-                <Route path="/payments/people" element={<Navigate to="/books/people" replace />} />
                 <Route path="/payments/wallet" element={<Wallet />} />
                 <Route path="/payments/plan" element={<FinancialPlan />} />
                 <Route path="/payments/planner" element={<FinancialPlan />} />
@@ -128,12 +133,12 @@ function AuthenticatedApp() {
                 <Route path="/books/income" element={<Income />} />
                 <Route path="/books/dashboard" element={<BooksDashboard />} />
                 <Route path="/books/stock" element={<Stock />} />
-                <Route path="/books/people" element={<People />} />
-                <Route path="/books/people/overview" element={<PeopleOverview />} />
+                <Route path="/books/people" element={<Navigate to="/payments/people" replace />} />
+                <Route path="/books/people/overview" element={<Navigate to="/payments/people/overview" replace />} />
                 <Route path="/books/people/:id" element={<PersonProfile />} />
-                <Route path="/books/people/transactions" element={<PeopleTransactions />} />
-                <Route path="/books/people/reminders" element={<PeopleReminders />} />
-                <Route path="/books/people/records" element={<PeopleRecords />} />
+                <Route path="/books/people/transactions" element={<Navigate to="/payments/people/transactions" replace />} />
+                <Route path="/books/people/reminders" element={<Navigate to="/payments/people/reminders" replace />} />
+                <Route path="/books/people/records" element={<Navigate to="/payments/people/records" replace />} />
                 <Route path="/books/split-collect" element={<SplitExpense />} />
                 <Route path="/books/split-expense" element={<Navigate to="/books/split-collect" replace />} />
                 <Route path="/books/settings" element={<Settings />} />

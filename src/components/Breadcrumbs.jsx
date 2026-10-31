@@ -53,7 +53,8 @@ const Breadcrumbs = ({ items }) => {
 
     // Redirect specific paths to valid routes
     const pathRedirects = {
-        '/books/people': '/books/people/overview',
+        '/payments/people': '/payments/people/overview',
+        '/books/people': '/payments/people/overview',
     };
 
     let breadcrumbs = items;

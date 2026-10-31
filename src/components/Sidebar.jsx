@@ -280,7 +280,18 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showFinanceSidebar && (
                     <>
-                        {/* 1. Transaction */}
+                        {/* 1. People */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('People', '/payments/people')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">People</span>
+                            </div>
+                        </button>
+
+                        {/* 2. Transaction */}
                         <button
                             className={`sidebar-item ${activeItem === 'Transaction' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Transaction', '/payments/transactions')}
@@ -291,7 +302,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 2. Segregation */}
+                        {/* 3. Segregation */}
                         <button
                             className={`sidebar-item ${activeItem === 'Segregation' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Segregation', '/payments/segregation')}
@@ -302,7 +313,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 3. Planner */}
+                        {/* 4. Planner */}
                         <button
                             className={`sidebar-item ${activeItem === 'Planner' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Planner', '/payments/plan')}
@@ -361,18 +372,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 6. People */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('People', '/books/people')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">People</span>
-                            </div>
-                        </button>
-
-                        {/* 7. Split & Collect */}
+                        {/* 6. Split & Collect */}
                         <button
                             className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Split & Collect', '/books/split-collect')}
