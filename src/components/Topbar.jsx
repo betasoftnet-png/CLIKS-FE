@@ -75,8 +75,18 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
             </button>
 
             {/* Center: Navigation (New Lamp Style) */}
-            <div className={`top-nav-links ${isOpen ? 'active' : ''}`}>
-                <div className="top-nav-lamp-container">
+            <div className={`top-nav-links ${isOpen ? 'active' : ''}`} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                    backdropFilter: 'blur(8px)',
+                    padding: '4px',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}>
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isItemActive = item.name === 'Payments'
@@ -96,8 +106,20 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                                 style={({ isActive }) => {
                                     const active = isActive || isItemActive;
                                     return {
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '8px 20px',
+                                        borderRadius: '999px',
+                                        border: 'none',
                                         background: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                                        color: active ? '#ffffff' : 'rgba(255, 255, 255, 0.7)'
+                                        color: active ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
+                                        fontSize: '14px',
+                                        fontWeight: 500,
+                                        cursor: 'pointer',
+                                        textDecoration: 'none',
+                                        transition: 'all 0.2s ease',
+                                        position: 'relative'
                                     };
                                 }}
                                 onMouseEnter={(e) => {
