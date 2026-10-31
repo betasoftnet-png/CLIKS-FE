@@ -138,6 +138,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         if (path.includes('/books/accounting') || path.includes('/finance/accounts')) return 'Accounts';
         if (path.includes('/books/purchase-details')) return 'Purchases';
         if (path.includes('/books/income') || path.includes('/finance/income')) return 'Income';
+        if (path.includes('/books/expense') || path.includes('/finance/expenses')) return 'Expense';
         if (path.includes('/books/stock')) return 'Stock';
         if (path.includes('/books/people') || path.includes('/payments/people')) return 'People';
         if (path.includes('/books/split-collect') || path.includes('/books/split-expense') || path.includes('/payments/split-collect') || path.includes('/payments/split-expense')) return 'Split & Collect';
@@ -398,14 +399,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 5. Stock */}
+                        {/* 5. Expense */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Stock' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Stock', '/books/stock')}
+                            className={`sidebar-item ${activeItem === 'Expense' || activeItem === 'Expenses' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Expense', '/books/expenses')}
                         >
                             <div className="flex items-center gap-3">
-                                <TrendingUp size={20} style={{ color: activeItem === 'Stock' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Stock</span>
+                                <TrendingDown size={20} style={{ color: (activeItem === 'Expense' || activeItem === 'Expenses') ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Expense</span>
                             </div>
                         </button>
 
