@@ -1033,6 +1033,52 @@
     background: transparent;
 }
 
+/* Side-by-Side Settings & Help & Support */
+.sidebar-footer-nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.sidebar-footer-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.45rem;
+    background: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #D8F3E5;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.78rem;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s ease;
+    white-space: nowrap;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+.sidebar-footer-btn:hover {
+    background: #F9FBF9;
+    border-color: #A7F3D0;
+    transform: translateY(-1px);
+}
+
+.sidebar-footer-btn-icon {
+    flex-shrink: 0;
+}
+
+.sidebar-footer-btn-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
 /* Collapsed Sidebar (Desktop) */
 .sidebar.collapsed {
     width: 0;

@@ -694,63 +694,38 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     </div>
                 </button>
 
-                {/* Bottom Settings Block */}
-                <button
-                    onClick={() => handleItemClick('Settings', '/books/settings')}
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '0.75rem 1rem',
-                        background: location.pathname.includes('/books/settings') ? '#F0FDF4' : '#F8FAFC',
-                        color: location.pathname.includes('/books/settings') ? '#1B6B3A' : '#334155',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: location.pathname.includes('/books/settings') ? '#BBF7D0' : '#E2E8F0',
-                        cursor: 'pointer',
-                        fontWeight: '700',
-                        fontSize: '0.85rem',
-                        transition: 'background 0.2s'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = location.pathname.includes('/books/settings') ? '#F0FDF4' : '#F1F5F9'}
-                    onMouseOut={(e) => e.currentTarget.style.background = location.pathname.includes('/books/settings') ? '#F0FDF4' : '#F8FAFC'}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <Settings size={18} style={{ opacity: 0.8 }} />
-                        <span>Settings</span>
-                    </div>
-                    <ChevronRight size={14} style={{ opacity: 0.5 }} />
-                </button>
+                {/* Bottom Settings & Help & Support (Side-by-Side Grid matching Cliks Business) */}
+                <div className="sidebar-footer-nav-grid">
+                    <button
+                        type="button"
+                        onClick={() => handleItemClick('Settings', '/books/settings')}
+                        className="sidebar-footer-btn"
+                        style={{
+                            color: location.pathname.includes('/books/settings') ? '#1B6B3A' : '#334155',
+                            backgroundColor: location.pathname.includes('/books/settings') ? '#F0FDF4' : '#FFFFFF',
+                            borderColor: location.pathname.includes('/books/settings') ? '#BBF7D0' : '#D8F3E5'
+                        }}
+                        title="Settings"
+                    >
+                        <Settings size={16} className="sidebar-footer-btn-icon" style={{ opacity: 0.85, flexShrink: 0 }} />
+                        <span className="sidebar-footer-btn-label">Settings</span>
+                    </button>
 
-                {/* Help & Support Block */}
-                <button
-                    onClick={() => handleItemClick('Help & Support', '/books/faq')}
-                    style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '0.75rem 1rem',
-                        background: location.pathname.includes('/books/faq') ? '#F0FDF4' : '#F8FAFC',
-                        color: location.pathname.includes('/books/faq') ? '#1B6B3A' : '#334155',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: location.pathname.includes('/books/faq') ? '#BBF7D0' : '#E2E8F0',
-                        cursor: 'pointer',
-                        fontWeight: '700',
-                        fontSize: '0.85rem',
-                        transition: 'background 0.2s'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.background = location.pathname.includes('/books/faq') ? '#F0FDF4' : '#F1F5F9'}
-                    onMouseOut={(e) => e.currentTarget.style.background = location.pathname.includes('/books/faq') ? '#F0FDF4' : '#F8FAFC'}
-                >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <HelpCircle size={18} style={{ opacity: 0.8 }} />
-                        <span>Help & Support</span>
-                    </div>
-                    <ChevronRight size={14} style={{ opacity: 0.5 }} />
-                </button>
+                    <button
+                        type="button"
+                        onClick={() => handleItemClick('Help & Support', '/books/faq')}
+                        className="sidebar-footer-btn"
+                        style={{
+                            color: location.pathname.includes('/books/faq') ? '#1B6B3A' : '#334155',
+                            backgroundColor: location.pathname.includes('/books/faq') ? '#F0FDF4' : '#FFFFFF',
+                            borderColor: location.pathname.includes('/books/faq') ? '#BBF7D0' : '#D8F3E5'
+                        }}
+                        title="Help & Support"
+                    >
+                        <HelpCircle size={16} className="sidebar-footer-btn-icon" style={{ opacity: 0.85, flexShrink: 0 }} />
+                        <span className="sidebar-footer-btn-label">Help & Support</span>
+                    </button>
+                </div>
             </div>
 
             {/* Storage Allocation Breakdown Modal */}
