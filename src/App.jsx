@@ -87,7 +87,6 @@ function AuthenticatedApp() {
               <Routes location={location}>
                 {/* Root Redirect */}
                 <Route path="/" element={<Navigate to="/books/dashboard" replace />} />
-                <Route path="/books" element={<Navigate to="/books/dashboard" replace />} />
                 <Route path="/payments" element={<Navigate to="/payments/transactions" replace />} />
                 <Route path="/social" element={<Navigate to="/social/meetup" replace />} />
                 
@@ -124,6 +123,9 @@ function AuthenticatedApp() {
                 <Route path="/books/finance" element={<Navigate to="/books/accounting" replace />} />
                 <Route path="/books/tax-deductions" element={<TaxDeductions />} />
                 <Route path="/books" element={<Books />} />
+                <Route path="/books/report" element={<Books />} />
+                <Route path="/books/reports" element={<Books />} />
+                <Route path="/books/income" element={<Income />} />
                 <Route path="/books/dashboard" element={<BooksDashboard />} />
                 <Route path="/books/stock" element={<Stock />} />
                 <Route path="/books/people" element={<People />} />

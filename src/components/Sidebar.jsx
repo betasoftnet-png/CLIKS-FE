@@ -134,18 +134,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         if (path === '/payments/wallet' || path.includes('/payments/wallet/')) return 'Wallet';
         if (path.includes('/payments/rewards-offers')) return 'Rewards & Offers';
 
-        if (path.includes('/books/dashboard')) return 'Books Dashboard';
+        if (path.includes('/books/dashboard')) return 'Dashboard';
+        if (path.includes('/books/accounting') || path.includes('/finance/accounts')) return 'Accounts';
+        if (path.includes('/books/purchase-details')) return 'Purchases';
+        if (path.includes('/books/income') || path.includes('/finance/income')) return 'Income';
         if (path.includes('/books/stock')) return 'Stock';
         if (path.includes('/books/people') || path.includes('/payments/people')) return 'People';
         if (path.includes('/books/split-collect') || path.includes('/books/split-expense') || path.includes('/payments/split-collect') || path.includes('/payments/split-expense')) return 'Split & Collect';
-        if (path.includes('/books/finance/staff-details') || path.includes('/staff-details')) return 'Staff details';
-        if (path.includes('/books/finance')) return 'Finance';
-        if (path === '/books' || path === '/books/') return 'Report';
-        if (path.includes('/books/track/simple-billing') || path.includes('/books/money-tracker')) return 'Simple Billing';
-        if (path.includes('/books/track/billing-records')) return 'Billing Records';
-        if (path.includes('/books/track')) return 'Simple Billing';
-        if (path.includes('/books/accounting')) return 'Accounting';
-        if (path.includes('/books/purchase-details')) return 'Purchase details';
+        if (path === '/books' || path === '/books/' || path.includes('/books/report')) return 'Report';
         if (path.includes('/books/settings')) return 'Settings';
         if (path.includes('/books/faq')) return 'Help & Support';
         if (path.includes('/ca')) return 'FIN-PRO';
@@ -164,7 +160,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             if (qpage === 'trading') return 'Trading docs';
         }
 
-        return 'Books Dashboard';
+        return 'Dashboard';
     };
 
     const [activeItem, setActiveItem] = useState(getActiveItemFromPath(location.pathname, location.search));
@@ -205,23 +201,10 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         return () => { isMounted = false; };
     }, [isStorageModalOpen]);
 
-    const [isFinanceOpen, setIsFinanceOpen] = useState(
-        location.pathname.includes('/books/finance') ||
-        location.pathname.includes('/books/accounting') ||
-        location.pathname.includes('/books/purchase-details')
-    );
-    const [isTrackOpen, setIsTrackOpen] = useState(location.pathname.includes('/books/track') || location.pathname.includes('/books/money-tracker'));
-
     // Update active item when location changes
     React.useEffect(() => {
         const newItem = getActiveItemFromPath(location.pathname, location.search);
         setActiveItem(newItem);
-        if (location.pathname.includes('/books/finance') || location.pathname.includes('/books/accounting') || location.pathname.includes('/books/purchase-details')) {
-            setIsFinanceOpen(true);
-        }
-        if (location.pathname.includes('/books/track') || location.pathname.includes('/books/money-tracker')) {
-            setIsTrackOpen(true);
-        }
     }, [location.pathname, location.search]);
 
     // Books Section State (from snippet)
@@ -319,75 +302,54 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showBooksSidebar && (
                     <>
-                        {/* 1. Books Dashboard */}
+                        {/* 1. Dashboard */}
                         <button
-                            className={`sidebar-item ${activeItem === 'Books Dashboard' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Books Dashboard', '/books/dashboard')}
+                            className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
                         >
                             <div className="flex items-center gap-3">
-                                <Home size={20} style={{ color: activeItem === 'Books Dashboard' ? '#ffffff' : '#1B6B3A' }} />
+                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
                                 <span className="sidebar-label">Dashboard</span>
                             </div>
                         </button>
 
-                        {/* 2. Finance (Collapsible) */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                            <button
-                                className={`sidebar-item ${isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details' ? 'active' : ''}`}
-                                onClick={() => setIsFinanceOpen(!isFinanceOpen)}
-                                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <PiggyBank size={20} style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details') ? '#ffffff' : '#1B6B3A' }} />
-                                    <span className="sidebar-label">Finance</span>
-                                </div>
-                                <div style={{ color: (isFinanceOpen || activeItem === 'Finance' || activeItem === 'Accounting' || activeItem === 'Purchase details' || activeItem === 'Staff details') ? '#ffffff' : '#1B6B3A', opacity: 0.7, paddingRight: '4px' }}>
-                                    {isFinanceOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                </div>
-                            </button>
+                        {/* Divider Line */}
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
 
-                            {isFinanceOpen && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', paddingLeft: '0.75rem', marginTop: '0.1rem' }}>
-                                    {/* Accounting */}
-                                    <button
-                                        className={`sidebar-item ${activeItem === 'Accounting' ? 'active' : ''}`}
-                                        onClick={() => handleItemClick('Accounting', '/books/accounting')}
-                                        style={{ height: '36px' }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Calculator size={18} style={{ color: activeItem === 'Accounting' ? '#ffffff' : '#1B6B3A' }} />
-                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Accounting</span>
-                                        </div>
-                                    </button>
+                        {/* 2. Accounts */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Accounts' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Accounts', '/books/accounting')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Calculator size={20} style={{ color: activeItem === 'Accounts' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Accounts</span>
+                            </div>
+                        </button>
 
-                                    {/* Purchase details */}
-                                    <button
-                                        className={`sidebar-item ${activeItem === 'Purchase details' ? 'active' : ''}`}
-                                        onClick={() => handleItemClick('Purchase details', '/books/purchase-details')}
-                                        style={{ height: '36px' }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <ShoppingCart size={18} style={{ color: activeItem === 'Purchase details' ? '#ffffff' : '#1B6B3A' }} />
-                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Purchase details</span>
-                                        </div>
-                                    </button>
+                        {/* 3. Purchases */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Purchases' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Purchases', '/books/purchase-details')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <ShoppingCart size={20} style={{ color: activeItem === 'Purchases' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Purchases</span>
+                            </div>
+                        </button>
 
-                                    {/* Staff details */}
-                                    <button
-                                        className={`sidebar-item ${activeItem === 'Staff details' ? 'active' : ''}`}
-                                        onClick={() => handleItemClick('Staff details', '/books/finance/staff-details')}
-                                        style={{ height: '36px' }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <UserCheck size={18} style={{ color: activeItem === 'Staff details' ? '#ffffff' : '#1B6B3A' }} />
-                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Staff details</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+                        {/* 4. Income */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Income' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Income', '/books/income')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Banknote size={20} style={{ color: activeItem === 'Income' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Income</span>
+                            </div>
+                        </button>
 
-                        {/* 3. Stock */}
+                        {/* 5. Stock */}
                         <button
                             className={`sidebar-item ${activeItem === 'Stock' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Stock', '/books/stock')}
@@ -398,7 +360,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 4. People */}
+                        {/* 6. People */}
                         <button
                             className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
                             onClick={() => handleItemClick('People', '/books/people')}
@@ -409,7 +371,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 5. Split & Collect */}
+                        {/* 7. Split & Collect */}
                         <button
                             className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Split & Collect', '/books/split-collect')}
@@ -420,7 +382,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 6. Report (Points to /books layout) */}
+                        {/* 8. Report */}
                         <button
                             className={`sidebar-item ${activeItem === 'Report' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Report', '/books')}
@@ -430,54 +392,6 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 <span className="sidebar-label">Report</span>
                             </div>
                         </button>
-
-                        {/* 5b. Track (Collapsible) */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                            <button
-                                className={`sidebar-item ${activeItem === 'Track' || activeItem === 'Simple Billing' || activeItem === 'Billing Records' ? 'active' : ''}`}
-                                onClick={() => {
-                                    setIsTrackOpen(!isTrackOpen);
-                                    handleItemClick('Simple Billing', '/books/track/simple-billing');
-                                }}
-                                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Compass size={20} style={{ color: (activeItem === 'Track' || activeItem === 'Simple Billing' || activeItem === 'Billing Records') ? '#ffffff' : '#1B6B3A' }} />
-                                    <span className="sidebar-label">Track</span>
-                                </div>
-                                <div style={{ color: (activeItem === 'Track' || activeItem === 'Simple Billing' || activeItem === 'Billing Records') ? '#ffffff' : '#1B6B3A', opacity: 0.7, paddingRight: '4px' }}>
-                                    {isTrackOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                </div>
-                            </button>
-
-                            {isTrackOpen && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', paddingLeft: '0.75rem', marginTop: '0.1rem' }}>
-                                    {/* Simple Billing */}
-                                    <button
-                                        className={`sidebar-item ${activeItem === 'Simple Billing' ? 'active' : ''}`}
-                                        onClick={() => handleItemClick('Simple Billing', '/books/track/simple-billing')}
-                                        style={{ height: '36px' }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Receipt size={18} style={{ color: activeItem === 'Simple Billing' ? '#ffffff' : '#1B6B3A' }} />
-                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Simple Billing</span>
-                                        </div>
-                                    </button>
-
-                                    {/* Billing Records */}
-                                    <button
-                                        className={`sidebar-item ${activeItem === 'Billing Records' ? 'active' : ''}`}
-                                        onClick={() => handleItemClick('Billing Records', '/books/track/billing-records')}
-                                        style={{ height: '36px' }}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Receipt size={18} style={{ color: activeItem === 'Billing Records' ? '#ffffff' : '#1B6B3A' }} />
-                                            <span className="sidebar-label" style={{ fontSize: '0.82rem' }}>Billing Records</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
 
                         <div style={{ height: '1px', background: '#E2E8F0', margin: '0.5rem 1rem' }} />
 
