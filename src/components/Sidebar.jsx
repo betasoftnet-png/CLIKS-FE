@@ -426,6 +426,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             <Plus size={16} strokeWidth={3} /> Add Transaction
                         </button>
 
+                        {/* Divider Line */}
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.1rem 0.75rem 0.5rem 0.75rem' }} />
+
                         {/* 2. People */}
                         <button
                             className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
