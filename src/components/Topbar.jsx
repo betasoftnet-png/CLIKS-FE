@@ -30,7 +30,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
 
     const navItems = [
         { name: 'Books', url: '/books', icon: BookOpen, activeBase: '/books' },
-        { name: 'Payments', url: '/payments/transactions', icon: Wallet, activeBase: '/payments' },
+        { name: 'Payments', url: '/payments/people', icon: Wallet, activeBase: '/payments' },
         { name: 'Social', url: '/social', icon: Users, activeBase: '/social' },
     ];
 
