@@ -265,60 +265,42 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
             <div className="sidebar-scroll-container" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
                 <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                {showFinanceSidebar ? (
-                    /* In Payments view: Replace Dashboard with '+ Add Transaction' button */
-                    <button
-                        onClick={() => {
-                            navigate('/payments/transactions?add=true');
-                            if (typeof window !== 'undefined') {
-                                window.dispatchEvent(new CustomEvent('open-add-transaction'));
-                            }
-                        }}
-                        style={{
-                            width: 'calc(100% - 1.5rem)',
-                            margin: '0.25rem 0.75rem 0.85rem 0.75rem',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '0.5rem',
-                            padding: '0.65rem 1rem',
-                            background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
-                            color: '#FFFFFF',
-                            borderRadius: '10px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            fontWeight: '800',
-                            fontSize: '0.85rem',
-                            boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)',
-                            transition: 'all 0.2s ease',
-                            flexShrink: 0
-                        }}
-                        onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
-                        onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                    >
-                        <Plus size={16} strokeWidth={3} /> Add Transaction
-                    </button>
-                ) : (
-                    <>
-                        {/* Fixed Global Dashboard for Books, Social views */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Dashboard</span>
-                            </div>
-                        </button>
-
-                        {/* Divider Line */}
-                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
-                    </>
-                )}
-
                 {showFinanceSidebar && (
                     <>
-                        {/* 1. People */}
+                        {/* 1. Add Transaction */}
+                        <button
+                            onClick={() => {
+                                navigate('/payments/transactions?add=true');
+                                if (typeof window !== 'undefined') {
+                                    window.dispatchEvent(new CustomEvent('open-add-transaction'));
+                                }
+                            }}
+                            style={{
+                                width: 'calc(100% - 1.5rem)',
+                                margin: '0.25rem 0.75rem 0.85rem 0.75rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '0.5rem',
+                                padding: '0.65rem 1rem',
+                                background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
+                                color: '#FFFFFF',
+                                borderRadius: '10px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontWeight: '800',
+                                fontSize: '0.85rem',
+                                boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)',
+                                transition: 'all 0.2s ease',
+                                flexShrink: 0
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                            onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                        >
+                            <Plus size={16} strokeWidth={3} /> Add Transaction
+                        </button>
+
+                        {/* 2. People */}
                         <button
                             className={`sidebar-item ${activeItem === 'People' ? 'active' : ''}`}
                             onClick={() => handleItemClick('People', '/payments/people')}
@@ -329,7 +311,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 2. Transaction */}
+                        {/* 3. Transaction */}
                         <button
                             className={`sidebar-item ${activeItem === 'Transaction' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Transaction', '/payments/transactions')}
@@ -340,7 +322,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 3. Segregation */}
+                        {/* 4. Segregation */}
                         <button
                             className={`sidebar-item ${activeItem === 'Segregation' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Segregation', '/payments/segregation')}
@@ -351,7 +333,18 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 4. Planner */}
+                        {/* 5. Split & Collect */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Split & Collect</span>
+                            </div>
+                        </button>
+
+                        {/* 6. Planner */}
                         <button
                             className={`sidebar-item ${activeItem === 'Planner' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Planner', '/payments/plan')}
@@ -366,6 +359,19 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showBooksSidebar && (
                     <>
+                        {/* 1. Dashboard */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Dashboard</span>
+                            </div>
+                        </button>
+
+                        {/* Divider Line */}
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
                         {/* 2. Accounts */}
                         <button
                             className={`sidebar-item ${activeItem === 'Accounts' ? 'active' : ''}`}

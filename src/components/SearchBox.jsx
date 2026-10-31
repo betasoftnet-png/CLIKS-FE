@@ -234,6 +234,7 @@ const SearchBox = ({ onOpenCalculator }) => {
             {/* ── Expanded: full search pill ── */}
             {isExpanded && (
                 <div
+                    className="topbar-search-input-box"
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -242,7 +243,7 @@ const SearchBox = ({ onOpenCalculator }) => {
                         borderRadius: '999px',
                         background: 'rgba(255,255,255,0.14)',
                         border: '1px solid rgba(255,255,255,0.28)',
-                        width: '220px',
+                        width: 'clamp(120px, 12vw, 175px)',
                         animation: 'searchExpand 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                     }}
                 >
