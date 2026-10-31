@@ -262,7 +262,8 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 <h2 className="app-title">CLIKS</h2>
             </div>
 
-            <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <div className="sidebar-scroll-container" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+                <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                 {/* Fixed Global Dashboard for all views (Books, Payments, Social) */}
                 <button
                     className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
@@ -471,10 +472,12 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 )}
 
 
-            </nav>
+                </nav>
+                <div style={{ flex: 1 }} />
+            </div>
 
             {/* Refer & Earn Block */}
-            <div style={{ padding: '0rem 1rem', flexShrink: 0 }}>
+            <div style={{ padding: '0 1rem', marginBottom: '0.75rem', flexShrink: 0 }}>
                 <button
                     onClick={() => {
                         if (onReferralClick) onReferralClick();
@@ -491,11 +494,10 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         borderRadius: '12px',
                         border: '1px solid transparent',
                         cursor: 'pointer',
-                        fontWeight: '700',
+                        fontWeight: '750',
                         fontSize: '0.875rem',
                         transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                        outline: 'none',
-                        marginTop: '1.2rem'
+                        outline: 'none'
                     }}
                     onMouseOver={(e) => {
                         e.currentTarget.style.background = 'linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%)';
