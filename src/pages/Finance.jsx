@@ -25,9 +25,33 @@ import {
 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { paymentService } from '../services/paymentService';
+import { transactionsService } from '../services/transactionsService';
 import { apiClient } from '../api/client';
 import '../App.css';
 import { useCurrency } from '../context';
+
+const INCOME_CATEGORIES = [
+    'Sales & Revenue',
+    'Client Payment',
+    'Consulting / Services',
+    'Investment Returns',
+    'Salary & Bonus',
+    'Cash Inward',
+    'Refund',
+    'Other Income'
+];
+
+const EXPENSE_CATEGORIES = [
+    'Vendor / Supplies',
+    'Rent & Utilities',
+    'Office & Stationery',
+    'Food & Refreshments',
+    'Salaries & Wages',
+    'Travel & Fuel',
+    'Marketing & Ads',
+    'Maintenance & Repairs',
+    'Other Expense'
+];
 
 const BusinessPayments = () => {
     const { currency, formatCurrency } = useCurrency();
@@ -35,10 +59,30 @@ const BusinessPayments = () => {
     const [colFilters, setColFilters] = React.useState({}); // 'receivables', 'payables', 'bank', 'reminders'
     const [searchTerm, setSearchTerm] = useState('');
     const [showSearch, setShowSearch] = useState(false);
+    const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] = useState(false);
+    const [txForm, setTxForm] = useState({
+        type: 'income',
+        title: '',
+        amount: '',
+        category: '',
+        payment_mode: 'UPI',
+        date: new Date().toISOString().split('T')[0],
+        notes: '',
+        reference: ''
+    });
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [isSupplierModalOpen, setIsSupplierModalOpen] = useState(false);
     const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
     const [toast, setToast] = useState(null);
+
+    React.useEffect(() => {
+        const handleOpen = () => setIsAddTransactionModalOpen(true);
+        window.addEventListener('open-add-transaction', handleOpen);
+        if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('add') === 'true') {
+            setIsAddTransactionModalOpen(true);
+        }
+        return () => window.removeEventListener('open-add-transaction', handleOpen);
+    }, []);
 
     React.useEffect(() => {
         if (toast) {
@@ -240,42 +284,104 @@ const BusinessPayments = () => {
         p.payment_number.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const handleSaveTransaction = async (e) => {
+        e.preventDefault();
+        const amt = parseFloat(txForm.amount);
+        if (isNaN(amt) || amt <= 0) {
+            alert('Please enter a valid amount greater than 0.');
+            return;
+        }
+        if (!txForm.title.trim()) {
+            alert('Please enter a description or payee/source name.');
+            return;
+        }
+
+        try {
+            if (txForm.type === 'income') {
+                await paymentService.receivePayment({
+                    customer_name: txForm.title,
+                    invoice_id: txForm.reference || `TXN-${Date.now().toString().slice(-6)}`,
+                    amount: amt,
+                    payment_mode: txForm.payment_mode,
+                    reference_number: txForm.reference || `REF-${Date.now().toString().slice(-6)}`
+                }).catch(() => {});
+            } else {
+                await paymentService.paySupplier({
+                    supplier_name: txForm.title,
+                    purchase_id: txForm.reference || `TXN-${Date.now().toString().slice(-6)}`,
+                    amount: amt,
+                    payment_mode: txForm.payment_mode,
+                    reference_number: txForm.reference || `REF-${Date.now().toString().slice(-6)}`
+                }).catch(() => {});
+            }
+
+            // Sync with transactions ledger
+            await transactionsService.createTransaction({
+                type: txForm.type === 'income' ? 'Income' : 'Expense',
+                title: txForm.title,
+                category: txForm.category || (txForm.type === 'income' ? 'Sales & Revenue' : 'Other Expense'),
+                amount: amt,
+                date: txForm.date,
+                notes: txForm.notes || txForm.reference || ''
+            }).catch(() => {});
+
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+
+            setIsAddTransactionModalOpen(false);
+            setTxForm({
+                type: 'income',
+                title: '',
+                amount: '',
+                category: '',
+                payment_mode: 'UPI',
+                date: new Date().toISOString().split('T')[0],
+                notes: '',
+                reference: ''
+            });
+            setToast({
+                message: `${txForm.type === 'income' ? 'Income' : 'Expense'} entry recorded successfully.`,
+                type: 'success'
+            });
+        } catch (err) {
+            alert('Failed to save transaction: ' + (err.message || 'Unknown error'));
+        }
+    };
+
+    const totalIncome = receivables.reduce((sum, r) => sum + r.paid_amount, 0);
+    const totalExpenses = payables.reduce((sum, p) => sum + p.paid_amount, 0);
+    const totalBalance = accounts.reduce((sum, a) => sum + a.current_balance, 0);
+
     return (
         <div style={{ padding: '1.25rem 2.5rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
             <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <CreditCard size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Payments & Cash Flow Engine</h1>
+                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1.05rem', fontWeight: '500' }}>Receive customer payments, pay suppliers, link invoices, manage bank accounts/cash, and dispatch overdue reminder templates.</p>
+                    <p style={{ color: '#475569', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Record and track all your money entries, income, expenses, and accounts.</p>
                 </div>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button 
-                        onClick={() => setIsSupplierModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'white', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+                        onClick={() => setIsAddTransactionModalOpen(true)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.4rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)', fontSize: '0.92rem', transition: 'all 0.2s' }}
                     >
-                        <ArrowUpRight size={16} /> Pay Supplier
-                    </button>
-                    <button 
-                        onClick={() => setIsPaymentModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}
-                    >
-                        <ArrowDownRight size={16} /> Receive Payment
+                        <Plus size={18} strokeWidth={2.5} /> Add Transaction
                     </button>
                 </div>
             </div>
 
             {/* Quick Metrics Cards */}
-            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '1.75rem' }}>
                 {[
-                    { label: 'Outstanding Receivables', value: formatCurrency(totalOutstandingReceivables), icon: TrendingUp, color: '#EF4444', bg: '#FEE2E2' },
-                    { label: 'Daily Collections', value: formatCurrency(totalDailyCollections), icon: ArrowDownRight, color: '#1B6B3A', bg: '#DCF2E4' },
-                    { label: 'Combined Balances', value: formatCurrency(accounts.reduce((sum, a) => sum + a.current_balance, 0)), icon: Wallet, color: '#3B82F6', bg: '#DBEAFE' },
-                    { label: 'Efficiency Rate', value: '94.2%', icon: CheckCircle2, color: '#0D9488', bg: '#CCFBF1' }
+                    { label: 'Total Inflow (Income)', value: formatCurrency(totalIncome), icon: ArrowDownRight, color: '#1B6B3A', bg: '#DCF2E4' },
+                    { label: 'Total Outflow (Expense)', value: formatCurrency(totalExpenses), icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
+                    { label: 'Available Balances', value: formatCurrency(totalBalance), icon: Wallet, color: '#3B82F6', bg: '#DBEAFE' },
+                    { label: 'Net Cash Balance', value: formatCurrency(totalIncome - totalExpenses), icon: CheckCircle2, color: '#0D9488', bg: '#CCFBF1' }
                 ].map((stat, idx) => (
                     <div key={idx} className="stat-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '1rem 1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)', cursor: 'default' }}>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
@@ -290,27 +396,28 @@ const BusinessPayments = () => {
             </div>
 
             {/* Tabs Row & Global Search */}
-            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
                     {[
-                        { id: 'receivables', label: 'Customer Receivables (Inward)', icon: ArrowDownRight },
-                        { id: 'payables', label: 'Supplier Payables (Outward)', icon: ArrowUpRight },
+                        { id: 'receivables', label: 'Income (Inflow)', icon: ArrowDownRight },
+                        { id: 'payables', label: 'Expenses (Outflow)', icon: ArrowUpRight },
                         { id: 'bank', label: 'Bank & Cash Registers', icon: Wallet },
-                        { id: 'reminders', label: 'Overdue Collections & Reminders', icon: Clock }
+                        { id: 'reminders', label: 'Overdue Reminders', icon: Clock }
                     ].map(tab => (
                         <button 
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             style={{ 
-                                padding: '0.75rem 1.5rem', borderRadius: '12px', 
+                                padding: '0.65rem 1.25rem', borderRadius: '12px', 
                                 background: activeTab === tab.id ? '#064E3B' : 'white', 
                                 color: activeTab === tab.id ? 'white' : '#475569',
                                 border: '1px solid #E2E8F0', fontWeight: '700', cursor: 'pointer',
                                 display: 'flex', alignItems: 'center', gap: '0.5rem',
-                                boxShadow: activeTab === tab.id ? '0 8px 16px rgba(6, 78, 59, 0.15)' : 'none'
+                                boxShadow: activeTab === tab.id ? '0 8px 16px rgba(6, 78, 59, 0.15)' : 'none',
+                                fontSize: '0.88rem'
                             }}
                         >
-                            <tab.icon size={18} /> {tab.label}
+                            <tab.icon size={16} /> {tab.label}
                         </button>
                     ))}
                 </div>
@@ -542,6 +649,170 @@ const BusinessPayments = () => {
                             ))}
                         </tbody>
                     </table>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Transaction Modal (Income / Expense) */}
+            {isAddTransactionModalOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '2rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '28px', padding: '2rem 2.25rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                            <h3 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Transaction</h3>
+                            <button onClick={() => setIsAddTransactionModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
+                        </div>
+
+                        {/* Income / Expense Switcher */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', background: '#F1F5F9', padding: '4px', borderRadius: '14px', marginBottom: '1.25rem' }}>
+                            <button
+                                type="button"
+                                onClick={() => setTxForm({ ...txForm, type: 'income', category: '' })}
+                                style={{
+                                    padding: '0.65rem',
+                                    borderRadius: '10px',
+                                    border: 'none',
+                                    background: txForm.type === 'income' ? '#10B981' : 'transparent',
+                                    color: txForm.type === 'income' ? '#FFFFFF' : '#475569',
+                                    fontWeight: '800',
+                                    fontSize: '0.88rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <ArrowDownRight size={16} /> Income (Money In)
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setTxForm({ ...txForm, type: 'expense', category: '' })}
+                                style={{
+                                    padding: '0.65rem',
+                                    borderRadius: '10px',
+                                    border: 'none',
+                                    background: txForm.type === 'expense' ? '#EF4444' : 'transparent',
+                                    color: txForm.type === 'expense' ? '#FFFFFF' : '#475569',
+                                    fontWeight: '800',
+                                    fontSize: '0.88rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <ArrowUpRight size={16} /> Expense (Money Out)
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSaveTransaction} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {/* Source / Payee / Name */}
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>
+                                    {txForm.type === 'income' ? 'Received From / Description' : 'Paid To / Description'}
+                                </label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder={txForm.type === 'income' ? 'e.g. Acme Corp, Salary, Project Payment' : 'e.g. Office Rent, Supplier Bill, Tea'}
+                                    value={txForm.title}
+                                    onChange={(e) => setTxForm({ ...txForm, title: e.target.value })}
+                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            {/* Amount & Date in one row */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Amount ({currency.symbol})</label>
+                                    <input
+                                        required
+                                        type="number"
+                                        min="0.01"
+                                        step="any"
+                                        placeholder="0.00"
+                                        value={txForm.amount}
+                                        onChange={(e) => setTxForm({ ...txForm, amount: e.target.value })}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.95rem', fontWeight: '700', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Date</label>
+                                    <input
+                                        required
+                                        type="date"
+                                        value={txForm.date}
+                                        onChange={(e) => setTxForm({ ...txForm, date: e.target.value })}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Category & Payment Mode in one row */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Category</label>
+                                    <select
+                                        value={txForm.category}
+                                        onChange={(e) => setTxForm({ ...txForm, category: e.target.value })}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                    >
+                                        <option value="">Select Category</option>
+                                        {(txForm.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES).map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Payment Mode</label>
+                                    <select
+                                        value={txForm.payment_mode}
+                                        onChange={(e) => setTxForm({ ...txForm, payment_mode: e.target.value })}
+                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                    >
+                                        <option value="UPI">UPI</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Card">Card</option>
+                                        <option value="Cheque">Cheque</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Notes / Ref ID */}
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Notes / Reference (Optional)</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Transaction ID, receipt #, or remarks"
+                                    value={txForm.notes}
+                                    onChange={(e) => setTxForm({ ...txForm, notes: e.target.value })}
+                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            <button
+                                type="submit"
+                                style={{
+                                    width: '100%',
+                                    padding: '0.85rem',
+                                    borderRadius: '14px',
+                                    background: txForm.type === 'income' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                                    color: 'white',
+                                    border: 'none',
+                                    fontWeight: '800',
+                                    fontSize: '1rem',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
+                                    marginTop: '0.5rem'
+                                }}
+                            >
+                                {txForm.type === 'income' ? '+ Save Income Entry' : '- Save Expense Entry'}
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}
