@@ -263,6 +263,20 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             </div>
 
             <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {/* Fixed Global Dashboard for all views (Books, Payments, Social) */}
+                <button
+                    className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
+                    onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
+                >
+                    <div className="flex items-center gap-3">
+                        <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
+                        <span className="sidebar-label">Dashboard</span>
+                    </div>
+                </button>
+
+                {/* Divider Line */}
+                <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
+
                 {showFinanceSidebar && (
                     <>
                         {/* 1. Transaction */}
@@ -302,20 +316,6 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showBooksSidebar && (
                     <>
-                        {/* 1. Dashboard */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Dashboard</span>
-                            </div>
-                        </button>
-
-                        {/* Divider Line */}
-                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
-
                         {/* 2. Accounts */}
                         <button
                             className={`sidebar-item ${activeItem === 'Accounts' ? 'active' : ''}`}
