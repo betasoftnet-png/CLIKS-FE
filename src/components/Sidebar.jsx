@@ -60,10 +60,14 @@ import {
     Package,
     Grid3X3,
     Cloud,
+    ArrowDownRight,
+    ArrowUpRight,
     X
 } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context';
+import { useAuth, useCurrency } from '../context';
+import { useQueryClient } from '@tanstack/react-query';
+import { incomeService, expensesService, transactionsService, paymentService } from '../services';
 import '../App.css';
 import logoPng from '../assets/cliks.png'; // Final branding
 
@@ -162,6 +166,128 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         }
 
         return 'Dashboard';
+    };
+
+    const queryClient = useQueryClient();
+    const { currency } = useCurrency();
+    const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
+    const [bookModalType, setBookModalType] = useState('income'); // 'income' | 'expense'
+    const [bookTxForm, setBookTxForm] = useState({
+        title: '',
+        amount: '',
+        category: 'Sales & Revenue',
+        payment_mode: 'UPI',
+        date: new Date().toISOString().split('T')[0],
+        notes: '',
+        reference: ''
+    });
+    const [isSubmittingBookTx, setIsSubmittingBookTx] = useState(false);
+
+    const openBookTxModal = (type) => {
+        setBookModalType(type);
+        setBookTxForm({
+            title: '',
+            amount: '',
+            category: type === 'income' ? 'Sales & Revenue' : 'Office Rent',
+            payment_mode: 'UPI',
+            date: new Date().toISOString().split('T')[0],
+            notes: '',
+            reference: ''
+        });
+        setIsAddBookModalOpen(true);
+    };
+
+    const handleSaveBookTx = async (e) => {
+        e.preventDefault();
+        const amt = parseFloat(bookTxForm.amount);
+        if (isNaN(amt) || amt <= 0) {
+            alert('Please enter a valid amount greater than 0.');
+            return;
+        }
+        if (!bookTxForm.title.trim()) {
+            alert('Please enter a description.');
+            return;
+        }
+
+        setIsSubmittingBookTx(true);
+        try {
+            if (bookModalType === 'income') {
+                await incomeService.createIncome({
+                    source: bookTxForm.title,
+                    amount: amt,
+                    category: bookTxForm.category || 'Sales & Revenue',
+                    date: bookTxForm.date,
+                    payment_mode: bookTxForm.payment_mode,
+                    recurring: false
+                }).catch(() => {});
+
+                await transactionsService.createTransaction({
+                    type: 'Income',
+                    title: bookTxForm.title,
+                    category: bookTxForm.category || 'Sales & Revenue',
+                    amount: amt,
+                    date: bookTxForm.date,
+                    notes: bookTxForm.notes || bookTxForm.reference || ''
+                }).catch(() => {});
+
+                await paymentService.receivePayment({
+                    customer_name: bookTxForm.title,
+                    invoice_id: bookTxForm.reference || `INC-${Date.now().toString().slice(-6)}`,
+                    amount: amt,
+                    payment_mode: bookTxForm.payment_mode,
+                    reference_number: bookTxForm.reference || `REF-${Date.now().toString().slice(-6)}`
+                }).catch(() => {});
+            } else {
+                await expensesService.createExpense({
+                    description: bookTxForm.title,
+                    amount: amt,
+                    category: bookTxForm.category || 'Office Rent',
+                    date: bookTxForm.date,
+                    payment_mode: bookTxForm.payment_mode
+                }).catch(() => {});
+
+                await transactionsService.createTransaction({
+                    type: 'Expense',
+                    title: bookTxForm.title,
+                    category: bookTxForm.category || 'Other Expense',
+                    amount: amt,
+                    date: bookTxForm.date,
+                    notes: bookTxForm.notes || bookTxForm.reference || ''
+                }).catch(() => {});
+
+                await paymentService.paySupplier({
+                    supplier_name: bookTxForm.title,
+                    purchase_id: bookTxForm.reference || `EXP-${Date.now().toString().slice(-6)}`,
+                    amount: amt,
+                    payment_mode: bookTxForm.payment_mode,
+                    reference_number: bookTxForm.reference || `REF-${Date.now().toString().slice(-6)}`
+                }).catch(() => {});
+            }
+
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: bookModalType, amount: amt } }));
+            }
+
+            setIsAddBookModalOpen(false);
+            setBookTxForm({
+                title: '',
+                amount: '',
+                category: 'Sales & Revenue',
+                payment_mode: 'UPI',
+                date: new Date().toISOString().split('T')[0],
+                notes: '',
+                reference: ''
+            });
+        } catch (err) {
+            console.error('Failed to save entry:', err);
+        } finally {
+            setIsSubmittingBookTx(false);
+        }
     };
 
     const [activeItem, setActiveItem] = useState(getActiveItemFromPath(location.pathname, location.search));
@@ -359,6 +485,60 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                 {showBooksSidebar && (
                     <>
+                        {/* Action Buttons: Add Income & Add Expense */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem', margin: '0.25rem 0.75rem 0.75rem 0.75rem' }}>
+                            <button
+                                onClick={() => openBookTxModal('income')}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.35rem',
+                                    padding: '0.6rem 0.35rem',
+                                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                                    color: '#FFFFFF',
+                                    borderRadius: '10px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontWeight: '800',
+                                    fontSize: '0.78rem',
+                                    boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)',
+                                    transition: 'all 0.2s ease',
+                                    whiteSpace: 'nowrap'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                title="Add Income"
+                            >
+                                <Plus size={14} strokeWidth={3} /> Add Income
+                            </button>
+                            <button
+                                onClick={() => openBookTxModal('expense')}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.35rem',
+                                    padding: '0.6rem 0.35rem',
+                                    background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                                    color: '#FFFFFF',
+                                    borderRadius: '10px',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    fontWeight: '800',
+                                    fontSize: '0.78rem',
+                                    boxShadow: '0 3px 10px rgba(239, 68, 68, 0.25)',
+                                    transition: 'all 0.2s ease',
+                                    whiteSpace: 'nowrap'
+                                }}
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                                title="Add Expense"
+                            >
+                                <Plus size={14} strokeWidth={3} /> Add Expense
+                            </button>
+                        </div>
+
                         {/* 1. Dashboard */}
                         <button
                             className={`sidebar-item ${activeItem === 'Dashboard' || activeItem === 'Books Dashboard' ? 'active' : ''}`}
@@ -859,6 +1039,212 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 Close Breakdown
                             </button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Add Income / Add Expense Modal */}
+            {isAddBookModalOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000, backdropFilter: 'blur(8px)', padding: '1.5rem' }}>
+                    <div style={{ background: '#FFFFFF', width: '100%', maxWidth: '460px', borderRadius: '24px', padding: '1.75rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', border: '1px solid #E2E8F0', maxHeight: '90vh', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: bookModalType === 'income' ? '#059669' : '#DC2626', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                {bookModalType === 'income' ? <ArrowDownRight size={22} /> : <ArrowUpRight size={22} />}
+                                {bookModalType === 'income' ? 'Add Income' : 'Add Expense'}
+                            </h3>
+                            <button onClick={() => setIsAddBookModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.45rem', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        {/* Income / Expense Switcher Tab */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', background: '#F1F5F9', padding: '4px', borderRadius: '12px', marginBottom: '1.2rem' }}>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setBookModalType('income');
+                                    setBookTxForm(prev => ({ ...prev, category: 'Sales & Revenue' }));
+                                }}
+                                style={{
+                                    padding: '0.55rem',
+                                    borderRadius: '9px',
+                                    border: 'none',
+                                    background: bookModalType === 'income' ? '#10B981' : 'transparent',
+                                    color: bookModalType === 'income' ? '#FFFFFF' : '#475569',
+                                    fontWeight: '800',
+                                    fontSize: '0.82rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <ArrowDownRight size={15} /> Income
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setBookModalType('expense');
+                                    setBookTxForm(prev => ({ ...prev, category: 'Office Rent' }));
+                                }}
+                                style={{
+                                    padding: '0.55rem',
+                                    borderRadius: '9px',
+                                    border: 'none',
+                                    background: bookModalType === 'expense' ? '#EF4444' : 'transparent',
+                                    color: bookModalType === 'expense' ? '#FFFFFF' : '#475569',
+                                    fontWeight: '800',
+                                    fontSize: '0.82rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '6px',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <ArrowUpRight size={15} /> Expense
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleSaveBookTx} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
+                            {/* Description / Source */}
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>
+                                    {bookModalType === 'income' ? 'Income Source / Received From' : 'Expense / Paid To Description'} *
+                                </label>
+                                <input
+                                    required
+                                    type="text"
+                                    placeholder={bookModalType === 'income' ? 'e.g. Client Payment, Product Sales, Salary' : 'e.g. Office Rent, Hardware Supplies, Tea'}
+                                    value={bookTxForm.title}
+                                    onChange={(e) => setBookTxForm({ ...bookTxForm, title: e.target.value })}
+                                    style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.88rem', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            {/* Amount & Date in one row */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>
+                                        Amount ({currency?.symbol || '₹'}) *
+                                    </label>
+                                    <input
+                                        required
+                                        type="number"
+                                        min="0.01"
+                                        step="any"
+                                        placeholder="0.00"
+                                        value={bookTxForm.amount}
+                                        onChange={(e) => setBookTxForm({ ...bookTxForm, amount: e.target.value })}
+                                        style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.92rem', fontWeight: '700', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>Date *</label>
+                                    <input
+                                        required
+                                        type="date"
+                                        value={bookTxForm.date}
+                                        onChange={(e) => setBookTxForm({ ...bookTxForm, date: e.target.value })}
+                                        style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.88rem', boxSizing: 'border-box' }}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Category & Mode */}
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>Category</label>
+                                    <select
+                                        value={bookTxForm.category}
+                                        onChange={(e) => setBookTxForm({ ...bookTxForm, category: e.target.value })}
+                                        style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.85rem', boxSizing: 'border-box', background: '#FFFFFF' }}
+                                    >
+                                        {bookModalType === 'income' ? (
+                                            <>
+                                                <option value="Sales & Revenue">Sales & Revenue</option>
+                                                <option value="Consulting & Services">Consulting & Services</option>
+                                                <option value="Investments">Investments</option>
+                                                <option value="Salary">Salary</option>
+                                                <option value="Rental Income">Rental Income</option>
+                                                <option value="Other Income">Other Income</option>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <option value="Office Rent">Office Rent</option>
+                                                <option value="Utilities & Bills">Utilities & Bills</option>
+                                                <option value="Supplies & Hardware">Supplies & Hardware</option>
+                                                <option value="Staff & Payroll">Staff & Payroll</option>
+                                                <option value="Travel & Fuel">Travel & Fuel</option>
+                                                <option value="Food & Refreshments">Food & Refreshments</option>
+                                                <option value="Other Expense">Other Expense</option>
+                                            </>
+                                        )}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>Payment Mode</label>
+                                    <select
+                                        value={bookTxForm.payment_mode}
+                                        onChange={(e) => setBookTxForm({ ...bookTxForm, payment_mode: e.target.value })}
+                                        style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.85rem', boxSizing: 'border-box', background: '#FFFFFF' }}
+                                    >
+                                        <option value="UPI">UPI</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Debit Card">Debit Card</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Reference / Notes */}
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>Notes / Reference (Optional)</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Transaction ID, receipt #, or remark"
+                                    value={bookTxForm.notes}
+                                    onChange={(e) => setBookTxForm({ ...bookTxForm, notes: e.target.value, reference: e.target.value })}
+                                    style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.88rem', boxSizing: 'border-box' }}
+                                />
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.6rem' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsAddBookModalOpen(false)}
+                                    style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: '#F8FAFC', color: '#64748B', fontWeight: '750', fontSize: '0.88rem', cursor: 'pointer' }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={isSubmittingBookTx}
+                                    style={{
+                                        flex: 2,
+                                        padding: '0.75rem',
+                                        borderRadius: '12px',
+                                        border: 'none',
+                                        background: bookModalType === 'income' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                                        color: '#FFFFFF',
+                                        fontWeight: '800',
+                                        fontSize: '0.88rem',
+                                        cursor: isSubmittingBookTx ? 'not-allowed' : 'pointer',
+                                        opacity: isSubmittingBookTx ? 0.7 : 1,
+                                        boxShadow: bookModalType === 'income' ? '0 4px 14px rgba(16, 185, 129, 0.3)' : '0 4px 14px rgba(239, 68, 68, 0.3)'
+                                    }}
+                                >
+                                    {isSubmittingBookTx ? 'Saving...' : (bookModalType === 'income' ? 'Save Income Entry' : 'Save Expense Entry')}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             )}
