@@ -27,6 +27,7 @@ const FinanceAccounts = React.lazy(() => import('./pages/finance/Accounts'));
 const Bills = React.lazy(() => import('./pages/finance/Bills'));
 const FinanceSavings = React.lazy(() => import('./pages/finance/Savings'));
 const Rewards = React.lazy(() => import('./pages/finance/Rewards'));
+const LoyaltyRewards = React.lazy(() => import('./pages/finance/LoyaltyRewards'));
 const Books = React.lazy(() => import('./pages/Books'));
 const BooksDashboard = React.lazy(() => import('./pages/books/Dashboard'));
 const Auditor = React.lazy(() => import('./pages/Auditor'));
@@ -118,7 +119,10 @@ function AuthenticatedApp() {
                 <Route path="/payments/segregation" element={<Segregation />} />
                 <Route path="/payments/split-collect" element={<SplitExpense />} />
                 <Route path="/payments/split-expense" element={<SplitExpense />} />
-                <Route path="/payments/rewards-offers" element={<Rewards />} />
+                <Route path="/payments/loyalty" element={<LoyaltyRewards />} />
+                <Route path="/payments/loyalty-points" element={<LoyaltyRewards />} />
+                <Route path="/payments/rewards-offers" element={<LoyaltyRewards />} />
+                <Route path="/payments/rewards" element={<LoyaltyRewards />} />
 
                 {/* Referral Routes */}
                 <Route path="/referral" element={<Referral />} />

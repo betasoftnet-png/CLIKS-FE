@@ -7,7 +7,7 @@ import {
     Target, Gift, BarChart3, Split, Calculator, Receipt,
     Landmark, PiggyBank, LineChart, FileCheck, Bell, User,
     Home, BookOpen, Globe, Star, Calendar, Clock, Tag, ShieldCheck,
-    CheckCircle2, AlertCircle, ArrowDownRight, Sliders, Monitor, Barcode, Plus
+    CheckCircle2, AlertCircle, ArrowDownRight, Sliders, Monitor, Barcode, Plus, Coins
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────────
@@ -40,6 +40,7 @@ const SEARCH_INDEX = [
     { label: 'Segregation Wallets',  path: '/payments/segregation',      icon: Target,          category: 'Payments',    type: 'Page',     desc: 'Allocate funds to specific purpose goal wallets', keywords: ['segregation', 'purpose wallets', 'target funds', 'envelope', 'goals'] },
     { label: 'Split & Collect',      path: '/payments/split-collect',    icon: Split,           category: 'Payments',    type: 'Page',     desc: 'Group expense sharing and bill splitting', keywords: ['split and collect', 'split expense', 'group bill', 'share bill', 'split payment'] },
     { label: 'Financial Planner',    path: '/payments/planner',          icon: Calendar,        category: 'Payments',    type: 'Page',     desc: 'Schedule recurring payment reminders & EMI deadlines', keywords: ['planner', 'financial plan', 'plan', 'recurring payments', 'calendar reminders'] },
+    { label: 'Loyalty Points & Store Rewards', path: '/payments/loyalty', icon: Coins,           category: 'Payments',    type: 'Page',     desc: 'Shop-wise loyalty balances, point ledger & purchase invoices', keywords: ['loyalty', 'loyalty points', 'store points', 'shop points', 'reward points', 'cashback', 'point history'] },
     { label: 'Rewards & Offers',     path: '/payments/rewards-offers',   icon: Gift,            category: 'Payments',    type: 'Page',     desc: 'Earned cashback points, partner deals and loyalty perks', keywords: ['reward', 'offer', 'points', 'loyalty', 'cashback', 'perks'] },
     { label: 'Wallet & Cash Balance',path: '/payments/wallet',           icon: Wallet,          category: 'Payments',    type: 'Page',     desc: 'View personal wallet balance and add funds', keywords: ['wallet', 'money', 'balance', 'add money', 'cash balance'] },
     { label: 'Transaction History',  path: '/payments/transactions',     icon: ArrowLeftRight,  category: 'Payments',    type: 'Page',     desc: 'Comprehensive bank transfer and payment history', keywords: ['transaction', 'history', 'transfer', 'payment ledger'] },

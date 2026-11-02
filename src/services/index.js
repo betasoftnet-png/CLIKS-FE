@@ -39,4 +39,5 @@ export * from './businessSegregationService';
 export * from './referralService';
 export * from './financePlusService';
 export * from './staffingService';
+export * from './customerLoyaltyService';
 

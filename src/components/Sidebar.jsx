@@ -39,6 +39,8 @@ import {
     // Finance icons
     Building2,
     Gift,
+    Coins,
+    Star,
     Send,
     Landmark,
     History,
@@ -136,7 +138,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         if (path.includes('/payments/segregation')) return 'Segregation';
         if (path.includes('/payments/planner') || path.includes('/payments/plan')) return 'Planner';
         if (path === '/payments/wallet' || path.includes('/payments/wallet/')) return 'Wallet';
-        if (path.includes('/payments/rewards-offers')) return 'Rewards & Offers';
+        if (path.includes('/payments/loyalty') || path.includes('/payments/rewards-offers') || path.includes('/payments/rewards')) return 'Loyalty Points';
 
         if (path.includes('/books/dashboard')) return 'Dashboard';
         if (path.includes('/books/accounting') || path.includes('/finance/accounts')) return 'Accounts';
@@ -481,6 +483,17 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             <div className="flex items-center gap-3">
                                 <Calendar size={20} style={{ color: activeItem === 'Planner' ? '#ffffff' : '#1B6B3A' }} />
                                 <span className="sidebar-label">Planner</span>
+                            </div>
+                        </button>
+
+                        {/* 7. Loyalty Points */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Loyalty Points' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Loyalty Points', '/payments/loyalty')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Coins size={20} style={{ color: activeItem === 'Loyalty Points' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Loyalty Points</span>
                             </div>
                         </button>
                     </>
