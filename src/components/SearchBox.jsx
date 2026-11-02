@@ -6,79 +6,74 @@ import {
     Settings, HelpCircle, CreditCard, Zap, Wallet, ArrowLeftRight,
     Target, Gift, BarChart3, Split, Calculator, Receipt,
     Landmark, PiggyBank, LineChart, FileCheck, Bell, User,
-    Home, BookOpen, Globe, Star, Calendar
+    Home, BookOpen, Globe, Star, Calendar, Clock, Tag, ShieldCheck,
+    CheckCircle2, AlertCircle, ArrowDownRight, Sliders, Monitor, Barcode, Plus
 } from 'lucide-react';
-
-// (default points are 1000 — set in Wallet.jsx and Rewards.jsx)
 
 /* ─────────────────────────────────────────────────────────────────
    SEARCH INDEX
-   Add entries here for every navigable destination.
-   Keywords array allows partial matching on synonyms.
+   Comprehensive index covering every main module, submodule,
+   internal feature, action, and tool.
 ───────────────────────────────────────────────────────────────── */
 const SHOW_BETA_CLUB_UI = true;
 
 const SEARCH_INDEX = [
-    // ── Books / Dashboard ──────────────────────────────────────
-    { label: 'Dashboard',        path: '/books/dashboard',           icon: LayoutDashboard, category: 'Books',    keywords: ['dashboard', 'home', 'overview', 'console', 'books'] },
-    { label: 'Stock',            path: '/books/stock',               icon: TrendingUp,      category: 'Books',    keywords: ['stock', 'inventory', 'assets', 'items'] },
-    { label: 'People',           path: '/books/people',              icon: Users,           category: 'Books',    keywords: ['people', 'contacts', 'customers', 'clients', 'persons'] },
-    { label: 'Split & Collect',  path: '/books/split-collect',       icon: Split,           category: 'Books',    keywords: ['split', 'collect', 'expense', 'share', 'bill'] },
-    { label: 'Report',           path: '/books',                     icon: BarChart3,        category: 'Books',    keywords: ['report', 'analytics', 'summary'] },
-    { label: 'FIN-PRO Audit',    path: '/ca',                        icon: Briefcase,       category: 'FIN-PRO',  keywords: ['finpro', 'fin-pro', 'audit', 'ca', 'chartered', 'auditor'] },
+    // ── Primary Modules ──────────────────────────────────────────
+    { label: 'Books Workspace',      path: '/books/dashboard',           icon: BookOpen,        category: 'Books',       type: 'Module',   desc: 'Enterprise ERP, Invoicing & Accounts', keywords: ['books', 'erp', 'business', 'company', 'workspace'] },
+    { label: 'Payments Workspace',   path: '/payments/people',           icon: CreditCard,      category: 'Payments',    type: 'Module',   desc: 'Cash Flow Engine, Escrow & P2P Ledger', keywords: ['payments', 'finance', 'billing', 'upi', 'cash flow', 'escrow', 'money'] },
+    { label: 'Social Workspace',     path: '/social/betaclub',           icon: Users,           category: 'Social',      type: 'Module',   desc: 'Founder Community & Trading Documents', keywords: ['social', 'network', 'chat', 'feed', 'pitches', 'community'] },
+    { label: 'Access Kit Tools',     path: '/beta-launcher',             icon: Sliders,         category: 'Tools',       type: 'Module',   desc: 'Floating Utilities & Financial Calculators', keywords: ['access kit', 'beta products', 'launcher', 'apps', 'utilities', 'sidebar tools'] },
 
-    // ── Payments ───────────────────────────────────────────────
-    { label: 'Planner',          path: '/payments/planner',          icon: Calendar,        category: 'Payments', keywords: ['planner', 'financial plan', 'plan', 'payments'] },
-    { label: 'Wallet',           path: '/payments/wallet',           icon: Wallet,          category: 'Payments', keywords: ['wallet', 'money', 'balance', 'add money'] },
-    { label: 'Transactions',     path: '/payments/transactions',     icon: ArrowLeftRight,  category: 'Payments', keywords: ['transaction', 'history', 'transfer', 'payment'] },
-    { label: 'Segregation',      path: '/payments/segregation',      icon: Target,          category: 'Payments', keywords: ['segregation', 'goal', 'target', 'funds'] },
-    { label: 'Rewards & Offers', path: '/payments/rewards-offers',   icon: Gift,            category: 'Payments', keywords: ['reward', 'offer', 'points', 'loyalty', 'cashback'] },
+    // ── Books Hubs & Submodules ───────────────────────────────────
+    { label: 'Dashboard',            path: '/books/dashboard',           icon: LayoutDashboard, category: 'Books',       type: 'Page',     desc: 'Financial Overview, Net Worth & Quick Stats', keywords: ['dashboard', 'home', 'overview', 'console', 'books', 'metrics'] },
+    { label: 'Stock & Inventory',    path: '/books/stock',               icon: Boxes,           category: 'Books',       type: 'Page',     desc: 'Products, inventory valuation & stock tracking', keywords: ['stock', 'inventory', 'assets', 'items', 'products', 'levels'] },
+    { label: 'People Network',       path: '/payments/people',           icon: Users,           category: 'Payments',    type: 'Page',     desc: 'Contacts, counterparty ledgers & friendly advances', keywords: ['people', 'contacts', 'customers', 'clients', 'parties', 'ledger'] },
+    { label: 'Report & Analytics',   path: '/books',                     icon: BarChart3,        category: 'Books',       type: 'Page',     desc: 'Financial performance summaries & charts', keywords: ['report', 'analytics', 'summary', 'charts', 'financial reports'] },
+    { label: 'FIN-PRO CA Audit Hub', path: '/ca',                        icon: Briefcase,       category: 'Audit',       type: 'Page',     desc: 'Chartered Accountant portal, Section 43B(h) MSME & Form 3CD', keywords: ['finpro', 'fin-pro', 'audit', 'ca', 'chartered', 'auditor', 'tax audit', 'msme'] },
 
-    // ── Finance ────────────────────────────────────────────────
-    { label: 'Payments Dashboard',path: '/finance/dashboard',        icon: DollarSign,      category: 'Finance',  keywords: ['finance', 'financial', 'money', 'dashboard'] },
-    { label: 'Income',           path: '/finance/income',            icon: TrendingUp,      category: 'Finance',  keywords: ['income', 'revenue', 'earnings', 'salary'] },
-    { label: 'Expenses',         path: '/finance/expenses',          icon: ShoppingCart,    category: 'Finance',  keywords: ['expense', 'spend', 'cost', 'expenditure'] },
-    { label: 'Budgets',          path: '/finance/budgets',           icon: Target,          category: 'Finance',  keywords: ['budget', 'limit', 'plan', 'cap'] },
-    { label: 'Accounts',         path: '/finance/accounts',          icon: Landmark,        category: 'Finance',  keywords: ['account', 'bank', 'ledger'] },
-    { label: 'Savings',          path: '/finance/savings',           icon: PiggyBank,       category: 'Finance',  keywords: ['saving', 'savings', 'piggy', 'fund'] },
-    { label: 'Investments',      path: '/finance/investments',       icon: LineChart,       category: 'Finance',  keywords: ['invest', 'investment', 'portfolio', 'stock', 'mutual'] },
-    { label: 'Debts',            path: '/finance/debts',             icon: CreditCard,      category: 'Finance',  keywords: ['debt', 'loan', 'liability', 'emi', 'borrow'] },
-    { label: 'Planned Payments', path: '/finance/planned-payments',  icon: FileCheck,       category: 'Finance',  keywords: ['planned', 'scheduled', 'upcoming', 'recurring'] },
+    // ── Payments Hub & Cash Flow Engine ──────────────────────────
+    { label: 'Payments Dashboard',   path: '/payments/people',           icon: DollarSign,      category: 'Payments',    type: 'Page',     desc: 'Cash Flow Engine, receivables & payables', keywords: ['payments dashboard', 'cash flow', 'money hub'] },
+    { label: 'Add Transaction',      path: '/payments/people?action=log',icon: Plus,            category: 'Payments',    type: 'Action',   desc: 'Record money entry, payment, expense or transfer', keywords: ['add transaction', 'log transaction', 'money entry', 'record payment', 'transfer note'] },
+    { label: 'Add People Contact',   path: '/payments/people?action=add',icon: Plus,            category: 'Payments',    type: 'Action',   desc: 'Register a new person, peer or company contact', keywords: ['add people contact', 'new person', 'add contact', 'new peer'] },
+    { label: 'Outstanding Receivables',path: '/payments/people?tab=rec', icon: TrendingUp,      category: 'Payments',    type: 'Internal', desc: 'Money owed to you from customers and peers', keywords: ['outstanding receivables', 'receivables card', 'money owed', 'due to me'] },
+    { label: 'Outstanding Payables', path: '/payments/people?tab=pay',   icon: ArrowDownRight,  category: 'Payments',    type: 'Internal', desc: 'Money you owe to suppliers, lenders and vendors', keywords: ['outstanding payables', 'payables card', 'due money', 'pending payments'] },
+    { label: 'Segregation Wallets',  path: '/payments/segregation',      icon: Target,          category: 'Payments',    type: 'Page',     desc: 'Allocate funds to specific purpose goal wallets', keywords: ['segregation', 'purpose wallets', 'target funds', 'envelope', 'goals'] },
+    { label: 'Split & Collect',      path: '/payments/split-collect',    icon: Split,           category: 'Payments',    type: 'Page',     desc: 'Group expense sharing and bill splitting', keywords: ['split and collect', 'split expense', 'group bill', 'share bill', 'split payment'] },
+    { label: 'Financial Planner',    path: '/payments/planner',          icon: Calendar,        category: 'Payments',    type: 'Page',     desc: 'Schedule recurring payment reminders & EMI deadlines', keywords: ['planner', 'financial plan', 'plan', 'recurring payments', 'calendar reminders'] },
+    { label: 'Rewards & Offers',     path: '/payments/rewards-offers',   icon: Gift,            category: 'Payments',    type: 'Page',     desc: 'Earned cashback points, partner deals and loyalty perks', keywords: ['reward', 'offer', 'points', 'loyalty', 'cashback', 'perks'] },
+    { label: 'Wallet & Cash Balance',path: '/payments/wallet',           icon: Wallet,          category: 'Payments',    type: 'Page',     desc: 'View personal wallet balance and add funds', keywords: ['wallet', 'money', 'balance', 'add money', 'cash balance'] },
+    { label: 'Transaction History',  path: '/payments/transactions',     icon: ArrowLeftRight,  category: 'Payments',    type: 'Page',     desc: 'Comprehensive bank transfer and payment history', keywords: ['transaction', 'history', 'transfer', 'payment ledger'] },
 
-    // ── Social ─────────────────────────────────────────────────
-    { 
-        label: SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup', 
-        path: '/social/meetup', 
-        icon: Users, 
-        category: 'Social', 
-        keywords: SHOW_BETA_CLUB_UI ? ['beta', 'club', 'meetup', 'event', 'meet', 'social', 'network'] : ['meetup', 'event', 'meet', 'social', 'network'] 
-    },
-    { label: 'Trading Docs',     path: '/social/trading',            icon: LineChart,       category: 'Social',   keywords: ['trading', 'docs', 'market', 'trade'] },
-    { label: 'Beta Club',        path: '/social/beta-club',          icon: Star,            category: 'Social',   keywords: ['beta', 'club', 'investor', 'founders'] },
+    // ── Finance, Accounting & Tax ────────────────────────────────
+    { label: 'Accounting & Ledger',  path: '/books/accounting',          icon: Calculator,      category: 'Finance',     type: 'Page',     desc: 'Double-entry general ledger, daybook & chart of accounts', keywords: ['accounting', 'acct', 'general ledger', 'daybook', 'ledger', 'chart of accounts'] },
+    { label: 'Profit & Loss (P&L)',  path: '/books/accounting?tab=pnl',  icon: TrendingUp,      category: 'Finance',     type: 'Internal', desc: 'Revenue, gross profit, operating costs and net margin', keywords: ['profit and loss', 'p&l', 'income statement', 'gross profit', 'net profit'] },
+    { label: 'Income & Revenue',     path: '/books/income',              icon: TrendingUp,      category: 'Finance',     type: 'Page',     desc: 'Record and track non-invoice revenue & earnings', keywords: ['income', 'revenue', 'earnings', 'salary', 'add income'] },
+    { label: 'Expenses Tracker',     path: '/books/expenses',            icon: ShoppingCart,    category: 'Finance',     type: 'Page',     desc: 'Operational expense logs, category breakdown and receipts', keywords: ['expense', 'expenses', 'spend', 'cost', 'expenditure', 'add expense'] },
+    { label: 'Add Income',           path: '/books/income?create=true',  icon: Plus,            category: 'Finance',     type: 'Action',   desc: 'Add a new revenue or income entry', keywords: ['add income', 'log revenue', 'record earnings', 'new income'] },
+    { label: 'Add Expense',          path: '/books/expenses?create=true',icon: Plus,            category: 'Finance',     type: 'Action',   desc: 'Add a new business expense or payment receipt', keywords: ['add expense', 'log expense', 'record spend', 'new expense'] },
+    { label: 'Tax Deductions',       path: '/books/tax-deductions',      icon: Percent,         category: 'Finance',     type: 'Page',     desc: 'Section 80C, 80D tax exemptions & regime optimizer', keywords: ['tax deductions', 'section 80c', 'section 80d', 'tax saving', 'old vs new regime'] },
+    { label: 'Purchase Details',     path: '/books/purchase-details',    icon: ShoppingBag,     category: 'Purchases',   type: 'Page',     desc: 'Inward purchase logs, supplier invoices & orders', keywords: ['purchase details', 'purchases', 'vendor bills', 'inward bills'] },
+    { label: 'Staff Details & Pay',  path: '/books/finance/staff-details',icon: UserCheck,      category: 'HR',          type: 'Page',     desc: 'Employee salary registers and staff payroll advances', keywords: ['staff details', 'employee pay', 'salary register', 'hr'] },
 
-    // ── Settings & Support ─────────────────────────────────────
-    { label: 'Settings',         path: '/books/settings',            icon: Settings,        category: 'System',   keywords: ['setting', 'config', 'preference', 'appearance', 'dark mode', 'theme', 'notification'] },
-    { label: 'Help & Support',   path: '/books/faq',                 icon: HelpCircle,      category: 'System',   keywords: ['help', 'faq', 'support', 'ticket', 'question', 'guide'] },
-    { label: 'Subscription',     path: '/subscription',              icon: CreditCard,      category: 'System',   keywords: ['subscription', 'plan', 'billing', 'upgrade', 'premium'] },
-    { label: 'Profile',          path: '/books/profile',             icon: User,            category: 'System',   keywords: ['profile', 'account', 'user', 'name', 'avatar'] },
+    // ── Simple Billing & Records ─────────────────────────────────
+    { label: 'Simple Billing',       path: '/books/track/simple-billing',icon: Receipt,         category: 'Billing',     type: 'Page',     desc: 'Fast thermal receipt generator with dynamic line items', keywords: ['simple billing', 'quick bill', 'thermal bill', 'cash memo', 'fast receipt'] },
+    { label: 'Billing Records',      path: '/books/track/billing-records',icon: FileCheck,      category: 'Billing',     type: 'Page',     desc: 'Archive of submitted quick bills and sales records', keywords: ['billing records', 'past bills', 'bills history', 'receipt archive'] },
 
-    // ── Quick Actions ──────────────────────────────────────────
-    { label: 'Calculator',       path: '__CALC__',                   icon: Calculator,      category: 'Tools',    keywords: ['calculator', 'calc', 'math', 'compute', 'tax', 'gst'] },
-    { label: 'New Invoice',      path: '/books/dashboard',           icon: Receipt,         category: 'Actions',  keywords: ['invoice', 'bill', 'new invoice', 'generate', 'receipt'] },
-    { label: 'Sales Orders',     path: '/books/stock',               icon: ShoppingCart,    category: 'Actions',  keywords: ['sales', 'order', 'sale'] },
-    { label: 'Add Customer',     path: '/books/people',              icon: UserCheck,       category: 'Actions',  keywords: ['customer', 'add customer', 'client', 'new customer'] },
-    { label: 'Add Supplier',     path: '/books/people',              icon: Users,           category: 'Actions',  keywords: ['supplier', 'vendor', 'add supplier'] },
-    { label: 'Purchases',        path: '/books/stock',               icon: ShoppingBag,     category: 'Actions',  keywords: ['purchase', 'buy', 'procurement', 'po'] },
-    { label: 'Inventory',        path: '/books/stock',               icon: Boxes,           category: 'Actions',  keywords: ['inventory', 'stock', 'warehouse', 'product'] },
-    { label: 'HR',               path: '/books/people',              icon: UserCheck,       category: 'Actions',  keywords: ['hr', 'human resource', 'employee', 'staff', 'attendance', 'payroll'] },
-    { label: 'Attendance',       path: '/books/people',              icon: UserCheck,       category: 'Actions',  keywords: ['attendance', 'check in', 'present', 'absent'] },
-    { label: 'POS Billing',      path: '/books/stock',               icon: Receipt,         category: 'Actions',  keywords: ['pos', 'billing', 'point of sale', 'checkout'] },
-    { label: 'Add Expense',      path: '/finance/expenses',          icon: DollarSign,      category: 'Actions',  keywords: ['add expense', 'expense', 'spend'] },
-    { label: 'Staff Claim',      path: '/books/people',              icon: FileCheck,       category: 'Actions',  keywords: ['staff claim', 'reimbursement', 'claim'] },
-    { label: 'New Purchase PO',  path: '/books/stock',               icon: ShoppingBag,     category: 'Actions',  keywords: ['purchase order', 'po', 'new po', 'procurement'] },
+    // ── Social & Community ───────────────────────────────────────
+    { label: SHOW_BETA_CLUB_UI ? 'Beta Club Page' : 'Meetup', path: '/social/meetup', icon: Users, category: 'Social', type: 'Page', desc: 'Founder community feed, venture pitches and networking', keywords: SHOW_BETA_CLUB_UI ? ['beta', 'club', 'meetup', 'event', 'social', 'network', 'pitches'] : ['meetup', 'event', 'social', 'network'] },
+    { label: 'Trading Docs',         path: '/social/trading',            icon: LineChart,       category: 'Social',      type: 'Page',     desc: 'Company shares, legal contracts & market agreements', keywords: ['trading', 'docs', 'market', 'trade', 'shares', 'contracts'] },
+    { label: 'Beta Club Feed',       path: '/social/beta-club',          icon: Star,            category: 'Social',      type: 'Page',     desc: 'Startup community updates, founder ideas & investors', keywords: ['beta', 'club', 'investor', 'founders', 'pitches'] },
+
+    // ── Access Kit & Tools ───────────────────────────────────────
+    { label: 'Calculator Utility',   path: '__CALC__',                   icon: Calculator,      category: 'Tools',       type: 'Tool',     desc: 'GST tax computation, margin and discount calculator', keywords: ['calculator', 'calc', 'math', 'compute', 'tax', 'gst calculator'] },
+    { label: 'Refer & Earn Program', path: '/referral',                  icon: Gift,            category: 'Tools',       type: 'Tool',     desc: 'Share your referral code and earn bonus points', keywords: ['referral', 'refer and earn', 'invite friends', 'reward code'] },
+    { label: 'Settings',             path: '/books/settings',            icon: Settings,        category: 'System',      type: 'Page',     desc: 'Application configuration, branding and preferences', keywords: ['setting', 'config', 'preference', 'appearance', 'dark mode', 'theme'] },
+    { label: 'Help & Support',       path: '/books/faq',                 icon: HelpCircle,      category: 'System',      type: 'Page',     desc: 'Frequently asked questions and customer support desk', keywords: ['help', 'faq', 'support', 'ticket', 'question', 'guide'] },
+    { label: 'Subscription & Plans', path: '/subscription',              icon: CreditCard,      category: 'System',      type: 'Page',     desc: 'Manage your active plan, upgrade and renewal status', keywords: ['subscription', 'plan', 'billing', 'upgrade', 'premium', 'license tier'] },
+    { label: 'User Profile & KYC',   path: '/books/profile',             icon: User,            category: 'System',      type: 'Page',     desc: 'Profile details, business name, avatar and email', keywords: ['profile', 'account', 'user', 'name', 'avatar', 'kyc'] }
 ];
 
-/* ─── Fuzzy / substring matching ────────────────────────────── */
+/* ─── Enhanced scoring algorithm ─────────────────────────────── */
 const normalize = (s) => s.toLowerCase().replace(/\s+/g, ' ').trim();
 
 const scoreItem = (item, query) => {
@@ -86,27 +81,45 @@ const scoreItem = (item, query) => {
     if (!q) return -1;
     const labelN = normalize(item.label);
     const catN   = normalize(item.category);
-    // Exact label match → highest
-    if (labelN === q) return 100;
-    // Label starts with query → high
-    if (labelN.startsWith(q)) return 90;
-    // Label contains query → good
-    if (labelN.includes(q)) return 80;
-    // Category match
-    if (catN.includes(q)) return 60;
-    // Any keyword match
-    for (const kw of item.keywords) {
+    const descN  = normalize(item.desc || '');
+    const typeN  = normalize(item.type || '');
+    const qWords = q.split(/\s+/).filter(Boolean);
+
+    // Exact label match
+    if (labelN === q) return 120;
+    if (labelN.startsWith(q)) return 95;
+    if (labelN.includes(q)) return 75;
+
+    // Category or Type match
+    if (catN.includes(q)) return 65;
+    if (typeN.includes(q)) return 55;
+
+    // Keywords match
+    for (const kw of (item.keywords || [])) {
         const kwN = normalize(kw);
-        if (kwN === q)          return 75;
-        if (kwN.startsWith(q))  return 65;
-        if (kwN.includes(q))    return 55;
-        // individual words in keyword
-        if (q.split(' ').some(word => word.length > 1 && kwN.includes(word))) return 45;
+        if (kwN === q)          return 90;
+        if (kwN.startsWith(q))  return 75;
+        if (kwN.includes(q))    return 60;
     }
+
+    // Description match
+    if (descN.includes(q)) return 40;
+
+    // Multi-word partial matching: if all words match somewhere
+    if (qWords.length > 1) {
+        const allWordsFound = qWords.every(w =>
+            labelN.includes(w) ||
+            catN.includes(w) ||
+            descN.includes(w) ||
+            (item.keywords || []).some(k => normalize(k).includes(w))
+        );
+        if (allWordsFound) return 70;
+    }
+
     return -1;
 };
 
-const searchItems = (query, max = 8) => {
+const searchItems = (query, max = 50) => {
     if (!query || normalize(query).length < 1) return [];
     return SEARCH_INDEX
         .map(item => ({ item, score: scoreItem(item, query) }))
@@ -122,22 +135,19 @@ const SearchBox = ({ onOpenCalculator }) => {
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isExpanded, setIsExpanded] = useState(false); // collapsed by default
+    const [isExpanded, setIsExpanded] = useState(false);
     const [activeIdx, setActiveIdx] = useState(0);
     const wrapperRef = useRef(null);
     const inputRef   = useRef(null);
     const debounceRef = useRef(null);
 
-    /* Expand search and auto-focus */
     const expand = () => {
         setIsExpanded(true);
-        // Focus after CSS transition starts
         requestAnimationFrame(() => {
             requestAnimationFrame(() => inputRef.current?.focus());
         });
     };
 
-    /* Collapse search and reset state */
     const collapse = () => {
         setIsExpanded(false);
         setIsDropdownOpen(false);
@@ -146,7 +156,6 @@ const SearchBox = ({ onOpenCalculator }) => {
         inputRef.current?.blur();
     };
 
-    /* Debounced search */
     const handleChange = (e) => {
         const val = e.target.value;
         setQuery(val);
@@ -156,10 +165,11 @@ const SearchBox = ({ onOpenCalculator }) => {
             const found = searchItems(val);
             setResults(found);
             setIsDropdownOpen(val.trim().length > 0);
-        }, 200);
+        }, 120);
     };
 
     const handleSelect = useCallback((item) => {
+        if (!item) return;
         if (item.path === '__CALC__') {
             if (onOpenCalculator) onOpenCalculator();
         } else {
@@ -168,7 +178,6 @@ const SearchBox = ({ onOpenCalculator }) => {
         collapse();
     }, [navigate, onOpenCalculator]);
 
-    /* Keyboard navigation */
     const handleKeyDown = (e) => {
         if (e.key === 'Escape') {
             collapse();
@@ -184,11 +193,10 @@ const SearchBox = ({ onOpenCalculator }) => {
         } else if (e.key === 'Enter') {
             e.preventDefault();
             if (results[activeIdx]) handleSelect(results[activeIdx]);
-            else if (!query.trim()) collapse(); // empty Enter collapses
+            else if (!query.trim()) collapse();
         }
     };
 
-    /* Close on outside click */
     useEffect(() => {
         const handler = (e) => {
             if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -199,17 +207,15 @@ const SearchBox = ({ onOpenCalculator }) => {
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
-    /* Cleanup on unmount */
     useEffect(() => () => clearTimeout(debounceRef.current), []);
 
     return (
         <div ref={wrapperRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-
-            {/* ── Collapsed: icon-only button ── */}
             {!isExpanded && (
                 <button
                     onClick={expand}
                     aria-label="Open search"
+                    title="Search all features & tools"
                     style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -227,11 +233,10 @@ const SearchBox = ({ onOpenCalculator }) => {
                     onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.14)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
                 >
-                    <Search size={15} color="rgba(255,255,255,0.75)" />
+                    <Search size={15} color="rgba(255,255,255,0.85)" />
                 </button>
             )}
 
-            {/* ── Expanded: full search pill ── */}
             {isExpanded && (
                 <div
                     className="topbar-search-input-box"
@@ -239,19 +244,19 @@ const SearchBox = ({ onOpenCalculator }) => {
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
-                        padding: '7px 14px',
+                        padding: '6px 14px',
                         borderRadius: '999px',
                         background: 'rgba(255,255,255,0.14)',
                         border: '1px solid rgba(255,255,255,0.28)',
-                        width: 'clamp(120px, 12vw, 175px)',
+                        width: 'clamp(180px, 18vw, 260px)',
                         animation: 'searchExpand 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                     }}
                 >
-                    <Search size={15} color="rgba(255,255,255,0.65)" style={{ flexShrink: 0 }} />
+                    <Search size={15} color="rgba(255,255,255,0.8)" style={{ flexShrink: 0 }} />
                     <input
                         ref={inputRef}
                         type="text"
-                        placeholder="Search..."
+                        placeholder="Search all features..."
                         value={query}
                         onChange={handleChange}
                         onKeyDown={handleKeyDown}
@@ -264,13 +269,22 @@ const SearchBox = ({ onOpenCalculator }) => {
                             outline: 'none',
                             background: 'transparent',
                             color: '#ffffff',
-                            fontSize: '13px',
-                            fontWeight: 500,
+                            fontSize: '12.5px',
+                            fontWeight: 600,
                             width: '100%',
                             minWidth: 0,
                             padding: 0,
                         }}
                     />
+                    {query && (
+                        <button
+                            type="button"
+                            onClick={() => { setQuery(''); inputRef.current?.focus(); }}
+                            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        >
+                            <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', fontWeight: 'bold' }}>×</span>
+                        </button>
+                    )}
                 </div>
             )}
 
@@ -279,68 +293,105 @@ const SearchBox = ({ onOpenCalculator }) => {
                 <div style={{
                     position: 'absolute',
                     top: 'calc(100% + 8px)',
-                    left: 0,
-                    minWidth: '280px',
+                    right: 0,
+                    width: 'clamp(320px, 32vw, 420px)',
                     background: '#ffffff',
-                    borderRadius: '14px',
-                    boxShadow: '0 16px 40px rgba(0,0,0,0.16)',
+                    borderRadius: '16px',
+                    boxShadow: '0 20px 40px -8px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(15, 23, 42, 0.08)',
                     border: '1px solid #E2E8F0',
                     overflow: 'hidden',
                     zIndex: 9999,
+                    maxHeight: '440px',
+                    display: 'flex',
+                    flexDirection: 'column'
                 }}>
-                    {results.length === 0 ? (
-                        <div style={{ padding: '1rem 1.25rem', color: '#94A3B8', fontSize: '0.85rem', fontWeight: 500 }}>
-                            No matching results found
-                        </div>
-                    ) : (
-                        <ul style={{ listStyle: 'none', padding: '0.375rem 0', margin: 0 }}>
-                            {results.map((item, i) => {
-                                const Icon = item.icon;
-                                const isActive = i === activeIdx;
-                                return (
-                                    <li key={`${item.path}-${i}`}>
-                                        <button
-                                            onMouseEnter={() => setActiveIdx(i)}
-                                            onMouseDown={(e) => { e.preventDefault(); handleSelect(item); }}
-                                            style={{
-                                                width: '100%',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '0.75rem',
-                                                padding: '0.625rem 1rem',
-                                                border: 'none',
-                                                background: isActive ? '#F0FDF4' : 'transparent',
-                                                cursor: 'pointer',
-                                                textAlign: 'left',
-                                                transition: 'background 0.1s',
-                                            }}
-                                        >
-                                            <span style={{
-                                                width: 32, height: 32, borderRadius: 8,
-                                                background: isActive ? '#DCFCE7' : '#F1F5F9',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                flexShrink: 0,
-                                            }}>
-                                                <Icon size={15} color={isActive ? '#1B6B3A' : '#64748B'} />
-                                            </span>
-                                            <span style={{ flex: 1, minWidth: 0 }}>
-                                                <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#1E293B', lineHeight: 1.3 }}>
-                                                    {item.label}
+                    {/* Results count header bar */}
+                    <div style={{
+                        padding: '8px 14px',
+                        background: '#F8FAFC',
+                        borderBottom: '1px solid #F1F5F9',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        position: 'sticky',
+                        top: 0,
+                        zIndex: 2,
+                    }}>
+                        <span style={{ fontSize: '11px', fontWeight: '800', color: '#334155' }}>
+                            {results.length} {results.length === 1 ? 'Feature found' : 'Features found'}
+                        </span>
+                        <span style={{ fontSize: '10px', color: '#94A3B8', fontWeight: '600' }}>
+                            ↑↓ to navigate • ↵ select • ESC close
+                        </span>
+                    </div>
+
+                    <div style={{ overflowY: 'auto', flex: 1, padding: '4px 0' }}>
+                        {results.length === 0 ? (
+                            <div style={{ padding: '1.5rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.85rem', fontWeight: 600 }}>
+                                No matching features found for "{query}"
+                            </div>
+                        ) : (
+                            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                {results.map((item, i) => {
+                                    const Icon = item.icon || Info;
+                                    const isActive = i === activeIdx;
+                                    return (
+                                        <li key={`${item.path}-${i}`}>
+                                            <button
+                                                onMouseEnter={() => setActiveIdx(i)}
+                                                onMouseDown={(e) => { e.preventDefault(); handleSelect(item); }}
+                                                style={{
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '10px',
+                                                    padding: '8px 14px',
+                                                    border: 'none',
+                                                    background: isActive ? '#F0FDF4' : 'transparent',
+                                                    borderLeft: isActive ? '3px solid #16A34A' : '3px solid transparent',
+                                                    cursor: 'pointer',
+                                                    textAlign: 'left',
+                                                    transition: 'all 0.12s ease',
+                                                }}
+                                            >
+                                                <span style={{
+                                                    width: 32, height: 32, borderRadius: 8,
+                                                    background: isActive ? '#DCFCE7' : '#F1F5F9',
+                                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                    flexShrink: 0,
+                                                }}>
+                                                    <Icon size={15} color={isActive ? '#15803D' : '#64748B'} />
                                                 </span>
-                                                <span style={{ display: 'block', fontSize: '0.72rem', color: '#94A3B8', fontWeight: 500 }}>
-                                                    {item.category}
+                                                <span style={{ flex: 1, minWidth: 0 }}>
+                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '2px' }}>
+                                                        <span style={{ fontSize: '9px', fontWeight: '850', color: '#166534', background: '#DCFCE7', padding: '1px 5px', borderRadius: '4px', textTransform: 'uppercase' }}>
+                                                            {item.category}
+                                                        </span>
+                                                        {item.type && (
+                                                            <span style={{ fontSize: '9px', fontWeight: '750', color: '#64748B', background: '#F1F5F9', padding: '1px 5px', borderRadius: '4px' }}>
+                                                                {item.type}
+                                                            </span>
+                                                        )}
+                                                    </span>
+                                                    <span style={{ display: 'block', fontSize: '0.84rem', fontWeight: 750, color: isActive ? '#15803D' : '#1E293B', lineHeight: 1.3 }}>
+                                                        {item.label}
+                                                    </span>
+                                                    {item.desc && (
+                                                        <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748B', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
+                                                            {item.desc}
+                                                        </span>
+                                                    )}
                                                 </span>
-                                            </span>
-                                        </button>
-                                    </li>
-                                );
-                            })}
-                        </ul>
-                    )}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
+                    </div>
                 </div>
             )}
 
-            {/* Expand animation keyframe */}
             <style>{`
                 @keyframes searchExpand {
                     from { opacity: 0; transform: scaleX(0.6); transform-origin: left; }
