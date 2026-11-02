@@ -7,7 +7,8 @@ import {
     Target, Gift, BarChart3, Split, Calculator, Receipt,
     Landmark, PiggyBank, LineChart, FileCheck, Bell, User,
     Home, BookOpen, Globe, Star, Calendar, Clock, Tag, ShieldCheck,
-    CheckCircle2, AlertCircle, ArrowDownRight, Sliders, Monitor, Barcode, Plus, Coins
+    CheckCircle2, AlertCircle, ArrowDownRight, Sliders, Monitor, Barcode, Plus, Coins,
+    Percent
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────────────────────────
