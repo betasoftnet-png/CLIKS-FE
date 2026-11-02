@@ -590,6 +590,17 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
+                        {/* 4. Loyalty Points */}
+                        <button
+                            className={`sidebar-item ${activeItem === 'Loyalty Points' ? 'active' : ''}`}
+                            onClick={() => handleItemClick('Loyalty Points', '/payments/loyalty')}
+                        >
+                            <div className="flex items-center gap-3">
+                                <Coins size={20} style={{ color: activeItem === 'Loyalty Points' ? '#ffffff' : '#1B6B3A' }} />
+                                <span className="sidebar-label">Loyalty Points</span>
+                            </div>
+                        </button>
+
                         {/* 4. Income */}
                         <button
                             className={`sidebar-item ${activeItem === 'Income' ? 'active' : ''}`}
