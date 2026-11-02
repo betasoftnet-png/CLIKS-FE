@@ -119,10 +119,10 @@ function AuthenticatedApp() {
                 <Route path="/payments/segregation" element={<Segregation />} />
                 <Route path="/payments/split-collect" element={<SplitExpense />} />
                 <Route path="/payments/split-expense" element={<SplitExpense />} />
-                <Route path="/payments/loyalty" element={<LoyaltyRewards />} />
-                <Route path="/payments/loyalty-points" element={<LoyaltyRewards />} />
-                <Route path="/payments/rewards-offers" element={<LoyaltyRewards />} />
-                <Route path="/payments/rewards" element={<LoyaltyRewards />} />
+                <Route path="/payments/loyalty" element={<Navigate to="/books/purchase-details" replace />} />
+                <Route path="/payments/loyalty-points" element={<Navigate to="/books/purchase-details" replace />} />
+                <Route path="/payments/rewards-offers" element={<Navigate to="/books/purchase-details" replace />} />
+                <Route path="/payments/rewards" element={<Navigate to="/books/purchase-details" replace />} />
 
                 {/* Referral Routes */}
                 <Route path="/referral" element={<Referral />} />
