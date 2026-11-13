@@ -14,7 +14,7 @@ const Auth = () => {
     const [error, setError] = useState('');
 
     const CLIENT_ID = 'cliks-app';
-    const REDIRECT_URI = 'https://cliks.beta-softnet.com/auth';
+    const REDIRECT_URI = typeof window !== 'undefined' ? `${window.location.origin}/auth` : 'https://cliks.beta-softnet.com/auth';
     const BNX_AUTH_URL = 'https://www.b2auth.com';
     const BNX_API_URL = 'https://api.bnxmail.com';
 
@@ -92,9 +92,10 @@ const Auth = () => {
     } else {
         // No code → redirect user to BNX login
         const state = 'cliks-auth-state';
+        const redirectUri = encodeURIComponent(window.location.origin + '/auth');
 
         window.location.href =
-            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${state}`;
+            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}`;
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,9 +103,10 @@ const Auth = () => {
 
     const handleLoginWithBNX = () => {
         const state = 'cliks-auth-state';
+        const redirectUri = encodeURIComponent(window.location.origin + '/auth');
 
         window.location.href =
-            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${state}`;
+            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}`;
     };
 
     return (

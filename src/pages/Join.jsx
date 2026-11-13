@@ -123,11 +123,11 @@ const Join = () => {
             sessionStorage.setItem('cliks_pending_ref', clean);
         }
         const CLIENT_ID    = 'cliks-app';
-        const REDIRECT_URI = 'https://cliks.beta-softnet.com/auth';
+        const redirectUri  = encodeURIComponent(window.location.origin + '/auth');
         const BNX_AUTH_URL = 'https://www.b2auth.com';
         const state        = 'cliks-auth-state';
         window.location.href =
-            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&state=${state}`;
+            `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}`;
     };
 
     return (
