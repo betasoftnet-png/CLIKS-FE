@@ -10,27 +10,49 @@ import {
     ArrowUpRight, 
     Download, 
     Calendar,
-    Sparkles
+    Sparkles,
+    Minus,
+    Plus
 } from 'lucide-react';
 import { load } from '@cashfreepayments/cashfree-js';
 import { apiClient } from '../api/client';
 import '../App.css';
-import { customConfirm } from '../utils/customConfirm';
 import { formatCurrency } from '../lib/formatCurrency';
 import { useAuth } from '../context';
 
 const Subscription = () => {
     const { user } = useAuth();
     const currency = { code: 'INR' };
+    const storedFinProPlan = user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan;
+    const legacyFinProPlans = {
+        'FIN-PRO Standard': 'Fin-Pro Solo',
+        'FIN-PRO Premium': 'Fin-Pro Firm',
+        'FIN-PRO Enterprise': 'Fin-Pro Firm'
+    };
+    const initialFinProPlan = legacyFinProPlans[storedFinProPlan] || storedFinProPlan || null;
     const [activeCategory, setActiveCategory] = useState('ca');
     const [betaSubCategory, setBetaSubCategory] = useState('investor'); 
-    const [selectedTier, setSelectedTier] = useState('FIN-PRO Standard'); 
+    const [selectedTier, setSelectedTier] = useState(initialFinProPlan);
+    const [activeFinProPlan, setActiveFinProPlan] = useState(initialFinProPlan);
+    const [firmTeamMembers, setFirmTeamMembers] = useState(3);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const handleUpgrade = async (tier) => {
-        if (tier.name === selectedTier) return;
-        
-        const amt = tier.priceAnnually;
+    const handleUpgrade = async (tier, categoryKey, teamMemberCount = firmTeamMembers) => {
+        const currentPlan = categoryKey === 'ca' ? activeFinProPlan : selectedTier;
+        if (tier.name === currentPlan) return;
+
+        const extraTeamMembers = tier.includedTeamMembers
+            ? Math.max(0, teamMemberCount - tier.includedTeamMembers)
+            : 0;
+        const amt = (tier.priceMonthly ?? tier.priceAnnually)
+            + extraTeamMembers * (tier.additionalMemberMonthlyPrice || 0);
+        const activateTier = () => {
+            setSelectedTier(tier.name);
+            if (categoryKey === 'ca') {
+                setActiveFinProPlan(tier.name);
+                window.dispatchEvent(new Event('finpro:subscription-activated'));
+            }
+        };
         
         try {
             setIsProcessing(true);
@@ -59,23 +81,14 @@ const Subscription = () => {
                 if (result.error) {
                     alert("Gateway Interrupted: " + result.error.message);
                 } else {
-                    setSelectedTier(tier.name);
+                    activateTier();
                     alert(`Successfully upgraded to ${tier.name}!`);
                 }
             });
 
         } catch (err) {
             console.warn("[CASHFREE GATEWAY LOGGER]:", err.message);
-            const shouldSimulate = await customConfirm(
-                `🚨 [CASHFREE GATEWAY ERROR]\n\n` +
-                `Transaction Handshake Failed: ${err.message}\n\n` +
-                `Would you like to simulate a SUCCESSFUL Gateway callback anyway to test UI loading logic?`
-            );
-
-            if (shouldSimulate) {
-                setSelectedTier(tier.name);
-                alert(`Successfully simulated upgrade to ${tier.name}!`);
-            }
+            alert(`Cashfree checkout could not be started: ${err.message || 'Unable to create a payment session.'}`);
         } finally {
             setIsProcessing(false);
         }
@@ -100,13 +113,13 @@ const Subscription = () => {
         ],
         ca: [
             {
-                name: 'FIN-PRO Standard',
-                priceAnnually: 4999,
-                originalPrice: 6999,
-                desc: 'Perfect for independent practitioners and small firms.',
+                name: 'Fin-Pro Solo',
+                priceMonthly: 799,
+                originalPrice: 1199,
+                desc: 'Perfect for solo practitioners and independent auditors.',
                 icon: ShieldCheck,
-                color: '#1E3A8A',
-                badge: 'Essential',
+                color: '#4F46E5',
+                badge: 'SOLO',
                 features: [
                     'Manage up to 25 Active Client Ledgers',
                     'Standard Multi-Client GST/ITR Reporting',
@@ -116,35 +129,21 @@ const Subscription = () => {
                 ]
             },
             {
-                name: 'FIN-PRO Premium',
-                priceAnnually: 9999,
-                originalPrice: 14999,
-                desc: 'Designed for high-growth firms and collaborative auditing teams.',
+                name: 'Fin-Pro Firm',
+                priceMonthly: 1499,
+                originalPrice: 2499,
+                includedTeamMembers: 3,
+                additionalMemberMonthlyPrice: 299,
+                desc: 'Designed for scaling accounting firms and collaborative auditing teams.',
                 icon: Zap,
-                color: '#2563EB',
-                badge: 'Most Recommended',
-                features: [
-                    'Manage up to 100 Active Client Ledgers',
-                    'Custom White-Labeled Client Report Generation',
-                    'Multi-User Staff Logins (up to 5 members)',
-                    'Automated Client Payment & Reminder Rules',
-                    'Live Chat Support & Direct API Sandbox Access'
-                ]
-            },
-            {
-                name: 'FIN-PRO Enterprise',
-                priceAnnually: 19999,
-                originalPrice: 29999,
-                desc: 'Complete control and white-labeling for national firms.',
-                icon: Crown,
-                color: '#1D4ED8',
-                badge: 'All Inclusive',
+                color: '#3B82F6',
+                badge: 'FIRM',
                 features: [
                     'Manage Unlimited Active Client Ledgers',
-                    'Fully Branded Dedicated Client Portal System',
-                    'Uncapped Staff Logins with Advanced Permissions',
-                    'Dedicated Account Executive & API/ERP Sync',
-                    'Priority 24/7/365 Direct VIP Phone Support'
+                    'Custom White-Labeled Client Report Generation',
+                    '3 team members included by default',
+                    'Additional members at just ₹299/month each',
+                    'Live Chat Support & Direct API Sandbox Access'
                 ]
             }
         ],
@@ -259,6 +258,16 @@ const Subscription = () => {
     ];
 
     const getRenewalDetails = () => {
+        if (!selectedTier) {
+            return {
+                price: null,
+                desc: 'No FIN-PRO subscription is active. Choose a plan below to get started.',
+                gradient: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
+                color: '#1B6B3A',
+                billingPeriod: null
+            };
+        }
+
         let foundTier = null;
         for (const cat of Object.keys(allTiers)) {
             const match = allTiers[cat].find(t => t.name === selectedTier);
@@ -269,37 +278,44 @@ const Subscription = () => {
         }
         if (!foundTier) {
             return {
-                price: 6999,
-                desc: 'Your workspace is configured with high-performance ERP pipelines. All accounting, manufacturing, and HR modules are fully active.',
+                price: null,
+                desc: 'Subscription details are not available for this plan.',
                 gradient: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
-                color: '#1B6B3A'
+                color: '#1B6B3A',
+                billingPeriod: null
             };
         }
         
         let desc = '';
         let gradient = '';
         if (foundTier.category === 'basic') {
-            desc = `Your workspace is running the Basic Plan with no ads, valid for up to 12 days.`;
+            desc = `Your workspace is running the Business plan with no ads, valid for up to 12 days.`;
             gradient = 'linear-gradient(135deg, #0E4F2E 0%, #064E3B 100%)';
         } else if (foundTier.category === 'business') {
             desc = `Your workspace is configured with high-performance ERP pipelines under the Business ${foundTier.name} tier.`;
             gradient = 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)';
         } else if (foundTier.category === 'ca') {
-            desc = `Your workspace is configured with comprehensive auditor pipelines under the FIN-PRO ${foundTier.name} tier.`;
-            gradient = 'linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 100%)';
+            desc = `Your workspace is configured with comprehensive auditor pipelines under the ${foundTier.name} plan.`;
+            gradient = 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)';
         } else if (foundTier.category === 'betaclub_investor') {
-            desc = `Your workspace is configured with exclusive investor network pipelines under the Beta Club (Investor) ${foundTier.name} tier.`;
+            desc = `Your workspace is configured with exclusive investor network pipelines under the Partner Launch Desk (Investor) ${foundTier.name} tier.`;
             gradient = 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%)';
         } else {
-            desc = `Your workspace is configured with high-exposure roadmap channels under the Beta Club (Products & Ideas) ${foundTier.name} tier.`;
+            desc = `Your workspace is configured with high-exposure roadmap channels under the Partner Launch Desk (Products & Ideas) ${foundTier.name} tier.`;
             gradient = 'linear-gradient(135deg, #EC4899 0%, #BE185D 100%)';
         }
+
+        const extraTeamMembers = foundTier.includedTeamMembers
+            ? Math.max(0, firmTeamMembers - foundTier.includedTeamMembers)
+            : 0;
         
         return {
-            price: foundTier.priceAnnually,
+            price: (foundTier.priceMonthly ?? foundTier.priceAnnually)
+                + extraTeamMembers * (foundTier.additionalMemberMonthlyPrice || 0),
             desc: desc,
             gradient: gradient,
-            color: foundTier.color
+            color: foundTier.category === 'ca' ? '#1B6B3A' : foundTier.color,
+            billingPeriod: foundTier.priceMonthly ? 'month' : 'year'
         };
     };
 
@@ -340,13 +356,19 @@ const Subscription = () => {
                         </div>
                         <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B' }}>Subscription & Billing</h1>
                     </div>
-                    <p style={{ color: '#475569', fontWeight: '500' }}>Manage your active workspace tier, features access, and transaction statements.</p>
+                    <p style={{ color: '#475569', fontWeight: '500' }}>Manage your active workspace tier, feature access, and transaction statements.</p>
                 </div>
                 
                 {/* Billing Badge */}
                 <div style={{ display: 'flex', background: '#DCF2E4', padding: '0.6rem 1.25rem', borderRadius: '14px', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ color: '#064E3B', fontWeight: '800', fontSize: '0.85rem' }}>Annual Billing Cycle</span>
-                    <span style={{ background: '#1B6B3A', color: 'white', fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '6px', fontWeight: '800' }}>ACTIVE</span>
+                    <span style={{ color: '#064E3B', fontWeight: '800', fontSize: '0.85rem' }}>
+                        {renewal.billingPeriod
+                            ? `${renewal.billingPeriod === 'month' ? 'Monthly' : 'Annual'} Billing Cycle`
+                            : 'No Active Plan'}
+                    </span>
+                    {selectedTier && (
+                        <span style={{ background: '#1B6B3A', color: 'white', fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '6px', fontWeight: '800' }}>ACTIVE</span>
+                    )}
                 </div>
             </div>
 
@@ -378,8 +400,12 @@ const Subscription = () => {
                     </div>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>Active Plan:</span>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: '900', margin: 0, lineHeight: 1.2 }}>{selectedTier}</h2>
+                            <span style={{ fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>
+                                {selectedTier ? 'Active Plan:' : 'Plan Status:'}
+                            </span>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: '900', margin: 0, lineHeight: 1.2 }}>
+                                {selectedTier === 'Basic Plan' ? 'Business' : selectedTier || 'No Active Plan'}
+                            </h2>
                         </div>
                         <p style={{ color: '#DCF2E4', fontWeight: '500', fontSize: '0.85rem', margin: 0, opacity: 0.95 }}>{renewal.desc}</p>
                     </div>
@@ -397,12 +423,21 @@ const Subscription = () => {
                 }}>
                     <div style={{ textAlign: 'left' }}>
                         <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Next Renewal</p>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>01 May, 2027</h3>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>
+                            {selectedTier ? '01 May, 2027' : 'Not scheduled'}
+                        </h3>
                     </div>
                     <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.2)' }} />
                     <div style={{ textAlign: 'left' }}>
                         <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Renewal Amount</p>
-                        <p style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>{formatCurrency(renewal.price)} <span style={{ fontSize: '0.75rem', fontWeight: '500', opacity: 0.8 }}>+ GST</span></p>
+                        <p style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>
+                            {renewal.price == null ? '—' : formatCurrency(renewal.price)}
+                            {renewal.price != null && (
+                                <span style={{ fontSize: '0.75rem', fontWeight: '500', opacity: 0.8 }}>
+                                    {' '}+ GST / {renewal.billingPeriod}
+                                </span>
+                            )}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -422,9 +457,9 @@ const Subscription = () => {
                     justifyContent: 'center'
                 }}>
                     {[
-                        { id: 'basic', label: 'Basic Plan', icon: ShieldCheck, color: '#0E4F2E' },
-                        { id: 'ca', label: 'FIN-PRO (Auditor)', icon: Award, color: '#1E3A8A' },
-                        { id: 'betaclub', label: 'Beta Club', icon: Crown, color: '#7C3AED' }
+                        { id: 'basic', label: 'Business', icon: ShieldCheck, color: '#0E4F2E' },
+                        { id: 'ca', label: 'FIN-PRO', icon: Award, color: '#1E3A8A' },
+                        { id: 'betaclub', label: 'Partner Launch Desk', icon: Crown, color: '#7C3AED' }
                     ].map((tab) => {
                         const isTabActive = activeCategory === tab.id;
                         return (
@@ -460,7 +495,7 @@ const Subscription = () => {
                 </div>
             </div>
 
-            {/* Nested Sub-selector when Beta Club is active */}
+            {/* Nested sub-selector for Partner Launch Desk */}
             {activeCategory === 'betaclub' && (
                 <div style={{ 
                     display: 'flex', 
@@ -515,15 +550,36 @@ const Subscription = () => {
 
             {/* Pricing Tiers Selection Grid */}
             <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B', marginBottom: '1.25rem' }}>
-                {activeCategory === 'basic' ? 'Basic Plan Details' : 'Upgrade Workspace Tier'}
+                {activeCategory === 'basic' ? 'Business Details' : 'Upgrade Workspace Tier'}
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: activeCategory === 'basic' ? 'repeat(1, minmax(0, 360px))' : 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '3rem', justifyContent: activeCategory === 'basic' ? 'center' : 'stretch' }}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: activeCategory === 'basic'
+                    ? 'repeat(1, minmax(0, 360px))'
+                    : activeCategory === 'ca'
+                        ? 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))'
+                        : 'repeat(3, 1fr)',
+                gap: activeCategory === 'ca' ? '1rem' : '1.5rem',
+                marginBottom: '3rem',
+                justifyContent: activeCategory === 'basic' || activeCategory === 'ca' ? 'center' : 'stretch',
+                maxWidth: activeCategory === 'ca' ? '600px' : 'none',
+                marginLeft: activeCategory === 'ca' ? 'auto' : 0,
+                marginRight: activeCategory === 'ca' ? 'auto' : 0
+            }}>
                 {allTiers[activeCategory === 'betaclub' ? (betaSubCategory === 'investor' ? 'betaclub_investor' : 'betaclub_product') : activeCategory].map((tier, idx) => {
-                    const price = tier.priceAnnually;
+                    const extraTeamMembers = tier.includedTeamMembers
+                        ? Math.max(0, firmTeamMembers - tier.includedTeamMembers)
+                        : 0;
+                    const price = (tier.priceMonthly ?? tier.priceAnnually)
+                        + extraTeamMembers * (tier.additionalMemberMonthlyPrice || 0);
+                    const originalPrice = tier.originalPrice == null
+                        ? null
+                        : tier.originalPrice + extraTeamMembers * (tier.additionalMemberMonthlyPrice || 0);
+                    const billingPeriod = tier.priceMonthly ? 'month' : 'year';
                     const currentCategoryKey = activeCategory === 'betaclub' ? (betaSubCategory === 'investor' ? 'betaclub_investor' : 'betaclub_product') : activeCategory;
                     const activeModulePlan = 
                         currentCategoryKey === 'business' ? (user?.active_subscriptions?.business?.plan || user?.tier || 'Starter Plan') :
-                        currentCategoryKey === 'ca' ? (user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan || null) :
+                        currentCategoryKey === 'ca' ? activeFinProPlan :
                         currentCategoryKey === 'betaclub_investor' ? (user?.active_subscriptions?.investor?.plan || user?.investor_plan || (localStorage.getItem('cliks_investor_active') === 'true' ? 'Basic Investor' : null)) :
                         currentCategoryKey === 'betaclub_product' ? (user?.active_subscriptions?.poster?.plan || user?.poster_plan || (localStorage.getItem('cliks_poster_active') === 'true' ? 'Monthly Innovator' : null)) : null;
 
@@ -533,14 +589,16 @@ const Subscription = () => {
                         <div 
                             key={idx} 
                             className="plan-card"
-                            onClick={() => setSelectedTier(tier.name)}
+                            onClick={() => {
+                                if (currentCategoryKey !== 'ca') setSelectedTier(tier.name);
+                            }}
                             style={{ 
                                 background: 'white', 
                                 borderRadius: '24px', 
                                 border: isActive ? `3px solid #0f766e` : '1px solid #E2E8F0',
-                                padding: '1.75rem 2rem',
+                                padding: activeCategory === 'ca' ? '1.5rem' : '1.75rem 2rem',
                                 position: 'relative',
-                                cursor: 'pointer',
+                                cursor: currentCategoryKey === 'ca' ? 'default' : 'pointer',
                                 transform: isActive ? 'translateY(-6px)' : 'none',
                                 boxShadow: isActive ? `0 20px 25px -5px rgba(15, 118, 110, 0.2)` : 'none'
                             }}
@@ -553,22 +611,109 @@ const Subscription = () => {
                             <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: `${tier.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tier.color, marginBottom: '1rem' }}>
                                 <TierIcon size={24} />
                             </div>
-                            <h4 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.5rem' }}>{tier.name}</h4>
+                            <h4 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.5rem' }}>
+                                {currentCategoryKey === 'basic' && tier.name === 'Basic Plan' ? 'Business' : tier.name}
+                            </h4>
                             <p style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '500', marginBottom: '1.25rem', minHeight: '34px' }}>{tier.desc}</p>
-                            
+
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginBottom: '1.25rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#94A3B8', textDecoration: 'line-through' }}>{formatCurrency(tier.originalPrice)}</span>
-                                    <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1B6B3A', background: '#DCF2E4', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>Save {formatCurrency(tier.originalPrice - price)}</span>
-                                </div>
+                                {originalPrice != null && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#94A3B8', textDecoration: 'line-through' }}>{formatCurrency(originalPrice)}</span>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1B6B3A', background: '#DCF2E4', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>
+                                            Save {formatCurrency(originalPrice - price)}
+                                        </span>
+                                    </div>
+                                )}
                                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
                                     <span style={{ fontSize: '2.25rem', fontWeight: '900', color: '#1E293B' }}>{formatCurrency(price)}</span>
-                                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '0.9rem' }}>/ year</span>
+                                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '0.9rem' }}>/ {billingPeriod}</span>
                                 </div>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>
-                                    (Equivalent to {formatCurrency(Math.round(price / 12))} per month)
-                                </span>
+                                {tier.priceMonthly ? (
+                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>
+                                        (Billed every month)
+                                    </span>
+                                ) : (
+                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>
+                                        (Equivalent to {formatCurrency(Math.round(price / 12))} per month)
+                                    </span>
+                                )}
                             </div>
+
+                            {tier.includedTeamMembers && (
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.5rem',
+                                    padding: '0.85rem 1.1rem',
+                                    marginBottom: '1rem',
+                                    border: '1px solid #E2E8F0',
+                                    borderRadius: '20px',
+                                    background: '#F8FAFC',
+                                    color: '#475569',
+                                    fontSize: '0.85rem',
+                                    fontWeight: '700'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+                                        <span>Total Team Members:</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                            <button
+                                                type="button"
+                                                aria-label="Decrease team members"
+                                                disabled={firmTeamMembers <= 1}
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    setFirmTeamMembers(count => Math.max(1, count - 1));
+                                                }}
+                                                style={{
+                                                    width: '36px',
+                                                    height: '36px',
+                                                    borderRadius: '50%',
+                                                    border: '1px solid #CBD5E1',
+                                                    background: '#FFFFFF',
+                                                    color: firmTeamMembers <= 1 ? '#CBD5E1' : '#475569',
+                                                    cursor: firmTeamMembers <= 1 ? 'not-allowed' : 'pointer',
+                                                    display: 'grid',
+                                                    placeItems: 'center',
+                                                    padding: 0
+                                                }}
+                                            >
+                                                <Minus size={14} />
+                                            </button>
+                                            <span aria-live="polite" style={{ minWidth: '16px', textAlign: 'center', color: '#475569', fontSize: '1rem' }}>
+                                                {firmTeamMembers}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                aria-label="Increase team members"
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    setFirmTeamMembers(count => count + 1);
+                                                }}
+                                                style={{
+                                                    width: '36px',
+                                                    height: '36px',
+                                                    borderRadius: '50%',
+                                                    border: '1px solid #CBD5E1',
+                                                    background: '#FFFFFF',
+                                                    color: '#475569',
+                                                    cursor: 'pointer',
+                                                    display: 'grid',
+                                                    placeItems: 'center',
+                                                    padding: 0
+                                                }}
+                                            >
+                                                <Plus size={14} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {extraTeamMembers > 0 && (
+                                        <span style={{ alignSelf: 'flex-end', color: '#3366FF', fontSize: '0.75rem', fontWeight: '700' }}>
+                                            +{extraTeamMembers} extra {extraTeamMembers === 1 ? 'member' : 'members'} ({formatCurrency(tier.additionalMemberMonthlyPrice)}/mo each)
+                                        </span>
+                                    )}
+                                </div>
+                            )}
 
                             {isActive ? (
                                 <button 
@@ -624,7 +769,7 @@ const Subscription = () => {
                                     className="upgrade-btn"
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        handleUpgrade(tier);
+                                        handleUpgrade(tier, currentCategoryKey, firmTeamMembers);
                                     }}
                                     disabled={isProcessing}
                                     style={{ 

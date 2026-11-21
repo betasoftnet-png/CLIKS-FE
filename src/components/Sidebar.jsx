@@ -701,7 +701,6 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
 
                 </nav>
-                <div style={{ flex: 1 }} />
             </div>
 
             {/* Refer & Earn Block */}

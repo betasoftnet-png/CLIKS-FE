@@ -10,7 +10,15 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 5173,
-    host: true
+    host: true,
+    proxy: {
+      '/bnx-api': {
+        target: 'https://api.bnxmail.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace(/^\/bnx-api/, '')
+      }
+    }
   },
   resolve: {
     alias: {
