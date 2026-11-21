@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('books_auth_token'));
     const [loading, setLoading] = useState(!!token);
-    
     const queryClient = useQueryClient();
 
     const logout = React.useCallback(() => {
@@ -90,7 +89,6 @@ export const AuthProvider = ({ children }) => {
         ssoLogin,
         logout,
         isAuthenticated: !!token
-        
     };
 
     return (

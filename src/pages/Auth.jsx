@@ -16,8 +16,8 @@ const Auth = () => {
     const CLIENT_ID = 'cliks-app';
     const REDIRECT_URI = typeof window !== 'undefined' ? `${window.location.origin}/auth` : 'https://cliks.beta-softnet.com/auth';
     const BNX_AUTH_URL = 'https://www.b2auth.com';
-    //const BNX_API_URL = 'https://api.bnxmail.com';
-    const BNX_API_URL = '/bnx-api';
+    const BNX_API_URL = 'https://api.bnxmail.com';
+
     const handledRef = React.useRef(false);
 
     const handleOAuthCallback = React.useCallback(async (code) => {
