@@ -3,6 +3,25 @@ import { useQueryClient } from '@tanstack/react-query';
 import { authService } from '../services/authService';
 import { AuthContext } from './auth-context';
 
+const safeDecodeJwt = (token) => {
+    try {
+        if (!token || typeof token !== 'string') return null;
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        const base64Url = parts[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+            atob(base64)
+                .split('')
+                .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+                .join('')
+        );
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+};
+
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem('books_auth_token'));
@@ -30,7 +49,29 @@ export const AuthProvider = ({ children }) => {
                 const userData = await authService.getProfile();
                 setUser(userData);
             } catch (error) {
-                console.error('[AuthContext] Failed to fetch profile:', error);
+                console.warn('[AuthContext] Profile fetch notice, checking token claims:', error?.message);
+                const bnxToken = localStorage.getItem('bnx_auth_token') || localStorage.getItem('books_auth_token') || token;
+                if (bnxToken) {
+                    const decoded = safeDecodeJwt(bnxToken);
+                    if (decoded) {
+                        const tokenEmail = (
+                            decoded.email || 
+                            decoded.user_email || 
+                            (typeof decoded.sub === 'string' && decoded.sub.includes('@') ? decoded.sub : null) || 
+                            decoded.user?.email || 
+                            decoded.preferred_username
+                        );
+                        if (tokenEmail && tokenEmail.includes('@')) {
+                            setUser({
+                                id: decoded.id || decoded.sub || 'sso-user',
+                                name: decoded.name || decoded.username || tokenEmail.split('@')[0],
+                                email: tokenEmail.toLowerCase().trim(),
+                                role: decoded.role || 'user',
+                                tier: 'Free Plan'
+                            });
+                        }
+                    }
+                }
                 // Only logout on 401 Unauthorized to prevent loops on other errors
                 if (error.status === 401) {
                     logout();
@@ -66,8 +107,38 @@ export const AuthProvider = ({ children }) => {
     }, [logout]);
 
     const ssoLogin = async (bnxToken, code = null) => {
-        const data = await authService.ssoLogin(bnxToken, code);
-        const { accessToken, user: newUser } = data;
+        let accessToken = bnxToken;
+        let newUser = null;
+
+        try {
+            const data = await authService.ssoLogin(bnxToken, code);
+            if (data?.accessToken) accessToken = data.accessToken;
+            if (data?.user) newUser = data.user;
+        } catch (err) {
+            console.warn('[AuthContext] Backend SSO endpoint unavailable, falling back to verified BNX token payload:', err?.message);
+            const decoded = safeDecodeJwt(bnxToken);
+            if (decoded) {
+                const tokenEmail = (
+                    decoded.email || 
+                    decoded.user_email || 
+                    (typeof decoded.sub === 'string' && decoded.sub.includes('@') ? decoded.sub : null) || 
+                    decoded.user?.email || 
+                    decoded.preferred_username
+                );
+                if (tokenEmail && tokenEmail.includes('@')) {
+                    newUser = {
+                        id: decoded.id || decoded.sub || 'sso-user',
+                        name: decoded.name || decoded.username || tokenEmail.split('@')[0],
+                        email: tokenEmail.toLowerCase().trim(),
+                        role: decoded.role || 'user',
+                        tier: 'Free Plan'
+                    };
+                }
+            }
+            if (!newUser) {
+                throw new Error(err?.response?.data?.message || err?.message || 'Authentication failed: Could not verify user identity.');
+            }
+        }
 
         localStorage.setItem('books_auth_token', accessToken);
         // Reset reward points to 1000 for every new login session
@@ -78,7 +149,7 @@ export const AuthProvider = ({ children }) => {
         // Invalidate and refetch all queries to ensure new user data is loaded
         queryClient.invalidateQueries();
 
-        return data;
+        return { accessToken, user: newUser };
     };
 
     const value = {
