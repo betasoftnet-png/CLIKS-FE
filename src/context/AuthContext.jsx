@@ -65,8 +65,8 @@ export const AuthProvider = ({ children }) => {
         return () => window.removeEventListener('storage', handleStorageChange);
     }, [logout]);
 
-    const ssoLogin = async (bnxToken) => {
-        const data = await authService.ssoLogin(bnxToken);
+    const ssoLogin = async (bnxToken, code = null) => {
+        const data = await authService.ssoLogin(bnxToken, code);
         const { accessToken, user: newUser } = data;
 
         localStorage.setItem('books_auth_token', accessToken);

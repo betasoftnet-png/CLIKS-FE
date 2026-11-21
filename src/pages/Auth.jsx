@@ -16,7 +16,12 @@ const Auth = () => {
     const CLIENT_ID = 'cliks-app';
     const REDIRECT_URI = typeof window !== 'undefined' ? `${window.location.origin}/auth` : 'https://cliks.beta-softnet.com/auth';
     const BNX_AUTH_URL = 'https://www.b2auth.com';
-    const BNX_API_URL = 'https://api.bnxmail.com';
+    const isLocalhost = typeof window !== 'undefined' && (
+        window.location.hostname === 'localhost' || 
+        window.location.hostname === '127.0.0.1' || 
+        window.location.hostname.endsWith('.local')
+    );
+    const BNX_API_URL = isLocalhost ? '/bnx-api' : 'https://api.bnxmail.com';
 
     const handledRef = React.useRef(false);
 
@@ -28,47 +33,77 @@ const Auth = () => {
         setError('');
 
         try {
-            // 1. Exchange code for BNX token
-            const tokenRes = await fetch(`${BNX_API_URL}/api/oauth/token`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    grantType: 'authorization_code',
-                    code,
-                    clientId: CLIENT_ID,
-                    clientSecret: 'secure-cliks-secret-2026'
-                })
-            });
-            console.log(tokenRes)
-            const tokenData = await tokenRes.json();
-            console.log(tokenData);
+            let bnxToken = null;
 
-            if (!tokenData.success) {
-                throw new Error('Failed to get BNX token');
+            // 1. Attempt token exchange with primary endpoint
+            try {
+                let tokenRes = await fetch(`${BNX_API_URL}/api/oauth/token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        grant_type: 'authorization_code',
+                        grantType: 'authorization_code',
+                        code,
+                        client_id: CLIENT_ID,
+                        clientId: CLIENT_ID,
+                        client_secret: 'secure-cliks-secret-2026',
+                        clientSecret: 'secure-cliks-secret-2026',
+                        redirect_uri: REDIRECT_URI,
+                        redirectUri: REDIRECT_URI
+                    })
+                });
+
+                // If non-ok and not already api.bnxmail.com, try fallback directly to api.bnxmail.com
+                if (!tokenRes.ok && BNX_API_URL !== 'https://api.bnxmail.com') {
+                    tokenRes = await fetch('https://api.bnxmail.com/api/oauth/token', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            grant_type: 'authorization_code',
+                            grantType: 'authorization_code',
+                            code,
+                            client_id: CLIENT_ID,
+                            clientId: CLIENT_ID,
+                            client_secret: 'secure-cliks-secret-2026',
+                            clientSecret: 'secure-cliks-secret-2026',
+                            redirect_uri: REDIRECT_URI,
+                            redirectUri: REDIRECT_URI
+                        })
+                    });
+                }
+
+                if (tokenRes.ok) {
+                    const tokenData = await tokenRes.json().catch(() => ({}));
+                    bnxToken = tokenData.access_token || tokenData.data?.access_token || tokenData.token || tokenData.data?.token || (typeof tokenData.data === 'string' ? tokenData.data : null);
+                }
+            } catch (fetchErr) {
+                console.warn('[Auth] Direct token exchange warning:', fetchErr?.message);
             }
 
-            const bnxToken = tokenData.data.access_token;
-            localStorage.setItem('bnx_auth_token', bnxToken);
+            // Fallback: If code itself is a JWT token
+            if (!bnxToken && typeof code === 'string' && code.startsWith('eyJ')) {
+                bnxToken = code;
+            }
+
+            if (bnxToken) {
+                localStorage.setItem('bnx_auth_token', bnxToken);
+            }
 
             // 2. Check if this user arrived via a referral link
-            //    The ref code is stored in sessionStorage / localStorage when Landing redirects to B2Auth
             const pendingRefCode = sessionStorage.getItem('cliks_pending_ref') || localStorage.getItem('cliks_referral_code');
 
-            // 3. Perform SSO Login with backend
-            await ssoLogin(bnxToken);
+            // 3. Perform SSO Login with backend (passes bnxToken and code fallback)
+            await ssoLogin(bnxToken, code);
 
             // 4. Apply referral code if present — fire-and-forget (don't block navigation)
             if (pendingRefCode) {
                 sessionStorage.removeItem('cliks_pending_ref');
                 referralService.apply(pendingRefCode).catch((err) => {
-                    // Silently log — referral failure must never block login
                     console.warn('[Auth] Referral apply failed (non-blocking):', err?.message);
                 });
             }
 
             navigate('/books/dashboard', { replace: true });
-
-
         } catch (err) {
             console.error('[Auth] SSO error:', err);
             setError('Authentication failed. Please try again.');
