@@ -57,6 +57,13 @@ const BusinessPayments = () => {
     const { currency, formatCurrency } = useCurrency();
     const [activeTab, setActiveTab] = useState('receivables');
     const [colFilters, setColFilters] = React.useState({}); // 'receivables', 'payables', 'bank', 'reminders'
+
+    const formatDisplayDate = (dateStr) => {
+        if (!dateStr || dateStr === 'N/A') return '—';
+        const d = new Date(`${dateStr}T00:00:00`);
+        if (Number.isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
     const [searchTerm, setSearchTerm] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] = useState(false);
@@ -353,7 +360,7 @@ const BusinessPayments = () => {
     const totalBalance = accounts.reduce((sum, a) => sum + a.current_balance, 0);
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-color, #F8FAFC)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
             <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
                 <div>
@@ -361,7 +368,7 @@ const BusinessPayments = () => {
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <CreditCard size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
+                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
                     </div>
                     <p style={{ color: '#475569', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Record and track all your money entries, income, expenses, and accounts.</p>
                 </div>
@@ -486,7 +493,7 @@ const BusinessPayments = () => {
                                         <td style={{ padding: '1.5rem 2rem' }}>
                                             <p style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.95rem' }}>{r.payment_number}</p>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B' }}>{r.payment_date}</td>
+                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B', whiteSpace: 'nowrap' }}>{formatDisplayDate(r.payment_date)}</td>
                                         <td style={{ padding: '1.5rem 2rem', fontWeight: '700', color: '#1E293B' }}>{r.customer_name}</td>
                                         <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '600' }}>{r.invoice_id}</td>
                                         <td style={{ padding: '1.5rem 2rem', fontWeight: '600', color: '#475569' }}>{formatCurrency(r.total_amount)}</td>
@@ -527,7 +534,7 @@ const BusinessPayments = () => {
                                         <td style={{ padding: '1.5rem 2rem' }}>
                                             <p style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.95rem' }}>{p.payment_number}</p>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B' }}>{p.payment_date}</td>
+                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B', whiteSpace: 'nowrap' }}>{formatDisplayDate(p.payment_date)}</td>
                                         <td style={{ padding: '1.5rem 2rem', fontWeight: '700', color: '#1E293B' }}>{p.supplier_name}</td>
                                         <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '600' }}>{p.purchase_id}</td>
                                         <td style={{ padding: '1.5rem 2rem', fontWeight: '600', color: '#475569' }}>{formatCurrency(p.total_amount)}</td>

@@ -131,7 +131,7 @@ const Accounting = () => {
     const { data: properties = [] } = useQuery({ queryKey: ['property-records'], queryFn: financePlusService.getPropertyRecords, enabled: !!uid && uid !== 'guest' });
     const { data: pensionRecords = [] } = useQuery({ queryKey: ['pension-records'], queryFn: financePlusService.getPensionRecords, enabled: !!uid && uid !== 'guest' });
     const { data: notifications = [] } = useQuery({ queryKey: ['finance-notifications'], queryFn: financePlusService.getNotifications, enabled: !!uid && uid !== 'guest' });
-    const { data: dbTransactions = [] } = useQuery({ queryKey: ['transactions'], queryFn: () => transactionsService.getTransactions(), enabled: !!uid && uid !== 'guest' });
+    const { data: dbTransactions } = useQuery({ queryKey: ['transactions'], queryFn: () => transactionsService.getTransactions(), enabled: !!uid && uid !== 'guest' });
 
     // ── Mutations ───────────────────────────────────────────────────────────
 
@@ -488,7 +488,7 @@ const Accounting = () => {
 
     // Sync React states with query data once auto-sync is done
     useEffect(() => {
-        if (!isSynced || !uid || uid === 'guest' || !dbTransactions) return;
+        if (!isSynced || !uid || uid === 'guest' || !Array.isArray(dbTransactions)) return;
 
         const mapTransactionToEntry = (tx) => {
             const isAdd = tx.title ? tx.title.startsWith('[Add] ') : false;
@@ -515,6 +515,12 @@ const Accounting = () => {
             };
         };
 
+        const areEntryArraysEqual = (prev, next) => {
+            if (prev === next) return true;
+            if (!Array.isArray(prev) || !Array.isArray(next) || prev.length !== next.length) return false;
+            return JSON.stringify(prev) === JSON.stringify(next);
+        };
+
         const syncedIncome = dbTransactions
             .filter(tx => (tx.type || '').toLowerCase() === 'income' && !(tx.title || '').startsWith('[Add] ') && !(tx.name || '').startsWith('[Add] '))
             .map(mapTransactionToEntry);
@@ -531,10 +537,10 @@ const Accounting = () => {
             .filter(tx => (tx.type || '').toLowerCase() === 'expense' && ((tx.title || '').startsWith('[Add] ') || (tx.name || '').startsWith('[Add] ')))
             .map(mapTransactionToEntry);
 
-        setIncomeSources(syncedIncome);
-        setExpenses(syncedExpenses);
-        setAdditionalIncomeSources(syncedAddIncome);
-        setAdditionalExpenses(syncedAddExpenses);
+        setIncomeSources(prev => (areEntryArraysEqual(prev, syncedIncome) ? prev : syncedIncome));
+        setExpenses(prev => (areEntryArraysEqual(prev, syncedExpenses) ? prev : syncedExpenses));
+        setAdditionalIncomeSources(prev => (areEntryArraysEqual(prev, syncedAddIncome) ? prev : syncedAddIncome));
+        setAdditionalExpenses(prev => (areEntryArraysEqual(prev, syncedAddExpenses) ? prev : syncedAddExpenses));
     }, [dbTransactions, isSynced, uid]);
 
     // Derived
@@ -974,11 +980,11 @@ const Accounting = () => {
     return (
         <div style={{ padding: '1.5rem 2rem', maxWidth: 1200, margin: '0 auto', fontFamily: "'Inter', sans-serif" }}>
             <style>{`
-                body:not([data-theme='dark']), 
-                .app-root:not([data-theme='dark']), 
-                .app-body:not([data-theme='dark']), 
-                .main-content-area:not([data-theme='dark']), 
-                .content-scrollable:not([data-theme='dark']) {
+                :root:not([data-theme='dark']) body,
+                :root:not([data-theme='dark']) .app-root,
+                :root:not([data-theme='dark']) .app-body,
+                :root:not([data-theme='dark']) .main-content-area,
+                :root:not([data-theme='dark']) .content-scrollable {
                     background-color: #ffffff !important;
                 }
                 .finance-premium-container { display: flex; gap: 2rem; }
@@ -1180,7 +1186,7 @@ const Accounting = () => {
             <div style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                 <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
                 <div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 850, color: '#064E3B', margin: 0 }}>Additional Source</h2>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 850, color: 'var(--text-main, #064E3B)', margin: 0 }}>Additional Source</h2>
                     <p style={{ color: '#475569', fontSize: '0.95rem', fontWeight: 500, margin: '0.2rem 0 0 0' }}>Manage your additional income sources and additional expenses here.</p>
                 </div>
             </div>
@@ -1496,7 +1502,7 @@ const Accounting = () => {
             <div style={{ marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                 <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
                 <div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 850, color: '#064E3B', margin: 0 }}>Fixed Source</h2>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 850, color: 'var(--text-main, #064E3B)', margin: 0 }}>Fixed Source</h2>
                     <p style={{ color: '#475569', fontSize: '0.95rem', fontWeight: 500, margin: '0.2rem 0 0 0' }}>Manage your income sources and daily expenses here.</p>
                 </div>
             </div>

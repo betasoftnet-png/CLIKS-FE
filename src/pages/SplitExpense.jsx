@@ -1848,7 +1848,7 @@ const BusinessSplitCollect = () => {
                         }}>
                             <CreditCard size={18} />
                         </div>
-                        <h1 style={{ fontSize: '1.4rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em', margin: 0 }}>Splitwise & Collect</h1>
+                        <h1 style={{ fontSize: '1.4rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Splitwise & Collect</h1>
                     </div>
                     <p style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: '500', margin: 0 }}>Divide collaborative bills, track expenses, and simplify balances with team members.</p>
                 </div>

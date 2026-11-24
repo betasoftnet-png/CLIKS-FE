@@ -17,15 +17,15 @@
     --gauge-yellow: #EAB308;
     --gauge-green: #22C55E;
 
-    /* Dark mode surface palette */
-    --dm-bg:         #0d1117;
-    --dm-surface:    #161b22;
-    --dm-surface-2:  #1c2430;
-    --dm-surface-3:  #21262d;
-    --dm-border:     #30363d;
-    --dm-text:       #e6edf3;
-    --dm-text-muted: #8b949e;
-    --dm-primary:    #4ade80;
+    /* Dark mode surface palette (deep teal/green, aligned to reference dark UI) */
+    --dm-bg:         #041517;
+    --dm-surface:    #092124;
+    --dm-surface-2:  #0d2a2d;
+    --dm-surface-3:  #123338;
+    --dm-border:     #1a454b;
+    --dm-text:       #eaf6f4;
+    --dm-text-muted: #88a7a3;
+    --dm-primary:    #22c55e;
 
     font-family: var(--font-main, 'Inter', system-ui, -apple-system, sans-serif);
     line-height: 1.5;
@@ -54,15 +54,34 @@
 [data-theme='dark'] .app-body,
 [data-theme='dark'] .content-scrollable,
 [data-theme='dark'] .main-content-area,
-[data-theme='dark'] .premium-container {
+[data-theme='dark'] .premium-container,
+[data-theme='dark'] .content-wrapper,
+[data-theme='dark'] main {
     background-color: var(--dm-bg) !important;
+    color: var(--dm-text) !important;
+}
+
+/* ── Topbar / headers ── */
+[data-theme='dark'] .topbar,
+[data-theme='dark'] .dashboard-header,
+[data-theme='dark'] .app-header,
+[data-theme='dark'] .main-header {
+    background-color: var(--dm-surface) !important;
+    border-color: var(--dm-border) !important;
     color: var(--dm-text) !important;
 }
 
 /* ── Sidebar ── */
 [data-theme='dark'] .sidebar {
     background: var(--dm-surface) !important;
+    background-color: var(--dm-surface) !important;
     border-right-color: var(--dm-border) !important;
+}
+[data-theme='dark'] .sidebar-header,
+[data-theme='dark'] .sidebar-nav,
+[data-theme='dark'] .sidebar-footer {
+    background: transparent !important;
+    border-color: var(--dm-border) !important;
 }
 [data-theme='dark'] .sidebar-item {
     color: var(--dm-text-muted) !important;
@@ -79,11 +98,6 @@
     background: var(--dm-surface-2) !important;
     border-color: var(--dm-border) !important;
     color: var(--dm-text-muted) !important;
-}
-
-/* ── Dashboard header ── */
-[data-theme='dark'] .dashboard-header {
-    background-color: var(--dm-bg) !important;
 }
 
 /* ── Cards & tiles ── */
@@ -107,68 +121,196 @@
 
 /* ── Inline white / near-white backgrounds ── */
 [data-theme='dark'] [style*="background: white"],
-[data-theme='dark'] [style*="background:white"],
+[data-theme='dark'] [style*="background-color: white"],
 [data-theme='dark'] [style*="background: #fff"],
 [data-theme='dark'] [style*="background: #FFF"],
 [data-theme='dark'] [style*="background: #ffffff"],
 [data-theme='dark'] [style*="background: #FFFFFF"],
-[data-theme='dark'] [style*="background-color: white"],
 [data-theme='dark'] [style*="background-color: #fff"],
+[data-theme='dark'] [style*="background-color: #FFF"],
 [data-theme='dark'] [style*="background-color: #ffffff"],
-[data-theme='dark'] [style*="background-color: #FFFFFF"] {
+[data-theme='dark'] [style*="background-color: #FFFFFF"],
+[data-theme='dark'] [style*="background: rgb(255, 255, 255)"],
+[data-theme='dark'] [style*="background-color: rgb(255, 255, 255)"] {
     background: var(--dm-surface) !important;
     background-color: var(--dm-surface) !important;
 }
 
-/* ── Light grey surfaces ── */
+/* ── Light grey / off-white surfaces ── */
 [data-theme='dark'] [style*="background: #F8FAFC"],
 [data-theme='dark'] [style*="background: #f8fafc"],
-[data-theme='dark'] [style*="background: #F1F5F9"],
-[data-theme='dark'] [style*="background: #f1f5f9"],
-[data-theme='dark'] [style*="background: #F0FDF4"],
-[data-theme='dark'] [style*="background: #f0fdf4"],
-[data-theme='dark'] [style*="background: #FAFBFC"],
-[data-theme='dark'] [style*="background: #fafbfc"],
-[data-theme='dark'] [style*="background: #FAFAFB"],
 [data-theme='dark'] [style*="background-color: #F8FAFC"],
 [data-theme='dark'] [style*="background-color: #f8fafc"],
+[data-theme='dark'] [style*="background: rgb(248, 250, 252)"],
+[data-theme='dark'] [style*="background-color: rgb(248, 250, 252)"],
+[data-theme='dark'] [style*="background: #F1F5F9"],
+[data-theme='dark'] [style*="background: #f1f5f9"],
 [data-theme='dark'] [style*="background-color: #F1F5F9"],
-[data-theme='dark'] [style*="background-color: #F0FDF4"] {
+[data-theme='dark'] [style*="background-color: #f1f5f9"],
+[data-theme='dark'] [style*="background: rgb(241, 245, 249)"],
+[data-theme='dark'] [style*="background:rgb(241,245,249)"],
+[data-theme='dark'] [style*="background-color: rgb(241, 245, 249)"],
+[data-theme='dark'] [style*="background: #F0FDF4"],
+[data-theme='dark'] [style*="background: #f0fdf4"],
+[data-theme='dark'] [style*="background-color: #F0FDF4"],
+[data-theme='dark'] [style*="background-color: #f0fdf4"],
+[data-theme='dark'] [style*="background: rgb(240, 253, 244)"],
+[data-theme='dark'] [style*="background: #FAFBFC"],
+[data-theme='dark'] [style*="background: #fafbfc"],
+[data-theme='dark'] [style*="background: #FAFAFA"],
+[data-theme='dark'] [style*="background: #fafafa"],
+[data-theme='dark'] [style*="background-color: #FAFAFA"],
+[data-theme='dark'] [style*="background-color: #fafafa"],
+[data-theme='dark'] [style*="background: rgb(250, 250, 250)"],
+[data-theme='dark'] [style*="background-color: rgb(250, 250, 250)"],
+[data-theme='dark'] [style*="background: #F9FAFB"],
+[data-theme='dark'] [style*="background: #f9fafb"],
+[data-theme='dark'] [style*="background-color: #F9FAFB"],
+[data-theme='dark'] [style*="background-color: #f9fafb"],
+[data-theme='dark'] [style*="background: rgb(249, 250, 251)"],
+[data-theme='dark'] [style*="background-color: rgb(249, 250, 251)"],
+[data-theme='dark'] [style*="background: #F3F4F6"],
+[data-theme='dark'] [style*="background: #f3f4f6"],
+[data-theme='dark'] [style*="background-color: #F3F4F6"],
+[data-theme='dark'] [style*="background-color: #f3f4f6"],
+[data-theme='dark'] [style*="background: rgb(243, 244, 246)"],
+[data-theme='dark'] [style*="background-color: rgb(243, 244, 246)"],
+[data-theme='dark'] [style*="background: #E5E7EB"],
+[data-theme='dark'] [style*="background: #e5e7eb"],
+[data-theme='dark'] [style*="background-color: #E5E7EB"],
+[data-theme='dark'] [style*="background-color: #e5e7eb"],
+[data-theme='dark'] [style*="background: rgb(229, 231, 235)"],
+[data-theme='dark'] [style*="background-color: rgb(229, 231, 235)"],
+[data-theme='dark'] [style*="background: #EEF2F7"],
+[data-theme='dark'] [style*="background: #eef2f7"],
+[data-theme='dark'] [style*="background-color: #EEF2F7"],
+[data-theme='dark'] [style*="background-color: #eef2f7"],
+[data-theme='dark'] [style*="background: rgb(238, 242, 247)"],
+[data-theme='dark'] [style*="background-color: rgb(238, 242, 247)"],
+[data-theme='dark'] [style*="background: #E2E8F0"],
+[data-theme='dark'] [style*="background: #e2e8f0"],
+[data-theme='dark'] [style*="background-color: #E2E8F0"],
+[data-theme='dark'] [style*="background-color: #e2e8f0"],
+[data-theme='dark'] [style*="background: rgb(226, 232, 240)"],
+[data-theme='dark'] [style*="background-color: rgb(226, 232, 240)"],
+[data-theme='dark'] [style*="background: #FEF2F2"],
+[data-theme='dark'] [style*="background: #fef2f2"],
+[data-theme='dark'] [style*="background: #FFF7ED"],
+[data-theme='dark'] [style*="background: #fff7ed"],
+[data-theme='dark'] [style*="background: #FFFBEB"],
+[data-theme='dark'] [style*="background: #fffbeb"],
+[data-theme='dark'] [style*="background: #ECFDF5"],
+[data-theme='dark'] [style*="background: #ecfdf5"],
+[data-theme='dark'] [style*="background: #EFF6FF"],
+[data-theme='dark'] [style*="background: #eff6ff"],
+[data-theme='dark'] [style*="background: #F5F3FF"],
+[data-theme='dark'] [style*="background: #f5f3ff"]{
     background: var(--dm-surface-2) !important;
     background-color: var(--dm-surface-2) !important;
 }
 
 /* ── Dark text → light text in dark mode ── */
 [data-theme='dark'] [style*="color: #1E293B"],
-[data-theme='dark'] [style*="color: #0F172A"],
-[data-theme='dark'] [style*="color: #064E3B"],
-[data-theme='dark'] [style*="color: #1B6B3A"],
-[data-theme='dark'] [style*="color: #334155"],
 [data-theme='dark'] [style*="color: #1e293b"],
-[data-theme='dark'] [style*="color: #0f172a"] {
+[data-theme='dark'] [style*="color: rgb(30, 41, 59)"],
+[data-theme='dark'] [style*="color: #0F172A"],
+[data-theme='dark'] [style*="color: #0f172a"],
+[data-theme='dark'] [style*="color: rgb(15, 23, 42)"],
+[data-theme='dark'] [style*="color: #111827"],
+[data-theme='dark'] [style*="color: #064E3B"],
+[data-theme='dark'] [style*="color: #064e3b"],
+[data-theme='dark'] [style*="color: #1B6B3A"],
+[data-theme='dark'] [style*="color: #1b6b3a"],
+[data-theme='dark'] [style*="color: #334155"],
+[data-theme='dark'] [style*="color: rgb(51, 65, 85)"],
+[data-theme='dark'] [style*="color: #374151"] {
     color: var(--dm-text) !important;
 }
 
 /* ── Muted text ── */
 [data-theme='dark'] [style*="color: #64748B"],
-[data-theme='dark'] [style*="color: #94A3B8"],
-[data-theme='dark'] [style*="color: #475569"],
 [data-theme='dark'] [style*="color: #64748b"],
+[data-theme='dark'] [style*="color: rgb(100, 116, 139)"],
+[data-theme='dark'] [style*="color: #94A3B8"],
 [data-theme='dark'] [style*="color: #94a3b8"],
-[data-theme='dark'] [style*="color: #475569"] {
+[data-theme='dark'] [style*="color: rgb(148, 163, 184)"],
+[data-theme='dark'] [style*="color: #475569"],
+[data-theme='dark'] [style*="color: rgb(71, 85, 105)"],
+[data-theme='dark'] [style*="color: #6B7280"],
+[data-theme='dark'] [style*="color: #6b7280"],
+[data-theme='dark'] [style*="color: #777"],
+[data-theme='dark'] [style*="color: #9CA3AF"] {
     color: var(--dm-text-muted) !important;
 }
 
 /* ── Borders ── */
 [data-theme='dark'] [style*="border: 1px solid #E2E8F0"],
 [data-theme='dark'] [style*="border: 1px solid #e2e8f0"],
+[data-theme='dark'] [style*="border: 1px solid rgb(226, 232, 240)"],
+[data-theme='dark'] [style*="border: 1px solid #F1F5F9"],
+[data-theme='dark'] [style*="border: 1px solid #f1f5f9"],
+[data-theme='dark'] [style*="border: 1px solid rgb(241, 245, 249)"],
+[data-theme='dark'] [style*="border: 1px solid #CBD5E1"],
+[data-theme='dark'] [style*="border: 1px solid #cbd5e1"],
+[data-theme='dark'] [style*="border: 1px solid #D1D5DB"],
 [data-theme='dark'] [style*="border-bottom: 1px solid #E2E8F0"],
+[data-theme='dark'] [style*="border-bottom: 1px solid #e2e8f0"],
+[data-theme='dark'] [style*="border-bottom: 1px solid rgb(226, 232, 240)"],
 [data-theme='dark'] [style*="border-bottom: 1px solid #F1F5F9"],
+[data-theme='dark'] [style*="border-bottom: 1px solid #f1f5f9"],
+[data-theme='dark'] [style*="border-bottom: 1px solid rgb(241, 245, 249)"],
 [data-theme='dark'] [style*="border-top: 1px solid #E2E8F0"],
 [data-theme='dark'] [style*="border-top: 1px solid #F1F5F9"],
+[data-theme='dark'] [style*="border-top: 1px solid rgb(226, 232, 240)"],
+[data-theme='dark'] [style*="border-left: 1px solid #E2E8F0"],
+[data-theme='dark'] [style*="border-right: 1px solid #E2E8F0"],
 [data-theme='dark'] [style*="border-bottom: 1px solid #F8FAFC"],
-[data-theme='dark'] [style*="border-bottom: 1px solid #F0FDF4"] {
+[data-theme='dark'] [style*="border-bottom:1px solid #F8FAFC"],
+[data-theme='dark'] [style*="border-bottom: 1px solid #f8fafc"],
+[data-theme='dark'] [style*="border-bottom: 1px solid #F0FDF4"],
+[data-theme='dark'] [style*="border: 2px dashed #CBD5E1"],
+[data-theme='dark'] [style*="border: 2px dashed #cbd5e1"]{
     border-color: var(--dm-border) !important;
+}
+
+/* ── Common containers (cards, panels, wrappers) ── */
+[data-theme='dark'] .card,
+[data-theme='dark'] .content-wrapper,
+[data-theme='dark'] .page-content,
+[data-theme='dark'] .settings-container,
+[data-theme='dark'] .settings-content {
+    background: transparent;
+    color: var(--dm-text);
+}
+[data-theme='dark'] .card {
+    background: var(--dm-surface) !important;
+    border-color: var(--dm-border) !important;
+}
+
+/* ── Light gradients (cards/banners that remain bright in dark mode) ── */
+[data-theme='dark'] [style*="linear-gradient"][style*="#fff"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#FFF"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#FFFFFF"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#ffffff"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#F8FAFC"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#f8fafc"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#F1F5F9"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#f1f5f9"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#F0FDF4"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#f0fdf4"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#FEF2F2"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#FFF7ED"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#FFFBEB"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#ECFDF5"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#EFF6FF"],
+[data-theme='dark'] [style*="linear-gradient"][style*="#F5F3FF"],
+[data-theme='dark'] [style*="linear-gradient"][style*="rgb(255, 255, 255)"],
+[data-theme='dark'] [style*="linear-gradient"][style*="rgb(248, 250, 252)"],
+[data-theme='dark'] [style*="linear-gradient"][style*="rgb(241, 245, 249)"] {
+    background: var(--dm-surface) !important;
+    background-color: var(--dm-surface) !important;
+    background-image: none !important;
+    color: var(--dm-text) !important;
 }
 
 /* ── Inputs / selects / textareas ── */
@@ -213,6 +355,189 @@
 [data-theme='dark'] ::-webkit-scrollbar { width: 6px; height: 6px; }
 [data-theme='dark'] ::-webkit-scrollbar-track { background: var(--dm-surface); }
 [data-theme='dark'] ::-webkit-scrollbar-thumb { background: var(--dm-border); border-radius: 3px; }
+
+/* ── Light accent/tint inline surfaces (mapped to dark surfaces in dark mode) ── */
+[data-theme='dark'] [style*="background: #DCF2E4"],
+[data-theme='dark'] [style*="background: #dcf2e4"],
+[data-theme='dark'] [style*="background-color: #DCF2E4"],
+[data-theme='dark'] [style*="background: rgb(220, 242, 228)"],
+[data-theme='dark'] [style*="background: rgb(236, 253, 245)"],
+[data-theme='dark'] [style*="background-color: rgb(236, 253, 245)"],
+[data-theme='dark'] [style*="background: rgb(255, 251, 235)"],
+[data-theme='dark'] [style*="background-color: rgb(255, 251, 235)"],
+[data-theme='dark'] [style*="background: rgb(245, 243, 255)"],
+[data-theme='dark'] [style*="background: rgb(254, 242, 242)"],
+[data-theme='dark'] [style*="background-color: rgb(254, 242, 242)"],
+[data-theme='dark'] [style*="background:rgb(238,242,255)"],
+[data-theme='dark'] [style*="background-color: rgb(238, 242, 255)"],
+[data-theme='dark'] [style*="background: #DCFCE7"],
+[data-theme='dark'] [style*="background: #dcfce7"],
+[data-theme='dark'] [style*="background-color: #DCFCE7"],
+[data-theme='dark'] [style*="background: rgb(220, 252, 231)"],
+[data-theme='dark'] [style*="background: #DBEAFE"],
+[data-theme='dark'] [style*="background: #dbeafe"],
+[data-theme='dark'] [style*="background-color: #DBEAFE"],
+[data-theme='dark'] [style*="background: rgb(219, 234, 254)"],
+[data-theme='dark'] [style*="background: #E0F2FE"],
+[data-theme='dark'] [style*="background: #e0f2fe"],
+[data-theme='dark'] [style*="background-color: #E0F2FE"],
+[data-theme='dark'] [style*="background: #FEE2E2"],
+[data-theme='dark'] [style*="background: #fee2e2"],
+[data-theme='dark'] [style*="background-color: #FEE2E2"],
+[data-theme='dark'] [style*="background: #FFEDD5"],
+[data-theme='dark'] [style*="background: #ffedd5"],
+[data-theme='dark'] [style*="background-color: #FFEDD5"],
+[data-theme='dark'] [style*="background: #FEF3C7"],
+[data-theme='dark'] [style*="background: #fef3c7"],
+[data-theme='dark'] [style*="background-color: #FEF3C7"],
+[data-theme='dark'] [style*="background: #EDE9FE"],
+[data-theme='dark'] [style*="background: #ede9fe"],
+[data-theme='dark'] [style*="background-color: #EDE9FE"],
+[data-theme='dark'] [style*="background: #F3E8FF"],
+[data-theme='dark'] [style*="background: #f3e8ff"],
+[data-theme='dark'] [style*="background-color: #F3E8FF"],
+[data-theme='dark'] [style*="background: #E0E7FF"],
+[data-theme='dark'] [style*="background: #e0e7ff"],
+[data-theme='dark'] [style*="background-color: #E0E7FF"],
+[data-theme='dark'] [style*="background: #F0F9F4"],
+[data-theme='dark'] [style*="background: #f0f9f4"],
+[data-theme='dark'] [style*="background-color: #F0F9F4"],
+[data-theme='dark'] [style*="background: rgb(240, 249, 244)"],
+[data-theme='dark'] [style*="background-color: rgb(240, 249, 244)"],
+[data-theme='dark'] [style*="background: #D1FAE5"],
+[data-theme='dark'] [style*="background: #d1fae5"],
+[data-theme='dark'] [style*="background-color: #D1FAE5"],
+[data-theme='dark'] [style*="background: #A7F3D0"],
+[data-theme='dark'] [style*="background: #BBF7D0"],
+[data-theme='dark'] [style*="background: #BFDBFE"],
+[data-theme='dark'] [style*="background: #C7D2FE"],
+[data-theme='dark'] [style*="background: #DDD6FE"],
+[data-theme='dark'] [style*="background: #ddd6fe"],
+[data-theme='dark'] [style*="background-color: #DDD6FE"],
+[data-theme='dark'] [style*="background: #FBCFE8"],
+[data-theme='dark'] [style*="background: #FDE68A"],
+[data-theme='dark'] [style*="background: #FED7AA"],
+[data-theme='dark'] [style*="background: #FECACA"],
+[data-theme='dark'] [style*="background: #F0F9FF"],
+[data-theme='dark'] [style*="background: #F5F5F5"],
+[data-theme='dark'] [style*="background: #f5f5f5"],
+[data-theme='dark'] [style*="background-color: #F5F5F5"],
+[data-theme='dark'] [style*="background: #EEF2FF"],
+[data-theme='dark'] [style*="background: #eef2ff"],
+[data-theme='dark'] [style*="background-color: #EEF2FF"],
+[data-theme='dark'] [style*="background-color: #eef2ff"],
+[data-theme='dark'] [style*="background: rgb(238, 242, 255)"],
+[data-theme='dark'] [style*="background-color: rgb(238, 242, 255)"]{
+    background: var(--dm-surface-2) !important;
+    background-color: var(--dm-surface-2) !important;
+}
+
+/* ── Targeted dark-mode fallbacks for known component classes ── */
+/* Prefer specific selectors/theme vars over broad [class*="..."] overrides. */
+[data-theme='dark'] .card,
+[data-theme='dark'] .plan-card,
+[data-theme='dark'] .dashboard-tile,
+[data-theme='dark'] .account-card {
+    border-color: var(--dm-border);
+    color: var(--dm-text);
+}
+
+[data-theme='dark'] .expense-stat-card,
+[data-theme='dark'] .income-stat-card,
+[data-theme='dark'] .dashboard-stat-card,
+[data-theme='dark'] .stat-card,
+[data-theme='dark'] .overview-card,
+[data-theme='dark'] .overview-card-wrapper,
+[data-theme='dark'] .dashboard-tile,
+[data-theme='dark'] .bento-tile,
+[data-theme='dark'] .account-card,
+[data-theme='dark'] .expense-list-container,
+[data-theme='dark'] .income-list-container,
+[data-theme='dark'] .table-container,
+[data-theme='dark'] .search-input,
+[data-theme='dark'] .filter-btn,
+[data-theme='dark'] .controls-bar,
+[data-theme='dark'] .modal,
+[data-theme='dark'] .modal-content,
+[data-theme='dark'] .page-card,
+[data-theme='dark'] .summary-card,
+[data-theme='dark'] .metric-card,
+[data-theme='dark'] .finance-card,
+[data-theme='dark'] .wallet-card,
+[data-theme='dark'] .report-card,
+[data-theme='dark'] .analytics-card,
+[data-theme='dark'] .chart-card,
+[data-theme='dark'] .finance-panel-left,
+[data-theme='dark'] .finance-panel-right,
+[data-theme='dark'] .finance-table-wrapper {
+    background: var(--dm-surface) !important;
+    background-color: var(--dm-surface) !important;
+    border-color: var(--dm-border) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .search-input,
+[data-theme='dark'] .filter-btn,
+[data-theme='dark'] .btn-secondary,
+[data-theme='dark'] input:not([type="color"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="submit"]):not([type="button"]) {
+    box-shadow: none !important;
+}
+
+[data-theme='dark'] .filter-btn:hover,
+[data-theme='dark'] .expense-table tr:hover td,
+[data-theme='dark'] .income-table tr:hover td,
+[data-theme='dark'] [class*="row"]:hover,
+[data-theme='dark'] [class*="Row"]:hover {
+    background: var(--dm-surface-2) !important;
+    background-color: var(--dm-surface-2) !important;
+}
+
+[data-theme='dark'] .expense-table th,
+[data-theme='dark'] .income-table th,
+[data-theme='dark'] .expense-table td,
+[data-theme='dark'] .income-table td,
+[data-theme='dark'] th,
+[data-theme='dark'] td {
+    border-color: var(--dm-border) !important;
+}
+
+[data-theme='dark'] .expense-table th,
+[data-theme='dark'] .income-table th,
+[data-theme='dark'] thead,
+[data-theme='dark'] thead tr,
+[data-theme='dark'] thead th {
+    background: var(--dm-surface-2) !important;
+    background-color: var(--dm-surface-2) !important;
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .table-icon-bg,
+[data-theme='dark'] .category-pill,
+[data-theme='dark'] [class*="badge"],
+[data-theme='dark'] [class*="Badge"],
+[data-theme='dark'] [class*="pill"],
+[data-theme='dark'] [class*="Pill"],
+[data-theme='dark'] [class*="tag"],
+[data-theme='dark'] [class*="Tag"] {
+    border-color: var(--dm-border) !important;
+}
+
+[data-theme='dark'] .table-icon-bg,
+[data-theme='dark'] .category-pill {
+    background: var(--dm-surface-2) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .text-main {
+    color: inherit;
+}
+
+/* Improve contrast for common hardcoded inline heading/text colors in dark mode */
+[data-theme='dark'] [style*="color: #064E3B"],
+[data-theme='dark'] [style*="color: #064e3b"],
+[data-theme='dark'] [style*="color: rgb(6, 78, 59)"] {
+    color: var(--dm-text) !important;
+}
 
 html {
     font-size: 14.5px;

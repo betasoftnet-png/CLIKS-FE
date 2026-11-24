@@ -70,6 +70,17 @@ if (savedDarkMode === 'true') {
     document.documentElement.setAttribute('data-theme', 'light');
 }
 
+const savedAccentColor = localStorage.getItem('cliks_accent_color');
+if (savedAccentColor) {
+    document.documentElement.style.setProperty('--primary', savedAccentColor);
+}
+
+const savedFontSize = localStorage.getItem('cliks_font_size');
+if (savedFontSize) {
+    const fontSizeMap = { small: '14px', medium: '16px', large: '18px' };
+    document.documentElement.style.fontSize = fontSizeMap[savedFontSize] || '16px';
+}
+
 const PageLoader = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px', color: '#64748B' }}>
     Loading...

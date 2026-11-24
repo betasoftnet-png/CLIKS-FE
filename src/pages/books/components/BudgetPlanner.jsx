@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Target, Edit3, Check, X } from 'lucide-react';
 
-const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, onUpdateBudget, currencySymbol = '₹' }) => {
+const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, currentSpent, onUpdateBudget, currencySymbol = '₹' }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState('');
 
@@ -12,8 +12,9 @@ const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, onUpdateBudget, c
         setIsEditing(false);
     };
 
-    const remainingBudget = Math.max(0, budget - currentMonthExpenses);
-    const usagePercentage = budget > 0 ? Math.min(100, Math.round((currentMonthExpenses / budget) * 100)) : 0;
+    const spent = Number(currentMonthExpenses ?? currentSpent ?? 0);
+    const remainingBudget = Math.max(0, budget - spent);
+    const usagePercentage = budget > 0 ? Math.min(100, Math.round((spent / budget) * 100)) : 0;
 
     // ProgressBar color
     let progressColor = '#10B981'; // Green
@@ -87,7 +88,7 @@ const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, onUpdateBudget, c
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Expenses</span>
                         <span style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F172A' }}>
-                            {currencySymbol}{currentMonthExpenses.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                            {currencySymbol}{spent.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
                     </div>
                     

@@ -93,8 +93,13 @@ const Income = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-
-                    <p className="text-muted text-sm mt-1">Track and manage your revenue streams</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'linear-gradient(135deg,#1B6B3A 0%,#064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+                            <TrendingUp size={20} />
+                        </div>
+                        <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 900, color: 'var(--text-main, #0F172A)', lineHeight: 1.1 }}>Income</h1>
+                    </div>
+                    <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.9rem', fontWeight: 500 }}>Track and manage your revenue streams</p>
                 </div>
                 <button className="btn-primary">
                     <Plus size={18} />

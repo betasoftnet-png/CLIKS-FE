@@ -195,7 +195,7 @@ const Profile = () => {
 
     return (
         <div className={`app-root select-none ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`} style={{ height: '100vh', overflow: 'hidden' }}>
-            <Topbar onToggleSidebar={toggleSidebar} />
+            <Topbar onToggleSidebar={toggleSidebar} isSidebarOpen={sidebarOpen} />
             <div className="app-body" style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
                 <div className="main-content-area" style={{ background: '#F8FAFC', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', padding: '0' }}>
                     <div className="content-scrollable" style={{ overflowY: 'auto' }}>

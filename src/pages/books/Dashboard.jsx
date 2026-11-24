@@ -1,32 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCurrency, useLanguage } from '../../context';
-import {
-    LayoutDashboard,
-    Package,
-    Users,
-    Wallet,
-    SplitSquareVertical,
-    ArrowRight,
-    ArrowUpRight,
-    ArrowDownLeft,
-    Search,
-    Bell,
-    Settings,
-    Activity,
-    Plus,
-    Loader2,
-    TrendingUp,
-    Target,
-    Clock,
-    PiggyBank,
-    FileText,
-    ShieldCheck,
-    Briefcase,
-    X,
-    Calendar,
-    Award
-} from 'lucide-react';
+import { LayoutDashboard, Package, Users, Wallet, SplitSquareVertical, ArrowRight,
+    ArrowUpRight, ArrowDownLeft,Search, Bell, Settings, Activity, Plus, Loader2, TrendingUp,
+    Target, Clock, PiggyBank, FileText, ShieldCheck, Briefcase, X, Calendar, Award} from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { homeService } from '../../services';
@@ -155,7 +132,7 @@ const BooksDashboard = () => {
     ];
 
     return (
-        <div className="premium-container" style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', background: '#ffffff' }}>
+        <div className="premium-container" style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', background: 'var(--bg-color, #ffffff)' }}>
             <div className="dashboard-header" style={{ flexShrink: 0 }}>
                 <div className="dashboard-header-title">
                     <h1>{t('booksConsole', 'Books Console')}</h1>

@@ -10,11 +10,11 @@ import { ProfileDropdown } from './ProfileDropdown';
 import SearchBox from './SearchBox';
 import { pitchesService } from '../services/pitchesService';
 
-const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen, onOpenCalculator }) => {
+const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen, isSidebarOpen, onOpenCalculator }) => {
     const { logout, user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(false);
+    const [isNavOpen, setIsNavOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
     const storedFinProPlan = user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan;
     const [hasActiveFinPro, setHasActiveFinPro] = useState(Boolean(storedFinProPlan));
@@ -73,13 +73,21 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
     }, [isNotificationsOpen]);
 
     const toggleMenu = () => {
-        setIsOpen(!isOpen);
+        setIsNavOpen(prev => !prev);
     };
 
     const handleNavigation = (path) => {
         navigate(path);
-        setIsOpen(false);
-    }
+        setIsNavOpen(false);
+    };
+
+    const handleHamburgerClick = () => {
+        if (onToggleSidebar) {
+            onToggleSidebar();
+            return;
+        }
+        toggleMenu();
+    };
 
     const handleLogout = () => {
         logout();
@@ -123,9 +131,10 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
 
             {/* Hamburger Button (Mobile) */}
             <button
-                className={`hamburger ${isOpen ? 'active' : ''}`}
-                onClick={toggleMenu}
-                aria-label="Menu"
+                className={`hamburger ${(typeof isSidebarOpen === 'boolean' ? isSidebarOpen : isNavOpen) ? 'active' : ''}`}
+                onClick={handleHamburgerClick}
+                aria-label={typeof isSidebarOpen === 'boolean' ? 'Toggle sidebar' : 'Menu'}
+                aria-expanded={typeof isSidebarOpen === 'boolean' ? isSidebarOpen : isNavOpen}
             >
                 <span></span>
                 <span></span>
@@ -133,7 +142,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
             </button>
 
             {/* Center: Navigation (New Lamp Style) */}
-            <div className={`top-nav-links ${isOpen ? 'active' : ''}`} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div className={`top-nav-links ${isNavOpen ? 'active' : ''}`} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',

@@ -206,7 +206,7 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: #ffffff;
+    background-color: var(--bg-color, #ffffff);
 }
 
 .page-title {
@@ -2340,12 +2340,12 @@ div[style*="background-color: '#F0F9F4'"] {
 .dashboard-header-title h1 {
     font-size: 1.75rem;
     font-weight: 800;
-    color: #064E3B;
+    color: var(--text-main, #064E3B);
     margin-bottom: 0.25rem;
 }
 
 .dashboard-header-title p {
-    color: #64748B;
+    color: var(--text-muted, #64748B);
 }
 
 .dashboard-header-actions {
@@ -2361,10 +2361,11 @@ div[style*="background-color: '#F0F9F4'"] {
 .dashboard-search-input {
     padding: 0.65rem 1rem 0.65rem 2.5rem;
     border-radius: 12px;
-    border: 1px solid #E2E8F0;
+    border: 1px solid var(--border-color, #E2E8F0);
     outline: none;
     width: 260px;
-    background: white;
+    background: var(--input-bg, #ffffff);
+    color: var(--text-main, #064E3B);
     transition: all 0.2s ease;
 }
 

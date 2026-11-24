@@ -369,7 +369,7 @@ const Segregation = () => {
     });
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: '#F0F9F4', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Main Title Bar */}
             <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
                 <div>
@@ -387,7 +387,7 @@ const Segregation = () => {
                         }}>
                             <Target size={24} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em', margin: 0 }}>Segregation Wallets</h1>
+                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Segregation Wallets</h1>
                         
                         <button 
                             onClick={() => {

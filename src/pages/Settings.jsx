@@ -6,13 +6,26 @@ import {
     Save, User, Settings2, Shield, Bell, Palette,
     CreditCard, Zap, Terminal, ChevronLeft, Upload,
     Check, RefreshCw, Download, UploadCloud, Code2,
-    Globe, Lock, Smartphone, Mail, AlertCircle
+    Globe, Lock, Smartphone, Mail, AlertCircle, Eye, EyeOff
 } from 'lucide-react';
 
 /* ─── Dark mode helper ─────────────────────────────────────────── */
 const applyDarkMode = (isDark) => {
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     localStorage.setItem('cliks_dark_mode', isDark ? 'true' : 'false');
+};
+
+const applyAccentColor = (color) => {
+    if (!color) return;
+    document.documentElement.style.setProperty('--primary', color);
+    localStorage.setItem('cliks_accent_color', color);
+};
+
+const applyFontSize = (size) => {
+    const map = { small: '14px', medium: '16px', large: '18px' };
+    const value = map[size] || '16px';
+    document.documentElement.style.fontSize = value;
+    localStorage.setItem('cliks_font_size', size || 'medium');
 };
 
 /* ─── Shared style helpers ─────────────────────────────────────── */
@@ -126,8 +139,15 @@ const Settings = () => {
     const [security, setSecurity] = useState({
         currentPassword: '', newPassword: '', confirmPassword: '', sessionTimeout: '30',
     });
-    const [accentColor, setAccentColor] = useState('#1B6B3A');
-    const [fontSize, setFontSize] = useState('medium');
+
+    /* Password show and hide */
+    const [showPasswords, setShowPasswords] = useState({
+        currentPassword: false,
+        newPassword: false,
+        confirmPassword: false
+    });
+    const [accentColor, setAccentColor] = useState(localStorage.getItem('cliks_accent_color') || '#1B6B3A');
+    const [fontSize, setFontSize] = useState(localStorage.getItem('cliks_font_size') || 'medium');
     const [apiKey, setApiKey] = useState('sk-••••••••••••••••••••••••••••');
     const [avatarPreview, setAvatarPreview] = useState(null);
 
@@ -140,6 +160,14 @@ const Settings = () => {
                 const s = data.settings;
                 setToggles(prev => ({ ...prev, ...s }));
                 if (s.darkMode !== undefined) applyDarkMode(s.darkMode);
+                if (s.accentColor) {
+                    setAccentColor(s.accentColor);
+                    applyAccentColor(s.accentColor);
+                }
+                if (s.fontSize) {
+                    setFontSize(s.fontSize);
+                    applyFontSize(s.fontSize);
+                }
             }
         },
     });
@@ -153,6 +181,12 @@ const Settings = () => {
         },
     });
 
+    React.useEffect(() => {
+        applyAccentColor(localStorage.getItem('cliks_accent_color') || accentColor);
+        applyFontSize(localStorage.getItem('cliks_font_size') || fontSize);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     const handleToggle = (key) => {
         setToggles(prev => {
             const next = { ...prev, [key]: !prev[key] };
@@ -163,7 +197,9 @@ const Settings = () => {
 
     const handleSave = () => {
         applyDarkMode(toggles.darkMode);
-        mutation.mutate({ ...toggles, ...general });
+        applyAccentColor(accentColor);
+        applyFontSize(fontSize);
+        mutation.mutate({ ...toggles, ...general, accentColor, fontSize });
     };
 
     const handleAvatarChange = (e) => {
@@ -293,25 +329,83 @@ const Settings = () => {
         </div>
     );
 
+    
     const renderSecurity = () => (
         <div style={card}>
             <div style={sectionTitle}>Security Settings</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.25rem' }}>
-                <Field label="Current Password">
-                    <input type="password" style={inputStyle} value={security.currentPassword}
-                        onChange={e => setSecurity(p => ({ ...p, currentPassword: e.target.value }))} placeholder="••••••••" />
-                </Field>
-                <Field label="New Password">
-                    <input type="password" style={inputStyle} value={security.newPassword}
-                        onChange={e => setSecurity(p => ({ ...p, newPassword: e.target.value }))} placeholder="••••••••" />
-                </Field>
-                <Field label="Confirm Password">
-                    <input type="password" style={inputStyle} value={security.confirmPassword}
-                        onChange={e => setSecurity(p => ({ ...p, confirmPassword: e.target.value }))} placeholder="••••••••" />
-                </Field>
+
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+                gap: '1rem',
+                marginBottom: '1.25rem'
+            }}>
+                {[
+                    { key: 'currentPassword', label: 'Current Password' },
+                    { key: 'newPassword', label: 'New Password' },
+                    { key: 'confirmPassword', label: 'Confirm Password' }
+                ].map(({ key, label }) => (
+                    <Field key={key} label={label}>
+                        <div style={{ position: 'relative' }}>
+                            <input
+                                type={showPasswords[key] ? 'text' : 'password'}
+                                style={{
+                                    ...inputStyle,
+                                    paddingRight: '42px'
+                                }}
+                                value={security[key]}
+                                onChange={e =>
+                                    setSecurity(p => ({
+                                        ...p,
+                                        [key]: e.target.value
+                                    }))
+                                }
+                                placeholder="••••••••"
+                            />
+
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    setShowPasswords(p => ({
+                                        ...p,
+                                        [key]: !p[key]
+                                    }))
+                                }
+                                aria-label={showPasswords[key] ? 'Hide password' : 'Show password'}
+                                style={{
+                                    position: 'absolute',
+                                    right: '12px',
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                    background: 'transparent',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    color: '#777',
+                                    padding: 0
+                                }}
+                            >
+                                {showPasswords[key]
+                                    ? <EyeOff size={18} />
+                                    : <Eye size={18} />
+                                }
+                            </button>
+                        </div>
+                    </Field>
+                ))}
+
                 <Field label="Session Timeout (minutes)">
-                    <select style={selectStyle} value={security.sessionTimeout}
-                        onChange={e => setSecurity(p => ({ ...p, sessionTimeout: e.target.value }))}>
+                    <select
+                        style={selectStyle}
+                        value={security.sessionTimeout}
+                        onChange={e =>
+                            setSecurity(p => ({
+                                ...p,
+                                sessionTimeout: e.target.value
+                            }))
+                        }
+                    >
                         <option value="15">15 minutes</option>
                         <option value="30">30 minutes</option>
                         <option value="60">1 hour</option>
@@ -319,9 +413,16 @@ const Settings = () => {
                     </select>
                 </Field>
             </div>
-            <ToggleRow label="Enable Two-Factor Authentication" description="Require a verification code on each login." checked={toggles.twoFactor} onChange={() => handleToggle('twoFactor')} />
+
+            <ToggleRow
+                label="Enable Two-Factor Authentication"
+                description="Require a verification code on each login."
+                checked={toggles.twoFactor}
+                onChange={() => handleToggle('twoFactor')}
+            />
         </div>
     );
+
 
     const renderNotifications = () => (
         <div style={card}>
@@ -342,13 +443,13 @@ const Settings = () => {
             <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
                 <Field label="Accent Color">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                        <input type="color" value={accentColor} onChange={e => setAccentColor(e.target.value)}
+                        <input type="color" value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }}
                             style={{ width: 40, height: 36, borderRadius: 8, border: '1px solid #E2E8F0', cursor: 'pointer', padding: 2 }} />
-                        <input style={{ ...inputStyle, flex: 1 }} value={accentColor} onChange={e => setAccentColor(e.target.value)} />
+                        <input style={{ ...inputStyle, flex: 1 }} value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }} />
                     </div>
                 </Field>
                 <Field label="Font Size">
-                    <select style={selectStyle} value={fontSize} onChange={e => setFontSize(e.target.value)}>
+                    <select style={selectStyle} value={fontSize} onChange={e => { setFontSize(e.target.value); applyFontSize(e.target.value); }}>
                         <option value="small">Small</option>
                         <option value="medium">Medium</option>
                         <option value="large">Large</option>

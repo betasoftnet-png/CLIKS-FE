@@ -393,11 +393,11 @@ const FinancialPlan = () => {
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
                                         <div style={{ 
                                             width: '50px', height: '50px', borderRadius: '15px', 
-                                            background: '#FFF1F2',
-                                            color: '#E11D48',
+                                            background: isSend ? '#FFF1F2' : '#D1FAE5',
+                                            color: isSend ? '#E11D48' : '#10B981',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center'
                                         }}>
-                                            <ArrowUpRight size={24} />
+                                            {isSend ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
                                         </div>
                                         <div>
                                             <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#1E293B' }}>{displayTitle}</h4>
@@ -424,7 +424,7 @@ const FinancialPlan = () => {
                                     <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '2rem' }}>
                                         <div>
                                             <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
-                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: '#E11D48' }}>
+                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: isSend ? '#E11D48' : '#10B981' }}>
                                                 ₹{formattedAmount}
                                             </h4>
                                         </div>

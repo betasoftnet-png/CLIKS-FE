@@ -1090,11 +1090,11 @@ export default function Public() {
     return (
         <>
             <style>{`
-                body:not([data-theme='dark']), 
-                .app-root:not([data-theme='dark']), 
-                .app-body:not([data-theme='dark']), 
-                .main-content-area:not([data-theme='dark']), 
-                .content-scrollable:not([data-theme='dark']) {
+                :root:not([data-theme='dark']) body, 
+                :root:not([data-theme='dark']) .app-root, 
+                :root:not([data-theme='dark']) .app-body, 
+                :root:not([data-theme='dark']) .main-content-area, 
+                :root:not([data-theme='dark']) .content-scrollable {
                     background-color: #ffffff !important;
                 }
             `}</style>

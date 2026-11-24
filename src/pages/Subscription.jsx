@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { 
     CreditCard, 
     Check, 
@@ -16,12 +18,20 @@ import {
 } from 'lucide-react';
 import { load } from '@cashfreepayments/cashfree-js';
 import { apiClient } from '../api/client';
+import { caService } from '../services';
 import '../App.css';
 import { formatCurrency } from '../lib/formatCurrency';
 import { useAuth } from '../context';
 
 const Subscription = () => {
+    const navigate = useNavigate();
     const { user } = useAuth();
+    const { data: icaiData } = useQuery({
+        queryKey: ['icaiVerificationStatus'],
+        queryFn: () => caService.getIcaiVerification(),
+        retry: false
+    });
+    const isCaVerified = (icaiData?.data || icaiData || {}).status === 'VERIFIED';
     const currency = { code: 'INR' };
     const storedFinProPlan = user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan;
     const legacyFinProPlans = {
@@ -38,6 +48,11 @@ const Subscription = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     const handleUpgrade = async (tier, categoryKey, teamMemberCount = firmTeamMembers) => {
+        if (categoryKey === 'ca' && !isCaVerified) {
+            navigate('/ca');
+            return;
+        }
+
         const currentPlan = categoryKey === 'ca' ? activeFinProPlan : selectedTier;
         if (tier.name === currentPlan) return;
 
@@ -252,10 +267,7 @@ const Subscription = () => {
         ]
     };
 
-    const invoices = [
-        { id: 'INV-2026-041', date: '2026-05-01', tier: 'Growth Plan', amount: 6999, status: 'Paid', method: 'UPI (Razorpay)' },
-        { id: 'INV-2026-029', date: '2025-05-01', tier: 'Growth Plan', amount: 6999, status: 'Paid', method: 'Bank Transfer' }
-    ];
+    const invoices = [];
 
     const getRenewalDetails = () => {
         if (!selectedTier) {
@@ -823,16 +835,24 @@ const Subscription = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {invoices.map((inv, idx) => (
-                                <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                    <td style={{ padding: '1.25rem', fontWeight: '800', color: '#064E3B' }}>{inv.id}</td>
-                                    <td style={{ padding: '1.25rem', fontSize: '0.85rem', color: '#64748B', fontWeight: '500' }}>{inv.date}</td>
-                                    <td style={{ padding: '1.25rem', fontWeight: '700', color: '#1E293B' }}>{inv.tier}</td>
-                                    <td style={{ padding: '1.25rem', fontSize: '0.8rem', color: '#475569', fontWeight: '600' }}><span style={{ background: '#F1F5F9', padding: '0.3rem 0.6rem', borderRadius: '8px' }}>{inv.method}</span></td>
-                                    <td style={{ padding: '1.25rem' }}><span style={{ padding: '0.4rem 0.8rem', borderRadius: '10px', background: '#F0FDF4', color: '#1B6B3A', fontSize: '0.8rem', fontWeight: '750' }}>{inv.status}</span></td>
-                                    <td style={{ padding: '1.25rem', textAlign: 'right', fontWeight: '850', color: '#1E293B' }}>{formatCurrency(inv.amount)}</td>
+                            {invoices.length > 0 ? (
+                                invoices.map((inv, idx) => (
+                                    <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <td style={{ padding: '1.25rem', fontWeight: '800', color: '#064E3B' }}>{inv.id}</td>
+                                        <td style={{ padding: '1.25rem', fontSize: '0.85rem', color: '#64748B', fontWeight: '500' }}>{inv.date}</td>
+                                        <td style={{ padding: '1.25rem', fontWeight: '700', color: '#1E293B' }}>{inv.tier}</td>
+                                        <td style={{ padding: '1.25rem', fontSize: '0.8rem', color: '#475569', fontWeight: '600' }}><span style={{ background: '#F1F5F9', padding: '0.3rem 0.6rem', borderRadius: '8px' }}>{inv.method}</span></td>
+                                        <td style={{ padding: '1.25rem' }}><span style={{ padding: '0.4rem 0.8rem', borderRadius: '10px', background: '#F0FDF4', color: '#1B6B3A', fontSize: '0.8rem', fontWeight: '750' }}>{inv.status}</span></td>
+                                        <td style={{ padding: '1.25rem', textAlign: 'right', fontWeight: '850', color: '#1E293B' }}>{formatCurrency(inv.amount)}</td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={6} style={{ padding: '2rem 1.25rem', textAlign: 'center', color: '#64748B', fontWeight: '600' }}>
+                                        No billing history available.
+                                    </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
