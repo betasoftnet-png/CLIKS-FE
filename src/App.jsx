@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+﻿import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute } from './routes/ProtectedRoute';
@@ -58,6 +58,9 @@ const BillingRecords = React.lazy(() => import('./pages/books/BillingRecords'));
 const Accounting = React.lazy(() => import('./pages/books/Accounting'));
 const PurchaseDetails = React.lazy(() => import('./pages/books/PurchaseDetails'));
 const StaffDetails = React.lazy(() => import('./pages/StaffDetails'));
+const BusinessBranches = React.lazy(() => import('./pages/BusinessBranches'));
+const PermissionManager = React.lazy(() => import('./components/PermissionManager'));
+const BusinessCustomization = React.lazy(() => import('./pages/BusinessCustomization'));
 
 
 import './App.css';
@@ -77,8 +80,8 @@ if (savedAccentColor) {
 
 const savedFontSize = localStorage.getItem('cliks_font_size');
 if (savedFontSize) {
-    const fontSizeMap = { small: '14px', medium: '16px', large: '18px' };
-    document.documentElement.style.fontSize = fontSizeMap[savedFontSize] || '16px';
+    const fontSizeMap = { small: '13.5px', medium: '14.5px', large: '16px' };
+    document.documentElement.style.fontSize = fontSizeMap[savedFontSize] || '14.5px';
 }
 
 const PageLoader = () => (
@@ -174,8 +177,13 @@ function AuthenticatedApp() {
                 <Route path="/social/trading" element={<Public />} />
                 <Route path="/social/beta-club" element={<Public />} />
 
+                {/* Management Routes */}
+                <Route path="/inventory/branches" element={<BusinessBranches />} />
+                <Route path="/manage-subids" element={<PermissionManager />} />
+                                <Route path="/customization" element={<BusinessCustomization />} />
+
                 {/* FIN-PRO CA Section */}
-                <Route path="/ca" element={<BusinessCA />} />
+                <Route path="/ca" element={<BusinessCA mode="personal" />} />
                 
                 {/* Subscription Section */}
                 <Route path="/subscription" element={<Subscription />} />
@@ -237,3 +245,4 @@ function App() {
 }
 
 export default App;
+

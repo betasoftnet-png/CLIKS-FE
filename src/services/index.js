@@ -40,4 +40,6 @@ export * from './referralService';
 export * from './financePlusService';
 export * from './staffingService';
 export * from './customerLoyaltyService';
+export * from './branchService';
+export * from './productsService';
 

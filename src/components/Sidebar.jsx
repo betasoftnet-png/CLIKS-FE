@@ -350,7 +350,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
     // Show Finance sidebar for root, home (redirect), and finance/payments paths
     const showFinanceSidebar = location.pathname === '/' || location.pathname.startsWith('/home') || location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments');
-    const showBooksSidebar = (location.pathname.startsWith('/books') && location.pathname !== '/books/profile') || location.pathname === '/auditor' || location.pathname.startsWith('/ca') || location.pathname === '/subscription';
+    const showBooksSidebar = (location.pathname.startsWith('/books') && location.pathname !== '/books/profile') || location.pathname === '/auditor' || location.pathname.startsWith('/ca') || location.pathname === '/subscription' || location.pathname.startsWith('/manage-subids') || location.pathname.startsWith('/inventory/branches') || location.pathname === '/branches' || location.pathname.startsWith('/settings/branches') || location.pathname.startsWith('/customization');
     const showPublicSidebar = location.pathname.startsWith('/public') || location.pathname.startsWith('/social');
 
 
@@ -391,7 +391,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             </div>
 
             <div className="sidebar-scroll-container" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-                <nav className="sidebar-nav" style={{ paddingTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <nav className="sidebar-nav" style={{ paddingTop: '0.4rem', display: 'flex', flexDirection: 'column', gap: '1px' }}>
                 {showFinanceSidebar && (
                     <>
                         {/* 1. Add Transaction */}
@@ -403,32 +403,32 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 }
                             }}
                             style={{
-                                width: 'calc(100% - 1.5rem)',
-                                margin: '0.25rem 0.75rem 0.85rem 0.75rem',
+                                width: 'calc(100% - 1rem)',
+                                margin: '0.15rem 0.5rem 0.45rem 0.5rem',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.5rem',
-                                padding: '0.65rem 1rem',
+                                gap: '0.4rem',
+                                padding: '0.5rem 0.75rem',
                                 background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
                                 color: '#FFFFFF',
-                                borderRadius: '10px',
+                                borderRadius: '8px',
                                 border: 'none',
                                 cursor: 'pointer',
                                 fontWeight: '800',
-                                fontSize: '0.85rem',
-                                boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)',
+                                fontSize: '0.8rem',
+                                boxShadow: '0 3px 10px rgba(27, 107, 58, 0.18)',
                                 transition: 'all 0.2s ease',
                                 flexShrink: 0
                             }}
                             onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                             onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                         >
-                            <Plus size={16} strokeWidth={3} /> Add Transaction
+                            <Plus size={14} strokeWidth={3} /> Add Transaction
                         </button>
 
                         {/* Divider Line */}
-                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.1rem 0.75rem 0.5rem 0.75rem' }} />
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.1rem 0.5rem 0.35rem 0.5rem' }} />
 
                         {/* 2. People */}
                         <button
@@ -490,23 +490,23 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 {showBooksSidebar && (
                     <>
                         {/* Action Buttons: Add Income & Add Expense */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.45rem', margin: '0.25rem 0.75rem 0.75rem 0.75rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem', margin: '0.15rem 0.5rem 0.45rem 0.5rem' }}>
                             <button
                                 onClick={() => openBookTxModal('income')}
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '0.35rem',
-                                    padding: '0.6rem 0.35rem',
+                                    gap: '0.25rem',
+                                    padding: '0.45rem 0.25rem',
                                     background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                                     color: '#FFFFFF',
-                                    borderRadius: '10px',
+                                    borderRadius: '8px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.78rem',
-                                    boxShadow: '0 3px 10px rgba(16, 185, 129, 0.25)',
+                                    fontSize: '0.72rem',
+                                    boxShadow: '0 2px 8px rgba(16, 185, 129, 0.22)',
                                     transition: 'all 0.2s ease',
                                     whiteSpace: 'nowrap'
                                 }}
@@ -514,7 +514,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                                 title="Add Income"
                             >
-                                <Plus size={14} strokeWidth={3} /> Add Income
+                                <Plus size={12} strokeWidth={3} /> Add Income
                             </button>
                             <button
                                 onClick={() => openBookTxModal('expense')}
@@ -522,16 +522,16 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '0.35rem',
-                                    padding: '0.6rem 0.35rem',
+                                    gap: '0.25rem',
+                                    padding: '0.45rem 0.25rem',
                                     background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
                                     color: '#FFFFFF',
-                                    borderRadius: '10px',
+                                    borderRadius: '8px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.78rem',
-                                    boxShadow: '0 3px 10px rgba(239, 68, 68, 0.25)',
+                                    fontSize: '0.72rem',
+                                    boxShadow: '0 2px 8px rgba(239, 68, 68, 0.22)',
                                     transition: 'all 0.2s ease',
                                     whiteSpace: 'nowrap'
                                 }}
@@ -539,7 +539,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                                 title="Add Expense"
                             >
-                                <Plus size={14} strokeWidth={3} /> Add Expense
+                                <Plus size={12} strokeWidth={3} /> Add Expense
                             </button>
                         </div>
 
@@ -555,7 +555,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         </button>
 
                         {/* Divider Line */}
-                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.4rem 0.5rem' }} />
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.2rem 0.5rem' }} />
                         {/* 2. Accounts */}
                         <button
                             className={`sidebar-item ${activeItem === 'Accounts' ? 'active' : ''}`}
@@ -622,7 +622,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.5rem 1rem' }} />
+                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.25rem 0.75rem' }} />
 
                         
                     </>
@@ -659,7 +659,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             </div>
 
             {/* Refer & Earn Block */}
-            <div style={{ padding: '0 1rem', marginBottom: '0.75rem', flexShrink: 0 }}>
+            <div style={{ padding: '0 0.75rem', marginBottom: '0.4rem', flexShrink: 0 }}>
                 <button
                     onClick={() => {
                         if (onReferralClick) onReferralClick();
@@ -669,15 +669,15 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        gap: '0.65rem',
-                        padding: '0.60rem',
+                        gap: '0.5rem',
+                        padding: '0.45rem 0.5rem',
                         background: 'transparent',
                         color: '#6B7280',
-                        borderRadius: '12px',
+                        borderRadius: '10px',
                         border: '1px solid transparent',
                         cursor: 'pointer',
                         fontWeight: '750',
-                        fontSize: '0.875rem',
+                        fontSize: '0.8rem',
                         transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                         outline: 'none'
                     }}
@@ -696,18 +696,18 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         e.currentTarget.style.transform = 'translateY(0)';
                     }}
                 >
-                    <Gift size={18} strokeWidth={2.5} style={{ color: '#8B5CF6', flexShrink: 0 }} />
+                    <Gift size={16} strokeWidth={2.5} style={{ color: '#8B5CF6', flexShrink: 0 }} />
                     <span>Refer &amp; Earn</span>
                 </button>
             </div>
 
             {/* Fixed Sidebar Footer */}
-            <div style={{ 
-                padding: '1rem', 
+            <div className="sidebar-footer-container" style={{ 
+                padding: '0.55rem 0.75rem 0.65rem 0.75rem', 
                 borderTop: '1px solid #F1F5F9', 
                 display: 'flex', 
                 flexDirection: 'column', 
-                gap: '0.6rem',
+                gap: '0.4rem',
                 flexShrink: 0,
                 background: '#FFFFFF'
             }}>
@@ -717,28 +717,28 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     onClick={() => handleItemClick('Subscription', '/subscription')}
                     style={{
                         width: '100%',
-                        padding: '0.75rem 0.85rem',
+                        padding: '0.5rem 0.6rem',
                         background: '#0f172a',
                         color: '#FFFFFF',
                         border: '1px solid #1e293b',
                         cursor: 'pointer',
-                        borderRadius: '16px',
-                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.3)',
+                        borderRadius: '12px',
+                        boxShadow: '0 3px 10px rgba(0, 0, 0, 0.25)',
                         transition: 'all 0.2s ease',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        gap: '0.5rem',
+                        gap: '0.35rem',
                         boxSizing: 'border-box'
                     }}
                     onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
                     onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
                     {/* Badge 1: BOOK ELITE */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, flex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0, flex: 1 }}>
                         <div style={{
-                            width: '36px',
-                            height: '36px',
+                            width: '30px',
+                            height: '30px',
                             borderRadius: '50%',
                             background: 'rgba(0,0,0,0.4)',
                             border: '2px solid #F59E0B',
@@ -748,27 +748,27 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
-                            <span style={{ fontSize: '0.6rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
-                            <span style={{ fontSize: '0.38rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
+                            <span style={{ fontSize: '0.52rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.34rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
                         </div>
                         <div style={{ textAlign: 'left', minWidth: 0 }}>
-                            <span style={{ fontSize: '0.68rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 BOOK
                             </span>
-                            <span style={{ fontSize: '0.6rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
+                            <span style={{ fontSize: '0.54rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
                                 ELITE
                             </span>
                         </div>
                     </div>
 
                     {/* Center Divider */}
-                    <div style={{ width: '1px', height: '24px', background: '#334155', flexShrink: 0, margin: '0 2px' }} />
+                    <div style={{ width: '1px', height: '20px', background: '#334155', flexShrink: 0, margin: '0 1px' }} />
 
                     {/* Badge 2: FIN-PRO SOLO */}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', minWidth: 0, flex: 1, justifyContent: 'flex-end' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', minWidth: 0, flex: 1, justifyContent: 'flex-end' }}>
                         <div style={{
-                            width: '36px',
-                            height: '36px',
+                            width: '30px',
+                            height: '30px',
                             borderRadius: '50%',
                             background: 'rgba(0,0,0,0.4)',
                             border: '2px solid #F59E0B',
@@ -778,14 +778,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             justifyContent: 'center',
                             flexShrink: 0
                         }}>
-                            <span style={{ fontSize: '0.6rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
-                            <span style={{ fontSize: '0.38rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
+                            <span style={{ fontSize: '0.52rem', fontWeight: '900', color: '#F59E0B', lineHeight: 1 }}>353</span>
+                            <span style={{ fontSize: '0.34rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', lineHeight: 1, marginTop: '1px' }}>DAYS</span>
                         </div>
                         <div style={{ textAlign: 'left', minWidth: 0 }}>
-                            <span style={{ fontSize: '0.68rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <span style={{ fontSize: '0.62rem', fontWeight: '900', color: '#F8FAFC', display: 'block', letterSpacing: '-0.01em', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 FIN-PRO
                             </span>
-                            <span style={{ fontSize: '0.6rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
+                            <span style={{ fontSize: '0.54rem', fontWeight: '800', color: '#FCD34D', textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', lineHeight: 1.1 }}>
                                 SOLO
                             </span>
                         </div>

@@ -22,8 +22,8 @@ const applyAccentColor = (color) => {
 };
 
 const applyFontSize = (size) => {
-    const map = { small: '14px', medium: '16px', large: '18px' };
-    const value = map[size] || '16px';
+    const map = { small: '13.5px', medium: '14.5px', large: '16px' };
+    const value = map[size] || '14.5px';
     document.documentElement.style.fontSize = value;
     localStorage.setItem('cliks_font_size', size || 'medium');
 };

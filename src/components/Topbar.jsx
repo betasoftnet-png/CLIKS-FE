@@ -77,6 +77,12 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
     };
 
     const handleNavigation = (path) => {
+        if (selectedPlan === 'Free Plan' && path !== '/dashboard' && path !== '/ca') {
+            alert('You are on the Free Plan! Please subscribe to unlock full access to this feature.');
+            navigate('/subscription');
+            setIsNavOpen(false);
+            return;
+        }
         navigate(path);
         setIsNavOpen(false);
     };
@@ -100,6 +106,42 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
         { name: 'Social', url: '/social', icon: Users, activeBase: '/social' },
     ];
 
+    // ICAI Verification / FIN-PRO Status Query
+    const token = typeof window !== 'undefined' ? (localStorage.getItem('books_auth_token') || localStorage.getItem('bnx_auth_token')) : null;
+    const { data: icaiVerification } = useQuery({
+        queryKey: ['icaiVerification'],
+        queryFn: async () => {
+            try {
+                return await caService.getIcaiVerification();
+            } catch (e) {
+                return null;
+            }
+        },
+        enabled: Boolean(token),
+        staleTime: 30000,
+        refetchInterval: (query) => {
+            // Once verified, avoid polling; otherwise poll every 15s to detect admin approval in real-time
+            const status = query.state.data?.status;
+            return status === 'VERIFIED' ? false : 15000;
+        },
+        refetchOnWindowFocus: true
+    });
+
+    const isFinProVerified = React.useMemo(() => {
+        const vStatus = icaiVerification?.status || user?.ca_verification_status;
+        const isVer = icaiVerification?.isVerified === true || user?.is_finpro_verified === true || user?.is_ca === 1 || user?.role === 'ca';
+        return vStatus === 'VERIFIED' || isVer;
+    }, [icaiVerification, user]);
+
+    React.useEffect(() => {
+        if (typeof window === 'undefined') return;
+        if (isFinProVerified) {
+            localStorage.setItem('cliks_finpro_verified', 'true');
+        } else {
+            localStorage.removeItem('cliks_finpro_verified');
+        }
+    }, [isFinProVerified]);
+
     return (
         <header className="topbar" style={{ paddingRight: '14px' }}>
             {/* Left: Branding / App Switcher */}
@@ -117,13 +159,13 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                             onToggleSidebar();
                         }
                     }}
-                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                     title="Toggle Sidebar"
                 >
-                    <div className="brand-logo-small" style={{ backgroundColor: '#f0fdf4', padding: '2px', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
-                        <img src={logoPng} alt="CLIKS Logo" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
+                    <div className="brand-logo-small" style={{ backgroundColor: '#f0fdf4', padding: '2px', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                        <img src={logoPng} alt="CLIKS Logo" style={{ height: '75%', width: '75%', objectFit: 'contain' }} />
                     </div>
-                    <span style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: '700', letterSpacing: '0.5px' }}>
+                    <span style={{ color: '#ffffff', fontSize: '1.15rem', fontWeight: '700', letterSpacing: '0.4px' }}>
                         CLIKS
                     </span>
                 </div>
@@ -159,7 +201,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                         const isItemActive = item.name === 'Payments'
                             ? (location.pathname.startsWith('/finance') || location.pathname.startsWith('/payments') || location.pathname === '/')
                             : (item.name === 'Books'
-                                ? (location.pathname.startsWith('/books') || location.pathname.startsWith('/ca'))
+                                ? (location.pathname.startsWith('/books') || location.pathname.startsWith('/ca') || location.pathname.startsWith('/customization'))
                                 : (item.activeBase
                                     ? (location.pathname.startsWith(item.activeBase) || (item.name === 'Social' && location.pathname.startsWith('/public')))
                                     : (item.url ? (location.pathname === item.url || (item.url !== '/home' && location.pathname.startsWith(item.url))) : false)));
@@ -370,32 +412,40 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     )}
                 </div>
 
-                {hasActiveFinPro && (
+                {/* FIN-PRO Header Button (Displayed after Admin verifies requested user's ICAI details) */}
+                {isFinProVerified && (
                     <button
-                        type="button"
-                        aria-label="FIN-PRO"
-                        title="Open FIN-PRO"
-                        onClick={() => navigate('/ca')}
+                        onClick={() => handleNavigation('/ca')}
+                        title="FIN-PRO Audit & Practice Hub"
+                        className="topbar-finpro-btn"
                         style={{
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '8px',
-                            height: '38px',
-                            padding: '0 14px',
+                            gap: '7px',
+                            height: '36px',
                             borderRadius: '999px',
-                            background: 'rgba(255, 255, 255, 0.12)',
-                            border: '1px solid rgba(255, 255, 255, 0.25)',
-                            color: '#ffffff',
-                            fontSize: '0.875rem',
-                            fontWeight: 700,
-                            whiteSpace: 'nowrap',
+                            backgroundColor: location.pathname.startsWith('/ca') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.12)',
+                            border: location.pathname.startsWith('/ca') ? '1.5px solid #60A5FA' : '1px solid rgba(255, 255, 255, 0.25)',
+                            color: '#FFFFFF',
+                            fontSize: '13px',
+                            fontWeight: '750',
                             cursor: 'pointer',
-                            flexShrink: 0,
+                            outline: 'none',
+                            transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                            whiteSpace: 'nowrap',
+                            boxShadow: location.pathname.startsWith('/ca') ? '0 0 14px rgba(96, 165, 250, 0.45)' : 'none'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.22)';
+                            e.currentTarget.style.transform = 'scale(1.02)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = location.pathname.startsWith('/ca') ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.12)';
+                            e.currentTarget.style.transform = 'scale(1)';
                         }}
                     >
-                        <Briefcase size={18} />
-                        <span>FIN-PRO</span>
+                        <Briefcase size={16} color={location.pathname.startsWith('/ca') ? '#93C5FD' : '#FFFFFF'} style={{ flexShrink: 0 }} />
+                        <span className="topbar-finpro-text">FIN-PRO</span>
                     </button>
                 )}
 

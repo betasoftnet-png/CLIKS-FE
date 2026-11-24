@@ -1,18 +1,68 @@
 import React, { useState, useRef, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, User as UserIcon, Settings, LogOut, HelpCircle, User, Globe, Coins, Flag, ArrowLeft, Search, ShieldCheck } from "lucide-react";
-import { useAuth, useCurrency } from "../context";
+import { ChevronDown, User as UserIcon, LogOut, User, Globe, Coins, Flag, ArrowLeft, Search, ShieldCheck, Camera, UserCog, UserPlus, Users, X, CheckCircle2, Building, Store } from "lucide-react";
+import { useAuth, useCurrency, useLanguage } from "../context";
+import { useNavigate } from "react-router-dom";
 
 export function ProfileDropdown({
     onAccount,
-    onSettings,
-    onFAQ,
     onLogout,
 }) {
+    const { t } = useLanguage();
     const [open, setOpen] = useState(false);
-    const { user } = useAuth();
+    const { user, accounts = [], switchAccount, removeAccount, logoutAll } = useAuth();
+    const navigate = useNavigate();
     const dropdownRef = useRef(null);
+
+    const isOwner = !user?.is_sub_id && user?.role !== 'sub_id' && user?.role !== 'SUB_ID';
+    const isBranchManager = Boolean(user && (user.is_sub_id || user.role === 'sub_id' || user.role === 'SUB_ID') && user.branch_id);
+    
+    // Profile Photo & Camera Menu States
+    const getResolvedProfilePic = () => {
+        const local = localStorage.getItem("profile_photo");
+        if (local) return local;
+        const pic = user?.profilePhoto || user?.profilePictureUrl || user?.profile_picture_url || null;
+        if (pic) {
+            return pic.startsWith('http') ? pic : `https://api.bnxmail.com${pic.startsWith('/') ? '' : '/'}${pic}`;
+        }
+        if (user?.profilePicture || user?.profile_picture) {
+            const uName = user.username || user.name || (user.email ? user.email.split('@')[0] : null);
+            if (uName) return `https://api.bnxmail.com/api/users/profile-picture/${encodeURIComponent(uName)}`;
+        }
+        return null;
+    };
+
+    const [profilePhoto, setProfilePhoto] = useState(getResolvedProfilePic);
+    const [imgError, setImgError] = useState(false);
+    const [isCameraMenuOpen, setIsCameraMenuOpen] = useState(false);
+    const [isViewPhotoModalOpen, setIsViewPhotoModalOpen] = useState(false);
+    const fileInputRef = useRef(null);
+
+    useEffect(() => {
+        const resolved = getResolvedProfilePic();
+        setProfilePhoto(resolved);
+        setImgError(false);
+    }, [user?.profilePhoto, user?.profilePictureUrl, user?.profile_picture_url, user?.profilePicture, user?.username, user?.email]);
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Please select an image file smaller than 5MB.");
+                return;
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result;
+                localStorage.setItem("profile_photo", base64String);
+                setProfilePhoto(base64String);
+                setImgError(false);
+                alert("Profile photo updated successfully!");
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     
     // Country Selector State
     const [isCountrySelectorOpen, setIsCountrySelectorOpen] = useState(false);
@@ -307,7 +357,48 @@ export function ProfileDropdown({
     const countryFlag = countryFlagObj ? countryFlagObj.flag : "🌐";
 
     const displayEmail = user?.email || "Guest";
-    const displayName = user?.username || user?.name || "User";
+    const emailPrefix = user?.email ? user.email.split('@')[0] : "User";
+
+    const otherAccounts = (accounts || []).filter(acc => {
+        if (!acc || !acc.email) return false;
+        if (!user || !user.email) return true;
+        return acc.email.toLowerCase() !== user.email.toLowerCase();
+    });
+
+    const rawDisplayName = (user?.displayName && String(user.displayName).trim())
+        ? String(user.displayName).trim()
+        : (user?.display_name && String(user.display_name).trim())
+            ? String(user.display_name).trim()
+            : (user?.fullName && String(user.fullName).trim())
+                ? String(user.fullName).trim()
+                : (user?.full_name && String(user.full_name).trim())
+                    ? String(user.full_name).trim()
+                    : user?.name || user?.username || emailPrefix;
+
+    // Guard against cross-contamination: if candidate matches any other account's prefix, username, or display name, fall back to emailPrefix
+    const isStaleFromOther = otherAccounts.some(other => {
+        if (!other || !other.email) return false;
+        const otherPrefix = other.email.toLowerCase().split('@')[0];
+        const otherUser = String(other.username || '').toLowerCase().trim();
+        const otherDisp = String(other.displayName || other.name || '').toLowerCase().trim();
+        const candidate = rawDisplayName.toLowerCase().trim();
+        return candidate === otherPrefix || (otherUser && candidate === otherUser) || (otherDisp && candidate === otherDisp);
+    });
+
+    const displayName = isStaleFromOther ? emailPrefix : rawDisplayName;
+    const firstLetter = (displayName || emailPrefix || 'U').trim().charAt(0).toUpperCase();
+
+    const handleAddAccount = () => {
+        const CLIENT_ID = 'cliks-business';
+        const redirectUri = encodeURIComponent(window.location.origin + '/');
+        const BNX_AUTH_URL = 'https://www.b2auth.com';
+        const state = 'cliks-business-add-account';
+        try {
+            sessionStorage.setItem('cliks_adding_account', 'true');
+        } catch (e) {}
+
+        window.location.href = `${BNX_AUTH_URL}/?client_id=${CLIENT_ID}&redirect_uri=${redirectUri}&state=${state}&mode=business&prompt=login`;
+    };
 
     // Calculate dynamic trust score
     const getBetaTrustScore = () => {
@@ -335,6 +426,7 @@ export function ProfileDropdown({
                 setIsCountrySelectorOpen(false);
                 setIsCurrencySelectorOpen(false);
                 setIsTrustOpen(false);
+                setIsCameraMenuOpen(false);
                 setCountrySearchQuery("");
                 setCountrySearchQueryCurrency("");
             }
@@ -351,35 +443,36 @@ export function ProfileDropdown({
         triggerButton: {
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
-            borderRadius: '12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '999px',
+            backgroundColor: 'rgba(255, 255, 255, 0.08)',
             border: '1px solid rgba(255, 255, 255, 0.2)',
-            padding: '6px 14px',
-            fontSize: '14px',
-            fontWeight: 600,
+            fontSize: '13px',
+            fontWeight: 700,
             color: '#FFFFFF',
             cursor: 'pointer',
             transition: 'all 0.2s ease',
             outline: 'none',
+            height: '36px',
         },
         dropdownMenu: {
             position: 'absolute',
             right: 0,
-            top: 'calc(100% + 10px)',
+            top: 'calc(100% + 8px)',
             zIndex: 1000,
-            width: '280px',
-            borderRadius: '16px',
+            width: '320px',
+            maxHeight: 'min(560px, calc(100vh - 80px))',
+            overflowY: 'auto',
+            borderRadius: '20px',
             backgroundColor: '#ffffff',
-            boxShadow: '0 20px 40px -12px rgba(0, 0, 0, 0.25)',
-            border: '1px solid #e5e7eb',
-            overflow: 'hidden',
-            padding: '8px',
+            boxShadow: '0 12px 32px -4px rgba(16, 24, 40, 0.14), 0 4px 12px -2px rgba(16, 24, 40, 0.08)',
+            border: '1px solid #e2e8f0',
+            padding: '6px',
+            scrollbarWidth: 'thin',
         },
         header: {
-            padding: '16px',
+            padding: '12px',
             borderBottom: '1px solid #f3f4f6',
-            marginBottom: '8px',
+            marginBottom: '6px',
         },
         signedInText: {
             fontSize: '11px',
@@ -390,7 +483,7 @@ export function ProfileDropdown({
             marginBottom: '4px',
         },
         emailText: {
-            fontSize: '14px',
+            fontSize: '13px',
             fontWeight: 700,
             color: '#111827',
             whiteSpace: 'nowrap',
@@ -400,21 +493,21 @@ export function ProfileDropdown({
         menuItem: {
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            gap: '10px',
             width: '100%',
             textAlign: 'left',
-            padding: '10px 12px',
-            fontSize: '14px',
+            padding: '8px 10px',
+            fontSize: '13px',
             fontWeight: 600,
-            color: '#4b5563',
+            color: '#374151',
             backgroundColor: 'transparent',
             border: 'none',
-            borderRadius: '10px',
+            borderRadius: '8px',
             cursor: 'pointer',
             transition: 'all 0.15s ease',
         },
         logoutItem: {
-            color: '#ef4444',
+            color: '#D93025',
         },
         submenuHeader: {
             display: 'flex',
@@ -485,11 +578,18 @@ export function ProfileDropdown({
             <button
                 type="button"
                 onClick={() => setOpen(!open)}
-                style={styles.triggerButton}
+                className="profile-trigger-btn"
+                style={{
+                    ...styles.triggerButton,
+                    backgroundColor: open ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                    boxSizing: 'border-box',
+                    maxWidth: '100%',
+                    minWidth: 0
+                }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = open ? 'rgba(255, 255, 255, 0.2)' : 'rgba(255, 255, 255, 0.08)'}
             >
-                <div style={{
+                <div className="profile-trigger-avatar" style={{
                     width: '24px',
                     height: '24px',
                     borderRadius: '50%',
@@ -497,36 +597,63 @@ export function ProfileDropdown({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    color: '#1B6B3A'
+                    color: '#135029',
+                    flexShrink: 0,
+                    overflow: 'hidden'
                 }}>
-                    <UserIcon size={14} />
+                    {profilePhoto && !imgError ? (
+                        <img 
+                            src={profilePhoto} 
+                            alt="Avatar" 
+                            onError={() => setImgError(true)}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        />
+                    ) : (
+                        <span style={{ fontSize: '11px', fontWeight: '800', color: '#135029', lineHeight: 1, textTransform: 'uppercase' }}>
+                            {firstLetter}
+                        </span>
+                    )}
                 </div>
-                <span className="hidden md:inline" style={{ 
+                <span className="profile-name-text" style={{ 
                     textTransform: 'none', 
                     letterSpacing: '0px',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    maxWidth: '100px',
+                    fontSize: '13px',
+                    fontWeight: '700',
+                    minWidth: 0,
+                    flex: '1 1 auto',
                     whiteSpace: 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis'
                 }}>{displayName}</span>
-                <span className="md:hidden" style={{ 
-                    textTransform: 'none', 
-                    letterSpacing: '0px',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    whiteSpace: 'nowrap',
-                }}>{displayName.slice(0, 5)}</span>
                 <ChevronDown
                     size={16}
+                    className="profile-chevron"
                     style={{
+                        flexShrink: 0,
                         transform: open ? 'rotate(180deg)' : 'rotate(0deg)',
                         transition: 'transform 0.3s ease',
                         opacity: 0.8
                     }}
                 />
             </button>
+            <style>{`
+                .profile-trigger-btn {
+                    padding: 0 8px;
+                    gap: 8px;
+                }
+                @media (min-width: 640px) {
+                    .profile-trigger-btn {
+                        padding: 0 10px;
+                        gap: 10px;
+                    }
+                }
+                @media (min-width: 1024px) {
+                    .profile-trigger-btn {
+                        padding: 0 12px;
+                        gap: 10px;
+                    }
+                }
+            `}</style>
 
             <AnimatePresence>
                 {open && (
@@ -655,150 +782,448 @@ export function ProfileDropdown({
                             </div>
                         ) : (
                             <>
-                                <div style={styles.header}>
-                                    <p style={styles.signedInText}>Signed in as</p>
-                                    <p style={styles.emailText} title={displayEmail}>{displayEmail}</p>
-                                    <div style={{ 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        gap: '6px', 
-                                        marginTop: '6px',
-                                        fontSize: '12px',
-                                        fontWeight: '600',
-                                        color: '#4b5563'
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    padding: '16px 12px 12px 12px',
+                                    borderBottom: '1px solid #f3f4f6',
+                                    textAlign: 'center'
+                                }}>
+                                    {/* Avatar circular */}
+                                    <div style={{
+                                        position: 'relative',
+                                        width: '58px',
+                                        height: '58px',
+                                        borderRadius: '50%',
+                                        backgroundColor: '#1A73E8',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: '#ffffff',
+                                        fontSize: '24px',
+                                        fontWeight: '750',
+                                        marginBottom: '8px',
+                                        boxShadow: '0 4px 12px rgba(26, 115, 232, 0.15)',
+                                        overflow: 'visible'
                                     }}>
-                                        <span>{countryFlag}</span>
-                                        <span>{selectedCountry || "Select Country"}</span>
+                                        {profilePhoto && !imgError ? (
+                                            <img 
+                                                src={profilePhoto} 
+                                                alt="Profile" 
+                                                onError={() => setImgError(true)}
+                                                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
+                                            />
+                                        ) : (
+                                            firstLetter
+                                        )}
+                                        
+                                        {/* Camera Icon Overlap */}
+                                        <div 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsCameraMenuOpen(!isCameraMenuOpen);
+                                            }}
+                                            style={{
+                                                position: 'absolute',
+                                                bottom: '-2px',
+                                                right: '-2px',
+                                                width: '22px',
+                                                height: '22px',
+                                                borderRadius: '50%',
+                                                backgroundColor: '#ffffff',
+                                                border: '1px solid #d1d5db',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            <Camera size={11} color="#5f6368" />
+                                        </div>
+
+                                        {isCameraMenuOpen && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '68px',
+                                                left: '50%',
+                                                transform: 'translateX(-50%)',
+                                                backgroundColor: '#ffffff',
+                                                borderRadius: '12px',
+                                                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                                                border: '1px solid #e5e7eb',
+                                                padding: '6px',
+                                                zIndex: 1100,
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '2px',
+                                                minWidth: '160px',
+                                                textAlign: 'left'
+                                            }}>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setIsCameraMenuOpen(false);
+                                                        fileInputRef.current?.click();
+                                                    }}
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px',
+                                                        padding: '8px 12px',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        color: '#3c4043',
+                                                        background: 'transparent',
+                                                        border: 'none',
+                                                        borderRadius: '8px',
+                                                        cursor: 'pointer',
+                                                        width: '100%',
+                                                        textAlign: 'left'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                                >
+                                                    <Camera size={14} color="#5f6368" />
+                                                    Add profile photo
+                                                </button>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setIsCameraMenuOpen(false);
+                                                        setIsViewPhotoModalOpen(true);
+                                                    }}
+                                                    style={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '8px',
+                                                        padding: '8px 12px',
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        color: '#3c4043',
+                                                        background: 'transparent',
+                                                        border: 'none',
+                                                        borderRadius: '8px',
+                                                        cursor: 'pointer',
+                                                        width: '100%',
+                                                        textAlign: 'left'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                                >
+                                                    <UserIcon size={14} color="#5f6368" />
+                                                    View profile photo
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
-                                </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                    {/* User Name */}
+                                    <div style={{
+                                        fontSize: '14.5px',
+                                        fontWeight: '750',
+                                        color: '#111827',
+                                        marginBottom: '2px',
+                                        lineHeight: 1.2
+                                    }}>
+                                        {displayName}
+                                    </div>
+
+                                    {/* Email */}
+                                    <div style={{
+                                        fontSize: '12px',
+                                        color: '#6b7280',
+                                        marginBottom: '12px',
+                                        maxWidth: '100%',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        fontWeight: '500'
+                                    }}>
+                                        {displayEmail}
+                                    </div>
+
+                                    {/* Manage Account Button */}
                                     <button
-                                        onClick={() => { onAccount?.(); setOpen(false); }}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        onClick={() => {
+                                            const token = localStorage.getItem('bnx_auth_token') ||
+                                                          localStorage.getItem('books_auth_token') ||
+                                                          localStorage.getItem('bnx_token') ||
+                                                          localStorage.getItem('token') ||
+                                                          localStorage.getItem('authToken');
+
+                                            const targetUrl = token
+                                                ? `https://account.beta-softnet.com/security?token=${encodeURIComponent(token)}`
+                                                : 'https://account.beta-softnet.com/security';
+
+                                            window.open(targetUrl, "_blank");
+                                            setOpen(false);
+                                        }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '7px',
+                                            padding: '6px 14px',
+                                            borderRadius: '999px',
+                                            border: '1px solid #e5e7eb',
+                                            backgroundColor: '#ffffff',
+                                            fontSize: '12px',
+                                            fontWeight: '700',
+                                            color: '#374151',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+                                            transition: 'all 0.15s ease'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.backgroundColor = '#f9fafb';
+                                            e.currentTarget.style.borderColor = '#d1d5db';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.backgroundColor = '#ffffff';
+                                            e.currentTarget.style.borderColor = '#e5e7eb';
+                                        }}
                                     >
-                                        <User size={18} />
-                                        Account Profile
+                                        <UserCog size={13} color="#4b5563" />
+                                        {t ? t('manageYourAccount', 'Manage your account') : 'Manage your account'}
                                     </button>
 
-                                    <button
-                                        onClick={() => { onSettings?.(); setOpen(false); }}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <Settings size={18} />
-                                        System Settings
-                                    </button>
-
-                                    <button
-                                        onClick={() => { onFAQ?.(); setOpen(false); }}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <HelpCircle size={18} />
-                                        Help & Support
-                                    </button>
-                                    
-                                    <button
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <Globe size={18} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                            <span>Language</span>
-                                            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '500' }}>English</span>
-                                        </div>
-                                    </button>
-
-                                    <button
-                                        onClick={() => setIsCurrencySelectorOpen(true)}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <Coins size={18} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                            <span>Currency</span>
-                                            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '550' }}>{selectedCurrency}</span>
-                                        </div>
-                                    </button>
-
-                                    <button
-                                        onClick={() => setIsCountrySelectorOpen(true)}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <Flag size={18} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                            <span>Country</span>
-                                            <span style={{ fontSize: '11px', color: '#9ca3af', fontWeight: '550' }}>{selectedCountry}</span>
-                                        </div>
-                                    </button>
-
-                                    <button
-                                        onClick={() => setIsTrustOpen(!isTrustOpen)}
-                                        style={styles.menuItem}
-                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                                    >
-                                        <ShieldCheck size={18} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                                            <span>Beta Trust</span>
-                                            <span style={{ fontSize: '11.5px', color: '#10B981', fontWeight: '800' }}>{trustData.total}%</span>
-                                        </div>
-                                    </button>
-
-                                    {isTrustOpen && (
+                                    {/* Other Logged-in IDs & Account Switcher */}
+                                    {otherAccounts.length > 0 && (
                                         <div style={{
-                                            background: '#f8fafc',
-                                            border: '1px solid #e2e8f0',
-                                            borderRadius: '10px',
-                                            padding: '12px',
-                                            margin: '4px 8px 8px 8px',
+                                            width: '100%',
+                                            marginTop: '10px',
+                                            paddingTop: '8px',
+                                            borderTop: '1px solid #f1f5f9',
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            gap: '6px'
+                                            gap: '4px'
                                         }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-                                                <span style={{ color: '#64748b', fontWeight: '600' }}>Base Score</span>
-                                                <span style={{ fontWeight: '700', color: '#10B981' }}>{trustData.base}%</span>
+                                            <div style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
+                                                padding: '2px 4px 4px 4px',
+                                                fontSize: '11px',
+                                                fontWeight: '750',
+                                                color: '#94a3b8',
+                                                letterSpacing: '0.02em'
+                                            }}>
+                                                <span>{t ? t('switchAccount', 'Switch account') : 'Switch account'}</span>
+                                                <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '600' }}>
+                                                    {otherAccounts.length} {otherAccounts.length === 1 ? 'other ID' : 'other IDs'}
+                                                </span>
                                             </div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-                                                <span style={{ color: '#64748b', fontWeight: '600' }}>Subscription Bonus</span>
-                                                <span style={{ fontWeight: '700', color: trustData.sub > 0 ? '#10B981' : '#94a3b8' }}>+{trustData.sub}%</span>
-                                            </div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-                                                <span style={{ color: '#64748b', fontWeight: '600' }}>Profile Completeness</span>
-                                                <span style={{ fontWeight: '700', color: trustData.profile > 0 ? '#10B981' : '#94a3b8' }}>+{trustData.profile}%</span>
-                                            </div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px' }}>
-                                                <span style={{ color: '#64748b', fontWeight: '600' }}>Daily Activity Bonus</span>
-                                                <span style={{ fontWeight: '700', color: trustData.activity > 0 ? '#10B981' : '#94a3b8' }}>+{trustData.activity}%</span>
-                                            </div>
-                                            <div style={{ height: '1px', backgroundColor: '#e2e8f0', margin: '4px 0' }} />
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', fontWeight: '800' }}>
-                                                <span style={{ color: '#1e293b' }}>Total Trust Score</span>
-                                                <span style={{ color: '#1B6B3A' }}>{trustData.total}%</span>
+
+                                            <div style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '3px',
+                                                maxHeight: '130px',
+                                                overflowY: 'auto'
+                                            }}>
+                                                {otherAccounts.map((acc, idx) => {
+                                                    const accName = (acc.displayName && String(acc.displayName).trim())
+                                                        ? String(acc.displayName).trim()
+                                                        : (acc.display_name && String(acc.display_name).trim())
+                                                            ? String(acc.display_name).trim()
+                                                            : (acc.fullName && String(acc.fullName).trim())
+                                                                ? String(acc.fullName).trim()
+                                                                : (acc.full_name && String(acc.full_name).trim())
+                                                                    ? String(acc.full_name).trim()
+                                                                    : acc.name || acc.username || (acc.email ? acc.email.split('@')[0] : 'User');
+                                                    const accEmail = acc.email || acc.id || '';
+                                                    const accInitial = (accName || accEmail || 'U').charAt(0).toUpperCase();
+
+                                                    return (
+                                                        <div
+                                                            key={acc.id || acc.email || idx}
+                                                            onClick={async () => {
+                                                                setOpen(false);
+                                                                await switchAccount(acc);
+                                                            }}
+                                                            style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                justifyContent: 'space-between',
+                                                                padding: '6px 8px',
+                                                                borderRadius: '10px',
+                                                                border: '1px solid #f1f5f9',
+                                                                backgroundColor: '#fbfcfd',
+                                                                cursor: 'pointer',
+                                                                transition: 'all 0.15s ease',
+                                                                textAlign: 'left'
+                                                            }}
+                                                            onMouseEnter={(e) => {
+                                                                e.currentTarget.style.backgroundColor = '#f1f5f9';
+                                                                e.currentTarget.style.borderColor = '#e2e8f0';
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                e.currentTarget.style.backgroundColor = '#fbfcfd';
+                                                                e.currentTarget.style.borderColor = '#f1f5f9';
+                                                            }}
+                                                            title={`Switch to ${accName} (${accEmail})`}
+                                                        >
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0, flex: 1 }}>
+                                                                <div style={{
+                                                                    width: '28px',
+                                                                    height: '28px',
+                                                                    borderRadius: '50%',
+                                                                    backgroundColor: '#059669',
+                                                                    color: '#ffffff',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    fontWeight: '750',
+                                                                    fontSize: '12px',
+                                                                    flexShrink: 0
+                                                                }}>
+                                                                    {acc.profilePhoto ? (
+                                                                        <img 
+                                                                            src={acc.profilePhoto.startsWith('http') ? acc.profilePhoto : `https://api.bnxmail.com${acc.profilePhoto.startsWith('/') ? '' : '/'}${acc.profilePhoto}`} 
+                                                                            alt={accName} 
+                                                                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                                                            style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} 
+                                                                        />
+                                                                    ) : (
+                                                                        accInitial
+                                                                    )}
+                                                                </div>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, textAlign: 'left', lineHeight: 1.25 }}>
+                                                                    <div style={{
+                                                                        fontSize: '12px',
+                                                                        fontWeight: '700',
+                                                                        color: '#1e293b',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap'
+                                                                    }}>
+                                                                        {accName}
+                                                                    </div>
+                                                                    <div style={{
+                                                                        fontSize: '11px',
+                                                                        color: '#64748b',
+                                                                        overflow: 'hidden',
+                                                                        textOverflow: 'ellipsis',
+                                                                        whiteSpace: 'nowrap',
+                                                                        fontWeight: '500'
+                                                                    }}>
+                                                                        {accEmail}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    removeAccount(acc.email || acc.id);
+                                                                }}
+                                                                title="Remove account from device"
+                                                                style={{
+                                                                    background: 'transparent',
+                                                                    border: 'none',
+                                                                    color: '#94a3b8',
+                                                                    cursor: 'pointer',
+                                                                    padding: '4px',
+                                                                    borderRadius: '6px',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    marginLeft: '4px',
+                                                                    flexShrink: 0,
+                                                                    transition: 'all 0.15s ease'
+                                                                }}
+                                                                onMouseEnter={(e) => {
+                                                                    e.currentTarget.style.color = '#ef4444';
+                                                                    e.currentTarget.style.backgroundColor = '#fee2e2';
+                                                                }}
+                                                                onMouseLeave={(e) => {
+                                                                    e.currentTarget.style.color = '#94a3b8';
+                                                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                                                }}
+                                                            >
+                                                                <X size={13} />
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     )}
-                                    
-                                    <div style={{ height: '1px', backgroundColor: '#f3f4f6', margin: '8px 0' }} />
-                                    
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', padding: '4px 0 2px 0' }}>
+                                    {/* Manage Branches - strictly visible to OWNER only */}
+                                    {isOwner && (
+                                        <button
+                                            onClick={() => {
+                                                navigate('/inventory/branches');
+                                                setOpen(false);
+                                            }}
+                                            style={styles.menuItem}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        >
+                                            <Building size={16} color="#5f6368" />
+                                            <span>{t ? t('manageBranches', 'Manage Branches') : 'Manage Branches'}</span>
+                                        </button>
+                                    )}
+
+                                    {/* Manage SubIDs - visible to Owner and Branch Managers */}
+                                    {(isOwner || isBranchManager) && (
+                                        <button
+                                            onClick={() => {
+                                                navigate('/manage-subids');
+                                                setOpen(false);
+                                            }}
+                                            style={styles.menuItem}
+                                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        >
+                                            <Users size={16} color="#5f6368" />
+                                            <span>{isBranchManager ? (t ? t('manageShowroomSubIds', 'Manage Showroom Sub-IDs') : 'Manage Showroom Sub-IDs') : (t ? t('manageSubIds', 'Manage SubIDs') : 'Manage SubIDs')}</span>
+                                        </button>
+                                    )}
+
                                     <button
-                                        onClick={() => { onLogout?.(); setOpen(false); }}
-                                        style={{ ...styles.menuItem, ...styles.logoutItem }}
+                                        onClick={handleAddAccount}
+                                        style={styles.menuItem}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                    >
+                                        <UserPlus size={16} color="#5f6368" />
+                                        <span>{t ? t('addAnotherAccount', 'Add another account') : 'Add another account'}</span>
+                                    </button>
+
+                                    <button
+                                        onClick={() => {
+                                            logoutAll?.();
+                                            setOpen(false);
+                                            navigate('/');
+                                        }}
+                                        style={styles.menuItem}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                                    >
+                                        <LogOut size={16} color="#5f6368" />
+                                        <span>{t ? t('signOutAll', 'Sign out of all accounts') : 'Sign out of all accounts'}</span>
+                                    </button>
+
+                                    <div style={{ height: '1px', backgroundColor: '#f1f5f9', margin: '4px 6px' }} />
+
+                                    <button
+                                        onClick={() => { 
+                                            onLogout?.(); 
+                                            setOpen(false); 
+                                            navigate('/');
+                                        }}
+                                        style={{ ...styles.menuItem, ...styles.logoutItem, justifyContent: 'center', fontWeight: '800' }}
                                         onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fef2f2'}
                                         onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                                     >
-                                        <LogOut size={18} />
-                                        Sign out
+                                        <LogOut size={16} />
+                                        {t ? t('signOut', 'Sign out') : 'Sign out'}
                                     </button>
                                 </div>
                             </>
@@ -806,6 +1231,60 @@ export function ProfileDropdown({
                     </motion.div>
                 )}
             </AnimatePresence>
+            {/* Hidden Profile Photo Input Picker */}
+            <input 
+                type="file" 
+                ref={fileInputRef} 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                style={{ display: 'none' }} 
+            />
+
+            {/* View Profile Photo Modal Overlay */}
+            {isViewPhotoModalOpen && (
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(8px)', padding: '2rem' }}>
+                    <div style={{ background: '#ffffff', borderRadius: '24px', padding: '1.5rem', width: '100%', maxWidth: '400px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '1.5rem' }}>
+                            <span style={{ fontSize: '15px', fontWeight: '800', color: '#1f2937' }}>Profile photo</span>
+                            <button onClick={() => setIsViewPhotoModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
+                        </div>
+                        
+                        {profilePhoto && !imgError ? (
+                            <img src={profilePhoto} alt="Profile Large" style={{ width: '260px', height: '260px', borderRadius: '50%', objectFit: 'cover', border: '4px solid #1A73E8', boxShadow: '0 8px 24px rgba(26,115,232,0.15)' }} />
+                        ) : (
+                            <div style={{ width: '260px', height: '260px', borderRadius: '50%', backgroundColor: '#1A73E8', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff', fontSize: '96px', fontWeight: '800', boxShadow: '0 8px 24px rgba(26,115,232,0.15)' }}>
+                                {firstLetter}
+                            </div>
+                        )}
+                        
+                        <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', width: '100%' }}>
+                            <button 
+                                onClick={() => {
+                                    setIsViewPhotoModalOpen(false);
+                                    fileInputRef.current?.click();
+                                }}
+                                style={{ flex: 1, padding: '10px', borderRadius: '12px', border: '1px solid #d1d5db', backgroundColor: '#ffffff', color: '#1A73E8', fontWeight: '800', fontSize: '13px', cursor: 'pointer' }}
+                            >
+                                Change photo
+                            </button>
+                            {profilePhoto && (
+                                <button 
+                                    onClick={() => {
+                                        localStorage.removeItem("profile_photo");
+                                        setProfilePhoto(null);
+                                        setImgError(false);
+                                        setIsViewPhotoModalOpen(false);
+                                        alert("Profile photo removed successfully!");
+                                    }}
+                                    style={{ flex: 1, padding: '10px', borderRadius: '12px', border: '1px solid #fca5a5', backgroundColor: '#fef2f2', color: '#dc2626', fontWeight: '800', fontSize: '13px', cursor: 'pointer' }}
+                                >
+                                    Delete photo
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
