@@ -28,46 +28,46 @@ const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, currentSpent, onU
         <div style={{
             background: 'white',
             borderRadius: '16px',
-            padding: '1.5rem',
+            padding: '1.359rem',
             boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
             border: '1px solid #E2E8F0',
-            marginBottom: '1.5rem'
+            marginBottom: '1.359rem'
         }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h3 style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.133rem', display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                 <Target size={20} style={{ color: '#7C3AED' }} /> Budget Planner
             </h3>
 
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '1.5rem',
+                gap: '1.359rem',
                 alignItems: 'center'
             }}>
                 {/* Monthly Limit Setup */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Monthly Budget Limit</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                    <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Monthly Budget Limit</span>
                     {isEditing ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.25rem' }}>
-                            <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>{currencySymbol}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.227rem', marginTop: '0.227rem' }}>
+                            <span style={{ fontSize: '1.087rem', fontWeight: 800 }}>{currencySymbol}</span>
                             <input 
                                 type="number"
                                 value={editValue}
                                 onChange={e => setEditValue(e.target.value)}
                                 style={{
                                     width: '100px',
-                                    padding: '0.35rem 0.5rem',
+                                    padding: '0.317rem 0.453rem',
                                     borderRadius: '6px',
                                     border: '1px solid #CBD5E1',
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.861rem',
                                     fontWeight: 700
                                 }}
                             />
-                            <button onClick={handleSaveBudget} style={{ border: 'none', background: '#10B981', color: 'white', borderRadius: '6px', padding: '0.35rem', cursor: 'pointer', display: 'flex' }}><Check size={14} /></button>
-                            <button onClick={() => setIsEditing(false)} style={{ border: 'none', background: '#EF4444', color: 'white', borderRadius: '6px', padding: '0.35rem', cursor: 'pointer', display: 'flex' }}><X size={14} /></button>
+                            <button onClick={handleSaveBudget} style={{ border: 'none', background: '#10B981', color: 'white', borderRadius: '6px', padding: '0.317rem', cursor: 'pointer', display: 'flex' }}><Check size={14} /></button>
+                            <button onClick={() => setIsEditing(false)} style={{ border: 'none', background: '#EF4444', color: 'white', borderRadius: '6px', padding: '0.317rem', cursor: 'pointer', display: 'flex' }}><X size={14} /></button>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <span style={{ fontSize: '1.5rem', fontWeight: 850, color: '#0F172A' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                            <span style={{ fontSize: '1.359rem', fontWeight: 850, color: '#0F172A' }}>
                                 {currencySymbol}{budget.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                             </span>
                             <button 
@@ -84,25 +84,25 @@ const BudgetPlanner = ({ budget = 0, currentMonthExpenses = 0, currentSpent, onU
                 </div>
 
                 {/* Expenses and Remaining */}
-                <div style={{ display: 'flex', gap: '2rem' }}>
+                <div style={{ display: 'flex', gap: '1.812rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Expenses</span>
-                        <span style={{ fontSize: '1.3rem', fontWeight: 800, color: '#0F172A' }}>
+                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Expenses</span>
+                        <span style={{ fontSize: '1.178rem', fontWeight: 800, color: '#0F172A' }}>
                             {currencySymbol}{spent.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Remaining</span>
-                        <span style={{ fontSize: '1.3rem', fontWeight: 800, color: remainingBudget <= 0 ? '#EF4444' : '#10B981' }}>
+                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', textTransform: 'uppercase' }}>Remaining</span>
+                        <span style={{ fontSize: '1.178rem', fontWeight: 800, color: remainingBudget <= 0 ? '#EF4444' : '#10B981' }}>
                             {currencySymbol}{remainingBudget.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                         </span>
                     </div>
                 </div>
 
                 {/* Progress Bar */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 800, color: '#475569' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', fontWeight: 800, color: '#475569' }}>
                         <span>Usage</span>
                         <span>{usagePercentage}%</span>
                     </div>

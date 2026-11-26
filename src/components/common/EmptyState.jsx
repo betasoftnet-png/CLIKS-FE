@@ -38,15 +38,15 @@ const EmptyState = ({
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 4rem 2rem;
+          padding: 3.625rem 1.812rem;
           text-align: center;
           background-color: white;
           border-radius: 12px;
           border: 1px dashed #E2E8F0; /* Subtle dashed border */
         }
         .empty-icon-wrapper {
-          margin-bottom: 1.5rem;
-          padding: 1rem;
+          margin-bottom: 1.359rem;
+          padding: 0.906rem;
           background-color: #F8FAFC;
           border-radius: 50%;
         }
@@ -54,19 +54,19 @@ const EmptyState = ({
           color: #94A3B8;
         }
         .empty-title {
-          font-size: 1.125rem;
+          font-size: 1.02rem;
           font-weight: 600;
           color: #1E293B;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.453rem;
         }
         .empty-description {
-          font-size: 0.875rem;
+          font-size: 0.793rem;
           color: #64748B;
           max-width: 400px;
           line-height: 1.5;
         }
         .empty-action {
-          margin-top: 2rem;
+          margin-top: 1.812rem;
         }
       `}</style>
         </div>

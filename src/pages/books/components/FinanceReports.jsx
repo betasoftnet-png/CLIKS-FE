@@ -76,25 +76,25 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
     };
 
     return (
-        <div style={{
+        <div data-tour="books-report-ready" style={{
             background: 'white',
             borderRadius: '16px',
-            padding: '1.5rem',
+            padding: '1.359rem',
             boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
             border: '1px solid #E2E8F0',
-            marginBottom: '1.5rem'
+            marginBottom: '1.359rem'
         }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem' }}>
+                <h3 data-tour="books-report-heading" style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.453rem', margin: 0, width: 'fit-content' }}>
                     <FileText size={20} style={{ color: '#7C3AED' }} /> Reports Engine
                 </h3>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.453rem', alignItems: 'center' }}>
                     <select 
                         value={reportType} 
                         onChange={e => setReportType(e.target.value)}
-                        style={{ padding: '0.4rem 0.65rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.8rem', fontWeight: 700, outline: 'none' }}
+                        style={{ padding: '0.363rem 0.589rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.725rem', fontWeight: 700, outline: 'none' }}
                     >
                         <option value="Monthly">Monthly Report</option>
                         <option value="Yearly">Yearly Report</option>
@@ -104,7 +104,7 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
                         <select 
                             value={selectedMonth} 
                             onChange={e => setSelectedMonth(e.target.value)}
-                            style={{ padding: '0.4rem 0.65rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.8rem', fontWeight: 700, outline: 'none' }}
+                            style={{ padding: '0.363rem 0.589rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.725rem', fontWeight: 700, outline: 'none' }}
                         >
                             {months.map(m => <option key={m} value={m}>{m}</option>)}
                         </select>
@@ -113,7 +113,7 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
                     <select 
                         value={selectedYear} 
                         onChange={e => setSelectedYear(e.target.value)}
-                        style={{ padding: '0.4rem 0.65rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.8rem', fontWeight: 700, outline: 'none' }}
+                        style={{ padding: '0.363rem 0.589rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.725rem', fontWeight: 700, outline: 'none' }}
                     >
                         <option value="2026">2026</option>
                         <option value="2025">2025</option>
@@ -122,17 +122,17 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
             </div>
 
             {/* Print Section Container */}
-            <div id="finance-report-sheet" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #E2E8F0', paddingBottom: '0.75rem', marginBottom: '1rem' }}>
+            <div id="finance-report-sheet" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.359rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #E2E8F0', paddingBottom: '0.68rem', marginBottom: '0.906rem' }}>
                     <div>
-                        <h4 style={{ margin: '0 0 0.25rem 0', fontSize: '1rem', fontWeight: 800, color: '#0F172A' }}>
+                        <h4 style={{ margin: '0 0 0.227rem 0', fontSize: '0.906rem', fontWeight: 800, color: '#0F172A' }}>
                             {reportType} Statement Summary
                         </h4>
-                        <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '3px' }}>
                             <Calendar size={12} /> {reportType === 'Monthly' ? `${selectedMonth} ${selectedYear}` : selectedYear}
                         </span>
                     </div>
-                    <div style={{ textAlign: 'right', fontSize: '0.72rem', color: '#94A3B8', fontWeight: 600 }}>
+                    <div style={{ textAlign: 'right', fontSize: '0.652rem', color: '#94A3B8', fontWeight: 600 }}>
                         Generated dynamically via CLIKS Books
                     </div>
                 </div>
@@ -141,24 +141,24 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                    gap: '1rem',
-                    marginBottom: '1.5rem'
+                    gap: '0.906rem',
+                    marginBottom: '1.359rem'
                 }}>
-                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.85rem', borderRadius: '8px' }}>
-                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Income Summary</span>
-                        <h5 style={{ margin: '0.25rem 0 0 0', fontSize: '1.1rem', fontWeight: 850, color: '#10B981' }}>{currencySymbol}{incomeSum.toLocaleString('en-IN')}</h5>
+                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.77rem', borderRadius: '8px' }}>
+                        <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Income Summary</span>
+                        <h5 style={{ margin: '0.227rem 0 0 0', fontSize: '0.997rem', fontWeight: 850, color: '#10B981' }}>{currencySymbol}{incomeSum.toLocaleString('en-IN')}</h5>
                     </div>
-                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.85rem', borderRadius: '8px' }}>
-                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Expense Summary</span>
-                        <h5 style={{ margin: '0.25rem 0 0 0', fontSize: '1.1rem', fontWeight: 850, color: '#EF4444' }}>{currencySymbol}{expenseSum.toLocaleString('en-IN')}</h5>
+                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.77rem', borderRadius: '8px' }}>
+                        <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Expense Summary</span>
+                        <h5 style={{ margin: '0.227rem 0 0 0', fontSize: '0.997rem', fontWeight: 850, color: '#EF4444' }}>{currencySymbol}{expenseSum.toLocaleString('en-IN')}</h5>
                     </div>
-                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.85rem', borderRadius: '8px' }}>
-                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Savings Summary</span>
-                        <h5 style={{ margin: '0.25rem 0 0 0', fontSize: '1.1rem', fontWeight: 850, color: '#7C3AED' }}>{currencySymbol}{netSavings.toLocaleString('en-IN')}</h5>
+                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.77rem', borderRadius: '8px' }}>
+                        <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Savings Summary</span>
+                        <h5 style={{ margin: '0.227rem 0 0 0', fontSize: '0.997rem', fontWeight: 850, color: '#7C3AED' }}>{currencySymbol}{netSavings.toLocaleString('en-IN')}</h5>
                     </div>
-                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.85rem', borderRadius: '8px' }}>
-                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Budget Summary</span>
-                        <h5 style={{ margin: '0.25rem 0 0 0', fontSize: '1.1rem', fontWeight: 850, color: '#475569' }}>
+                    <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.77rem', borderRadius: '8px' }}>
+                        <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Budget Summary</span>
+                        <h5 style={{ margin: '0.227rem 0 0 0', fontSize: '0.997rem', fontWeight: 850, color: '#475569' }}>
                             {reportType === 'Monthly' ? `${currencySymbol}${budget.toLocaleString('en-IN')}` : 'N/A'}
                         </h5>
                     </div>
@@ -166,27 +166,27 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
 
                 {/* Table list */}
                 {filteredReportTransactions.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '2rem 0', color: '#94A3B8', fontSize: '0.8rem' }}>No transaction history found for selected timeframe.</div>
+                    <div style={{ textAlign: 'center', padding: '1.812rem 0', color: '#94A3B8', fontSize: '0.725rem' }}>No transaction history found for selected timeframe.</div>
                 ) : (
                     <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.78rem' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.707rem' }}>
                             <thead>
                                 <tr style={{ borderBottom: '2px solid #E2E8F0', color: '#475569', fontWeight: 750 }}>
-                                    <th style={{ padding: '0.5rem' }}>Date</th>
-                                    <th style={{ padding: '0.5rem' }}>Type</th>
-                                    <th style={{ padding: '0.5rem' }}>Title</th>
-                                    <th style={{ padding: '0.5rem' }}>Category</th>
-                                    <th style={{ padding: '0.5rem', textAlign: 'right' }}>Amount</th>
+                                    <th style={{ padding: '0.453rem' }}>Date</th>
+                                    <th style={{ padding: '0.453rem' }}>Type</th>
+                                    <th style={{ padding: '0.453rem' }}>Title</th>
+                                    <th style={{ padding: '0.453rem' }}>Category</th>
+                                    <th style={{ padding: '0.453rem', textAlign: 'right' }}>Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredReportTransactions.map((t, idx) => (
                                     <tr key={t.id || idx} style={{ borderBottom: '1px solid #F1F5F9', color: '#334155', fontWeight: 600 }}>
-                                        <td style={{ padding: '0.5rem' }}>{t.date}</td>
-                                        <td style={{ padding: '0.5rem', color: (t.type || '').toLowerCase() === 'income' ? '#10B981' : '#EF4444' }}>{t.type}</td>
-                                        <td style={{ padding: '0.5rem', color: '#0F172A', fontWeight: 700 }}>{t.name}</td>
-                                        <td style={{ padding: '0.5rem' }}>{t.category || 'Other'}</td>
-                                        <td style={{ padding: '0.5rem', textAlign: 'right', fontWeight: 750 }}>{currencySymbol}{t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
+                                        <td style={{ padding: '0.453rem' }}>{t.date}</td>
+                                        <td style={{ padding: '0.453rem', color: (t.type || '').toLowerCase() === 'income' ? '#10B981' : '#EF4444' }}>{t.type}</td>
+                                        <td style={{ padding: '0.453rem', color: '#0F172A', fontWeight: 700 }}>{t.name}</td>
+                                        <td style={{ padding: '0.453rem' }}>{t.category || 'Other'}</td>
+                                        <td style={{ padding: '0.453rem', textAlign: 'right', fontWeight: 750 }}>{currencySymbol}{t.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -196,22 +196,22 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
             </div>
 
             {/* Export Toolbar */}
-            <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', marginTop: '1.25rem' }}>
+            <div style={{ display: 'flex', gap: '0.453rem', justifyContent: 'flex-end', marginTop: '1.133rem' }}>
                 <button 
                     onClick={() => exportCSV('csv')} 
-                    style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ padding: '0.453rem 0.906rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontSize: '0.725rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                     <Download size={14} /> Export CSV
                 </button>
                 <button 
                     onClick={() => exportCSV('xls')} 
-                    style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ padding: '0.453rem 0.906rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontSize: '0.725rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                     <Download size={14} /> Export Excel
                 </button>
                 <button 
                     onClick={handlePrintPDF} 
-                    style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    style={{ padding: '0.453rem 0.906rem', borderRadius: '8px', border: 'none', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', fontSize: '0.725rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
                     <Printer size={14} /> Export PDF / Print
                 </button>

@@ -1760,7 +1760,7 @@ const BusinessSplitCollect = () => {
                 <div class="grid-2">
                     <div>
                         <div class="section-title">Individual Balances</div>
-                        <table>
+                        <div style={{ overflowX: "auto", width: "100%" }}><table>
                             <thead>
                                 <tr>
                                     <th style="text-align: left;">Member</th>
@@ -1770,11 +1770,11 @@ const BusinessSplitCollect = () => {
                             <tbody>
                                 ${memberBalancesHTML}
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
                     <div>
                         <div class="section-title">Simplified Debts</div>
-                        <table>
+                        <div style={{ overflowX: "auto", width: "100%" }}><table>
                             <thead>
                                 <tr>
                                     <th style="text-align: left;">Debt Settlement</th>
@@ -1784,12 +1784,12 @@ const BusinessSplitCollect = () => {
                             <tbody>
                                 ${debtsHTML}
                             </tbody>
-                        </table>
+                        </table></div>
                     </div>
                 </div>
 
                 <div class="section-title">Logged Expenses Ledger</div>
-                <table>
+                <div style={{ overflowX: "auto", width: "100%" }}><table>
                     <thead>
                         <tr>
                             <th style="width: 15%;">Date</th>
@@ -1802,7 +1802,7 @@ const BusinessSplitCollect = () => {
                     <tbody>
                         ${expensesHTML}
                     </tbody>
-                </table>
+                </table></div>
 
                 <div class="footer">
                     Generated via CLIKS Business Ledger on ${new Date().toLocaleDateString('en-IN', { dateStyle: 'full' })}. All rights reserved.
@@ -1829,12 +1829,12 @@ const BusinessSplitCollect = () => {
     );
 
     return (
-        <div style={{ padding: '1.25rem 2rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 1.812rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             
             {/* Header Dashboard Banner */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.2rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', marginBottom: '0.181rem' }}>
                         <div style={{ 
                             width: '36px', 
                             height: '36px', 
@@ -1848,13 +1848,14 @@ const BusinessSplitCollect = () => {
                         }}>
                             <CreditCard size={18} />
                         </div>
-                        <h1 style={{ fontSize: '1.4rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Splitwise & Collect</h1>
+                        <h1 data-tour="split-heading" style={{ fontSize: '1.269rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Splitwise & Collect</h1>
                     </div>
-                    <p style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: '500', margin: 0 }}>Divide collaborative bills, track expenses, and simplify balances with team members.</p>
+                    <p style={{ color: '#64748B', fontSize: '0.725rem', fontWeight: '500', margin: 0 }}>Divide collaborative bills, track expenses, and simplify balances with team members.</p>
                 </div>
 
                 {!selectedSplitId && (
                     <button 
+                        data-tour="split-create"
                         onClick={() => {
                             setEditingGroupId(null);
                             setGroupForm({ title: '', currency: 'INR', description: '', participants: ['You'] });
@@ -1864,10 +1865,10 @@ const BusinessSplitCollect = () => {
                             setIsCreateGroupModalOpen(true);
                         }}
                         style={{ 
-                            display: 'flex', alignItems: 'center', gap: '0.4rem', 
-                            padding: '0.65rem 1.15rem', borderRadius: '12px', 
+                            display: 'flex', alignItems: 'center', gap: '0.363rem', 
+                            padding: '0.589rem 1.042rem', borderRadius: '12px', 
                             background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
-                            fontWeight: '850', fontSize: '0.82rem', cursor: 'pointer',
+                            fontWeight: '850', fontSize: '0.743rem', cursor: 'pointer',
                             boxShadow: '0 4px 12px rgba(27, 107, 58, 0.15)',
                             transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                         }}
@@ -1889,13 +1890,14 @@ const BusinessSplitCollect = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', height: '100%' }}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem', height: '100%' }}
                         >
                             {/* Search bar */}
-                            <div style={{ background: 'white', borderRadius: '14px', padding: '0.6rem 1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', border: '1px solid #E2E8F0', maxWidth: '320px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+                            <div style={{ background: 'white', borderRadius: '14px', padding: '0.544rem 0.906rem', display: 'flex', alignItems: 'center', gap: '0.453rem', border: '1px solid #E2E8F0', maxWidth: '320px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
                                 <Search size={16} color="#94A3B8" />
                                 <input
-                                    style={{ border: 'none', outline: 'none', background: 'transparent', width: '100%', fontWeight: '600', fontSize: '0.85rem', color: '#1E293B' }}
+                                    data-tour="split-search"
+                                    style={{ border: 'none', outline: 'none', background: 'transparent', width: '100%', fontWeight: '600', fontSize: '0.77rem', color: '#1E293B' }}
                                     type="text"
                                     placeholder="Search split tickets..."
                                     value={searchQuery}
@@ -1906,25 +1908,25 @@ const BusinessSplitCollect = () => {
                             {/* Splits Cards Grid */}
                             {loading ? (
                                 <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
-                                    <div style={{ textAlign: 'center', padding: '2rem' }}>
+                                    <div style={{ textAlign: 'center', padding: '1.812rem' }}>
                                         <Motion.div
                                             animate={{ rotate: 360 }}
                                             transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                                            style={{ width: '36px', height: '36px', border: '3px solid #E2E8F0', borderTopColor: '#064E3B', borderRadius: '50%', margin: '0 auto 1rem auto' }}
+                                            style={{ width: '36px', height: '36px', border: '3px solid #E2E8F0', borderTopColor: '#064E3B', borderRadius: '50%', margin: '0 auto 0.906rem auto' }}
                                         />
-                                        <p style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '750' }}>Loading Split Tickets...</p>
+                                        <p style={{ fontSize: '0.77rem', color: '#64748B', fontWeight: '750' }}>Loading Split Tickets...</p>
                                     </div>
                                 </div>
                             ) : filteredSplits.length === 0 ? (
                                 <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
-                                    <div style={{ textAlign: 'center', padding: '2rem' }}>
-                                        <Users size={48} style={{ color: '#CBD5E1', marginBottom: '1rem' }} />
-                                        <h3 style={{ fontSize: '1.1rem', fontWeight: '800', color: '#334155', margin: '0 0 0.25rem 0' }}>No Active Split Tickets</h3>
-                                        <p style={{ fontSize: '0.85rem', color: '#64748B', maxWidth: '320px', margin: 0 }}>Create a new split ticket to begin tracking collaborative expenses with your co-workers.</p>
+                                    <div style={{ textAlign: 'center', padding: '1.812rem' }}>
+                                        <Users size={48} style={{ color: '#CBD5E1', marginBottom: '0.906rem' }} />
+                                        <h3 style={{ fontSize: '0.997rem', fontWeight: '800', color: '#334155', margin: '0 0 0.227rem 0' }}>No Active Split Tickets</h3>
+                                        <p style={{ fontSize: '0.77rem', color: '#64748B', maxWidth: '320px', margin: 0 }}>Create a new split ticket to begin tracking collaborative expenses with your co-workers.</p>
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '0.906rem' }}>
                                     {filteredSplits
                                         .sort((a, b) => {
                                             const aPinned = pinnedSplitIds.includes(a.id);
@@ -1957,7 +1959,7 @@ const BusinessSplitCollect = () => {
                                                         background: 'white', 
                                                         borderRadius: '20px', 
                                                         border: isPendingInvite ? '2px solid #F59E0B' : '1.5px solid #E2E8F0', 
-                                                        padding: '1.5rem', 
+                                                        padding: '1.359rem', 
                                                         cursor: isPendingInvite ? 'default' : 'pointer',
                                                         boxShadow: isPendingInvite ? '0 4px 12px rgba(245, 158, 11, 0.1)' : '0 4px 6px -1px rgba(0,0,0,0.02)',
                                                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -1976,20 +1978,20 @@ const BusinessSplitCollect = () => {
                                                     }}
                                                 >
                                                     {/* Card Header */}
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.68rem' }}>
                                                         <div>
-                                                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '850', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <h3 style={{ margin: 0, fontSize: '0.997rem', fontWeight: '850', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                 {s.title}
                                                                 {isPinned && (
                                                                     <Pin size={12} style={{ color: '#004aad', transform: 'rotate(45deg)' }} />
                                                                 )}
                                                             </h3>
                                                             <div style={{ display: 'flex', gap: '6px', alignItems: 'center', marginTop: '5px' }}>
-                                                                <span style={{ fontSize: '0.65rem', color: '#64748B', fontWeight: '750', textTransform: 'uppercase', background: '#F1F5F9', padding: '2px 8px', borderRadius: '6px' }}>
+                                                                <span style={{ fontSize: '0.589rem', color: '#64748B', fontWeight: '750', textTransform: 'uppercase', background: '#F1F5F9', padding: '2px 8px', borderRadius: '6px' }}>
                                                                     {s.currency}
                                                                 </span>
                                                                 <span style={{ 
-                                                                    fontSize: '0.65rem', 
+                                                                    fontSize: '0.589rem', 
                                                                     fontWeight: '800', 
                                                                     background: isOwner ? '#F5F3FF' : (memberRole === 'editor' ? '#EFF6FF' : '#FFFBEB'),
                                                                     color: isOwner ? '#7C3AED' : (memberRole === 'editor' ? '#2563EB' : '#D97706'),
@@ -2056,7 +2058,7 @@ const BusinessSplitCollect = () => {
                                                                             border: 'none',
                                                                             background: 'none',
                                                                             color: '#334155',
-                                                                            fontSize: '0.85rem',
+                                                                            fontSize: '0.77rem',
                                                                             fontWeight: '600',
                                                                             cursor: 'pointer',
                                                                             borderRadius: '8px',
@@ -2090,7 +2092,7 @@ const BusinessSplitCollect = () => {
                                                                             border: 'none',
                                                                             background: 'none',
                                                                             color: '#334155',
-                                                                            fontSize: '0.85rem',
+                                                                            fontSize: '0.77rem',
                                                                             fontWeight: '600',
                                                                             cursor: 'pointer',
                                                                             borderRadius: '8px',
@@ -2117,7 +2119,7 @@ const BusinessSplitCollect = () => {
                                                                             border: 'none',
                                                                             background: 'none',
                                                                             color: '#EF4444',
-                                                                            fontSize: '0.85rem',
+                                                                            fontSize: '0.77rem',
                                                                             fontWeight: '600',
                                                                             cursor: 'pointer',
                                                                             borderRadius: '8px',
@@ -2134,7 +2136,7 @@ const BusinessSplitCollect = () => {
                                                         </div>
                                                     </div>
                                                     
-                                                    <p style={{ margin: '0 0 1.25rem 0', fontSize: '0.8rem', color: '#64748B', lineHeight: '1.4', height: '36px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                                                    <p style={{ margin: '0 0 1.133rem 0', fontSize: '0.725rem', color: '#64748B', lineHeight: '1.4', height: '36px', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
                                                         {s.description || 'No description provided.'}
                                                     </p>
                                                     
@@ -2145,18 +2147,18 @@ const BusinessSplitCollect = () => {
                                                                 background: '#FEF3C7',
                                                                 border: '1.5px solid #F59E0B',
                                                                 borderRadius: '12px',
-                                                                padding: '0.65rem 0.85rem',
-                                                                marginBottom: '0.85rem',
+                                                                padding: '0.589rem 0.77rem',
+                                                                marginBottom: '0.77rem',
                                                                 display: 'flex',
                                                                 flexDirection: 'column',
-                                                                gap: '0.4rem'
+                                                                gap: '0.363rem'
                                                             }}
                                                         >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.74rem', fontWeight: '800', color: '#92400E' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.671rem', fontWeight: '800', color: '#92400E' }}>
                                                                 <Mail size={14} />
                                                                 <span>Split Request: {getParticipantRole(myMember) === 'editor' ? 'Edit Access' : 'View Only'}</span>
                                                             </div>
-                                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                            <div style={{ display: 'flex', gap: '0.453rem' }}>
                                                                 <button
                                                                     onClick={(e) => {
                                                                         e.stopPropagation();
@@ -2170,7 +2172,7 @@ const BusinessSplitCollect = () => {
                                                                         color: 'white',
                                                                         border: 'none',
                                                                         fontWeight: '850',
-                                                                        fontSize: '0.75rem',
+                                                                        fontSize: '0.68rem',
                                                                         cursor: 'pointer',
                                                                         display: 'flex',
                                                                         alignItems: 'center',
@@ -2192,7 +2194,7 @@ const BusinessSplitCollect = () => {
                                                                         color: '#DC2626',
                                                                         border: '1px solid #FCA5A5',
                                                                         fontWeight: '800',
-                                                                        fontSize: '0.74rem',
+                                                                        fontSize: '0.671rem',
                                                                         cursor: 'pointer'
                                                                     }}
                                                                 >
@@ -2203,14 +2205,14 @@ const BusinessSplitCollect = () => {
                                                     )}
 
                                                     {/* Card Footer Statistics */}
-                                                    <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '0.906rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#1B6B3A' }}>
                                                             <Users size={14} />
-                                                            <span style={{ fontSize: '0.75rem', fontWeight: '800' }}>{s.participants.length} Members</span>
+                                                            <span style={{ fontSize: '0.68rem', fontWeight: '800' }}>{s.participants.length} Members</span>
                                                         </div>
                                                         <div style={{ textAlign: 'right' }}>
-                                                            <span style={{ display: 'block', fontSize: '0.6rem', color: '#64748B', fontWeight: '800', textTransform: 'uppercase' }}>Total Spent</span>
-                                                            <span style={{ fontSize: '1.05rem', fontWeight: '950', color: '#064E3B' }}>
+                                                            <span style={{ display: 'block', fontSize: '0.544rem', color: '#64748B', fontWeight: '800', textTransform: 'uppercase' }}>Total Spent</span>
+                                                            <span style={{ fontSize: '0.952rem', fontWeight: '950', color: '#064E3B' }}>
                                                                 {s.currencySymbol}{groupTotal.toLocaleString()}
                                                             </span>
                                                         </div>
@@ -2229,29 +2231,29 @@ const BusinessSplitCollect = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1.25rem' }}
+                            style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1.133rem' }}
                         >
                             {currentUserStatus === 'pending' && !isSplitAdmin ? (
                                 /* Invitation Pending Gate: members cannot enter into the split until they accept or decline */
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', width: '100%', maxWidth: '640px', margin: '2rem auto' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem', width: '100%', maxWidth: '640px', margin: '1.812rem auto' }}>
                                     <button 
                                         onClick={() => setSelectedSplitId(null)}
-                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: 'none', background: 'transparent', color: '#064E3B', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer', padding: 0, alignSelf: 'flex-start' }}
+                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: 'none', background: 'transparent', color: '#064E3B', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer', padding: 0, alignSelf: 'flex-start' }}
                                     >
                                         <ChevronLeft size={18} strokeWidth={2.5} /> Back to all tickets
                                     </button>
 
                                     <div style={{
                                         background: 'white',
-                                        borderRadius: '24px',
+                                        borderRadius: '16px',
                                         border: '2px solid #FCD34D',
-                                        padding: '2.5rem 2rem',
+                                        padding: '2.266rem 1.812rem',
                                         boxShadow: '0 12px 32px rgba(245, 158, 11, 0.12)',
                                         textAlign: 'center',
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        gap: '1.25rem'
+                                        gap: '1.133rem'
                                     }}>
                                         <div style={{
                                             width: '64px',
@@ -2272,7 +2274,7 @@ const BusinessSplitCollect = () => {
                                                 display: 'inline-flex',
                                                 alignItems: 'center',
                                                 gap: '5px',
-                                                fontSize: '0.72rem',
+                                                fontSize: '0.652rem',
                                                 fontWeight: '850',
                                                 textTransform: 'uppercase',
                                                 background: '#FEF3C7',
@@ -2280,15 +2282,15 @@ const BusinessSplitCollect = () => {
                                                 border: '1px solid #FCD34D',
                                                 padding: '3px 10px',
                                                 borderRadius: '9999px',
-                                                marginBottom: '0.75rem'
+                                                marginBottom: '0.68rem'
                                             }}>
                                                 <Clock size={12} /> Invitation Pending
                                             </span>
-                                            <h3 style={{ margin: '0.5rem 0 0.35rem 0', fontSize: '1.5rem', fontWeight: '900', color: '#0F172A' }}>
+                                            <h3 style={{ margin: '0.453rem 0 0.317rem 0', fontSize: '1.359rem', fontWeight: '900', color: '#0F172A' }}>
                                                 {activeSplit.title}
                                             </h3>
                                             {activeSplit.description && (
-                                                <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748B' }}>
+                                                <p style={{ margin: 0, fontSize: '0.797rem', color: '#64748B' }}>
                                                     {activeSplit.description}
                                                 </p>
                                             )}
@@ -2298,21 +2300,21 @@ const BusinessSplitCollect = () => {
                                             background: '#F8FAFC',
                                             border: '1px solid #E2E8F0',
                                             borderRadius: '16px',
-                                            padding: '1.1rem 1.25rem',
+                                            padding: '0.997rem 1.133rem',
                                             width: '100%',
                                             maxWidth: '460px',
                                             textAlign: 'left',
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            gap: '0.5rem'
+                                            gap: '0.453rem'
                                         }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <span style={{ fontSize: '0.75rem', fontWeight: '750', color: '#64748B' }}>Designated Role</span>
+                                                <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#64748B' }}>Designated Role</span>
                                                 <span style={{
                                                     display: 'inline-flex',
                                                     alignItems: 'center',
                                                     gap: '4px',
-                                                    fontSize: '0.72rem',
+                                                    fontSize: '0.652rem',
                                                     fontWeight: '850',
                                                     padding: '2px 8px',
                                                     borderRadius: '6px',
@@ -2327,19 +2329,19 @@ const BusinessSplitCollect = () => {
                                                     )}
                                                 </span>
                                             </div>
-                                            <p style={{ margin: 0, fontSize: '0.78rem', color: '#475569', lineHeight: 1.45 }}>
+                                            <p style={{ margin: 0, fontSize: '0.707rem', color: '#475569', lineHeight: 1.45 }}>
                                                 {currentUserRole === 'editor' 
                                                     ? 'With Edit Access, you will be able to record new expenses, view participants and balances once you accept.'
                                                     : 'With View-Only Access, you can view expenses and balance calculations once you accept.'}
                                             </p>
                                         </div>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#92400E', fontSize: '0.82rem', fontWeight: '700' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#92400E', fontSize: '0.743rem', fontWeight: '700' }}>
                                             <Lock size={15} />
                                             <span>You must accept or decline the invite to enter into this split.</span>
                                         </div>
 
-                                        <div style={{ display: 'flex', gap: '0.75rem', width: '100%', maxWidth: '380px' }}>
+                                        <div style={{ display: 'flex', gap: '0.68rem', width: '100%', maxWidth: '380px' }}>
                                             <button
                                                 onClick={() => handleRespondInvite(activeSplit.id, 'accepted')}
                                                 style={{
@@ -2348,13 +2350,13 @@ const BusinessSplitCollect = () => {
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
                                                     gap: '6px',
-                                                    padding: '0.75rem 1.25rem',
+                                                    padding: '0.68rem 1.133rem',
                                                     borderRadius: '14px',
                                                     background: '#1B6B3A',
                                                     color: 'white',
                                                     border: 'none',
                                                     fontWeight: '850',
-                                                    fontSize: '0.85rem',
+                                                    fontSize: '0.77rem',
                                                     cursor: 'pointer',
                                                     boxShadow: '0 4px 12px rgba(27, 107, 58, 0.25)'
                                                 }}
@@ -2367,13 +2369,13 @@ const BusinessSplitCollect = () => {
                                                     setSelectedSplitId(null);
                                                 }}
                                                 style={{
-                                                    padding: '0.75rem 1.25rem',
+                                                    padding: '0.68rem 1.133rem',
                                                     borderRadius: '14px',
                                                     background: 'white',
                                                     color: '#DC2626',
                                                     border: '1.5px solid #FCA5A5',
                                                     fontWeight: '800',
-                                                    fontSize: '0.85rem',
+                                                    fontSize: '0.77rem',
                                                     cursor: 'pointer'
                                                 }}
                                             >
@@ -2385,15 +2387,15 @@ const BusinessSplitCollect = () => {
                             ) : (
                                 <>
                                     {/* Back and Action Panel */}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.68rem' }}>
                                         <button 
                                             onClick={() => setSelectedSplitId(null)}
-                                            style={{ display: 'flex', alignItems: 'center', gap: '6px', border: 'none', background: 'transparent', color: '#064E3B', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer', padding: 0 }}
+                                            style={{ display: 'flex', alignItems: 'center', gap: '6px', border: 'none', background: 'transparent', color: '#064E3B', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer', padding: 0 }}
                                         >
                                             <ChevronLeft size={18} strokeWidth={2.5} /> Back to all tickets
                                         </button>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
                                             {isSplitAdmin && (
                                                 <button 
                                                     onClick={() => {
@@ -2404,10 +2406,10 @@ const BusinessSplitCollect = () => {
                                                         setIsInviteModalOpen(true);
                                                     }}
                                                     style={{ 
-                                                        display: 'flex', alignItems: 'center', gap: '0.4rem', 
-                                                        padding: '0.6rem 1.1rem', borderRadius: '12px', 
+                                                        display: 'flex', alignItems: 'center', gap: '0.363rem', 
+                                                        padding: '0.544rem 0.997rem', borderRadius: '12px', 
                                                         background: '#ECFDF5', color: '#065F46', border: '1.5px solid #A7F3D0', 
-                                                        fontWeight: '850', fontSize: '0.82rem', cursor: 'pointer',
+                                                        fontWeight: '850', fontSize: '0.743rem', cursor: 'pointer',
                                                         boxShadow: '0 2px 6px rgba(6, 78, 59, 0.06)'
                                                     }}
                                                 >
@@ -2420,10 +2422,10 @@ const BusinessSplitCollect = () => {
                                                 <button 
                                                     onClick={openAddExpenseModal}
                                                     style={{ 
-                                                        display: 'flex', alignItems: 'center', gap: '0.4rem', 
-                                                        padding: '0.6rem 1.15rem', borderRadius: '12px', 
+                                                        display: 'flex', alignItems: 'center', gap: '0.363rem', 
+                                                        padding: '0.544rem 1.042rem', borderRadius: '12px', 
                                                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
-                                                        fontWeight: '850', fontSize: '0.82rem', cursor: 'pointer',
+                                                        fontWeight: '850', fontSize: '0.743rem', cursor: 'pointer',
                                                         boxShadow: '0 4px 12px rgba(27, 107, 58, 0.15)'
                                                     }}
                                                 >
@@ -2435,10 +2437,10 @@ const BusinessSplitCollect = () => {
                                                     type="button"
                                                     onClick={() => alert('You have View-Only access to this split. Only the Admin and members with Edit Access can record expenses.')}
                                                     style={{ 
-                                                        display: 'flex', alignItems: 'center', gap: '0.4rem', 
-                                                        padding: '0.6rem 1.15rem', borderRadius: '12px', 
+                                                        display: 'flex', alignItems: 'center', gap: '0.363rem', 
+                                                        padding: '0.544rem 1.042rem', borderRadius: '12px', 
                                                         background: '#F1F5F9', color: '#64748B', border: '1.5px solid #CBD5E1', 
-                                                        fontWeight: '850', fontSize: '0.82rem', cursor: 'not-allowed'
+                                                        fontWeight: '850', fontSize: '0.743rem', cursor: 'not-allowed'
                                                     }}
                                                     title="View-Only Access: Only Admin and Editors can record expenses"
                                                 >
@@ -2451,45 +2453,45 @@ const BusinessSplitCollect = () => {
 
                                     {/* Toast Notification Banner */}
                                     {inviteSuccessToast && (
-                                        <div style={{ background: '#ECFDF5', border: '1.5px solid #34D399', borderRadius: '14px', padding: '0.75rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#065F46', fontWeight: '800', fontSize: '0.82rem' }}>
+                                        <div style={{ background: '#ECFDF5', border: '1.5px solid #34D399', borderRadius: '14px', padding: '0.68rem 1.133rem', display: 'flex', alignItems: 'center', gap: '0.544rem', color: '#065F46', fontWeight: '800', fontSize: '0.743rem' }}>
                                             <Check size={16} strokeWidth={3} />
                                             <span>{inviteSuccessToast}</span>
                                         </div>
                                     )}
 
                                     {/* Split Banner Header */}
-                                    <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #E2E8F0', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ background: 'white', borderRadius: '16px', border: '1.5px solid #E2E8F0', padding: '1.359rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
                                             <div style={{ display: 'flex', gap: '6px', alignItems: 'center', flexWrap: 'wrap' }}>
-                                                <span style={{ fontSize: '0.62rem', color: '#1B6B3A', fontWeight: '850', textTransform: 'uppercase', background: '#ECFDF5', padding: '2px 8px', borderRadius: '6px', border: '1px solid #D1FAE5' }}>
+                                                <span style={{ fontSize: '0.562rem', color: '#1B6B3A', fontWeight: '850', textTransform: 'uppercase', background: '#ECFDF5', padding: '2px 8px', borderRadius: '6px', border: '1px solid #D1FAE5' }}>
                                                     {activeSplit.currency} Group
                                                 </span>
                                                 {isSplitAdmin ? (
-                                                    <span style={{ fontSize: '0.62rem', color: '#7C3AED', fontWeight: '850', textTransform: 'uppercase', background: '#F5F3FF', padding: '2px 8px', borderRadius: '6px', border: '1px solid #DDD6FE', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <span style={{ fontSize: '0.562rem', color: '#7C3AED', fontWeight: '850', textTransform: 'uppercase', background: '#F5F3FF', padding: '2px 8px', borderRadius: '6px', border: '1px solid #DDD6FE', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                         <Crown size={11} strokeWidth={2.5} /> Admin / Creator
                                                     </span>
                                                 ) : currentUserRole === 'editor' ? (
-                                                    <span style={{ fontSize: '0.62rem', color: '#2563EB', fontWeight: '850', textTransform: 'uppercase', background: '#EFF6FF', padding: '2px 8px', borderRadius: '6px', border: '1px solid #BFDBFE', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <span style={{ fontSize: '0.562rem', color: '#2563EB', fontWeight: '850', textTransform: 'uppercase', background: '#EFF6FF', padding: '2px 8px', borderRadius: '6px', border: '1px solid #BFDBFE', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                         <Pencil size={11} strokeWidth={2.5} /> Edit Access (Can Record)
                                                     </span>
                                                 ) : (
-                                                    <span style={{ fontSize: '0.62rem', color: '#D97706', fontWeight: '850', textTransform: 'uppercase', background: '#FFFBEB', padding: '2px 8px', borderRadius: '6px', border: '1px solid #FDE68A', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <span style={{ fontSize: '0.562rem', color: '#D97706', fontWeight: '850', textTransform: 'uppercase', background: '#FFFBEB', padding: '2px 8px', borderRadius: '6px', border: '1px solid #FDE68A', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                         <Eye size={11} strokeWidth={2.5} /> View Only Mode
                                                     </span>
                                                 )}
                                                 {currentUserStatus === 'pending' && (
-                                                    <span style={{ fontSize: '0.62rem', color: '#DC2626', fontWeight: '850', textTransform: 'uppercase', background: '#FEF2F2', padding: '2px 8px', borderRadius: '6px', border: '1px solid #FECACA', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                    <span style={{ fontSize: '0.562rem', color: '#DC2626', fontWeight: '850', textTransform: 'uppercase', background: '#FEF2F2', padding: '2px 8px', borderRadius: '6px', border: '1px solid #FECACA', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                         <Clock size={10} /> Pending Acceptance
                                                     </span>
                                                 )}
                                             </div>
-                                            <h2 style={{ margin: '0.35rem 0 0.15rem 0', fontSize: '1.4rem', fontWeight: '900', color: '#0F172A' }}>{activeSplit.title}</h2>
-                                            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748B', fontWeight: '500' }}>{activeSplit.description}</p>
+                                            <h2 style={{ margin: '0.317rem 0 0.136rem 0', fontSize: '1.269rem', fontWeight: '900', color: '#0F172A' }}>{activeSplit.title}</h2>
+                                            <p style={{ margin: 0, fontSize: '0.743rem', color: '#64748B', fontWeight: '500' }}>{activeSplit.description}</p>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '0.906rem', alignItems: 'center' }}>
                                             <div style={{ textAlign: 'right' }}>
-                                                <span style={{ display: 'block', fontSize: '0.6rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Group Outlay</span>
-                                                <span style={{ fontSize: '1.5rem', fontWeight: '950', color: '#064E3B', letterSpacing: '-0.02em' }}>
+                                                <span style={{ display: 'block', fontSize: '0.544rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Group Outlay</span>
+                                                <span style={{ fontSize: '1.359rem', fontWeight: '950', color: '#064E3B', letterSpacing: '-0.02em' }}>
                                                     {activeSplit.currencySymbol}{calculatedBalances.totalSpent.toLocaleString()}
                                                 </span>
                                             </div>
@@ -2509,16 +2511,16 @@ const BusinessSplitCollect = () => {
                                         {/* ── Left Column (lg:col-span-6): LOGGED EXPENSES ── */}
                                         <div className="lg:col-span-6">
                             {/* Sessions Content: Each primary expense creates its own self-contained session section */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 
                                 {/* Top Action Bar */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                        <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '900', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.68rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
+                                        <h3 style={{ margin: 0, fontSize: '0.861rem', fontWeight: '900', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                                             Logged Expenses
                                         </h3>
                                         <span style={{ 
-                                            fontSize: '0.7rem', 
+                                            fontSize: '0.634rem', 
                                             fontWeight: '750', 
                                             background: '#F1F5F9', 
                                             color: '#475569', 
@@ -2530,9 +2532,9 @@ const BusinessSplitCollect = () => {
                                         </span>
                                     </div>
 
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                         {/* Search Toggle */}
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                                             <AnimatePresence>
                                                 {showDetailSearch && (
                                                     <Motion.input
@@ -2544,10 +2546,10 @@ const BusinessSplitCollect = () => {
                                                         value={detailSearchQuery}
                                                         onChange={(e) => setDetailSearchQuery(e.target.value)}
                                                         style={{
-                                                            padding: '0.35rem 0.65rem',
+                                                            padding: '0.317rem 0.589rem',
                                                             borderRadius: '8px',
                                                             border: '1px solid #CBD5E1',
-                                                            fontSize: '0.75rem',
+                                                            fontSize: '0.68rem',
                                                             outline: 'none',
                                                             fontWeight: '600'
                                                         }}
@@ -2560,7 +2562,7 @@ const BusinessSplitCollect = () => {
                                                     if (showDetailSearch) setDetailSearchQuery('');
                                                 }}
                                                 title="Search expenses"
-                                                style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                                style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.408rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                             >
                                                 <Search size={14} />
                                             </button>
@@ -2570,7 +2572,7 @@ const BusinessSplitCollect = () => {
                                         <button 
                                             onClick={handleShareGroup}
                                             title="Share Split Summary"
-                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.408rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
                                             <Share2 size={14} />
                                         </button>
@@ -2579,7 +2581,7 @@ const BusinessSplitCollect = () => {
                                         <button 
                                             onClick={handleDownloadPDF}
                                             title="Download Statement (PDF)"
-                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.45rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                            style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '8px', padding: '0.408rem', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         >
                                             <Download size={14} />
                                         </button>
@@ -2623,10 +2625,10 @@ const BusinessSplitCollect = () => {
 
                                     if (!hasItems) {
                                         return (
-                                            <div style={{ border: '2px dashed #E2E8F0', borderRadius: '24px', background: 'white', padding: '3.5rem 2rem', textAlign: 'center' }}>
-                                                <Receipt size={36} style={{ color: '#CBD5E1', marginBottom: '0.75rem' }} />
-                                                <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#334155', margin: '0 0 0.15rem 0' }}>No Expenses Found</h4>
-                                                <p style={{ fontSize: '0.8rem', color: '#64748B', maxWidth: '280px', margin: '0 auto' }}>
+                                            <div style={{ border: '2px dashed #E2E8F0', borderRadius: '16px', background: 'white', padding: '3.172rem 1.812rem', textAlign: 'center' }}>
+                                                <Receipt size={36} style={{ color: '#CBD5E1', marginBottom: '0.68rem' }} />
+                                                <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#334155', margin: '0 0 0.136rem 0' }}>No Expenses Found</h4>
+                                                <p style={{ fontSize: '0.725rem', color: '#64748B', maxWidth: '280px', margin: '0 auto' }}>
                                                     {activeSplit.expenses.length === 0 
                                                         ? 'Click "+ Add Expense" to record dinners, travel costs, or team bills in this split ticket.'
                                                         : `No expenses match your search query "${detailSearchQuery}".`
@@ -2656,20 +2658,20 @@ const BusinessSplitCollect = () => {
                                                         className="bg-white border rounded-3xl p-6 shadow-sm mb-6 transition-all duration-200 hover:shadow-md"
                                                         style={{
                                                             background: '#FFFFFF',
-                                                            borderRadius: '24px',
+                                                            borderRadius: '16px',
                                                             border: '1px solid #E2E8F0',
-                                                            padding: '1.5rem',
-                                                            marginBottom: '1.5rem',
+                                                            padding: '1.359rem',
+                                                            marginBottom: '1.359rem',
                                                             boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)'
                                                         }}
                                                     >
                                                         {/* Header Card (Clickable Row to Toggle) */}
                                                         <div
                                                             onClick={() => toggleExpenseExpand(e.id)}
-                                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap', cursor: 'pointer' }}
+                                                            style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.906rem', flexWrap: 'wrap', cursor: 'pointer' }}
                                                         >
                                                             {/* Left: Toggle Chevron, Receipt Icon & Content */}
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flex: 1, minWidth: '240px' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.793rem', flex: 1, minWidth: '240px' }}>
                                                                 {/* Dropdown Chevron Button */}
                                                                 <button
                                                                     type="button"
@@ -2729,12 +2731,12 @@ const BusinessSplitCollect = () => {
                                                                     <Receipt size={20} />
                                                                 </div>
 
-                                                                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                                                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '0.317rem' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', flexWrap: 'wrap' }}>
                                                                         <h4 
                                                                             style={{ 
                                                                                 margin: 0, 
-                                                                                fontSize: '1rem', 
+                                                                                fontSize: '0.906rem', 
                                                                                 fontWeight: '800', 
                                                                                 color: '#0F172A',
                                                                                 letterSpacing: '-0.01em'
@@ -2749,7 +2751,7 @@ const BusinessSplitCollect = () => {
                                                                                 alignItems: 'center',
                                                                                 padding: '2px 8px',
                                                                                 borderRadius: '9999px',
-                                                                                fontSize: '0.68rem',
+                                                                                fontSize: '0.616rem',
                                                                                 fontWeight: '750',
                                                                                 background: badgeStyle.bg,
                                                                                 color: badgeStyle.color,
@@ -2760,8 +2762,8 @@ const BusinessSplitCollect = () => {
                                                                         </span>
                                                                     </div>
 
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '500', color: '#64748B' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', flexWrap: 'wrap' }}>
+                                                                        <span style={{ fontSize: '0.68rem', fontWeight: '500', color: '#64748B' }}>
                                                                             Paid by <strong style={{ color: '#1E293B', fontWeight: '750' }}>{e.paidBy}</strong>
                                                                         </span>
                                                                         
@@ -2772,7 +2774,7 @@ const BusinessSplitCollect = () => {
                                                                                 display: 'inline-flex', 
                                                                                 alignItems: 'center', 
                                                                                 gap: '4px',
-                                                                                fontSize: '0.7rem', 
+                                                                                fontSize: '0.634rem', 
                                                                                 fontWeight: '600', 
                                                                                 color: '#64748B',
                                                                                 background: '#F8FAFC',
@@ -2808,7 +2810,7 @@ const BusinessSplitCollect = () => {
                                                                                         border: '1px solid #BFDBFE',
                                                                                         padding: '1px 8px',
                                                                                         borderRadius: '6px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '750',
                                                                                         cursor: 'pointer',
                                                                                         maxWidth: '160px',
@@ -2830,11 +2832,11 @@ const BusinessSplitCollect = () => {
                                                             </div>
 
                                                             {/* Right: Amount & Actions */}
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem', flexShrink: 0 }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.793rem', flexShrink: 0 }}>
                                                                 <div style={{ textAlign: 'right' }}>
                                                                     <span 
                                                                         style={{ 
-                                                                            fontSize: '1.2rem', 
+                                                                            fontSize: '1.087rem', 
                                                                             fontWeight: '900', 
                                                                             color: '#0F172A',
                                                                             letterSpacing: '-0.02em',
@@ -2845,7 +2847,7 @@ const BusinessSplitCollect = () => {
                                                                     </span>
                                                                 </div>
 
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.181rem' }}>
                                                                     <button 
                                                                         type="button"
                                                                         onClick={(ev) => {
@@ -2916,30 +2918,30 @@ const BusinessSplitCollect = () => {
                                                                 style={{
                                                                     display: 'grid',
                                                                     gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                                                                    gap: '1.25rem',
-                                                                    marginTop: '1.25rem',
-                                                                    paddingTop: '1.25rem',
+                                                                    gap: '1.133rem',
+                                                                    marginTop: '1.133rem',
+                                                                    paddingTop: '1.133rem',
                                                                     borderTop: '1px solid #F1F5F9',
                                                                     alignItems: 'start'
                                                                 }}
                                                             >
                                                                 {/* Left Column: Balances & Simplified Debts */}
-                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                                                     {/* 1. INDIVIDUAL BALANCES card */}
-                                                                    <div style={{ background: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '1.15rem' }}>
-                                                                        <h5 style={{ margin: '0 0 0.75rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                                    <div style={{ background: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '1.042rem' }}>
+                                                                        <h5 style={{ margin: '0 0 0.68rem 0', fontSize: '0.68rem', fontWeight: '900', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                                             Individual Balances
                                                                         </h5>
 
-                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.498rem' }}>
                                                                             {activeSplit.participants.map(m => {
                                                                                 const bal = sessionBalances.members[m] || 0;
                                                                                 return (
                                                                                     <div key={m} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                                                        <span style={{ fontWeight: '750', color: '#334155', fontSize: '0.82rem' }}>{m}</span>
+                                                                                        <span style={{ fontWeight: '750', color: '#334155', fontSize: '0.743rem' }}>{m}</span>
                                                                                         <span style={{
                                                                                             fontWeight: '900',
-                                                                                            fontSize: '0.82rem',
+                                                                                            fontSize: '0.743rem',
                                                                                             color: bal > 0.01 ? '#059669' : bal < -0.01 ? '#DC2626' : '#64748B'
                                                                                         }}>
                                                                                             {bal > 0.01 ? '+' : ''}{activeSplit.currencySymbol || '₹'}{bal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -2951,42 +2953,42 @@ const BusinessSplitCollect = () => {
                                                                     </div>
 
                                                                     {/* 2. SIMPLIFIED DEBTS dark box */}
-                                                                    <div style={{ background: '#0F172A', borderRadius: '18px', padding: '1.15rem', color: 'white', boxShadow: '0 8px 18px rgba(15,23,42,0.12)' }}>
-                                                                        <h5 style={{ margin: '0 0 0.85rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                                                    <div style={{ background: '#0F172A', borderRadius: '18px', padding: '1.042rem', color: 'white', boxShadow: '0 8px 18px rgba(15,23,42,0.12)' }}>
+                                                                        <h5 style={{ margin: '0 0 0.77rem 0', fontSize: '0.68rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                                             Simplified Debts
                                                                         </h5>
 
                                                                         {sessionBalances.debts.length === 0 ? (
-                                                                            <div style={{ textAlign: 'center', padding: '0.75rem 0' }}>
-                                                                                <Check size={22} color="#34D399" style={{ marginBottom: '0.35rem' }} />
-                                                                                <p style={{ margin: 0, fontSize: '0.78rem', color: '#94A3B8', fontWeight: '600' }}>All accounts completely settled!</p>
+                                                                            <div style={{ textAlign: 'center', padding: '0.68rem 0' }}>
+                                                                                <Check size={22} color="#34D399" style={{ marginBottom: '0.317rem' }} />
+                                                                                <p style={{ margin: 0, fontSize: '0.707rem', color: '#94A3B8', fontWeight: '600' }}>All accounts completely settled!</p>
                                                                             </div>
                                                                         ) : (
-                                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.589rem' }}>
                                                                                 {sessionBalances.debts.map((d, dIdx) => (
                                                                                     <div
                                                                                         key={dIdx}
                                                                                         style={{
                                                                                             background: 'rgba(255,255,255,0.04)',
-                                                                                            padding: '0.7rem 0.85rem',
+                                                                                            padding: '0.634rem 0.77rem',
                                                                                             borderRadius: '12px',
                                                                                             border: '1px solid rgba(255,255,255,0.07)',
                                                                                             display: 'flex',
                                                                                             justifyContent: 'space-between',
                                                                                             alignItems: 'center',
-                                                                                            gap: '0.5rem',
+                                                                                            gap: '0.453rem',
                                                                                             flexWrap: 'wrap'
                                                                                         }}
                                                                                     >
                                                                                         <div>
-                                                                                            <div style={{ fontSize: '0.78rem', fontWeight: '750', color: '#F8FAFC' }}>
+                                                                                            <div style={{ fontSize: '0.707rem', fontWeight: '750', color: '#F8FAFC' }}>
                                                                                                 {d.from} owes {d.to}
                                                                                             </div>
-                                                                                            <div style={{ fontSize: '0.95rem', fontWeight: '950', color: '#38BDF8', marginTop: '1px' }}>
+                                                                                            <div style={{ fontSize: '0.861rem', fontWeight: '950', color: '#38BDF8', marginTop: '1px' }}>
                                                                                                 {activeSplit.currencySymbol || '₹'}{d.amount.toLocaleString()}
                                                                                             </div>
                                                                                         </div>
-                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem' }}>
                                                                                             <button
                                                                                                 type="button"
                                                                                                 onClick={() => openCustomPayModal(d)}
@@ -2994,10 +2996,10 @@ const BusinessSplitCollect = () => {
                                                                                                     border: '1px solid rgba(255,255,255,0.18)',
                                                                                                     background: 'rgba(255,255,255,0.08)',
                                                                                                     color: '#F8FAFC',
-                                                                                                    padding: '0.35rem 0.65rem',
+                                                                                                    padding: '0.317rem 0.589rem',
                                                                                                     borderRadius: '8px',
                                                                                                     fontWeight: '800',
-                                                                                                    fontSize: '0.7rem',
+                                                                                                    fontSize: '0.634rem',
                                                                                                     cursor: 'pointer',
                                                                                                     transition: 'all 0.15s'
                                                                                                 }}
@@ -3013,10 +3015,10 @@ const BusinessSplitCollect = () => {
                                                                                                     border: 'none',
                                                                                                     background: '#34D399',
                                                                                                     color: '#064E3B',
-                                                                                                    padding: '0.35rem 0.65rem',
+                                                                                                    padding: '0.317rem 0.589rem',
                                                                                                     borderRadius: '8px',
                                                                                                     fontWeight: '900',
-                                                                                                    fontSize: '0.7rem',
+                                                                                                    fontSize: '0.634rem',
                                                                                                     cursor: 'pointer',
                                                                                                     boxShadow: '0 4px 10px rgba(52, 211, 153, 0.2)'
                                                                                                 }}
@@ -3032,12 +3034,12 @@ const BusinessSplitCollect = () => {
                                                                 </div>
 
                                                                 {/* Right Column: List of Settlement Cards linked to this specific expense */}
-                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.15rem' }}>
-                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.544rem' }}>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.136rem' }}>
+                                                                        <span style={{ fontSize: '0.68rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                                             <Check size={14} strokeWidth={2.5} /> Settlements ({linkedSettlements.length})
                                                                         </span>
-                                                                        <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#059669' }}>
+                                                                        <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#059669' }}>
                                                                             Settled: {activeSplit.currencySymbol || '₹'}{linkedSettlements.reduce((sum, s) => sum + (parseFloat(s.amount) || 0), 0).toLocaleString()}
                                                                         </span>
                                                                     </div>
@@ -3047,16 +3049,16 @@ const BusinessSplitCollect = () => {
                                                                             background: '#F8FAFC',
                                                                             border: '1.5px dashed #E2E8F0',
                                                                             borderRadius: '18px',
-                                                                            padding: '2rem 1.25rem',
+                                                                            padding: '1.812rem 1.133rem',
                                                                             textAlign: 'center',
                                                                             display: 'flex',
                                                                             flexDirection: 'column',
                                                                             alignItems: 'center',
                                                                             justifyContent: 'center'
                                                                         }}>
-                                                                            <Check size={24} style={{ color: '#CBD5E1', marginBottom: '0.5rem' }} />
-                                                                            <div style={{ fontSize: '0.82rem', fontWeight: '750', color: '#64748B' }}>No settlements yet</div>
-                                                                            <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '2px' }}>Settling dues will record payment receipts here.</div>
+                                                                            <Check size={24} style={{ color: '#CBD5E1', marginBottom: '0.453rem' }} />
+                                                                            <div style={{ fontSize: '0.743rem', fontWeight: '750', color: '#64748B' }}>No settlements yet</div>
+                                                                            <div style={{ fontSize: '0.652rem', color: '#94A3B8', marginTop: '2px' }}>Settling dues will record payment receipts here.</div>
                                                                         </div>
                                                                     ) : (
                                                                         linkedSettlements.map(s => (
@@ -3066,14 +3068,14 @@ const BusinessSplitCollect = () => {
                                                                                     background: '#F0FDF4',
                                                                                     border: '1px solid #BBF7D0',
                                                                                     borderRadius: '16px',
-                                                                                    padding: '0.75rem 1rem',
+                                                                                    padding: '0.68rem 0.906rem',
                                                                                     display: 'flex',
                                                                                     alignItems: 'center',
                                                                                     justifyContent: 'space-between',
-                                                                                    gap: '0.75rem'
+                                                                                    gap: '0.68rem'
                                                                                 }}
                                                                             >
-                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
                                                                                     <div style={{
                                                                                         width: '32px',
                                                                                         height: '32px',
@@ -3089,8 +3091,8 @@ const BusinessSplitCollect = () => {
                                                                                         <Check size={16} strokeWidth={2.5} />
                                                                                     </div>
                                                                                     <div style={{ minWidth: 0 }}>
-                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                                                                                            <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem', flexWrap: 'wrap' }}>
+                                                                                            <span style={{ fontSize: '0.77rem', fontWeight: '800', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                                                                 {s.title}
                                                                                             </span>
                                                                                             <span style={{
@@ -3098,7 +3100,7 @@ const BusinessSplitCollect = () => {
                                                                                                 alignItems: 'center',
                                                                                                 padding: '1px 6px',
                                                                                                 borderRadius: '9999px',
-                                                                                                fontSize: '0.62rem',
+                                                                                                fontSize: '0.562rem',
                                                                                                 fontWeight: '750',
                                                                                                 background: '#DCFCE7',
                                                                                                 color: '#059669',
@@ -3107,14 +3109,14 @@ const BusinessSplitCollect = () => {
                                                                                                 Settlement
                                                                                             </span>
                                                                                         </div>
-                                                                                        <div style={{ fontSize: '0.7rem', color: '#16A34A', fontWeight: '600', marginTop: '1px' }}>
+                                                                                        <div style={{ fontSize: '0.634rem', color: '#16A34A', fontWeight: '600', marginTop: '1px' }}>
                                                                                             Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
 
-                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                                                                                    <span style={{ fontSize: '0.95rem', fontWeight: '900', color: '#059669' }}>
+                                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexShrink: 0 }}>
+                                                                                    <span style={{ fontSize: '0.861rem', fontWeight: '900', color: '#059669' }}>
                                                                                         +{activeSplit.currencySymbol || '₹'}{(parseFloat(s.amount) || 0).toLocaleString()}
                                                                                     </span>
                                                                                     <button
@@ -3155,24 +3157,24 @@ const BusinessSplitCollect = () => {
                                                     className="bg-white border rounded-3xl p-6 shadow-sm mb-6"
                                                     style={{
                                                         background: '#FFFFFF',
-                                                        borderRadius: '24px',
+                                                        borderRadius: '16px',
                                                         border: '1px solid #E2E8F0',
-                                                        padding: '1.5rem',
-                                                        marginBottom: '1.5rem',
+                                                        padding: '1.359rem',
+                                                        marginBottom: '1.359rem',
                                                         boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)'
                                                     }}
                                                 >
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.85rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', marginBottom: '0.77rem' }}>
                                                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECFDF5', color: '#059669', border: '1px solid #A7F3D0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                                             <Check size={18} strokeWidth={2.5} />
                                                         </div>
                                                         <div>
-                                                            <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#065F46' }}>Other Settlements</h4>
-                                                            <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748B' }}>Direct or group debt settlements</p>
+                                                            <h4 style={{ margin: 0, fontSize: '0.861rem', fontWeight: '800', color: '#065F46' }}>Other Settlements</h4>
+                                                            <p style={{ margin: 0, fontSize: '0.652rem', color: '#64748B' }}>Direct or group debt settlements</p>
                                                         </div>
                                                     </div>
 
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
                                                         {generalSettlements.map(s => (
                                                             <div 
                                                                 key={s.id}
@@ -3180,29 +3182,29 @@ const BusinessSplitCollect = () => {
                                                                     background: '#F0FDF4',
                                                                     border: '1px solid #BBF7D0',
                                                                     borderRadius: '16px',
-                                                                    padding: '0.75rem 1rem',
+                                                                    padding: '0.68rem 0.906rem',
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'space-between',
-                                                                    gap: '0.75rem'
+                                                                    gap: '0.68rem'
                                                                 }}
                                                             >
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
                                                                     <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#DCFCE7', color: '#059669', border: '1px solid #86EFAC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                                                         <Check size={16} strokeWidth={2.5} />
                                                                     </div>
                                                                     <div style={{ minWidth: 0 }}>
-                                                                        <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#065F46' }}>
+                                                                        <div style={{ fontSize: '0.77rem', fontWeight: '800', color: '#065F46' }}>
                                                                             {s.title}
                                                                         </div>
-                                                                        <div style={{ fontSize: '0.7rem', color: '#16A34A', fontWeight: '600' }}>
+                                                                        <div style={{ fontSize: '0.634rem', color: '#16A34A', fontWeight: '600' }}>
                                                                             Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
                                                                         </div>
                                                                     </div>
                                                                 </div>
 
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                                                                    <span style={{ fontSize: '0.95rem', fontWeight: '900', color: '#059669' }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexShrink: 0 }}>
+                                                                    <span style={{ fontSize: '0.861rem', fontWeight: '900', color: '#059669' }}>
                                                                         +{activeSplit.currencySymbol || '₹'}{(parseFloat(s.amount) || 0).toLocaleString()}
                                                                     </span>
                                                                     <button 
@@ -3241,9 +3243,9 @@ const BusinessSplitCollect = () => {
                                                 className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm"
                                                 style={{
                                                     background: '#FFFFFF',
-                                                    borderRadius: '24px',
+                                                    borderRadius: '16px',
                                                     border: '1.5px solid #E2E8F0',
-                                                    padding: '1.25rem 1.5rem',
+                                                    padding: '1.133rem 1.359rem',
                                                     boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)'
                                                 }}
                                             >
@@ -3257,13 +3259,13 @@ const BusinessSplitCollect = () => {
                                                         cursor: 'pointer'
                                                     }}
                                                 >
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                                        <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '900', color: '#0F172A' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
+                                                        <h3 style={{ margin: 0, fontSize: '0.952rem', fontWeight: '900', color: '#0F172A' }}>
                                                             Members & Balances ({activeSplit.participants.length})
                                                         </h3>
                                                         <span
                                                             style={{
-                                                                fontSize: '0.68rem',
+                                                                fontSize: '0.616rem',
                                                                 fontWeight: '850',
                                                                 background: '#EFF6FF',
                                                                 color: '#2563EB',
@@ -3277,7 +3279,7 @@ const BusinessSplitCollect = () => {
                                                         </span>
                                                     </div>
 
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                                         {isSplitAdmin && (
                                                             <button
                                                                 type="button"
@@ -3295,7 +3297,7 @@ const BusinessSplitCollect = () => {
                                                                     color: '#065F46',
                                                                     padding: '3px 9px',
                                                                     borderRadius: '8px',
-                                                                    fontSize: '0.72rem',
+                                                                    fontSize: '0.652rem',
                                                                     fontWeight: '850',
                                                                     cursor: 'pointer',
                                                                     display: 'flex',
@@ -3339,7 +3341,7 @@ const BusinessSplitCollect = () => {
 
                                                 {/* Members List Accordion Content */}
                                                 {isSummaryExpanded && (
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', marginTop: '1.133rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                         {activeSplit.participants.map((m, mIdx) => {
                                                             const mName = getParticipantName(m);
                                                             const mEmail = getParticipantEmail(m);
@@ -3387,22 +3389,22 @@ const BusinessSplitCollect = () => {
                                                                         background: 'rgba(249, 250, 251, 0.7)',
                                                                         borderRadius: '16px',
                                                                         border: mStatus === 'pending' ? '1.5px dashed #F59E0B' : '1px solid #F1F5F9',
-                                                                        padding: '0.85rem 1rem',
+                                                                        padding: '0.77rem 0.906rem',
                                                                         display: 'flex',
                                                                         alignItems: 'center',
                                                                         justifyContent: 'space-between',
-                                                                        gap: '0.75rem',
+                                                                        gap: '0.68rem',
                                                                         flexWrap: 'wrap'
                                                                     }}
                                                                 >
                                                                     <div style={{ flex: 1, minWidth: '180px' }}>
-                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                                                            <span style={{ fontSize: '0.92rem', fontWeight: '850', color: '#1E293B' }}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', flexWrap: 'wrap' }}>
+                                                                            <span style={{ fontSize: '0.834rem', fontWeight: '850', color: '#1E293B' }}>
                                                                                 {mName}
                                                                             </span>
                                                                             
                                                                             {isCreatorMember ? (
-                                                                                <span style={{ background: '#047857', color: 'white', fontSize: '0.65rem', fontWeight: '850', padding: '2px 7px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                                                <span style={{ background: '#047857', color: 'white', fontSize: '0.589rem', fontWeight: '850', padding: '2px 7px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                                                     <Crown size={11} strokeWidth={2.5} /> Creator & Admin
                                                                                 </span>
                                                                             ) : mIsAdmin ? (
@@ -3412,7 +3414,7 @@ const BusinessSplitCollect = () => {
                                                                                             display: 'inline-flex',
                                                                                             alignItems: 'center',
                                                                                             gap: '4px',
-                                                                                            fontSize: '0.72rem',
+                                                                                            fontSize: '0.652rem',
                                                                                             fontWeight: '800',
                                                                                             borderRadius: '6px',
                                                                                             padding: '2px 6px',
@@ -3433,7 +3435,7 @@ const BusinessSplitCollect = () => {
                                                                                                 }}
                                                                                                 onClick={(e) => e.stopPropagation()}
                                                                                                 style={{
-                                                                                                    fontSize: '0.72rem',
+                                                                                                    fontSize: '0.652rem',
                                                                                                     fontWeight: '800',
                                                                                                     border: 'none',
                                                                                                     background: 'transparent',
@@ -3450,7 +3452,7 @@ const BusinessSplitCollect = () => {
                                                                                             </select>
                                                                                         </div>
                                                                                     ) : (
-                                                                                        <span style={{ background: '#047857', color: 'white', fontSize: '0.65rem', fontWeight: '850', padding: '2px 7px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                                                        <span style={{ background: '#047857', color: 'white', fontSize: '0.589rem', fontWeight: '850', padding: '2px 7px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                                                             <Crown size={11} strokeWidth={2.5} /> Admin
                                                                                         </span>
                                                                                     )}
@@ -3464,7 +3466,7 @@ const BusinessSplitCollect = () => {
                                                                                                 display: 'inline-flex',
                                                                                                 alignItems: 'center',
                                                                                                 gap: '4px',
-                                                                                                fontSize: '0.72rem',
+                                                                                                fontSize: '0.652rem',
                                                                                                 fontWeight: '800',
                                                                                                 borderRadius: '6px',
                                                                                                 padding: '2px 6px',
@@ -3489,7 +3491,7 @@ const BusinessSplitCollect = () => {
                                                                                                     }}
                                                                                                     onClick={(e) => e.stopPropagation()}
                                                                                                     style={{
-                                                                                                        fontSize: '0.72rem',
+                                                                                                        fontSize: '0.652rem',
                                                                                                         fontWeight: '800',
                                                                                                         border: 'none',
                                                                                                         background: 'transparent',
@@ -3517,7 +3519,7 @@ const BusinessSplitCollect = () => {
                                                                                                     display: 'inline-flex',
                                                                                                     alignItems: 'center',
                                                                                                     gap: '4px',
-                                                                                                    fontSize: '0.68rem',
+                                                                                                    fontSize: '0.616rem',
                                                                                                     fontWeight: '850',
                                                                                                     background: '#ECFDF5',
                                                                                                     color: '#047857',
@@ -3538,7 +3540,7 @@ const BusinessSplitCollect = () => {
                                                                                                 display: 'inline-flex',
                                                                                                 alignItems: 'center',
                                                                                                 gap: '4px',
-                                                                                                fontSize: '0.68rem',
+                                                                                                fontSize: '0.616rem',
                                                                                                 fontWeight: '800',
                                                                                                 background: mRole === 'editor' ? '#EFF6FF' : '#FFFBEB',
                                                                                                 color: mRole === 'editor' ? '#2563EB' : '#D97706',
@@ -3564,7 +3566,7 @@ const BusinessSplitCollect = () => {
                                                                                         display: 'inline-flex',
                                                                                         alignItems: 'center',
                                                                                         gap: '3px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '800',
                                                                                         background: '#FEF3C7',
                                                                                         color: '#B45309',
@@ -3582,7 +3584,7 @@ const BusinessSplitCollect = () => {
                                                                                             display: 'inline-flex',
                                                                                             alignItems: 'center',
                                                                                             gap: '2px',
-                                                                                            fontSize: '0.68rem',
+                                                                                            fontSize: '0.616rem',
                                                                                             fontWeight: '750',
                                                                                             background: '#ECFDF5',
                                                                                             color: '#059669',
@@ -3601,7 +3603,7 @@ const BusinessSplitCollect = () => {
                                                                                         display: 'inline-flex',
                                                                                         alignItems: 'center',
                                                                                         gap: '3px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '800',
                                                                                         background: '#ECFDF5',
                                                                                         color: '#059669',
@@ -3616,7 +3618,7 @@ const BusinessSplitCollect = () => {
                                                                         </div>
 
                                                                         {mEmail && (
-                                                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '500', marginTop: '2px' }}>
+                                                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '500', marginTop: '2px' }}>
                                                                                 {mEmail}
                                                                             </div>
                                                                         )}
@@ -3636,7 +3638,7 @@ const BusinessSplitCollect = () => {
                                                                                         color: '#047857',
                                                                                         padding: '3px 7px',
                                                                                         borderRadius: '6px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '800',
                                                                                         cursor: 'pointer'
                                                                                     }}
@@ -3652,7 +3654,7 @@ const BusinessSplitCollect = () => {
                                                                                         color: '#475569',
                                                                                         padding: '2px 6px',
                                                                                         borderRadius: '6px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '700',
                                                                                         cursor: 'pointer'
                                                                                     }}
@@ -3668,7 +3670,7 @@ const BusinessSplitCollect = () => {
                                                                                         color: '#DC2626',
                                                                                         padding: '3px 6px',
                                                                                         borderRadius: '6px',
-                                                                                        fontSize: '0.68rem',
+                                                                                        fontSize: '0.616rem',
                                                                                         fontWeight: '750',
                                                                                         cursor: 'pointer'
                                                                                     }}
@@ -3679,14 +3681,14 @@ const BusinessSplitCollect = () => {
                                                                             </div>
                                                                         )}
 
-                                                                        <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600', marginTop: '4px' }}>
+                                                                        <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600', marginTop: '4px' }}>
                                                                             Charged {currSym}{charged.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}, Paid {currSym}{paid.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                                                         </div>
                                                                     </div>
 
                                                                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                                                                         <span style={{
-                                                                            fontSize: '1rem',
+                                                                            fontSize: '0.906rem',
                                                                             fontWeight: '950',
                                                                             color: isZero ? '#64748B' : (isPositive ? '#059669' : '#DC2626')
                                                                         }}>
@@ -3706,14 +3708,14 @@ const BusinessSplitCollect = () => {
                                                 style={{
                                                     background: '#0b1329',
                                                     color: '#FFFFFF',
-                                                    borderRadius: '24px',
-                                                    padding: '1.5rem',
+                                                    borderRadius: '16px',
+                                                    padding: '1.359rem',
                                                     boxShadow: '0 8px 24px rgba(11, 19, 41, 0.18)'
                                                 }}
                                             >
                                                 <h5 
                                                     className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4"
-                                                    style={{ margin: '0 0 1rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.06em' }}
+                                                    style={{ margin: '0 0 0.906rem 0', fontSize: '0.68rem', fontWeight: '900', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.06em' }}
                                                 >
                                                     SIMPLIFIED DEBTS
                                                 </h5>
@@ -3721,47 +3723,47 @@ const BusinessSplitCollect = () => {
                                                 {calculatedBalances.debts.length === 0 ? (
                                                     <div 
                                                         className="flex flex-col items-center justify-center py-6 text-center"
-                                                        style={{ textAlign: 'center', padding: '1.5rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
+                                                        style={{ textAlign: 'center', padding: '1.359rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
                                                     >
                                                         <div 
                                                             className="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-2"
-                                                            style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.5rem' }}
+                                                            style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(52, 211, 153, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '0.453rem' }}
                                                         >
                                                             <Check size={22} color="#34D399" strokeWidth={3} />
                                                         </div>
                                                         <p 
                                                             className="text-sm font-bold text-slate-300 m-0"
-                                                            style={{ margin: 0, fontSize: '0.85rem', color: '#CBD5E1', fontWeight: '750' }}
+                                                            style={{ margin: 0, fontSize: '0.77rem', color: '#CBD5E1', fontWeight: '750' }}
                                                         >
                                                             {groupPrimaryExpenses.length === 0 ? 'No expenses recorded yet' : 'All accounts completely settled!'}
                                                         </p>
                                                     </div>
                                                 ) : (
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem' }}>
                                                         {calculatedBalances.debts.map((d, dIdx) => (
                                                             <div
                                                                 key={dIdx}
                                                                 style={{
                                                                     background: 'rgba(255,255,255,0.04)',
-                                                                    padding: '0.85rem 1rem',
+                                                                    padding: '0.77rem 0.906rem',
                                                                     borderRadius: '16px',
                                                                     border: '1px solid rgba(255,255,255,0.08)',
                                                                     display: 'flex',
                                                                     justifyContent: 'space-between',
                                                                     alignItems: 'center',
-                                                                    gap: '0.75rem',
+                                                                    gap: '0.68rem',
                                                                     flexWrap: 'wrap'
                                                                 }}
                                                             >
                                                                 <div>
-                                                                    <div style={{ fontSize: '0.82rem', fontWeight: '750', color: '#F8FAFC' }}>
+                                                                    <div style={{ fontSize: '0.743rem', fontWeight: '750', color: '#F8FAFC' }}>
                                                                         {d.from} owes <strong style={{ color: '#FFFFFF' }}>{d.to}</strong>
                                                                     </div>
-                                                                    <div style={{ fontSize: '1.05rem', fontWeight: '950', color: '#38BDF8', marginTop: '2px' }}>
+                                                                    <div style={{ fontSize: '0.952rem', fontWeight: '950', color: '#38BDF8', marginTop: '2px' }}>
                                                                         {currSym}{d.amount.toLocaleString()}
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.408rem' }}>
                                                                     <button
                                                                         type="button"
                                                                         onClick={() => openCustomPayModal(d)}
@@ -3769,10 +3771,10 @@ const BusinessSplitCollect = () => {
                                                                             border: '1px solid rgba(255,255,255,0.2)',
                                                                             background: 'rgba(255,255,255,0.08)',
                                                                             color: '#F8FAFC',
-                                                                            padding: '0.4rem 0.75rem',
+                                                                            padding: '0.363rem 0.68rem',
                                                                             borderRadius: '8px',
                                                                             fontWeight: '800',
-                                                                            fontSize: '0.72rem',
+                                                                            fontSize: '0.652rem',
                                                                             cursor: 'pointer',
                                                                             transition: 'all 0.15s'
                                                                         }}
@@ -3788,10 +3790,10 @@ const BusinessSplitCollect = () => {
                                                                             border: 'none',
                                                                             background: '#34D399',
                                                                             color: '#064E3B',
-                                                                            padding: '0.4rem 0.85rem',
+                                                                            padding: '0.363rem 0.77rem',
                                                                             borderRadius: '8px',
                                                                             fontWeight: '900',
-                                                                            fontSize: '0.72rem',
+                                                                            fontSize: '0.652rem',
                                                                             cursor: 'pointer',
                                                                             boxShadow: '0 4px 10px rgba(52, 211, 153, 0.2)'
                                                                         }}
@@ -3810,17 +3812,17 @@ const BusinessSplitCollect = () => {
                                                 {/* Top row */}
                                                 <div 
                                                     className="flex items-center justify-between px-1"
-                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.25rem' }}
+                                                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.227rem' }}
                                                 >
                                                     <span 
                                                         className="flex items-center gap-1.5 text-xs font-black text-emerald-600 uppercase tracking-wider"
-                                                        style={{ fontSize: '0.75rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}
+                                                        style={{ fontSize: '0.68rem', fontWeight: '850', color: '#059669', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '5px' }}
                                                     >
                                                         <Check size={14} strokeWidth={2.5} /> SETTLEMENTS ({splitSettlements.length})
                                                     </span>
                                                     <span 
                                                         className="text-xs font-bold text-emerald-600"
-                                                        style={{ fontSize: '0.75rem', fontWeight: '800', color: '#059669' }}
+                                                        style={{ fontSize: '0.68rem', fontWeight: '800', color: '#059669' }}
                                                     >
                                                         Settled: {currSym}{totalSettledAmount.toLocaleString()}
                                                     </span>
@@ -3837,14 +3839,14 @@ const BusinessSplitCollect = () => {
                                                             background: 'rgba(236, 253, 245, 0.5)', 
                                                             border: '1px solid #A7F3D0', 
                                                             borderRadius: '16px', 
-                                                            padding: '0 1rem', 
+                                                            padding: '0 0.906rem', 
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
                                                             textAlign: 'center' 
                                                         }}
                                                     >
-                                                        <div style={{ fontSize: '0.85rem', fontWeight: '750', color: '#065F46' }}>No settlements recorded yet</div>
+                                                        <div style={{ fontSize: '0.77rem', fontWeight: '750', color: '#065F46' }}>No settlements recorded yet</div>
                                                     </div>
                                                 ) : (
                                                     <div 
@@ -3852,7 +3854,7 @@ const BusinessSplitCollect = () => {
                                                         style={{ 
                                                             display: 'flex', 
                                                             flexDirection: 'column', 
-                                                            gap: '0.625rem',
+                                                            gap: '0.566rem',
                                                             maxHeight: '226px',
                                                             overflowY: 'auto',
                                                             paddingRight: '6px',
@@ -3872,14 +3874,14 @@ const BusinessSplitCollect = () => {
                                                                     background: 'rgba(236, 253, 245, 0.5)',
                                                                     border: '1px solid #A7F3D0',
                                                                     borderRadius: '16px',
-                                                                    padding: '0.85rem 1rem',
+                                                                    padding: '0.77rem 0.906rem',
                                                                     display: 'flex',
                                                                     alignItems: 'center',
                                                                     justifyContent: 'space-between',
-                                                                    gap: '0.75rem'
+                                                                    gap: '0.68rem'
                                                                 }}
                                                             >
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
                                                                     {/* Emerald checkmark square icon */}
                                                                     <div 
                                                                         className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 border border-emerald-300 flex items-center justify-center flex-shrink-0"
@@ -3899,8 +3901,8 @@ const BusinessSplitCollect = () => {
                                                                         <Check size={18} strokeWidth={2.5} />
                                                                     </div>
                                                                     <div style={{ minWidth: 0 }}>
-                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
-                                                                            <span style={{ fontSize: '0.88rem', fontWeight: '850', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.408rem', flexWrap: 'wrap' }}>
+                                                                            <span style={{ fontSize: '0.797rem', fontWeight: '850', color: '#065F46', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                                                 {s.title}
                                                                             </span>
                                                                             <span 
@@ -3910,7 +3912,7 @@ const BusinessSplitCollect = () => {
                                                                                     alignItems: 'center',
                                                                                     padding: '1px 7px',
                                                                                     borderRadius: '9999px',
-                                                                                    fontSize: '0.62rem',
+                                                                                    fontSize: '0.562rem',
                                                                                     fontWeight: '750',
                                                                                     background: '#DCFCE7',
                                                                                     color: '#059669',
@@ -3920,14 +3922,14 @@ const BusinessSplitCollect = () => {
                                                                                 Settlement
                                                                             </span>
                                                                         </div>
-                                                                        <div style={{ fontSize: '0.72rem', color: '#16A34A', fontWeight: '600', marginTop: '2px' }}>
+                                                                        <div style={{ fontSize: '0.652rem', color: '#16A34A', fontWeight: '600', marginTop: '2px' }}>
                                                                             Paid by <strong style={{ color: '#065F46' }}>{s.paidBy}</strong> • {s.date}
                                                                         </div>
                                                                     </div>
                                                                 </div>
 
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                                                                    <span style={{ fontSize: '1rem', fontWeight: '950', color: '#059669' }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexShrink: 0 }}>
+                                                                    <span style={{ fontSize: '0.906rem', fontWeight: '950', color: '#059669' }}>
                                                                         +{currSym}{(parseFloat(s.amount) || 0).toLocaleString()}
                                                                     </span>
                                                                     <button
@@ -3976,11 +3978,11 @@ const BusinessSplitCollect = () => {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '28px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
+                            style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '18px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
                         >
-                            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <h3 style={{ fontSize: '1.15rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>{editingGroupId ? 'Edit Split Ticket' : 'Create Split Ticket'}</h3>
-                                <button style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.4rem', cursor: 'pointer', color: '#475569' }} onClick={() => {
+                            <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <h3 style={{ fontSize: '1.042rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>{editingGroupId ? 'Edit Split Ticket' : 'Create Split Ticket'}</h3>
+                                <button style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.363rem', cursor: 'pointer', color: '#475569' }} onClick={() => {
                                     setIsCreateGroupModalOpen(false);
                                     setEditingGroupId(null);
                                     setNewParticipantName('');
@@ -3989,26 +3991,26 @@ const BusinessSplitCollect = () => {
                                 }}><X size={18} /></button>
                             </div>
                             
-                            <form onSubmit={handleCreateGroup} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+                            <form onSubmit={handleCreateGroup} style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '1.042rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Ticket Title</label>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Ticket Title</label>
                                     <input 
                                         required
                                         type="text" 
                                         placeholder="e.g. Goa Trip, Office lunch split"
                                         value={groupForm.title}
                                         onChange={(e) => setGroupForm({ ...groupForm, title: e.target.value })}
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600' }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600' }}
                                     />
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Group Currency</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Group Currency</label>
                                         <select 
                                             value={groupForm.currency}
                                             onChange={(e) => setGroupForm({ ...groupForm, currency: e.target.value })}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', outline: 'none' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', outline: 'none' }}
                                         >
                                             {currency.code !== 'INR' && currency.code !== 'USD' && currency.code !== 'EUR' && currency.code !== 'GBP' && (
                                                 <option value={currency.code}>{currency.code} ({currency.symbol})</option>
@@ -4020,42 +4022,42 @@ const BusinessSplitCollect = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Description</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Description</label>
                                         <input 
                                             type="text" 
                                             placeholder="Optional details"
                                             value={groupForm.description}
                                             onChange={(e) => setGroupForm({ ...groupForm, description: e.target.value })}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box' }}
                                         />
                                     </div>
                                 </div>
 
                                 {/* Participants Manager */}
                                 <div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                        <label style={{ fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.453rem' }}>
+                                        <label style={{ fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase' }}>
                                             PARTICIPANTS ({groupForm.participants.length})
                                         </label>
-                                        <span style={{ fontSize: '0.68rem', color: '#059669', fontWeight: '700' }}>
+                                        <span style={{ fontSize: '0.616rem', color: '#059669', fontWeight: '700' }}>
                                             Strictly @bnxmail.com
                                         </span>
                                     </div>
                                     
                                     {/* Input 1: Add participant name... */}
-                                    <div style={{ marginBottom: '0.45rem' }}>
+                                    <div style={{ marginBottom: '0.408rem' }}>
                                         <input 
                                             type="text" 
                                             placeholder="Participant Name (e.g. John Doe)"
                                             value={newParticipantName}
                                             onChange={(e) => setNewParticipantName(e.target.value)}
-                                            style={{ width: '100%', padding: '0.65rem 0.85rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontSize: '0.85rem' }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontSize: '0.77rem' }}
                                             onKeyDown={(e) => { if(e.key === 'Enter') { e.preventDefault(); addParticipantToForm(); } }}
                                         />
                                     </div>
 
                                     {/* Input 2: enter mail + Role + Add Button */}
-                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.45rem' }}>
+                                    <div style={{ display: 'flex', gap: '0.453rem', alignItems: 'center', marginBottom: '0.408rem' }}>
                                         <input 
                                             type="email" 
                                             placeholder="member@bnxmail.com"
@@ -4066,12 +4068,12 @@ const BusinessSplitCollect = () => {
                                             }}
                                             style={{ 
                                                 flex: 1, 
-                                                padding: '0.65rem 0.85rem', 
+                                                padding: '0.589rem 0.77rem', 
                                                 borderRadius: '10px', 
                                                 border: emailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', 
                                                 outline: 'none', 
                                                 boxSizing: 'border-box',
-                                                fontSize: '0.85rem'
+                                                fontSize: '0.77rem'
                                             }}
                                             onKeyDown={(e) => { if(e.key === 'Enter') { e.preventDefault(); addParticipantToForm(); } }}
                                         />
@@ -4079,11 +4081,11 @@ const BusinessSplitCollect = () => {
                                             value={newParticipantRole}
                                             onChange={(e) => setNewParticipantRole(e.target.value)}
                                             style={{
-                                                padding: '0.65rem 0.6rem',
+                                                padding: '0.589rem 0.544rem',
                                                 borderRadius: '10px',
                                                 border: '1px solid #E2E8F0',
                                                 background: '#F8FAFC',
-                                                fontSize: '0.78rem',
+                                                fontSize: '0.707rem',
                                                 fontWeight: '750',
                                                 color: '#334155',
                                                 outline: 'none',
@@ -4101,14 +4103,14 @@ const BusinessSplitCollect = () => {
                                                 border: 'none', 
                                                 background: '#ECFDF5', 
                                                 color: '#065F46', 
-                                                padding: '0.65rem 0.95rem', 
+                                                padding: '0.589rem 0.861rem', 
                                                 borderRadius: '10px', 
                                                 fontWeight: '900', 
                                                 cursor: 'pointer', 
                                                 display: 'flex', 
                                                 alignItems: 'center', 
                                                 gap: '4px',
-                                                fontSize: '0.82rem',
+                                                fontSize: '0.743rem',
                                                 whiteSpace: 'nowrap',
                                                 flexShrink: 0
                                             }}
@@ -4119,14 +4121,14 @@ const BusinessSplitCollect = () => {
 
                                     {/* Inline Error for Email Domain Guard */}
                                     {emailError && (
-                                        <div style={{ color: '#EF4444', fontSize: '0.74rem', fontWeight: '750', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#FEF2F2', padding: '4px 8px', borderRadius: '6px' }}>
+                                        <div style={{ color: '#EF4444', fontSize: '0.671rem', fontWeight: '750', marginBottom: '0.453rem', display: 'flex', alignItems: 'center', gap: '6px', background: '#FEF2F2', padding: '4px 8px', borderRadius: '6px' }}>
                                             <AlertCircle size={14} />
                                             <span>{emailError}</span>
                                         </div>
                                     )}
 
                                     {/* Participants List */}
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', maxHeight: '135px', overflowY: 'auto', background: '#F8FAFC', padding: '0.5rem', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.317rem', maxHeight: '135px', overflowY: 'auto', background: '#F8FAFC', padding: '0.453rem', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
                                         {groupForm.participants.map((p, idx) => {
                                             const pName = getParticipantName(p);
                                             const pEmail = getParticipantEmail(p);
@@ -4145,7 +4147,7 @@ const BusinessSplitCollect = () => {
                                                         border: pIsAdmin ? '1px solid #A7F3D0' : '1px solid #E2E8F0', 
                                                         padding: '6px 10px', 
                                                         borderRadius: '8px', 
-                                                        fontSize: '0.78rem'
+                                                        fontSize: '0.707rem'
                                                     }}
                                                 >
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', minWidth: 0, flex: 1 }}>
@@ -4153,7 +4155,7 @@ const BusinessSplitCollect = () => {
                                                             {pName}
                                                         </span>
                                                         {pEmail && (
-                                                            <span style={{ color: '#64748B', fontSize: '0.72rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                            <span style={{ color: '#64748B', fontSize: '0.652rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                                 ({pEmail})
                                                             </span>
                                                         )}
@@ -4161,7 +4163,7 @@ const BusinessSplitCollect = () => {
 
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
                                                         {isPrimaryCreator ? (
-                                                            <span style={{ background: '#047857', color: 'white', fontSize: '0.65rem', fontWeight: '850', padding: '2px 6px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                            <span style={{ background: '#047857', color: 'white', fontSize: '0.589rem', fontWeight: '850', padding: '2px 6px', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                                                                 <Crown size={10} strokeWidth={2.5} /> Creator & Admin
                                                             </span>
                                                         ) : (
@@ -4174,7 +4176,7 @@ const BusinessSplitCollect = () => {
                                                                         border: 'none',
                                                                         background: pIsAdmin ? '#ECFDF5' : (pRole === 'editor' ? '#EFF6FF' : '#FFFBEB'),
                                                                         color: pIsAdmin ? '#047857' : (pRole === 'editor' ? '#2563EB' : '#D97706'),
-                                                                        fontSize: '0.68rem',
+                                                                        fontSize: '0.616rem',
                                                                         fontWeight: '850',
                                                                         padding: '2px 6px',
                                                                         borderRadius: '6px',
@@ -4192,7 +4194,7 @@ const BusinessSplitCollect = () => {
                                                                         <><Eye size={10} strokeWidth={2.5} /> View Only</>
                                                                     )}
                                                                 </button>
-                                                                <span style={{ color: '#94A3B8', fontSize: '0.65rem', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                                                <span style={{ color: '#94A3B8', fontSize: '0.589rem', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                                                                     <Clock size={10} /> Pending Invite
                                                                 </span>
                                                                 <button 
@@ -4214,7 +4216,7 @@ const BusinessSplitCollect = () => {
 
                                 <button 
                                     type="submit"
-                                    style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '850', fontSize: '0.88rem', cursor: 'pointer', marginTop: '0.5rem' }}
+                                    style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '850', fontSize: '0.797rem', cursor: 'pointer', marginTop: '0.453rem' }}
                                 >
                                     {editingGroupId ? 'Save Changes' : 'Create Ticket'}
                                 </button>
@@ -4232,26 +4234,26 @@ const BusinessSplitCollect = () => {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
+                            style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
                         >
-                            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#064E3B' }}>
                                         <UserPlus size={16} />
                                     </div>
-                                    <h3 style={{ fontSize: '1.1rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>Invite Member to Split</h3>
+                                    <h3 style={{ fontSize: '0.997rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>Invite Member to Split</h3>
                                 </div>
                                 <button 
-                                    style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.4rem', cursor: 'pointer', color: '#475569' }} 
+                                    style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.363rem', cursor: 'pointer', color: '#475569' }} 
                                     onClick={() => { setIsInviteModalOpen(false); setInviteError(''); }}
                                 >
                                     <X size={18} />
                                 </button>
                             </div>
 
-                            <form onSubmit={handleInviteNewMember} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <form onSubmit={handleInviteNewMember} style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                                         Member Email Address (@bnxmail.com strictly required)
                                     </label>
                                     <input
@@ -4264,15 +4266,15 @@ const BusinessSplitCollect = () => {
                                             if (inviteError) setInviteError('');
                                         }}
                                         style={{
-                                            width: '100%', padding: '0.75rem', borderRadius: '12px',
+                                            width: '100%', padding: '0.68rem', borderRadius: '12px',
                                             border: inviteError ? '1.5px solid #EF4444' : '1px solid #E2E8F0',
-                                            outline: 'none', boxSizing: 'border-box', fontWeight: '600', fontSize: '0.85rem'
+                                            outline: 'none', boxSizing: 'border-box', fontWeight: '600', fontSize: '0.77rem'
                                         }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                                         Member Name (Optional)
                                     </label>
                                     <input
@@ -4281,30 +4283,30 @@ const BusinessSplitCollect = () => {
                                         value={inviteMemberName}
                                         onChange={(e) => setInviteMemberName(e.target.value)}
                                         style={{
-                                            width: '100%', padding: '0.75rem', borderRadius: '12px',
-                                            border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600', fontSize: '0.85rem'
+                                            width: '100%', padding: '0.68rem', borderRadius: '12px',
+                                            border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600', fontSize: '0.77rem'
                                         }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.4rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.363rem' }}>
                                         Designated Access Permission
                                     </label>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.453rem' }}>
                                         <div
                                             onClick={() => setInviteMemberRole('editor')}
                                             style={{
                                                 border: inviteMemberRole === 'editor' ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                                 background: inviteMemberRole === 'editor' ? '#F0FDF4' : 'white',
-                                                padding: '0.65rem 0.5rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
+                                                padding: '0.589rem 0.453rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
                                             }}
                                         >
-                                            <div style={{ fontSize: '0.78rem', fontWeight: '850', color: inviteMemberRole === 'editor' ? '#166534' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                            <div style={{ fontSize: '0.707rem', fontWeight: '850', color: inviteMemberRole === 'editor' ? '#166534' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                 <Pencil size={13} strokeWidth={2.5} />
                                                 <span>Edit Access</span>
                                             </div>
-                                            <div style={{ fontSize: '0.67rem', color: '#64748B', marginTop: '2px' }}>
+                                            <div style={{ fontSize: '0.607rem', color: '#64748B', marginTop: '2px' }}>
                                                 Can record & add expenses
                                             </div>
                                         </div>
@@ -4314,14 +4316,14 @@ const BusinessSplitCollect = () => {
                                             style={{
                                                 border: inviteMemberRole === 'viewer' ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                                 background: inviteMemberRole === 'viewer' ? '#F0FDF4' : 'white',
-                                                padding: '0.65rem 0.5rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
+                                                padding: '0.589rem 0.453rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
                                             }}
                                         >
-                                            <div style={{ fontSize: '0.78rem', fontWeight: '850', color: inviteMemberRole === 'viewer' ? '#166534' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                            <div style={{ fontSize: '0.707rem', fontWeight: '850', color: inviteMemberRole === 'viewer' ? '#166534' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                 <Eye size={13} strokeWidth={2.5} />
                                                 <span>View Only</span>
                                             </div>
-                                            <div style={{ fontSize: '0.67rem', color: '#64748B', marginTop: '2px' }}>
+                                            <div style={{ fontSize: '0.607rem', color: '#64748B', marginTop: '2px' }}>
                                                 Can view expenses & balances
                                             </div>
                                         </div>
@@ -4331,14 +4333,14 @@ const BusinessSplitCollect = () => {
                                             style={{
                                                 border: inviteMemberRole === 'admin' ? '2px solid #047857' : '1px solid #E2E8F0',
                                                 background: inviteMemberRole === 'admin' ? '#ECFDF5' : 'white',
-                                                padding: '0.65rem 0.5rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
+                                                padding: '0.589rem 0.453rem', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.15s'
                                             }}
                                         >
-                                            <div style={{ fontSize: '0.78rem', fontWeight: '850', color: inviteMemberRole === 'admin' ? '#047857' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                            <div style={{ fontSize: '0.707rem', fontWeight: '850', color: inviteMemberRole === 'admin' ? '#047857' : '#334155', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                 <Crown size={13} strokeWidth={2.5} />
                                                 <span>Admin</span>
                                             </div>
-                                            <div style={{ fontSize: '0.67rem', color: '#64748B', marginTop: '2px' }}>
+                                            <div style={{ fontSize: '0.607rem', color: '#64748B', marginTop: '2px' }}>
                                                 Full admin access & controls
                                             </div>
                                         </div>
@@ -4346,23 +4348,23 @@ const BusinessSplitCollect = () => {
                                 </div>
 
                                 {inviteError && (
-                                    <div style={{ color: '#EF4444', fontSize: '0.75rem', fontWeight: '750', background: '#FEF2F2', padding: '0.5rem 0.75rem', borderRadius: '8px', border: '1px solid #FECACA', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <div style={{ color: '#EF4444', fontSize: '0.68rem', fontWeight: '750', background: '#FEF2F2', padding: '0.453rem 0.68rem', borderRadius: '8px', border: '1px solid #FECACA', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         <AlertCircle size={15} />
                                         <span>{inviteError}</span>
                                     </div>
                                 )}
 
-                                <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.544rem', marginTop: '0.453rem' }}>
                                     <button
                                         type="button"
                                         onClick={() => { setIsInviteModalOpen(false); setInviteError(''); }}
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', fontWeight: '800', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', fontWeight: '800', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        style={{ flex: 1.5, padding: '0.75rem', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', fontWeight: '850', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                                        style={{ flex: 1.5, padding: '0.68rem', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', fontWeight: '850', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                                     >
                                         <Send size={15} /> Send Invitation
                                     </button>
@@ -4381,29 +4383,29 @@ const BusinessSplitCollect = () => {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            style={{ background: 'white', width: '100%', maxWidth: '520px', borderRadius: '28px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
+                            style={{ background: 'white', width: '100%', maxWidth: '520px', borderRadius: '18px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}
                         >
-                            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-                                <h3 style={{ fontSize: '1.15rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>{editingExpenseId ? 'Edit Expense Item' : 'Record Expense'}</h3>
-                                <button style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.4rem', cursor: 'pointer', color: '#475569' }} onClick={closeExpenseModal}><X size={18} /></button>
+                            <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+                                <h3 style={{ fontSize: '1.042rem', fontWeight: '900', color: '#064E3B', margin: 0 }}>{editingExpenseId ? 'Edit Expense Item' : 'Record Expense'}</h3>
+                                <button style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.363rem', cursor: 'pointer', color: '#475569' }} onClick={closeExpenseModal}><X size={18} /></button>
                             </div>
                             
-                            <form onSubmit={handleAddExpense} style={{ padding: '1.5rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.25rem', flex: 1, background: '#FAFAFA' }}>
+                            <form onSubmit={handleAddExpense} style={{ padding: '1.359rem', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1.133rem', flex: 1, background: '#FAFAFA' }}>
                                 
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Expense Description</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Expense Description</label>
                                         <input 
                                             required
                                             type="text" 
                                             placeholder="e.g. Dinner, Uber, Flight ticket"
                                             value={expenseForm.title}
                                             onChange={(e) => setExpenseForm({ ...expenseForm, title: e.target.value })}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '700', fontSize: '0.88rem' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '700', fontSize: '0.797rem' }}
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Amount ({activeSplit.currencySymbol})</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Amount ({activeSplit.currencySymbol})</label>
                                         <input 
                                             required
                                             type="text" 
@@ -4411,18 +4413,18 @@ const BusinessSplitCollect = () => {
                                             placeholder="0.00"
                                             value={expenseForm.amount}
                                             onChange={handleAmountChange}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '900', color: '#1B6B3A', fontSize: '0.95rem' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '900', color: '#1B6B3A', fontSize: '0.861rem' }}
                                         />
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Who Paid?</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Who Paid?</label>
                                         <select 
                                             value={expenseForm.paidBy}
                                             onChange={(e) => setExpenseForm({ ...expenseForm, paidBy: e.target.value })}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', outline: 'none', fontWeight: '600' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', outline: 'none', fontWeight: '600' }}
                                         >
                                             {activeSplit.participants.map((p, idx) => {
                                                 const pName = getParticipantName(p);
@@ -4436,19 +4438,19 @@ const BusinessSplitCollect = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>Date</label>
+                                        <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>Date</label>
                                         <input 
                                             type="date"
                                             value={expenseForm.date}
                                             onChange={(e) => setExpenseForm({ ...expenseForm, date: e.target.value })}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', boxSizing: 'border-box', fontWeight: '600' }}
                                         />
                                     </div>
                                 </div> {/* End Grid */}
 
                                 {/* ATTACH YOUR EXPENSES */}
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                                         ATTACH YOUR EXPENSES
                                     </label>
                                     
@@ -4461,15 +4463,15 @@ const BusinessSplitCollect = () => {
                                     />
 
                                     {expenseForm.attachmentFile || expenseForm.attachmentName ? (
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1rem', background: '#ECFDF5', border: '1.5px solid #A7F3D0', borderRadius: '12px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.68rem 0.906rem', background: '#ECFDF5', border: '1.5px solid #A7F3D0', borderRadius: '12px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
                                                 <FileText size={18} style={{ color: '#059669', flexShrink: 0 }} />
                                                 <div style={{ minWidth: 0 }}>
-                                                    <div style={{ fontSize: '0.82rem', fontWeight: '850', color: '#064E3B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                    <div style={{ fontSize: '0.743rem', fontWeight: '850', color: '#064E3B', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                                         {expenseForm.attachmentName}
                                                     </div>
                                                     {expenseForm.attachmentSizeKb && (
-                                                        <div style={{ fontSize: '0.68rem', fontWeight: '750', color: '#047857' }}>
+                                                        <div style={{ fontSize: '0.616rem', fontWeight: '750', color: '#047857' }}>
                                                             {expenseForm.attachmentSizeKb} KB
                                                         </div>
                                                     )}
@@ -4490,7 +4492,7 @@ const BusinessSplitCollect = () => {
                                             style={{ 
                                                 border: '1.5px dashed #CBD5E1', 
                                                 borderRadius: '12px', 
-                                                padding: '0.9rem', 
+                                                padding: '0.816rem', 
                                                 textAlign: 'center', 
                                                 cursor: 'pointer', 
                                                 background: '#FFFFFF',
@@ -4504,24 +4506,24 @@ const BusinessSplitCollect = () => {
                                             onMouseOut={(e) => { e.currentTarget.style.borderColor = '#CBD5E1'; e.currentTarget.style.background = '#FFFFFF'; }}
                                         >
                                             <Upload size={18} style={{ color: '#059669' }} />
-                                            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#334155' }}>Click to upload invoice / receipt copy</span>
-                                            <span style={{ fontSize: '0.68rem', color: '#94A3B8', fontWeight: '600' }}>Supports PNG, JPG, WEBP, or PDF (up to 20MB)</span>
+                                            <span style={{ fontSize: '0.725rem', fontWeight: '800', color: '#334155' }}>Click to upload invoice / receipt copy</span>
+                                            <span style={{ fontSize: '0.616rem', color: '#94A3B8', fontWeight: '600' }}>Supports PNG, JPG, WEBP, or PDF (up to 20MB)</span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Split Type Protocol */}
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Splitting Protocol</label>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', marginBottom: '0.453rem' }}>Splitting Protocol</label>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
                                         <button 
                                             type="button"
                                             onClick={() => setExpenseForm({ ...expenseForm, splitType: 'equal' })}
                                             style={{ 
-                                                padding: '0.6rem', borderRadius: '10px', 
+                                                padding: '0.544rem', borderRadius: '10px', 
                                                 border: expenseForm.splitType === 'equal' ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                                 background: expenseForm.splitType === 'equal' ? 'white' : '#F8FAFC', 
-                                                fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', color: expenseForm.splitType === 'equal' ? '#1B6B3A' : '#475569'
+                                                fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', color: expenseForm.splitType === 'equal' ? '#1B6B3A' : '#475569'
                                             }}
                                         >
                                             Split Equally
@@ -4530,10 +4532,10 @@ const BusinessSplitCollect = () => {
                                             type="button"
                                             onClick={() => setExpenseForm({ ...expenseForm, splitType: 'custom' })}
                                             style={{ 
-                                                padding: '0.6rem', borderRadius: '10px', 
+                                                padding: '0.544rem', borderRadius: '10px', 
                                                 border: expenseForm.splitType === 'custom' ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                                 background: expenseForm.splitType === 'custom' ? 'white' : '#F8FAFC', 
-                                                fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', color: expenseForm.splitType === 'custom' ? '#1B6B3A' : '#475569'
+                                                fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', color: expenseForm.splitType === 'custom' ? '#1B6B3A' : '#475569'
                                             }}
                                         >
                                             Customize Shares
@@ -4542,10 +4544,10 @@ const BusinessSplitCollect = () => {
                                 </div>
 
                                 {/* Dynamic Shares Breakdown */}
-                                <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '1rem', border: '1px solid #E2E8F0' }}>
-                                    <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.75rem', fontWeight: '900', color: '#475569', textTransform: 'uppercase' }}>Shares Allocations</h4>
+                                <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '0.906rem', border: '1px solid #E2E8F0' }}>
+                                    <h4 style={{ margin: '0 0 0.68rem 0', fontSize: '0.68rem', fontWeight: '900', color: '#475569', textTransform: 'uppercase' }}>Shares Allocations</h4>
                                     
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.544rem' }}>
                                         {activeSplit.participants.map((p, idx) => {
                                             const pName = getParticipantName(p);
                                             const pEmail = getParticipantEmail(p);
@@ -4553,17 +4555,17 @@ const BusinessSplitCollect = () => {
                                             const equalShare = totalAmt / activeSplit.participants.length;
                                             return (
                                                 <div key={pEmail || pName || idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <span style={{ fontSize: '0.82rem', fontWeight: '750', color: '#1F2937' }}>
-                                                        {pName} {pEmail ? <span style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: 'normal' }}>({pEmail})</span> : null}
+                                                    <span style={{ fontSize: '0.743rem', fontWeight: '750', color: '#1F2937' }}>
+                                                        {pName} {pEmail ? <span style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: 'normal' }}>({pEmail})</span> : null}
                                                     </span>
                                                     
                                                     {expenseForm.splitType === 'equal' ? (
-                                                        <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#1E293B' }}>
+                                                        <span style={{ fontSize: '0.77rem', fontWeight: '900', color: '#1E293B' }}>
                                                             {activeSplit.currencySymbol}{Number.isFinite(equalShare) ? equalShare.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
                                                         </span>
                                                     ) : (
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                            <span style={{ fontSize: '0.85rem', fontWeight: '850', color: '#64748B' }}>{activeSplit.currencySymbol}</span>
+                                                            <span style={{ fontSize: '0.77rem', fontWeight: '850', color: '#64748B' }}>{activeSplit.currencySymbol}</span>
                                                             <input 
                                                                 required
                                                                 type="number"
@@ -4590,7 +4592,7 @@ const BusinessSplitCollect = () => {
                                                                     if (pEmail) newShares[pEmail] = cleanVal;
                                                                     setExpenseForm({ ...expenseForm, shares: newShares });
                                                                 }}
-                                                                style={{ width: '100px', padding: '0.35rem 0.5rem', borderRadius: '8px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: '900', textAlign: 'right', fontSize: '0.82rem', color: '#1B6B3A' }}
+                                                                style={{ width: '100px', padding: '0.317rem 0.453rem', borderRadius: '8px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: '900', textAlign: 'right', fontSize: '0.743rem', color: '#1B6B3A' }}
                                                             />
                                                         </div>
                                                     )}
@@ -4609,9 +4611,9 @@ const BusinessSplitCollect = () => {
                                         }, 0);
                                         const difference = totalAmt - sum;
                                         return (
-                                            <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '6px', color: Math.abs(difference) < 0.1 ? '#059669' : '#DC2626' }}>
+                                            <div style={{ marginTop: '0.906rem', paddingTop: '0.68rem', borderTop: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '6px', color: Math.abs(difference) < 0.1 ? '#059669' : '#DC2626' }}>
                                                 <AlertCircle size={14} />
-                                                <span style={{ fontSize: '0.75rem', fontWeight: '800' }}>
+                                                <span style={{ fontSize: '0.68rem', fontWeight: '800' }}>
                                                     {Math.abs(difference) < 0.1 
                                                         ? 'All allocations match total perfectly!' 
                                                         : `Allocated: ${activeSplit.currencySymbol}${Number.isFinite(sum) ? sum.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'} (${difference > 0 ? 'Remaining' : 'Over'}: ${activeSplit.currencySymbol}${Number.isFinite(difference) ? Math.abs(difference).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'})`
@@ -4627,15 +4629,15 @@ const BusinessSplitCollect = () => {
                                     disabled={hasInvalidCustomShares}
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.75rem', 
+                                        padding: '0.68rem', 
                                         borderRadius: '12px', 
                                         background: hasInvalidCustomShares ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                         color: 'white', 
                                         border: 'none', 
                                         fontWeight: '850', 
-                                        fontSize: '0.88rem', 
+                                        fontSize: '0.797rem', 
                                         cursor: hasInvalidCustomShares ? 'not-allowed' : 'pointer', 
-                                        marginTop: '0.5rem',
+                                        marginTop: '0.453rem',
                                         opacity: hasInvalidCustomShares ? 0.6 : 1
                                     }}
                                 >
@@ -4652,22 +4654,22 @@ const BusinessSplitCollect = () => {
                 {isCustomPayModalOpen && customPayDebt && activeSplit && (() => {
                     const eligibleExpenses = getEligibleExpensesForDebt(customPayDebt, activeSplit.expenses || [], activeSplit.participants || []);
                     return (
-                        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050, padding: '1rem' }}>
+                        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.65)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050, padding: '0.906rem' }}>
                             <Motion.div
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
-                                style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '28px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
+                                style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '18px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', overflow: 'hidden' }}
                             >
                                 {/* Header */}
-                                <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
-                                        <h3 style={{ fontSize: '1.15rem', fontWeight: '900', color: '#0F172A', margin: 0 }}>Custom Expense Settlement</h3>
-                                        <p style={{ fontSize: '0.75rem', color: '#64748B', margin: '2px 0 0 0', fontWeight: '600' }}>Settle debt linked to a specific purchase</p>
+                                        <h3 style={{ fontSize: '1.042rem', fontWeight: '900', color: '#0F172A', margin: 0 }}>Custom Expense Settlement</h3>
+                                        <p style={{ fontSize: '0.68rem', color: '#64748B', margin: '2px 0 0 0', fontWeight: '600' }}>Settle debt linked to a specific purchase</p>
                                     </div>
                                     <button 
                                         type="button"
-                                        style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.4rem', cursor: 'pointer', color: '#475569' }} 
+                                        style={{ background: '#F1F5F9', border: 'none', borderRadius: '10px', padding: '0.363rem', cursor: 'pointer', color: '#475569' }} 
                                         onClick={() => {
                                             setIsCustomPayModalOpen(false);
                                             setCustomPayDebt(null);
@@ -4677,20 +4679,20 @@ const BusinessSplitCollect = () => {
                                     </button>
                                 </div>
 
-                                <form onSubmit={handleCustomPaySubmit} style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                <form onSubmit={handleCustomPaySubmit} style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                     {/* Debtor & Creditor Overview */}
-                                    <div style={{ background: '#F8FAFC', border: '1.5px solid #E2E8F0', borderRadius: '18px', padding: '0.9rem 1.1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ background: '#F8FAFC', border: '1.5px solid #E2E8F0', borderRadius: '18px', padding: '0.816rem 0.997rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
-                                            <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Settlement Flow</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '850', color: '#0F172A', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <div style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Settlement Flow</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '850', color: '#0F172A', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                 <span style={{ color: '#DC2626' }}>{customPayDebt.from}</span>
                                                 <span style={{ color: '#94A3B8' }}>➔</span>
                                                 <span style={{ color: '#059669' }}>{customPayDebt.to}</span>
                                             </div>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Outstanding Debt</div>
-                                            <div style={{ fontSize: '1rem', fontWeight: '950', color: '#0284C7', marginTop: '3px' }}>
+                                            <div style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Outstanding Debt</div>
+                                            <div style={{ fontSize: '0.906rem', fontWeight: '950', color: '#0284C7', marginTop: '3px' }}>
                                                 {activeSplit.currencySymbol || '₹'}{customPayDebt.amount.toLocaleString()}
                                             </div>
                                         </div>
@@ -4698,12 +4700,12 @@ const BusinessSplitCollect = () => {
 
                                     {/* Expense Selector: Dropdown / Radio list */}
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', marginBottom: '0.5rem', letterSpacing: '0.03em' }}>
+                                        <label style={{ display: 'block', fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', marginBottom: '0.453rem', letterSpacing: '0.03em' }}>
                                             Select Expense Paid by {customPayDebt.to}
                                         </label>
 
                                         {eligibleExpenses.length > 0 ? (
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem', maxHeight: '200px', overflowY: 'auto', paddingRight: '4px' }}>
                                                 {eligibleExpenses.map(exp => {
                                                     const isSelected = String(customPayExpenseId) === String(exp.id);
                                                     return (
@@ -4714,7 +4716,7 @@ const BusinessSplitCollect = () => {
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 justifyContent: 'space-between',
-                                                                padding: '0.75rem 0.9rem',
+                                                                padding: '0.68rem 0.816rem',
                                                                 borderRadius: '14px',
                                                                 border: isSelected ? '2px solid #059669' : '1px solid #E2E8F0',
                                                                 background: isSelected ? '#F0FDF4' : '#FFFFFF',
@@ -4722,7 +4724,7 @@ const BusinessSplitCollect = () => {
                                                                 transition: 'all 0.15s'
                                                             }}
                                                         >
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
                                                                 <input 
                                                                     type="radio" 
                                                                     name="customPayExpense" 
@@ -4731,19 +4733,19 @@ const BusinessSplitCollect = () => {
                                                                     style={{ accentColor: '#059669', cursor: 'pointer', flexShrink: 0 }}
                                                                 />
                                                                 <div style={{ minWidth: 0 }}>
-                                                                    <div style={{ fontSize: '0.88rem', fontWeight: '800', color: isSelected ? '#065F46' : '#1E293B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                    <div style={{ fontSize: '0.797rem', fontWeight: '800', color: isSelected ? '#065F46' : '#1E293B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                                         {exp.title}
                                                                     </div>
-                                                                    <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600', marginTop: '1px' }}>
+                                                                    <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600', marginTop: '1px' }}>
                                                                         Total: {activeSplit.currencySymbol || '₹'}{(parseFloat(exp.amount) || 0).toLocaleString()} • {exp.date}
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '0.75rem' }}>
-                                                                <span style={{ fontSize: '0.65rem', fontWeight: '800', color: isSelected ? '#047857' : '#64748B', display: 'block', textTransform: 'uppercase' }}>
+                                                            <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: '0.68rem' }}>
+                                                                <span style={{ fontSize: '0.589rem', fontWeight: '800', color: isSelected ? '#047857' : '#64748B', display: 'block', textTransform: 'uppercase' }}>
                                                                     Member Share
                                                                 </span>
-                                                                <span style={{ fontSize: '0.88rem', fontWeight: '900', color: isSelected ? '#059669' : '#0F172A' }}>
+                                                                <span style={{ fontSize: '0.797rem', fontWeight: '900', color: isSelected ? '#059669' : '#0F172A' }}>
                                                                     {activeSplit.currencySymbol || '₹'}{exp.memberShare.toLocaleString()}
                                                                 </span>
                                                             </div>
@@ -4752,7 +4754,7 @@ const BusinessSplitCollect = () => {
                                                 })}
                                             </div>
                                         ) : (
-                                            <div style={{ padding: '1rem', background: '#F8FAFC', borderRadius: '14px', border: '1px solid #E2E8F0', fontSize: '0.8rem', color: '#64748B', textAlign: 'center' }}>
+                                            <div style={{ padding: '0.906rem', background: '#F8FAFC', borderRadius: '14px', border: '1px solid #E2E8F0', fontSize: '0.725rem', color: '#64748B', textAlign: 'center' }}>
                                                 No individual itemized purchases found for {customPayDebt.to}. Settlement will be logged against the general debt.
                                             </div>
                                         )}
@@ -4760,8 +4762,8 @@ const BusinessSplitCollect = () => {
 
                                     {/* Amount Input */}
                                     <div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                                            <label style={{ fontSize: '0.72rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.363rem' }}>
+                                            <label style={{ fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.03em' }}>
                                                 Settlement Amount ({activeSplit.currencySymbol || '₹'})
                                             </label>
                                             {customPayExpenseId && eligibleExpenses.length > 0 && (
@@ -4775,14 +4777,14 @@ const BusinessSplitCollect = () => {
                                                             setCustomPayAmount(String(amountToPay));
                                                         }
                                                     }}
-                                                    style={{ background: 'none', border: 'none', color: '#059669', fontSize: '0.72rem', fontWeight: '850', cursor: 'pointer', padding: 0 }}
+                                                    style={{ background: 'none', border: 'none', color: '#059669', fontSize: '0.652rem', fontWeight: '850', cursor: 'pointer', padding: 0 }}
                                                 >
                                                     Fill Share Amount
                                                 </button>
                                             )}
                                         </div>
                                         <div style={{ position: 'relative' }}>
-                                            <span style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', fontWeight: '850', color: '#94A3B8' }}>
+                                            <span style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', fontWeight: '850', color: '#94A3B8' }}>
                                                 {activeSplit.currencySymbol || '₹'}
                                             </span>
                                             <input 
@@ -4808,11 +4810,11 @@ const BusinessSplitCollect = () => {
                                                 }}
                                                 style={{
                                                     width: '100%',
-                                                    padding: '0.75rem 1rem 0.75rem 2.25rem',
+                                                    padding: '0.68rem 0.906rem 0.68rem 2.039rem',
                                                     borderRadius: '14px',
                                                     border: '1.5px solid #E2E8F0',
                                                     outline: 'none',
-                                                    fontSize: '0.95rem',
+                                                    fontSize: '0.861rem',
                                                     fontWeight: '800',
                                                     color: '#0F172A',
                                                     boxSizing: 'border-box'
@@ -4822,21 +4824,21 @@ const BusinessSplitCollect = () => {
                                             />
                                         </div>
                                         {customPayDebt && Number(customPayAmount) >= customPayDebt.amount && (
-                                            <div style={{ fontSize: '0.68rem', color: '#059669', fontWeight: '700', marginTop: '0.3rem' }}>
+                                            <div style={{ fontSize: '0.616rem', color: '#059669', fontWeight: '700', marginTop: '0.272rem' }}>
                                                 Capped at debtor's net outstanding debt ({activeSplit.currencySymbol || '₹'}{customPayDebt.amount.toLocaleString()})
                                             </div>
                                         )}
                                     </div>
 
                                     {/* Action Buttons */}
-                                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
+                                    <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.227rem' }}>
                                         <button 
                                             type="button" 
                                             onClick={() => {
                                                 setIsCustomPayModalOpen(false);
                                                 setCustomPayDebt(null);
                                             }}
-                                            style={{ flex: 1, padding: '0.8rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}
+                                            style={{ flex: 1, padding: '0.725rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                         >
                                             Cancel
                                         </button>
@@ -4845,13 +4847,13 @@ const BusinessSplitCollect = () => {
                                             disabled={!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)}
                                             style={{ 
                                                 flex: 1.5, 
-                                                padding: '0.8rem', 
+                                                padding: '0.725rem', 
                                                 borderRadius: '14px', 
                                                 border: 'none', 
                                                 background: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? '#94A3B8' : 'linear-gradient(135deg, #059669 0%, #047857 100%)', 
                                                 color: 'white', 
                                                 fontWeight: '850', 
-                                                fontSize: '0.85rem', 
+                                                fontSize: '0.77rem', 
                                                 cursor: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? 'not-allowed' : 'pointer',
                                                 boxShadow: (!customPayAmount || Number(customPayAmount) <= 0 || (customPayDebt && Number(customPayAmount) > customPayDebt.amount)) ? 'none' : '0 4px 14px rgba(5, 150, 105, 0.25)' 
                                             }}
@@ -4880,7 +4882,7 @@ const BusinessSplitCollect = () => {
                             alignItems: 'center', 
                             justifyContent: 'center', 
                             zIndex: 1100,
-                            padding: '1rem'
+                            padding: '0.906rem'
                         }}
                         onClick={() => setPreviewAttachment(null)}
                     >
@@ -4893,9 +4895,9 @@ const BusinessSplitCollect = () => {
                             style={{ 
                                 background: '#FFFFFF', 
                                 width: '100%', 
-                                maxWidth: '42rem', // max-w-2xl
+                                maxWidth: '38.062rem', // max-w-2xl
                                 maxHeight: '90vh', 
-                                borderRadius: '24px', 
+                                borderRadius: '16px', 
                                 boxShadow: '0 25px 50px -12px rgba(0,0,0,0.45)', 
                                 overflow: 'hidden', 
                                 display: 'flex', 
@@ -4903,10 +4905,10 @@ const BusinessSplitCollect = () => {
                             }}
                         >
                             {/* Modal Header */}
-                            <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0, background: '#FAFAFA' }}>
+                            <div style={{ padding: '0.906rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0, background: '#FAFAFA' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden' }}>
                                     <FileText size={18} style={{ color: '#059669', flexShrink: 0 }} />
-                                    <h3 style={{ fontSize: '0.95rem', fontWeight: '900', color: '#0F172A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <h3 style={{ fontSize: '0.861rem', fontWeight: '900', color: '#0F172A', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         {previewAttachment.name || 'Expense Attachment'}
                                     </h3>
                                 </div>
@@ -4922,12 +4924,12 @@ const BusinessSplitCollect = () => {
                                                 display: 'inline-flex', 
                                                 alignItems: 'center', 
                                                 gap: '5px', 
-                                                padding: '0.45rem 0.85rem', 
+                                                padding: '0.408rem 0.77rem', 
                                                 borderRadius: '10px', 
                                                 background: '#ECFDF5', 
                                                 color: '#065F46', 
                                                 textDecoration: 'none', 
-                                                fontSize: '0.78rem', 
+                                                fontSize: '0.707rem', 
                                                 fontWeight: '850',
                                                 border: '1px solid #A7F3D0',
                                                 cursor: 'pointer'
@@ -4941,7 +4943,7 @@ const BusinessSplitCollect = () => {
                                             background: '#F1F5F9', 
                                             border: 'none', 
                                             borderRadius: '10px', 
-                                            padding: '0.45rem', 
+                                            padding: '0.408rem', 
                                             cursor: 'pointer', 
                                             color: '#475569',
                                             display: 'flex',
@@ -4957,7 +4959,7 @@ const BusinessSplitCollect = () => {
                             </div>
 
                             {/* Modal Content */}
-                            <div style={{ flex: 1, padding: '1rem', background: '#0F172A', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'auto', minHeight: '340px' }}>
+                            <div style={{ flex: 1, padding: '0.906rem', background: '#0F172A', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'auto', minHeight: '340px' }}>
                                 {isPdfFile(previewAttachment.url || previewAttachment.name) ? (
                                     <div className="w-full h-full flex flex-col items-center justify-center">
                                         <iframe 

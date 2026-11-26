@@ -22,8 +22,8 @@ const applyAccentColor = (color) => {
 };
 
 const applyFontSize = (size) => {
-    const map = { small: '13.5px', medium: '14.5px', large: '16px' };
-    const value = map[size] || '14.5px';
+    const map = { small: '14px', medium: '16px', large: '18px' };
+    const value = map[size] || '16px';
     document.documentElement.style.fontSize = value;
     localStorage.setItem('cliks_font_size', size || 'medium');
 };
@@ -31,10 +31,10 @@ const applyFontSize = (size) => {
 /* ─── Shared style helpers ─────────────────────────────────────── */
 const inputStyle = {
     width: '100%',
-    padding: '0.6rem 0.875rem',
+    padding: '0.544rem 0.793rem',
     borderRadius: '10px',
     border: '1px solid #E2E8F0',
-    fontSize: '0.875rem',
+    fontSize: '0.793rem',
     fontWeight: 500,
     color: '#1E293B',
     background: '#ffffff',
@@ -47,20 +47,20 @@ const selectStyle = { ...inputStyle, cursor: 'pointer' };
 
 const labelStyle = {
     display: 'block',
-    fontSize: '0.75rem',
+    fontSize: '0.68rem',
     fontWeight: 700,
     color: '#64748B',
     textTransform: 'uppercase',
     letterSpacing: '0.04em',
-    marginBottom: '0.4rem',
+    marginBottom: '0.363rem',
 };
 
 const sectionTitle = {
-    fontSize: '1rem',
+    fontSize: '0.906rem',
     fontWeight: 800,
     color: '#1E293B',
-    marginBottom: '1.25rem',
-    paddingBottom: '0.625rem',
+    marginBottom: '1.133rem',
+    paddingBottom: '0.566rem',
     borderBottom: '1px solid #F1F5F9',
 };
 
@@ -68,23 +68,23 @@ const card = {
     background: '#ffffff',
     borderRadius: '16px',
     border: '1px solid #E2E8F0',
-    padding: '1.75rem',
-    marginBottom: '1.5rem',
+    padding: '1.586rem',
+    marginBottom: '1.359rem',
     boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
 };
 
 const ToggleRow = ({ label, description, checked, onChange }) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.875rem 0', borderBottom: '1px solid #F8FAFC' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.793rem 0', borderBottom: '1px solid #F8FAFC' }}>
         <div>
-            <div style={{ fontWeight: 600, color: '#334155', fontSize: '0.9rem' }}>{label}</div>
-            {description && <div style={{ fontSize: '0.8rem', color: '#94A3B8', marginTop: '2px' }}>{description}</div>}
+            <div style={{ fontWeight: 600, color: '#334155', fontSize: '0.816rem' }}>{label}</div>
+            {description && <div style={{ fontSize: '0.725rem', color: '#94A3B8', marginTop: '2px' }}>{description}</div>}
         </div>
         <Toggle checked={checked} onChange={onChange} size="md" />
     </div>
 );
 
 const Field = ({ label, children }) => (
-    <div style={{ marginBottom: '1rem' }}>
+    <div style={{ marginBottom: '0.906rem' }}>
         <label style={labelStyle}>{label}</label>
         {children}
     </div>
@@ -223,8 +223,8 @@ const Settings = () => {
     const renderProfile = () => (
         <>
             {/* Avatar upload */}
-            <div style={{ ...card, display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ ...card, display: 'flex', alignItems: 'center', gap: '1.812rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.68rem' }}>
                     <div
                         onClick={() => avatarInputRef.current?.click()}
                         style={{
@@ -235,21 +235,21 @@ const Settings = () => {
                             cursor: 'pointer', overflow: 'hidden',
                         }}
                     >
-                        {!avatarPreview && <><Upload size={20} color="#94A3B8" /><span style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: 4 }}>Upload</span></>}
+                        {!avatarPreview && <><Upload size={20} color="#94A3B8" /><span style={{ fontSize: '0.589rem', color: '#94A3B8', marginTop: 4 }}>Upload</span></>}
                     </div>
-                    <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>Profile Image</span>
+                    <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 600 }}>Profile Image</span>
                     <input ref={avatarInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} />
                 </div>
                 <div>
-                    <div style={{ fontWeight: 800, color: '#1E293B', fontSize: '1rem' }}>Upload Profile Image</div>
-                    <div style={{ fontSize: '0.8rem', color: '#94A3B8', marginTop: 4 }}>JPG, PNG or GIF · Max 2MB</div>
+                    <div style={{ fontWeight: 800, color: '#1E293B', fontSize: '0.906rem' }}>Upload Profile Image</div>
+                    <div style={{ fontSize: '0.725rem', color: '#94A3B8', marginTop: 4 }}>JPG, PNG or GIF · Max 2MB</div>
                 </div>
             </div>
 
             {/* Profile fields */}
             <div style={card}>
                 <div style={sectionTitle}>Profile Information</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.906rem' }}>
                     {[
                         ['fullName', 'Full Name', 'text'],
                         ['businessName', 'Business Name', 'text'],
@@ -283,7 +283,7 @@ const Settings = () => {
     const renderGeneral = () => (
         <div style={card}>
             <div style={sectionTitle}>Application Settings</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.906rem' }}>
                 <Field label="Application Name">
                     <input style={inputStyle} value={general.appName} onChange={e => setGeneral(p => ({ ...p, appName: e.target.value }))} />
                 </Field>
@@ -337,8 +337,8 @@ const Settings = () => {
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '1rem',
-                marginBottom: '1.25rem'
+                gap: '0.906rem',
+                marginBottom: '1.133rem'
             }}>
                 {[
                     { key: 'currentPassword', label: 'Current Password' },
@@ -440,9 +440,9 @@ const Settings = () => {
             <div style={sectionTitle}>Appearance & Theme</div>
             <ToggleRow label="Dark Mode" description="Switch the application to a dark theme." checked={toggles.darkMode} onChange={() => handleToggle('darkMode')} />
             <ToggleRow label="Compact Mode" description="Reduce padding for a denser layout." checked={toggles.compactMode} onChange={() => handleToggle('compactMode')} />
-            <div style={{ marginTop: '1.25rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+            <div style={{ marginTop: '1.133rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.906rem' }}>
                 <Field label="Accent Color">
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                         <input type="color" value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }}
                             style={{ width: 40, height: 36, borderRadius: 8, border: '1px solid #E2E8F0', cursor: 'pointer', padding: 2 }} />
                         <input style={{ ...inputStyle, flex: 1 }} value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }} />
@@ -462,21 +462,21 @@ const Settings = () => {
     const renderBilling = () => (
         <div style={card}>
             <div style={sectionTitle}>Billing & Subscription</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.133rem', marginBottom: '1.359rem' }}>
                 {[
                     ['Current Plan', 'FIN-PRO Standard'],
                     ['Renewal Date', '01 May, 2027'],
                     ['Subscription Status', 'Active'],
                 ].map(([lbl, val]) => (
-                    <div key={lbl} style={{ background: '#F8FAFC', borderRadius: '12px', padding: '1rem 1.25rem', border: '1px solid #E2E8F0' }}>
-                        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.35rem' }}>{lbl}</div>
-                        <div style={{ fontSize: '1rem', fontWeight: 800, color: '#1E293B' }}>{val}</div>
+                    <div key={lbl} style={{ background: '#F8FAFC', borderRadius: '12px', padding: '0.906rem 1.133rem', border: '1px solid #E2E8F0' }}>
+                        <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#94A3B8', textTransform: 'uppercase', marginBottom: '0.317rem' }}>{lbl}</div>
+                        <div style={{ fontSize: '0.906rem', fontWeight: 800, color: '#1E293B' }}>{val}</div>
                     </div>
                 ))}
             </div>
             <button
                 onClick={() => window.location.href = '/subscription'}
-                style={{ padding: '0.7rem 1.75rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontSize: '0.875rem' }}>
+                style={{ padding: '0.634rem 1.586rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontSize: '0.793rem' }}>
                 Upgrade Plan
             </button>
         </div>
@@ -485,28 +485,28 @@ const Settings = () => {
     const renderIntegrations = () => (
         <div style={card}>
             <div style={sectionTitle}>Connected Integrations</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem', marginBottom: '1.359rem' }}>
                 {[
                     { name: 'Google', desc: 'Sync with Google Workspace', connected: true },
                     { name: 'Microsoft', desc: 'Sync with Microsoft 365', connected: false },
                     { name: 'Slack', desc: 'Send notifications to Slack', connected: false },
                     { name: 'WhatsApp', desc: 'Send alerts via WhatsApp', connected: false },
                 ].map(item => (
-                    <div key={item.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.875rem 1rem', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F8FAFC' }}>
+                    <div key={item.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.793rem 0.906rem', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F8FAFC' }}>
                         <div>
-                            <div style={{ fontWeight: 700, color: '#1E293B', fontSize: '0.9rem' }}>{item.name}</div>
-                            <div style={{ fontSize: '0.78rem', color: '#94A3B8' }}>{item.desc}</div>
+                            <div style={{ fontWeight: 700, color: '#1E293B', fontSize: '0.816rem' }}>{item.name}</div>
+                            <div style={{ fontSize: '0.707rem', color: '#94A3B8' }}>{item.desc}</div>
                         </div>
-                        <button style={{ padding: '0.4rem 1rem', borderRadius: '8px', border: item.connected ? 'none' : '1px solid #E2E8F0', background: item.connected ? '#ECFDF5' : 'white', color: item.connected ? '#059669' : '#64748B', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer' }}>
+                        <button style={{ padding: '0.363rem 0.906rem', borderRadius: '8px', border: item.connected ? 'none' : '1px solid #E2E8F0', background: item.connected ? '#ECFDF5' : 'white', color: item.connected ? '#059669' : '#64748B', fontWeight: 700, fontSize: '0.725rem', cursor: 'pointer' }}>
                             {item.connected ? '✓ Connected' : 'Connect'}
                         </button>
                     </div>
                 ))}
             </div>
             <Field label="API Key">
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', gap: '0.453rem' }}>
                     <input style={{ ...inputStyle, flex: 1, fontFamily: 'monospace' }} value={apiKey} readOnly />
-                    <button onClick={() => navigator.clipboard?.writeText(apiKey)} style={{ padding: '0.6rem 1rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', fontWeight: 700, cursor: 'pointer', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                    <button onClick={() => navigator.clipboard?.writeText(apiKey)} style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', fontWeight: 700, cursor: 'pointer', fontSize: '0.725rem', whiteSpace: 'nowrap' }}>
                         Copy
                     </button>
                 </div>
@@ -518,18 +518,18 @@ const Settings = () => {
         <div style={card}>
             <div style={sectionTitle}>Advanced Configuration</div>
             <ToggleRow label="Developer Mode" description="Enable detailed error logs and debug tools." checked={toggles.developerMode} onChange={() => handleToggle('developerMode')} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.906rem', marginTop: '1.133rem' }}>
                 {[
                     { icon: Download, label: 'Backup Settings', desc: 'Download a backup of your configuration.' },
                     { icon: UploadCloud, label: 'Restore Data', desc: 'Restore from a previous backup file.' },
                     { icon: Download, label: 'Export Settings', desc: 'Export settings as a JSON file.' },
                     { icon: UploadCloud, label: 'Import Settings', desc: 'Import settings from a JSON file.' },
                 ].map(item => (
-                    <button key={item.label} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '1rem', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F8FAFC', cursor: 'pointer', textAlign: 'left' }}>
+                    <button key={item.label} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.68rem', padding: '0.906rem', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F8FAFC', cursor: 'pointer', textAlign: 'left' }}>
                         <item.icon size={18} color="#64748B" style={{ flexShrink: 0, marginTop: 2 }} />
                         <div>
-                            <div style={{ fontWeight: 700, color: '#1E293B', fontSize: '0.875rem' }}>{item.label}</div>
-                            <div style={{ fontSize: '0.75rem', color: '#94A3B8', marginTop: 2 }}>{item.desc}</div>
+                            <div style={{ fontWeight: 700, color: '#1E293B', fontSize: '0.793rem' }}>{item.label}</div>
+                            <div style={{ fontSize: '0.68rem', color: '#94A3B8', marginTop: 2 }}>{item.desc}</div>
                         </div>
                     </button>
                 ))}
@@ -550,26 +550,27 @@ const Settings = () => {
 
     /* ══════════════ RENDER ══════════════ */
     return (
-        <div style={{ padding: '1.5rem 2rem', maxWidth: 1100, margin: '0 auto', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.359rem 1.812rem', maxWidth: 1100, margin: '0 auto', fontFamily: "'Inter', sans-serif" }}>
 
             {/* ── Page header ── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.586rem', flexWrap: 'wrap', gap: '0.906rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.9rem', fontWeight: 900, color: '#0F172A', margin: 0 }}>Settings</h1>
-                    <p style={{ color: '#64748B', marginTop: '0.35rem', fontSize: '0.9rem', fontWeight: 500 }}>
+                    <h1 data-tour="settings-heading" style={{ fontSize: '1.586rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>Settings</h1>
+                    <p style={{ color: '#64748B', marginTop: '0.317rem', fontSize: '0.816rem', fontWeight: 500 }}>
                         Manage your application preferences and system configuration.
                     </p>
                 </div>
                 <button
+                    data-tour="settings-save"
                     onClick={handleSave}
                     disabled={mutation.isPending}
                     style={{
-                        display: 'flex', alignItems: 'center', gap: '0.5rem',
-                        padding: '0.7rem 1.75rem',
+                        display: 'flex', alignItems: 'center', gap: '0.453rem',
+                        padding: '0.634rem 1.586rem',
                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
                         color: 'white', border: 'none', borderRadius: '10px',
                         fontWeight: 700, cursor: mutation.isPending ? 'not-allowed' : 'pointer',
-                        fontSize: '0.875rem', opacity: mutation.isPending ? 0.7 : 1,
+                        fontSize: '0.793rem', opacity: mutation.isPending ? 0.7 : 1,
                         boxShadow: '0 4px 12px rgba(27,107,58,0.25)',
                     }}
                 >
@@ -580,29 +581,30 @@ const Settings = () => {
 
             {/* ── Success banner ── */}
             {successMsg && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', background: '#ECFDF5', border: '1px solid #A7F3D0', color: '#065F46', padding: '0.875rem 1.25rem', borderRadius: '12px', marginBottom: '1.25rem', fontSize: '0.875rem', fontWeight: 600 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.566rem', background: '#ECFDF5', border: '1px solid #A7F3D0', color: '#065F46', padding: '0.793rem 1.133rem', borderRadius: '12px', marginBottom: '1.133rem', fontSize: '0.793rem', fontWeight: 600 }}>
                     <Check size={16} style={{ flexShrink: 0 }} />
                     {successMsg}
                 </div>
             )}
 
             {/* ── Tabs ── */}
-            <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', background: '#F1F5F9', borderRadius: '14px', padding: '0.35rem', marginBottom: '1.75rem' }}>
+            <div style={{ display: 'flex', gap: '0.317rem', flexWrap: 'wrap', background: '#F1F5F9', borderRadius: '14px', padding: '0.317rem', marginBottom: '1.586rem' }}>
                 {TABS.map(tab => {
                     const active = activeTab === tab.id;
                     const Icon = tab.icon;
                     return (
                         <button
                             key={tab.id}
+                            data-tour={`settings-tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
                             style={{
-                                display: 'flex', alignItems: 'center', gap: '0.45rem',
-                                padding: '0.55rem 1rem',
+                                display: 'flex', alignItems: 'center', gap: '0.408rem',
+                                padding: '0.498rem 0.906rem',
                                 borderRadius: '10px', border: 'none',
                                 background: active ? '#ffffff' : 'transparent',
                                 color: active ? '#1B6B3A' : '#64748B',
                                 fontWeight: active ? 700 : 600,
-                                fontSize: '0.825rem',
+                                fontSize: '0.748rem',
                                 cursor: 'pointer',
                                 boxShadow: active ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
                                 transition: 'all 0.15s ease',

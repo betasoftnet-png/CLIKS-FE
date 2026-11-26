@@ -165,7 +165,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     <div className="brand-logo-small" style={{ backgroundColor: '#f0fdf4', padding: '2px', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
                         <img src={logoPng} alt="CLIKS Logo" style={{ height: '75%', width: '75%', objectFit: 'contain' }} />
                     </div>
-                    <span style={{ color: '#ffffff', fontSize: '1.15rem', fontWeight: '700', letterSpacing: '0.4px' }}>
+                    <span className="topbar-brand-text" style={{ color: '#ffffff', fontSize: '1.042rem', fontWeight: '700', letterSpacing: '0.4px' }}>
                         CLIKS
                     </span>
                 </div>
@@ -184,18 +184,8 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
             </button>
 
             {/* Center: Navigation (New Lamp Style) */}
-            <div className={`top-nav-links ${isNavOpen ? 'active' : ''}`} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                    backdropFilter: 'blur(8px)',
-                    padding: '4px',
-                    borderRadius: '999px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}>
+            <div className={`top-nav-links ${isNavOpen ? 'active' : ''}`}>
+                <div className="top-nav-lamp-container" data-tour="topbar-workspaces">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isItemActive = item.name === 'Payments'
@@ -211,23 +201,13 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                                 key={item.name}
                                 to={item.url}
                                 aria-label={item.name}
+                                data-tour={`topbar-nav-${item.name.toLowerCase()}`}
                                 className={({ isActive }) => `top-nav-link ${isActive || isItemActive ? 'active' : ''}`}
                                 style={({ isActive }) => {
                                     const active = isActive || isItemActive;
                                     return {
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '8px',
-                                        padding: '8px 20px',
-                                        borderRadius: '999px',
-                                        border: 'none',
                                         background: active ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
                                         color: active ? '#ffffff' : 'rgba(255, 255, 255, 0.7)',
-                                        fontSize: '14px',
-                                        fontWeight: 500,
-                                        cursor: 'pointer',
-                                        textDecoration: 'none',
-                                        transition: 'all 0.2s ease',
                                         position: 'relative'
                                     };
                                 }}
@@ -249,7 +229,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
             </div>
 
             {/* Right Group */}
-            <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', paddingRight: '0px' }}>
+            <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '0.589rem', paddingRight: '0px' }}>
 
                 {/* Search bar — global search */}
                 <SearchBox onOpenCalculator={onOpenCalculator} />
@@ -258,6 +238,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                 <div ref={notificationsRef} style={{ position: 'relative', flexShrink: 0 }}>
                     <button
                         type="button"
+                        data-tour="topbar-notifications"
                         onClick={() => setIsNotificationsOpen(open => !open)}
                         title="Notifications"
                         aria-label="Notifications"
@@ -333,7 +314,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                                 zIndex: 100,
                             }}
                         >
-                            <div style={{
+                            <div data-tour="notification-panel-heading" style={{
                                 padding: '14px 16px',
                                 borderBottom: '1px solid #E2E8F0',
                                 fontWeight: 700,
@@ -412,12 +393,13 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     )}
                 </div>
 
-                {/* FIN-PRO Header Button (Displayed after Admin verifies requested user's ICAI details) */}
+                {/* FIN-PRO Badge (Displayed for ICAI-verified CA members, reference flow) */}
                 {isFinProVerified && (
                     <button
                         onClick={() => handleNavigation('/ca')}
                         title="FIN-PRO Audit & Practice Hub"
                         className="topbar-finpro-btn"
+                        data-tour="topbar-finpro"
                         style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -469,6 +451,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
 
                     {/* Sliders / filter icon — far right, toggles the quick-access toolbar */}
                     <button
+                        data-tour="topbar-toolbar-toggle"
                         onClick={onToggleToolbar}
                         title={isToolbarOpen ? 'Close Toolbar' : 'Open Toolbar'}
                         aria-pressed={isToolbarOpen}

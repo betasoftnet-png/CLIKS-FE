@@ -71,12 +71,12 @@ class ErrorBoundary extends React.Component {
               justify-content: center;
               min-height: 400px;
               width: 100%;
-              padding: 2rem;
+              padding: 1.812rem;
               background-color: #F8FAFC;
             }
             .error-card {
               background: white;
-              padding: 2.5rem;
+              padding: 2.266rem;
               border-radius: 16px;
               box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
               text-align: center;
@@ -85,7 +85,7 @@ class ErrorBoundary extends React.Component {
               border: 1px solid #E2E8F0;
             }
             .icon-wrapper {
-              margin-bottom: 1.5rem;
+              margin-bottom: 1.359rem;
               display: inline-flex;
               align-items: center;
               justify-content: center;
@@ -96,25 +96,25 @@ class ErrorBoundary extends React.Component {
               color: #DC2626;
             }
             .error-title {
-              font-size: 1.5rem;
+              font-size: 1.359rem;
               font-weight: 700;
               color: #1E293B;
-              margin-bottom: 0.75rem;
+              margin-bottom: 0.68rem;
             }
             .error-message {
               color: #64748B;
-              margin-bottom: 2rem;
+              margin-bottom: 1.812rem;
               line-height: 1.5;
             }
             .btn-retry {
               display: inline-flex;
               align-items: center;
               justify-content: center;
-              gap: 0.5rem;
+              gap: 0.453rem;
               background-color: #1B6B3A;
               color: white;
               border: none;
-              padding: 0.75rem 1.5rem;
+              padding: 0.68rem 1.359rem;
               border-radius: 8px;
               font-weight: 600;
               cursor: pointer;

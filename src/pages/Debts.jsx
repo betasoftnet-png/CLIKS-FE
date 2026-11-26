@@ -202,18 +202,18 @@ const Debts = () => {
                 .debt-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .debt-stat-card {
-                    background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);
+                    background: white; padding: 1.359rem; border-radius: 16px; border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; font-weight: 500; color: var(--text-muted); }
 
                 .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
                 .icon-red { background: #FEE2E2; color: #EF4444; }
@@ -223,65 +223,65 @@ const Debts = () => {
                 .debt-layout {
                     display: grid;
                     grid-template-columns: 2fr 1fr;
-                    gap: 1.5rem;
+                    gap: 1.359rem;
                 }
 
                 .debt-list-section {
-                    display: flex; flex-direction: column; gap: 1rem;
+                    display: flex; flex-direction: column; gap: 0.906rem;
                 }
 
-                .section-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
+                .section-title { font-size: 0.997rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.453rem; }
 
-                .debt-cards-list { display: flex; flex-direction: column; gap: 1rem; }
+                .debt-cards-list { display: flex; flex-direction: column; gap: 0.906rem; }
 
                 .debt-card-row {
-                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem;
+                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.133rem;
                     transition: all 0.2s;
                 }
                 .debt-card-row:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-color: #CBD5E1; }
 
-                .row-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+                .row-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.906rem; }
                 .debt-icon-box { width: 40px; height: 40px; background: #F8FAFC; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
                 .text-orange { color: #F97316; font-weight: 600; }
 
-                .progress-section { margin-bottom: 1rem; }
-                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 0.5rem; }
+                .progress-section { margin-bottom: 0.906rem; }
+                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 0.453rem; }
                 .progress-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease-out; }
                 .bg-green { background: #16A34A; }
 
-                .progress-labels { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 500; color: #16A34A; }
+                .progress-labels { display: flex; justify-content: space-between; font-size: 0.725rem; font-weight: 500; color: #16A34A; }
 
-                .row-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-color); }
-                .text-btn { text-transform: uppercase; font-size: 0.75rem; font-weight: 700; color: var(--primary); display: flex; items-center; gap: 0.25rem; letter-spacing: 0.05em; }
+                .row-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.906rem; border-top: 1px solid var(--border-color); }
+                .text-btn { text-transform: uppercase; font-size: 0.68rem; font-weight: 700; color: var(--primary); display: flex; items-center; gap: 0.227rem; letter-spacing: 0.05em; }
 
                 /* Strategy Section */
-                .strategy-section { display: flex; flex-direction: column; gap: 1.5rem; }
+                .strategy-section { display: flex; flex-direction: column; gap: 1.359rem; }
 
                 .strategy-card {
                     background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-                    color: white; padding: 1.5rem; border-radius: 20px; text-align: center;
-                    display: flex; flex-direction: column; align-items: center; gap: 1rem;
+                    color: white; padding: 1.359rem; border-radius: 20px; text-align: center;
+                    display: flex; flex-direction: column; align-items: center; gap: 0.906rem;
                     box-shadow: 0 10px 20px -5px rgba(239, 68, 68, 0.3);
                 }
                 .countdown-circle {
                     width: 100px; height: 100px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3);
                     display: flex; flex-direction: column; align-items: center; justify-content: center;
-                    margin: 0.5rem 0;
+                    margin: 0.453rem 0;
                 }
-                .months-left { font-size: 2.5rem; font-weight: 800; line-height: 1; }
-                .label { font-size: 0.8rem; opacity: 0.9; text-transform: uppercase; }
+                .months-left { font-size: 2.266rem; font-weight: 800; line-height: 1; }
+                .label { font-size: 0.725rem; opacity: 0.9; text-transform: uppercase; }
                 
                 .btn-white-outline {
-                    border: 1px solid rgba(255,255,255,0.5); padding: 0.5rem 1rem; border-radius: 8px;
-                    font-size: 0.9rem; font-weight: 500; width: 100%; transition: background 0.2s;
+                    border: 1px solid rgba(255,255,255,0.5); padding: 0.453rem 0.906rem; border-radius: 8px;
+                    font-size: 0.816rem; font-weight: 500; width: 100%; transition: background 0.2s;
                 }
                 .btn-white-outline:hover { background: rgba(255,255,255,0.1); }
 
                 .snowball-card {
-                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.25rem;
+                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.133rem;
                 }
-                .snowball-card h4 { display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.5rem; }
-                .snowball-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+                .snowball-card h4 { display: flex; align-items: center; gap: 0.453rem; font-size: 0.861rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.453rem; }
+                .snowball-card p { font-size: 0.77rem; color: var(--text-muted); line-height: 1.5; }
 
                 @media (max-width: 900px) {
                     .debt-layout { grid-template-columns: 1fr; }

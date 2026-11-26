@@ -16,7 +16,7 @@ export const Toggle = ({ checked, onChange, size = 'md', label, disabled = false
             style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.75rem',
+                gap: '0.68rem',
                 cursor: disabled ? 'not-allowed' : 'pointer',
                 opacity: disabled ? 0.6 : 1
             }}
@@ -56,7 +56,7 @@ export const Toggle = ({ checked, onChange, size = 'md', label, disabled = false
                 />
             </div>
             {label && (
-                <span style={{ fontSize: '0.9rem', color: '#1E293B', fontWeight: 500 }}>
+                <span style={{ fontSize: '0.816rem', color: '#1E293B', fontWeight: 500 }}>
                     {label}
                 </span>
             )}

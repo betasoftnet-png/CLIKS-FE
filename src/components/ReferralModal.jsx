@@ -69,7 +69,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         zIndex: 2000,
-                        padding: '1.5rem',
+                        padding: '1.359rem',
                         fontFamily: "'Inter', sans-serif"
                     }}
                     onClick={onClose}
@@ -83,7 +83,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             background: '#FFFFFF',
                             width: '100%',
                             maxWidth: '520px',
-                            borderRadius: '32px',
+                            borderRadius: '20px',
                             overflow: 'hidden',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -96,8 +96,8 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             onClick={onClose}
                             style={{
                                 position: 'absolute',
-                                top: '1.25rem',
-                                right: '1.25rem',
+                                top: '1.133rem',
+                                right: '1.133rem',
                                 width: '36px',
                                 height: '36px',
                                 borderRadius: '50%',
@@ -121,7 +121,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                         {/* Top Header Banner */}
                         <div style={{
                             background: 'linear-gradient(135deg, #064E3B 0%, #0F766E 100%)',
-                            padding: '2.5rem 2rem 2rem 2rem',
+                            padding: '2.266rem 1.812rem 1.812rem 1.812rem',
                             textAlign: 'center',
                             position: 'relative',
                             color: '#FFFFFF'
@@ -135,19 +135,19 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                margin: '0 auto 1rem auto',
+                                margin: '0 auto 0.906rem auto',
                                 boxShadow: '0 12px 24px rgba(245, 158, 11, 0.3)',
                             }}>
                                 <Gift size={30} />
                             </div>
-                            <h2 style={{ fontSize: '1.75rem', fontWeight: '900', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em' }}>Refer. Grow. Earn Premium.</h2>
-                            <p style={{ opacity: 0.95, fontSize: '0.9rem', fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
+                            <h2 style={{ fontSize: '1.586rem', fontWeight: '900', margin: '0 0 0.363rem 0', letterSpacing: '-0.02em' }}>Refer. Grow. Earn Premium.</h2>
+                            <p style={{ opacity: 0.95, fontSize: '0.816rem', fontWeight: '500', lineHeight: '1.5', margin: 0 }}>
                                 Refer a business owner → They join Cliks → They become active → You both earn rewards.
                             </p>
                         </div>
 
                         {/* Modal Body */}
-                        <div style={{ padding: '1.75rem 2rem' }}>
+                        <div style={{ padding: '1.586rem 1.812rem' }}>
                             
                             {/* Key Incentives Box */}
                             <div className="bg-emerald-50/80 border border-emerald-100 rounded-2xl p-3.5 space-y-1 mb-6">
@@ -158,7 +158,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             </div>
 
                             {/* Link Input Section */}
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.453rem' }}>
                                 YOUR UNIQUE REFERRAL LINK
                             </label>
 
@@ -166,11 +166,11 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                 background: '#F8FAFC', 
                                 borderRadius: '16px', 
                                 border: '1.5px dashed #CBD5E1', 
-                                padding: '0.85rem 1rem', 
+                                padding: '0.77rem 0.906rem', 
                                 display: 'flex', 
                                 alignItems: 'center', 
-                                gap: '0.75rem', 
-                                marginBottom: '1.5rem'
+                                gap: '0.68rem', 
+                                marginBottom: '1.359rem'
                             }}>
                                 <input 
                                     readOnly
@@ -179,7 +179,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                         flex: 1, 
                                         background: 'transparent', 
                                         border: 'none', 
-                                        fontSize: '0.85rem', 
+                                        fontSize: '0.77rem', 
                                         fontWeight: '700', 
                                         color: '#064E3B', 
                                         outline: 'none',
@@ -194,15 +194,15 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                     style={{ 
                                         display: 'flex', 
                                         alignItems: 'center', 
-                                        gap: '0.4rem', 
-                                        padding: '0.6rem 0.9rem', 
+                                        gap: '0.363rem', 
+                                        padding: '0.544rem 0.816rem', 
                                         borderRadius: '12px', 
                                         border: 'none', 
                                         cursor: 'pointer',
                                         background: copied ? '#059669' : '#1F2937', 
                                         color: 'white',
                                         fontWeight: '800', 
-                                        fontSize: '0.8rem', 
+                                        fontSize: '0.725rem', 
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
@@ -211,11 +211,11 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             </div>
 
                             {/* Share Buttons */}
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.6rem' }}>
+                            <div style={{ marginBottom: '1.359rem' }}>
+                                <span style={{ display: 'block', fontSize: '0.68rem', fontWeight: '850', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.544rem' }}>
                                     SHARE INSTANTLY
                                 </span>
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.6rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.544rem' }}>
                                     {[
                                         { key: 'whatsapp', label: 'WhatsApp', icon: MessageSquare, bg: '#25D366', color: 'white' },
                                         { key: 'facebook', label: 'Facebook', icon: Facebook, bg: '#1877F2', color: 'white' },
@@ -231,14 +231,14 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                                 alignItems: 'center', 
                                                 justifyContent: 'center',
                                                 gap: '4px',
-                                                padding: '0.6rem 0.4rem', 
+                                                padding: '0.544rem 0.363rem', 
                                                 borderRadius: '12px', 
                                                 border: 'none', 
                                                 background: sns.bg, 
                                                 color: sns.color, 
                                                 cursor: 'pointer',
                                                 fontWeight: '800',
-                                                fontSize: '0.72rem'
+                                                fontSize: '0.652rem'
                                             }}
                                         >
                                             <sns.icon size={16} />
@@ -249,7 +249,7 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             </div>
 
                             {/* Dashboard Navigation CTA */}
-                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.25rem', display: 'flex', gap: '0.75rem' }}>
+                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.133rem', display: 'flex', gap: '0.68rem' }}>
                                 <button 
                                     onClick={() => {
                                         onClose();
@@ -257,18 +257,18 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                     }}
                                     style={{
                                         flex: 1,
-                                        padding: '0.85rem',
+                                        padding: '0.77rem',
                                         borderRadius: '14px',
                                         border: 'none',
                                         background: 'linear-gradient(135deg, #064E3B 0%, #047857 100%)',
                                         color: 'white',
                                         fontWeight: '850',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '0.5rem',
+                                        gap: '0.453rem',
                                         boxShadow: '0 8px 16px rgba(6, 78, 59, 0.15)'
                                     }}
                                 >

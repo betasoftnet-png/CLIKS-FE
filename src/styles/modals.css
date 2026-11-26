@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 1rem;
+  padding: 0.906rem;
   backdrop-filter: blur(2px);
 }
 
@@ -20,7 +20,7 @@
 .modal-card {
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.812rem;
   width: 100%;
   max-width: 480px;
   box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
@@ -32,11 +32,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.586rem;
 }
 
 .modal-title {
-  font-size: 1.15rem;
+  font-size: 1.042rem;
   font-weight: 700;
   color: var(--text-main);
 }
@@ -65,17 +65,17 @@
 .modal-form {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 0.997rem;
 }
 
 .modal-field {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.317rem;
 }
 
 .modal-label {
-  font-size: 0.78rem;
+  font-size: 0.707rem;
   font-weight: 600;
   color: var(--text-muted);
   text-transform: uppercase;
@@ -87,8 +87,8 @@
 .modal-textarea {
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  padding: 0.65rem 0.9rem;
-  font-size: 0.9rem;
+  padding: 0.589rem 0.816rem;
+  font-size: 0.816rem;
   font-family: inherit;
   outline: none;
   background: var(--bg-color);
@@ -120,30 +120,37 @@
 .modal-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.85rem;
+  gap: 0.77rem;
+}
+
+@media (max-width: 480px) {
+  .modal-row {
+    grid-template-columns: 1fr;
+    gap: 0.68rem;
+  }
 }
 
 /* ── Error banner ── */
 .modal-error {
-  font-size: 0.82rem;
+  font-size: 0.743rem;
   color: #B91C1C;
   background: #FEE2E2;
   border: 1px solid #FECACA;
   border-radius: 8px;
-  padding: 0.5rem 0.8rem;
+  padding: 0.453rem 0.725rem;
 }
 
 /* ── Footer buttons ── */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
+  gap: 0.68rem;
+  margin-top: 0.453rem;
 }
 
 .modal-btn-cancel {
-  padding: 0.62rem 1.15rem;
-  font-size: 0.875rem;
+  padding: 0.562rem 1.042rem;
+  font-size: 0.793rem;
   font-weight: 500;
   color: var(--text-muted);
   border-radius: 10px;
@@ -160,8 +167,8 @@
 }
 
 .modal-btn-submit {
-  padding: 0.62rem 1.35rem;
-  font-size: 0.875rem;
+  padding: 0.562rem 1.223rem;
+  font-size: 0.793rem;
   font-weight: 600;
   color: #fff;
   background: var(--primary);
@@ -183,11 +190,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.6rem 0;
+  padding: 0.544rem 0;
 }
 
 .modal-toggle-label {
-  font-size: 0.9rem;
+  font-size: 0.816rem;
   font-weight: 500;
   color: var(--text-main);
 }
@@ -236,10 +243,10 @@
 
 .modal-tab {
   flex: 1;
-  padding: 0.5rem 0.75rem;
+  padding: 0.453rem 0.68rem;
   border-radius: 8px;
   border: none;
-  font-size: 0.875rem;
+  font-size: 0.793rem;
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
@@ -249,7 +256,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.363rem;
 }
 
 .modal-tab.active-income {

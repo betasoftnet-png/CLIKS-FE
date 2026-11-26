@@ -314,15 +314,15 @@ const FinancialContacts = () => {
                     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
                 }
                 .modal-title {
-                    font-size: 1.25rem;
+                    font-size: 1.133rem;
                     font-weight: 600;
-                    margin: 0 0 1rem 0;
+                    margin: 0 0 0.906rem 0;
                     color: var(--text-main);
                 }
                 .modal-form {
                     display: flex;
                     flex-direction: column;
-                    gap: 1rem;
+                    gap: 0.906rem;
                 }
                 .form-group {
                     display: flex;
@@ -330,15 +330,15 @@ const FinancialContacts = () => {
                     gap: 4px;
                 }
                 .form-group label {
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     font-weight: 500;
                     color: var(--text-muted);
                 }
                 .form-input {
-                    padding: 0.5rem 0.75rem;
+                    padding: 0.453rem 0.68rem;
                     border: 1px solid var(--border-color);
                     border-radius: 6px;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     outline: none;
                 }
                 .form-input:focus {
@@ -347,14 +347,14 @@ const FinancialContacts = () => {
                 }
                 .form-error {
                     color: #EF4444;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     margin: 0;
                 }
                 .modal-actions {
                     display: flex;
                     justify-content: flex-end;
                     gap: 8px;
-                    margin-top: 1rem;
+                    margin-top: 0.906rem;
                 }
 
                 .contacts-page {
@@ -414,10 +414,10 @@ const FinancialContacts = () => {
                     flex-direction: column;
                 }
                 .filter-body {
-                    padding: 1rem;
+                    padding: 0.906rem;
                     display: flex;
                     flex-direction: column;
-                    gap: 1rem;
+                    gap: 0.906rem;
                 }
                 .filter-group {
                     display: flex;
@@ -425,7 +425,7 @@ const FinancialContacts = () => {
                     gap: 6px;
                 }
                 .filter-label {
-                    font-size: 0.8rem;
+                    font-size: 0.725rem;
                     font-weight: 600;
                     color: var(--text-main);
                 }
@@ -441,10 +441,10 @@ const FinancialContacts = () => {
                 }
                 .filter-input-text {
                     width: 100%;
-                    padding: 0.5rem 0.5rem 0.5rem 32px;
+                    padding: 0.453rem 0.453rem 0.453rem 32px;
                     border: 1px solid var(--border-color);
                     border-radius: 6px;
-                    font-size: 0.85rem;
+                    font-size: 0.77rem;
                     outline: none;
                 }
                 .filter-input-text:focus {
@@ -452,10 +452,10 @@ const FinancialContacts = () => {
                 }
                 .filter-select {
                     width: 100%;
-                    padding: 0.5rem;
+                    padding: 0.453rem;
                     border: 1px solid var(--border-color);
                     border-radius: 6px;
-                    font-size: 0.85rem;
+                    font-size: 0.77rem;
                     outline: none;
                     background: white;
                 }
@@ -467,7 +467,7 @@ const FinancialContacts = () => {
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    font-size: 0.85rem;
+                    font-size: 0.77rem;
                     color: var(--text-main);
                     cursor: pointer;
                 }
@@ -478,7 +478,7 @@ const FinancialContacts = () => {
                     accent-color: #22C55E;
                 }
                 .filter-footer {
-                    padding: 0.75rem 1rem;
+                    padding: 0.68rem 0.906rem;
                     background: #F8FAFC;
                     border-top: 1px solid var(--border-color);
                     display: flex;
@@ -488,7 +488,7 @@ const FinancialContacts = () => {
                     background: none;
                     border: none;
                     color: #EF4444;
-                    font-size: 0.85rem;
+                    font-size: 0.77rem;
                     font-weight: 600;
                     cursor: pointer;
                 }

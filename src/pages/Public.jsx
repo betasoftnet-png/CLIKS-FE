@@ -75,13 +75,13 @@ export default function Public() {
             justifyContent: 'center',
             minHeight: '600px',
             textAlign: 'center',
-            gap: '2rem',
-            padding: '4rem 2rem',
+            gap: '1.812rem',
+            padding: '2.266rem 1.359rem',
             background: 'white',
-            borderRadius: '24px',
+            borderRadius: '16px',
             border: '1px solid #E2E8F0',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-            marginTop: '1rem'
+            marginTop: '0.906rem'
         }}>
             <div style={{
                 width: '100px',
@@ -92,27 +92,27 @@ export default function Public() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 boxShadow: '0 20px 25px -5px rgba(27, 107, 58, 0.3)',
-                marginBottom: '1rem'
+                marginBottom: '0.906rem'
             }}>
                 <Briefcase size={48} color="white" strokeWidth={1.5} />
             </div>
 
             <div style={{ maxWidth: '640px' }}>
                 <h1 style={{
-                    fontSize: '3rem',
+                    fontSize: '1.677rem',
                     fontWeight: '800',
                     color: '#1E293B',
-                    marginBottom: '1.25rem',
+                    marginBottom: '1.133rem',
                     letterSpacing: '-0.02em',
                     lineHeight: '1.2'
                 }}>
                     Do you want to become a Investor?
                 </h1>
                 <p style={{
-                    fontSize: '1.25rem',
+                    fontSize: '1.133rem',
                     color: '#64748B',
                     lineHeight: '1.6',
-                    marginBottom: '2rem'
+                    marginBottom: '1.812rem'
                 }}>
                     Unlock exclusive access to premium high-growth investment opportunities, connect with industry leaders in our private network, and grow your portfolio with expert-led insights.
                 </p>
@@ -121,12 +121,12 @@ export default function Public() {
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '3rem',
+                gap: '2.719rem',
                 width: '100%',
                 maxWidth: '800px',
-                margin: '1rem 0 3rem 0'
+                margin: '0.906rem 0 2.719rem 0'
             }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem' }}>
                     <div style={{
                         width: '56px',
                         height: '56px',
@@ -140,11 +140,11 @@ export default function Public() {
                         <TrendingUp size={28} strokeWidth={2} />
                     </div>
                     <div>
-                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>High Returns</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Access vetted deals with potential for exponential growth.</p>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '0.997rem', marginBottom: '0.227rem' }}>High Returns</h3>
+                        <p style={{ fontSize: '0.816rem', color: '#64748B' }}>Access vetted deals with potential for exponential growth.</p>
                     </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem' }}>
                     <div style={{
                         width: '56px',
                         height: '56px',
@@ -158,11 +158,11 @@ export default function Public() {
                         <Users size={28} strokeWidth={2} />
                     </div>
                     <div>
-                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>Elite Network</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Connect with successful founders and fellow investors.</p>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '0.997rem', marginBottom: '0.227rem' }}>Elite Network</h3>
+                        <p style={{ fontSize: '0.816rem', color: '#64748B' }}>Connect with successful founders and fellow investors.</p>
                     </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem' }}>
                     <div style={{
                         width: '56px',
                         height: '56px',
@@ -176,8 +176,8 @@ export default function Public() {
                         <Sparkles size={28} strokeWidth={2} />
                     </div>
                     <div>
-                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '1.1rem', marginBottom: '0.25rem' }}>Early Access</h3>
-                        <p style={{ fontSize: '0.9rem', color: '#64748B' }}>Get in on the ground floor of the next big thing.</p>
+                        <h3 style={{ fontWeight: '700', color: '#1E293B', fontSize: '0.997rem', marginBottom: '0.227rem' }}>Early Access</h3>
+                        <p style={{ fontSize: '0.816rem', color: '#64748B' }}>Get in on the ground floor of the next big thing.</p>
                     </div>
                 </div>
             </div>
@@ -185,9 +185,9 @@ export default function Public() {
             <button style={{
                 background: '#1B6B3A',
                 color: 'white',
-                padding: '1.25rem 3.5rem',
+                padding: '1.133rem 3.172rem',
                 borderRadius: '99px',
-                fontSize: '1.25rem',
+                fontSize: '1.133rem',
                 fontWeight: '700',
                 border: 'none',
                 cursor: 'pointer',
@@ -209,7 +209,7 @@ export default function Public() {
                 Start Investing Now
                 <ArrowUpRight size={24} />
             </button>
-            <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#94A3B8' }}>
+            <p style={{ marginTop: '0.906rem', fontSize: '0.816rem', color: '#94A3B8' }}>
                 No hidden fees. Cancel anytime.
             </p>
         </div>
@@ -217,14 +217,14 @@ export default function Public() {
 
     // Games Page
     const GamesPage = () => (
-        <div style={{ padding: '0 0 2rem 0', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '0 0 1.812rem 0', fontFamily: "'Inter', sans-serif" }}>
             {/* Unique Header Banner */}
             <div style={{
                 background: 'linear-gradient(120deg, #1B6B3A 0%, #064E3B 100%)',
-                borderRadius: '24px',
-                padding: '3rem 2rem',
+                borderRadius: '16px',
+                padding: '2.719rem 1.812rem',
                 color: 'white',
-                marginBottom: '2.5rem',
+                marginBottom: '2.266rem',
                 position: 'relative',
                 overflow: 'hidden',
                 display: 'flex',
@@ -235,31 +235,31 @@ export default function Public() {
                 <div style={{ position: 'relative', zIndex: 1, maxWidth: '60%' }}>
                     <span style={{
                         background: 'rgba(255,255,255,0.2)',
-                        padding: '0.5rem 1rem',
+                        padding: '0.453rem 0.906rem',
                         borderRadius: '99px',
-                        fontSize: '0.9rem',
+                        fontSize: '0.816rem',
                         fontWeight: '600',
                         backdropFilter: 'blur(10px)',
-                        marginBottom: '1rem',
+                        marginBottom: '0.906rem',
                         display: 'inline-block'
                     }}>
                         Level 5 â€¢ Pro Gamer
                     </span>
-                    <h1 style={{ fontSize: '2.5rem', fontWeight: '800', lineHeight: '1.2', marginBottom: '1rem' }}>
+                    <h1 style={{ fontSize: '2.266rem', fontWeight: '800', lineHeight: '1.2', marginBottom: '0.906rem' }}>
                         Ready to level up your <br /> Financial Skills?
                     </h1>
-                    <p style={{ fontSize: '1.1rem', opacity: '0.9', marginBottom: '2rem', maxWidth: '500px' }}>
+                    <p style={{ fontSize: '0.997rem', opacity: '0.9', marginBottom: '1.812rem', maxWidth: '500px' }}>
                         Compete in real-time trading battles, solve complex puzzles, and climb the global leaderboards to win exclusive rewards.
                     </p>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div style={{ display: 'flex', gap: '0.906rem' }}>
                         <button style={{
                             background: 'white',
                             color: '#1B6B3A',
                             border: 'none',
-                            padding: '0.75rem 1.5rem',
+                            padding: '0.68rem 1.359rem',
                             borderRadius: '12px',
                             fontWeight: '700',
-                            fontSize: '1rem',
+                            fontSize: '0.906rem',
                             cursor: 'pointer',
                             boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                         }}>
@@ -271,10 +271,10 @@ export default function Public() {
                             background: 'rgba(255,255,255,0.1)',
                             color: 'white',
                             border: '1px solid rgba(255,255,255,0.3)',
-                            padding: '0.75rem 1.5rem',
+                            padding: '0.68rem 1.359rem',
                             borderRadius: '12px',
                             fontWeight: '600',
-                            fontSize: '1rem',
+                            fontSize: '0.906rem',
                             cursor: 'pointer'
                         }}>
                             View Rewards
@@ -289,23 +289,23 @@ export default function Public() {
                 </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '2rem' }}>
+            <div style={{ display: 'flex', gap: '1.812rem' }}>
                 {/* Main Game Grid */}
                 <div style={{ flex: 1 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1f2937' }}>Featured Games</h2>
-                        <a href="#" style={{ color: '#1B6B3A', fontWeight: '600', textDecoration: 'none', fontSize: '0.9rem' }}>View All</a>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                        <h2 style={{ fontSize: '1.359rem', fontWeight: '700', color: '#1f2937' }}>Featured Games</h2>
+                        <a href="#" style={{ color: '#1B6B3A', fontWeight: '600', textDecoration: 'none', fontSize: '0.816rem' }}>View All</a>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.359rem' }}>
                         {/* Large Featured Card */}
                         <div style={{
                             gridColumn: 'span 2',
                             background: 'white',
                             borderRadius: '20px',
-                            padding: '2rem',
+                            padding: '1.812rem',
                             display: 'flex',
-                            gap: '2rem',
+                            gap: '1.812rem',
                             alignItems: 'center',
                             border: '1px solid #e5e7eb',
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
@@ -316,7 +316,7 @@ export default function Public() {
                                 width: '120px',
                                 height: '120px',
                                 background: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
-                                borderRadius: '24px',
+                                borderRadius: '16px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -325,14 +325,14 @@ export default function Public() {
                                 <TrendingUp size={60} color="white" />
                             </div>
                             <div style={{ flex: 1 }}>
-                                <span style={{ color: '#7c3aed', fontWeight: '700', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Trending Now</span>
-                                <h3 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111827', margin: '0.5rem 0' }}>Ultimate Trading Simulator</h3>
-                                <p style={{ color: '#6b7280', marginBottom: '1.5rem', lineHeight: '1.5' }}>Experience the thrill of the stock market without the risk. Trade with virtual currency and compete.</p>
+                                <span style={{ color: '#7c3aed', fontWeight: '700', fontSize: '0.77rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Trending Now</span>
+                                <h3 style={{ fontSize: '1.586rem', fontWeight: '800', color: '#111827', margin: '0.453rem 0' }}>Ultimate Trading Simulator</h3>
+                                <p style={{ color: '#6b7280', marginBottom: '1.359rem', lineHeight: '1.5' }}>Experience the thrill of the stock market without the risk. Trade with virtual currency and compete.</p>
                                 <button style={{
                                     background: '#1B6B3A',
                                     color: 'white',
                                     border: 'none',
-                                    padding: '0.75rem 2rem',
+                                    padding: '0.68rem 1.812rem',
                                     borderRadius: '12px',
                                     fontWeight: '600',
                                     cursor: 'pointer',
@@ -354,13 +354,13 @@ export default function Public() {
                             <div key={i} style={{
                                 background: 'white',
                                 borderRadius: '20px',
-                                padding: '1.5rem',
+                                padding: '1.359rem',
                                 border: '1px solid #e5e7eb',
                                 transition: 'all 0.2s',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '1rem',
+                                gap: '0.906rem',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                             }}
                                 onMouseEnter={(e) => {
@@ -386,9 +386,9 @@ export default function Public() {
                                     </div>
                                     <span style={{
                                         background: '#f3f4f6',
-                                        padding: '0.25rem 0.75rem',
+                                        padding: '0.227rem 0.68rem',
                                         borderRadius: '99px',
-                                        fontSize: '0.75rem',
+                                        fontSize: '0.68rem',
                                         fontWeight: '600',
                                         color: '#4b5563'
                                     }}>
@@ -396,8 +396,8 @@ export default function Public() {
                                     </span>
                                 </div>
                                 <div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.25rem' }}>{game.title}</h3>
-                                    <p style={{ fontSize: '0.9rem', color: '#6b7280' }}>2.5k Players Online</p>
+                                    <h3 style={{ fontSize: '1.133rem', fontWeight: '700', color: '#1f2937', marginBottom: '0.227rem' }}>{game.title}</h3>
+                                    <p style={{ fontSize: '0.816rem', color: '#6b7280' }}>2.5k Players Online</p>
                                 </div>
                             </div>
                         ))}
@@ -408,21 +408,21 @@ export default function Public() {
                 <div style={{ width: '340px' }}>
                     <div style={{
                         background: 'white',
-                        borderRadius: '24px',
-                        padding: '1.5rem',
+                        borderRadius: '16px',
+                        padding: '1.359rem',
                         border: '1px solid #e5e7eb',
                         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
                         position: 'sticky',
                         top: '24px'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1f2937' }}>Top Players</h3>
-                            <button style={{ background: 'none', border: 'none', color: '#1B6B3A', fontWeight: '600', cursor: 'pointer', fontSize: '0.9rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '700', color: '#1f2937' }}>Top Players</h3>
+                            <button style={{ background: 'none', border: 'none', color: '#1B6B3A', fontWeight: '600', cursor: 'pointer', fontSize: '0.816rem' }}>
                                 This Week
                             </button>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                             {[
                                 { name: 'Aditya S', score: '9,850', rank: 1, avatar: 'AV' },
                                 { name: 'Rahul K', score: '8,400', rank: 2, avatar: 'RK' },
@@ -430,7 +430,7 @@ export default function Public() {
                                 { name: 'Amit J', score: '6,900', rank: 4, avatar: 'AJ' },
                                 { name: 'Priya R', score: '5,540', rank: 5, avatar: 'PR' }
                             ].map((player, index) => (
-                                <div key={player.rank} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.5rem', borderRadius: '12px', background: index === 0 ? '#f0f9ff' : 'transparent' }}>
+                                <div key={player.rank} style={{ display: 'flex', alignItems: 'center', gap: '0.906rem', padding: '0.453rem', borderRadius: '12px', background: index === 0 ? '#f0f9ff' : 'transparent' }}>
                                     <div style={{
                                         width: '24px',
                                         height: '24px',
@@ -439,7 +439,7 @@ export default function Public() {
                                         justifyContent: 'center',
                                         fontWeight: '700',
                                         color: index < 3 ? '#eab308' : '#9ca3af',
-                                        fontSize: '0.9rem'
+                                        fontSize: '0.816rem'
                                     }}>
                                         {player.rank}
                                     </div>
@@ -453,13 +453,13 @@ export default function Public() {
                                         justifyContent: 'center',
                                         color: '#3730a3',
                                         fontWeight: '700',
-                                        fontSize: '0.9rem'
+                                        fontSize: '0.816rem'
                                     }}>
                                         {player.avatar}
                                     </div>
                                     <div style={{ flex: 1 }}>
-                                        <h4 style={{ fontSize: '0.95rem', fontWeight: '600', color: '#1f2937', margin: 0 }}>{player.name}</h4>
-                                        <p style={{ fontSize: '0.8rem', color: '#6b7280', margin: 0 }}>{player.score} XP</p>
+                                        <h4 style={{ fontSize: '0.861rem', fontWeight: '600', color: '#1f2937', margin: 0 }}>{player.name}</h4>
+                                        <p style={{ fontSize: '0.725rem', color: '#6b7280', margin: 0 }}>{player.score} XP</p>
                                     </div>
                                     {index === 0 && <Trophy size={16} color="#eab308" />}
                                 </div>
@@ -468,15 +468,15 @@ export default function Public() {
 
                         <button style={{
                             width: '100%',
-                            marginTop: '1.5rem',
-                            padding: '0.75rem',
+                            marginTop: '1.359rem',
+                            padding: '0.68rem',
                             border: '1px solid #e5e7eb',
                             borderRadius: '12px',
                             background: 'white',
                             color: '#4b5563',
                             fontWeight: '600',
                             cursor: 'pointer',
-                            fontSize: '0.9rem'
+                            fontSize: '0.816rem'
                         }}>
                             View Global Rankings
                         </button>
@@ -560,8 +560,8 @@ export default function Public() {
                 {/* Header Section */}
                 <div style={{
                     background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
-                    borderRadius: '24px',
-                    padding: '3rem',
+                    borderRadius: '16px',
+                    padding: '2.719rem',
                     color: 'white',
                     position: 'relative',
                     overflow: 'hidden',
@@ -574,23 +574,23 @@ export default function Public() {
                         <div style={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '0.5rem 1rem',
+                            gap: '0.453rem',
+                            padding: '0.453rem 0.906rem',
                             background: 'rgba(255, 255, 255, 0.15)',
                             borderRadius: '999px',
                             backdropFilter: 'blur(10px)',
-                            marginBottom: '1rem',
-                            fontSize: '0.9rem',
+                            marginBottom: '0.906rem',
+                            fontSize: '0.816rem',
                             fontWeight: '500'
                         }}>
                             <Briefcase size={16} />
                             <span>Business & Startups</span>
                         </div>
-                        <h1 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '1rem', lineHeight: 1.2 }}>
+                        <h1 style={{ fontSize: '2.266rem', fontWeight: '800', marginBottom: '0.906rem', lineHeight: 1.2 }}>
                             {uiText('Founders Meetup', 'Beta Club')} <br /> & {uiText('Event Scheduler', 'Community')}
                         </h1>
                         <p style={{
-                            fontSize: '1.1rem',
+                            fontSize: '0.997rem',
                             color: '#93c5fd',
                             maxWidth: '480px',
                             lineHeight: 1.6
@@ -617,17 +617,17 @@ export default function Public() {
                         style={{
                         position: 'relative',
                         zIndex: 10,
-                        padding: '1rem 2rem',
+                        padding: '0.906rem 1.812rem',
                         background: 'white',
                         color: '#1e3a8a',
                         border: 'none',
                         borderRadius: '12px',
                         fontWeight: '700',
-                        fontSize: '1rem',
+                        fontSize: '0.906rem',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.75rem',
+                        gap: '0.68rem',
                         boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
                         transition: 'all 0.2s'
                     }}
@@ -646,21 +646,21 @@ export default function Public() {
                 </div>
 
                 {/* Filters */}
-                <div style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', overflowX: 'auto' }}>
+                <div style={{ display: 'flex', gap: '0.906rem', paddingBottom: '0.906rem', overflowX: 'auto' }}>
                     {['All Events', 'Upcoming', 'Workshops', 'Webinars', 'My Events'].map(tab => (
                         <button
                             key={tab}
                             onClick={() => setFilter(tab)}
                             className="transition"
                             style={{
-                                padding: '0.75rem 1.5rem',
+                                padding: '0.68rem 1.359rem',
                                 borderRadius: '999px',
                                 border: filter === tab ? 'none' : '1px solid #E5E7EB',
                                 background: filter === tab ? '#1B6B3A' : 'white',
                                 color: filter === tab ? 'white' : '#6B7280',
                                 fontWeight: '600',
                                 cursor: 'pointer',
-                                fontSize: '0.95rem'
+                                fontSize: '0.861rem'
                             }}
                         >
                             {tab}
@@ -675,12 +675,12 @@ export default function Public() {
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        padding: '4rem 2rem',
+                        padding: '2.266rem 1.359rem',
                         background: 'white',
-                        borderRadius: '24px',
+                        borderRadius: '16px',
                         border: '1px dashed #CBD5E1',
                         textAlign: 'center',
-                        gap: '1rem'
+                        gap: '0.906rem'
                     }}>
                         <div style={{
                             width: '64px',
@@ -695,7 +695,7 @@ export default function Public() {
                             <Calendar size={32} />
                         </div>
                         <div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#1E293B', marginBottom: '0.5rem' }}>{uiText('No Events Found', 'No Active Panels Found')}</h3>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '700', color: '#1E293B', marginBottom: '0.453rem' }}>{uiText('No Events Found', 'No Active Panels Found')}</h3>
                             <p style={{ color: '#64748B', maxWidth: '400px', margin: '0 auto' }}>{uiText('There are no upcoming meetups scheduled right now. Click "Create Event" to schedule the first one!', 'There are no upcoming Beta Club events scheduled right now. Click "Create Event" to schedule the first one!')}</p>
                         </div>
                     </div>
@@ -753,13 +753,13 @@ export default function Public() {
 
                                 <div style={{
                                     position: 'absolute',
-                                    top: '1rem',
-                                    left: '1rem',
-                                    padding: '0.25rem 0.75rem',
+                                    top: '0.906rem',
+                                    left: '0.906rem',
+                                    padding: '0.227rem 0.68rem',
                                     background: 'rgba(27, 107, 58, 0.9)',
                                     color: 'white',
                                     borderRadius: '999px',
-                                    fontSize: '0.7rem',
+                                    fontSize: '0.634rem',
                                     fontWeight: '700',
                                     backdropFilter: 'blur(4px)'
                                 }}>
@@ -768,13 +768,13 @@ export default function Public() {
 
                                 <span style={{
                                     position: 'absolute',
-                                    top: '1rem',
-                                    right: '1rem',
-                                    padding: '0.25rem 0.75rem',
+                                    top: '0.906rem',
+                                    right: '0.906rem',
+                                    padding: '0.227rem 0.68rem',
                                     background: 'white',
                                     color: '#1B6B3A',
                                     borderRadius: '999px',
-                                    fontSize: '0.8rem',
+                                    fontSize: '0.725rem',
                                     fontWeight: '800',
                                     boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
                                 }}>
@@ -783,38 +783,38 @@ export default function Public() {
                             </div>
 
                             {/* Content */}
-                            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                            <div style={{ padding: '1.359rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.68rem' }}>
                                     <span style={{
-                                        fontSize: '0.75rem',
+                                        fontSize: '0.68rem',
                                         fontWeight: '700',
                                         color: event.type === 'Online' ? '#9333EA' : '#1B6B3A',
                                         background: event.type === 'Online' ? '#F3E8FF' : '#F0FDF4',
-                                        padding: '0.25rem 0.75rem',
+                                        padding: '0.227rem 0.68rem',
                                         borderRadius: '6px',
                                         border: `1px solid ${event.type === 'Online' ? '#E9D5FF' : '#DCF2E4'}`
                                     }}>
                                         {event.type}
                                     </span>
-                                    <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '600' }}>
+                                    <span style={{ fontSize: '0.77rem', color: '#64748B', fontWeight: '600' }}>
                                         {event.date}
                                     </span>
                                 </div>
 
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#064E3B', marginBottom: '0.5rem', lineHeight: '1.3' }}>
+                                <h3 style={{ fontSize: '1.133rem', fontWeight: '800', color: '#064E3B', marginBottom: '0.453rem', lineHeight: '1.3' }}>
                                     {event.title}
                                 </h3>
 
                                 {event.description && (
-                                    <p style={{ fontSize: '0.9rem', color: '#64748B', marginBottom: '1.25rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5' }}>
+                                    <p style={{ fontSize: '0.816rem', color: '#64748B', marginBottom: '1.133rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5' }}>
                                         {event.description}
                                     </p>
                                 )}
 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#4B635A', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#4B635A', fontSize: '0.77rem', marginBottom: '1.359rem' }}>
                                     <MapPin size={14} />
                                     <span style={{ fontWeight: '500' }}>{event.location}</span>
-                                    <span style={{ margin: '0 0.25rem', opacity: 0.5 }}>•</span>
+                                    <span style={{ margin: '0 0.227rem', opacity: 0.5 }}>•</span>
                                     <Clock size={14} />
                                     <span style={{ fontWeight: '500' }}>{event.time}</span>
                                 </div>
@@ -843,7 +843,7 @@ export default function Public() {
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                fontSize: '0.7rem',
+                                                fontSize: '0.634rem',
                                                 color: '#6B7280',
                                                 fontWeight: '600'
                                             }}>
@@ -853,7 +853,7 @@ export default function Public() {
                                     </div>
 
                                     <button className="transition" style={{
-                                        padding: '0.5rem 1.25rem',
+                                        padding: '0.453rem 1.133rem',
                                         border: '1px solid #1B6B3A',
                                         borderRadius: '8px',
                                         color: '#1B6B3A',
@@ -902,10 +902,10 @@ export default function Public() {
                     }}>
                         <div style={{
                             background: 'white',
-                            borderRadius: '24px',
+                            borderRadius: '16px',
                             width: '100%',
                             maxWidth: '500px',
-                            padding: '2rem',
+                            padding: '1.812rem',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                             position: 'relative'
                         }}>
@@ -913,8 +913,8 @@ export default function Public() {
                                 onClick={() => setIsCreateModalOpen(false)}
                                 style={{
                                     position: 'absolute',
-                                    top: '1.5rem',
-                                    right: '1.5rem',
+                                    top: '1.359rem',
+                                    right: '1.359rem',
                                     background: '#F0FDF4',
                                     border: 'none',
                                     borderRadius: '50%',
@@ -930,65 +930,65 @@ export default function Public() {
                                 <X size={18} />
                             </button>
 
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#1E293B', marginBottom: '1.5rem' }}>
+                            <h2 style={{ fontSize: '1.359rem', fontWeight: '700', color: '#1E293B', marginBottom: '1.359rem' }}>
                                 Create New Event
                             </h2>
 
-                            <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Event Title</label>
+                                    <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Event Title</label>
                                     <input
                                         type="text"
                                         required
                                         value={newEvent.title}
                                         onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
                                         placeholder="e.g. SaaS Founders Meetup"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Description</label>
+                                    <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Description</label>
                                     <textarea
                                         value={newEvent.description}
                                         onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
                                         placeholder="Tell people about your event..."
                                         rows={3}
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', resize: 'none', fontFamily: 'inherit' }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', resize: 'none', fontFamily: 'inherit' }}
                                     />
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Type</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Type</label>
                                         <select
                                             value={newEvent.type}
                                             onChange={(e) => setNewEvent({...newEvent, type: e.target.value})}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
                                         >
                                             <option value="Offline">Offline</option>
                                             <option value="Online">Online</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Price</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Price</label>
                                         <input
                                             type="text"
                                             value={newEvent.price}
                                             onChange={(e) => setNewEvent({...newEvent, price: e.target.value})}
                                             placeholder="e.g. Free or $20"
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                         />
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Category</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Category</label>
                                         <select
                                             value={newEvent.category}
                                             onChange={(e) => setNewEvent({...newEvent, category: e.target.value})}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
                                         >
                                             <option value="Networking">Networking</option>
                                             <option value="Workshop">Workshop</option>
@@ -998,49 +998,49 @@ export default function Public() {
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Image URL (Optional)</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Image URL (Optional)</label>
                                         <input
                                             type="text"
                                             value={newEvent.image_url}
                                             onChange={(e) => setNewEvent({...newEvent, image_url: e.target.value})}
                                             placeholder="https://..."
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                         />
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Date</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Date</label>
                                         <input
                                             type="date"
                                             required
                                             value={newEvent.date}
                                             onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Time</label>
+                                        <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Time</label>
                                         <input
                                             type="time"
                                             required
                                             value={newEvent.time}
                                             onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: '600', color: '#475569', marginBottom: '0.5rem' }}>Location (or Link)</label>
+                                    <label style={{ display: 'block', fontSize: '0.77rem', fontWeight: '600', color: '#475569', marginBottom: '0.453rem' }}>Location (or Link)</label>
                                     <input
                                         type="text"
                                         required
                                         value={newEvent.location}
                                         onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
                                         placeholder="Downtown Tech Hub"
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '8px', border: '1px solid #E2E8F0', outline: 'none' }}
                                     />
                                 </div>
 
@@ -1048,20 +1048,20 @@ export default function Public() {
                                     type="submit"
                                     disabled={createMutation.isPending}
                                     style={{
-                                        marginTop: '1rem',
+                                        marginTop: '0.906rem',
                                         width: '100%',
-                                        padding: '1rem',
+                                        padding: '0.906rem',
                                         background: '#1B6B3A',
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '12px',
                                         fontWeight: '700',
-                                        fontSize: '1rem',
+                                        fontSize: '0.906rem',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '0.5rem'
+                                        gap: '0.453rem'
                                     }}
                                 >
                                     {createMutation.isPending ? <Loader2 className="animate-spin" size={20} /> : 'Publish Event'}
@@ -1098,7 +1098,10 @@ export default function Public() {
                     background-color: #ffffff !important;
                 }
             `}</style>
-            <div className="content-wrapper">
+            <div
+                className="content-wrapper"
+                data-tour={page === 'meetup' ? 'social-guide-ready' : undefined}
+            >
                 {renderPage()}
             </div>
         </>

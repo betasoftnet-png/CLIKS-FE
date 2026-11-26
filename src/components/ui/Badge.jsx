@@ -44,7 +44,7 @@ const Badge = ({ variant = 'default', children, className = '', style = {} }) =>
         gap: '6px',
         padding: '6px 12px',
         borderRadius: '8px',
-        fontSize: '0.85rem',
+        fontSize: '0.77rem',
         fontWeight: '500',
         backgroundColor: config.bg,
         color: config.color,

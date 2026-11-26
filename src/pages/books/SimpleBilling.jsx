@@ -310,25 +310,25 @@ const SimpleBilling = () => {
     const savedRecordsCount = getSavedBillingRecords().length;
 
     return (
-        <div style={{ padding: '1.75rem', maxWidth: '1240px', margin: '0 auto', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
+        <div style={{ padding: '1.586rem', maxWidth: '1240px', margin: '0 auto', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
             
             {/* Header with Navigation and Quick Switch */}
             <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center', 
-                marginBottom: '1.75rem',
+                marginBottom: '1.586rem',
                 flexWrap: 'wrap',
-                gap: '1rem'
+                gap: '0.906rem'
             }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1B6B3A', marginBottom: '0.2rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#1B6B3A', marginBottom: '0.181rem' }}>
                         <span style={{ 
                             background: '#DCFCE7', 
                             color: '#166534', 
                             padding: '3px 8px', 
                             borderRadius: '8px', 
-                            fontSize: '0.72rem', 
+                            fontSize: '0.652rem', 
                             fontWeight: 850, 
                             display: 'inline-flex', 
                             alignItems: 'center', 
@@ -337,16 +337,16 @@ const SimpleBilling = () => {
                             <Sparkles size={13} /> Quick Counter
                         </span>
                     </div>
-                    <h1 style={{ fontSize: '1.85rem', fontWeight: 900, color: '#0F172A', margin: 0, letterSpacing: '-0.025em' }}>
+                    <h1 style={{ fontSize: '1.677rem', fontWeight: 900, color: '#0F172A', margin: 0, letterSpacing: '-0.025em' }}>
                         Simple Billing
                     </h1>
-                    <p style={{ color: '#64748B', fontSize: '0.88rem', margin: '0.25rem 0 0 0' }}>
+                    <p style={{ color: '#64748B', fontSize: '0.797rem', margin: '0.227rem 0 0 0' }}>
                         Quick-pick products, enter quantities, and generate customer receipts in seconds.
                     </p>
                 </div>
 
                 {/* Tab Switcher & Quick Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
                     <button
                         type="button"
                         onClick={handleResetBill}
@@ -358,9 +358,9 @@ const SimpleBilling = () => {
                             background: '#F8FAFC',
                             color: '#64748B',
                             border: '1px solid #E2E8F0',
-                            padding: '0.55rem 0.85rem',
+                            padding: '0.498rem 0.77rem',
                             borderRadius: '12px',
-                            fontSize: '0.8rem',
+                            fontSize: '0.725rem',
                             fontWeight: 750,
                             cursor: 'pointer',
                             transition: 'all 0.15s'
@@ -382,9 +382,9 @@ const SimpleBilling = () => {
                             background: '#FFFFFF',
                             color: '#1E293B',
                             border: '1px solid #CBD5E1',
-                            padding: '0.55rem 1rem',
+                            padding: '0.498rem 0.906rem',
                             borderRadius: '12px',
-                            fontSize: '0.82rem',
+                            fontSize: '0.743rem',
                             fontWeight: 800,
                             cursor: 'pointer',
                             boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
@@ -398,7 +398,7 @@ const SimpleBilling = () => {
                         <span style={{ 
                             background: '#F1F5F9', 
                             color: '#475569', 
-                            fontSize: '0.72rem', 
+                            fontSize: '0.652rem', 
                             fontWeight: 850, 
                             padding: '1px 6px', 
                             borderRadius: '999px' 
@@ -417,23 +417,23 @@ const SimpleBilling = () => {
                     background: '#FFFFFF',
                     borderRadius: '18px',
                     border: '1px solid #E2E8F0',
-                    padding: '1.25rem 1.5rem',
-                    marginBottom: '1.25rem',
+                    padding: '1.133rem 1.359rem',
+                    marginBottom: '1.133rem',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                    gap: '1.25rem',
+                    gap: '1.133rem',
                     alignItems: 'center'
                 }}>
                     {/* Customer Name Picker */}
                     <div style={{ position: 'relative' }} ref={customerDropdownRef}>
-                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.74rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.671rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                             <span style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <User size={13} style={{ color: '#1B6B3A' }} /> Customer
                             </span>
                             <span 
                                 onClick={() => setCustomerName('Walk-in Customer')}
-                                style={{ color: '#1B6B3A', cursor: 'pointer', fontSize: '0.7rem', fontWeight: 800 }}
+                                style={{ color: '#1B6B3A', cursor: 'pointer', fontSize: '0.634rem', fontWeight: 800 }}
                             >
                                 Default Walk-in
                             </span>
@@ -452,10 +452,10 @@ const SimpleBilling = () => {
                                 required
                                 style={{
                                     width: '100%',
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.589rem 0.77rem',
                                     borderRadius: '12px',
                                     border: '1.5px solid #CBD5E1',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     fontWeight: 700,
                                     color: '#0F172A',
                                     background: '#F8FAFC',
@@ -506,9 +506,9 @@ const SimpleBilling = () => {
                                         setShowCustomerDropdown(false);
                                     }}
                                     style={{
-                                        padding: '0.55rem 0.85rem',
+                                        padding: '0.498rem 0.77rem',
                                         cursor: 'pointer',
-                                        fontSize: '0.85rem',
+                                        fontSize: '0.77rem',
                                         fontWeight: 750,
                                         color: '#166534',
                                         background: '#F0FDF4',
@@ -529,9 +529,9 @@ const SimpleBilling = () => {
                                                 setShowCustomerDropdown(false);
                                             }}
                                             style={{
-                                                padding: '0.55rem 0.85rem',
+                                                padding: '0.498rem 0.77rem',
                                                 cursor: 'pointer',
-                                                fontSize: '0.85rem',
+                                                fontSize: '0.77rem',
                                                 borderBottom: '1px solid #F1F5F9',
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
@@ -541,7 +541,7 @@ const SimpleBilling = () => {
                                             onMouseOut={(e) => e.currentTarget.style.background = '#FFFFFF'}
                                         >
                                             <span style={{ fontWeight: 700, color: '#1E293B' }}>{cName}</span>
-                                            {cPhone && <span style={{ fontSize: '0.75rem', color: '#64748B' }}>{cPhone}</span>}
+                                            {cPhone && <span style={{ fontSize: '0.68rem', color: '#64748B' }}>{cPhone}</span>}
                                         </div>
                                     );
                                 })}
@@ -551,7 +551,7 @@ const SimpleBilling = () => {
 
                     {/* Bill Order Number */}
                     <div>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.74rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.671rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                             <Receipt size={13} style={{ color: '#1B6B3A' }} /> Bill No.
                         </label>
                         <div style={{ display: 'flex', gap: '6px' }}>
@@ -563,10 +563,10 @@ const SimpleBilling = () => {
                                 required
                                 style={{
                                     flex: 1,
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.589rem 0.77rem',
                                     borderRadius: '12px',
                                     border: '1.5px solid #CBD5E1',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     fontWeight: 800,
                                     color: '#166534',
                                     background: '#F0FDF4',
@@ -579,7 +579,7 @@ const SimpleBilling = () => {
                                 onClick={() => setBillingOrder(generateBillNumber())}
                                 title="Generate New Bill Number"
                                 style={{
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.589rem 0.77rem',
                                     borderRadius: '12px',
                                     border: '1px solid #CBD5E1',
                                     background: '#F8FAFC',
@@ -594,7 +594,7 @@ const SimpleBilling = () => {
 
                     {/* Payment Mode Pills */}
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.671rem', fontWeight: 850, color: '#475569', textTransform: 'uppercase', marginBottom: '0.317rem' }}>
                             Payment Method
                         </label>
                         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
@@ -613,9 +613,9 @@ const SimpleBilling = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             gap: '5px',
-                                            padding: '0.6rem 0.5rem',
+                                            padding: '0.544rem 0.453rem',
                                             borderRadius: '10px',
-                                            fontSize: '0.78rem',
+                                            fontSize: '0.707rem',
                                             fontWeight: 800,
                                             border: isSelected ? `2px solid ${mode.color}` : '1px solid #E2E8F0',
                                             background: isSelected ? mode.bg : '#FFFFFF',
@@ -638,19 +638,19 @@ const SimpleBilling = () => {
                     background: '#FFFFFF',
                     borderRadius: '18px',
                     border: '1px solid #E2E8F0',
-                    padding: '1.25rem 1.5rem',
-                    marginBottom: '1.25rem',
+                    padding: '1.133rem 1.359rem',
+                    marginBottom: '1.133rem',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.68rem', flexWrap: 'wrap', gap: '0.453rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <ShoppingBag size={18} style={{ color: '#1B6B3A' }} />
-                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 850, color: '#1E293B' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.906rem', fontWeight: 850, color: '#1E293B' }}>
                                 Quick Add from Existing Products
                             </h3>
                         </div>
                         {catalogProducts.length > 0 && (
-                            <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 700 }}>
+                            <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700 }}>
                                 {catalogProducts.length} items in inventory
                             </span>
                         )}
@@ -671,10 +671,10 @@ const SimpleBilling = () => {
                                 onFocus={() => setIsSearchFocused(true)}
                                 style={{
                                     width: '100%',
-                                    padding: '0.8rem 1rem 0.8rem 2.75rem',
+                                    padding: '0.725rem 0.906rem 0.725rem 2.492rem',
                                     borderRadius: '14px',
                                     border: isSearchFocused ? '2px solid #1B6B3A' : '1.5px solid #E2E8F0',
-                                    fontSize: '0.92rem',
+                                    fontSize: '0.834rem',
                                     fontWeight: 600,
                                     color: '#0F172A',
                                     background: '#F8FAFC',
@@ -728,40 +728,40 @@ const SimpleBilling = () => {
                                                 key={prod.id || idx}
                                                 onClick={() => handleSelectCatalogProduct(prod)}
                                                 style={{
-                                                    padding: '0.75rem 1rem',
+                                                    padding: '0.68rem 0.906rem',
                                                     borderBottom: '1px solid #F1F5F9',
                                                     cursor: 'pointer',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'space-between',
-                                                    gap: '1rem',
+                                                    gap: '0.906rem',
                                                     transition: 'background 0.15s'
                                                 }}
                                                 onMouseOver={(e) => e.currentTarget.style.background = '#F0FDF4'}
                                                 onMouseOut={(e) => e.currentTarget.style.background = '#FFFFFF'}
                                             >
                                                 <div style={{ minWidth: 0 }}>
-                                                    <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                    <div style={{ fontWeight: 800, fontSize: '0.816rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                         <span>{prod.name}</span>
                                                         {prod.category && (
-                                                            <span style={{ fontSize: '0.68rem', background: '#F1F5F9', color: '#64748B', padding: '1px 6px', borderRadius: '4px', fontWeight: 700 }}>
+                                                            <span style={{ fontSize: '0.616rem', background: '#F1F5F9', color: '#64748B', padding: '1px 6px', borderRadius: '4px', fontWeight: 700 }}>
                                                                 {prod.category}
                                                             </span>
                                                         )}
                                                     </div>
                                                     {prod.sku && (
-                                                        <div style={{ fontSize: '0.72rem', color: '#94A3B8', marginTop: '2px' }}>
+                                                        <div style={{ fontSize: '0.652rem', color: '#94A3B8', marginTop: '2px' }}>
                                                             SKU: {prod.sku}
                                                         </div>
                                                     )}
                                                 </div>
 
                                                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                                                    <div style={{ fontWeight: 900, color: '#166534', fontSize: '0.95rem' }}>
+                                                    <div style={{ fontWeight: 900, color: '#166534', fontSize: '0.861rem' }}>
                                                         ₹{pPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                     </div>
                                                     {pStock !== null && (
-                                                        <span style={{ fontSize: '0.7rem', color: '#059669', fontWeight: 750 }}>
+                                                        <span style={{ fontSize: '0.634rem', color: '#059669', fontWeight: 750 }}>
                                                             Stock: {pStock}
                                                         </span>
                                                     )}
@@ -770,8 +770,8 @@ const SimpleBilling = () => {
                                         );
                                     })
                                 ) : (
-                                    <div style={{ padding: '1.25rem', textAlign: 'center', color: '#64748B' }}>
-                                        <p style={{ margin: 0, fontSize: '0.85rem' }}>No catalog product found matching "{productSearch}".</p>
+                                    <div style={{ padding: '1.133rem', textAlign: 'center', color: '#64748B' }}>
+                                        <p style={{ margin: 0, fontSize: '0.77rem' }}>No catalog product found matching "{productSearch}".</p>
                                         <button
                                             type="button"
                                             onClick={() => {
@@ -787,13 +787,13 @@ const SimpleBilling = () => {
                                                 setIsSearchFocused(false);
                                             }}
                                             style={{
-                                                marginTop: '0.5rem',
+                                                marginTop: '0.453rem',
                                                 background: '#166534',
                                                 color: 'white',
                                                 border: 'none',
                                                 padding: '4px 12px',
                                                 borderRadius: '8px',
-                                                fontSize: '0.75rem',
+                                                fontSize: '0.68rem',
                                                 fontWeight: 750,
                                                 cursor: 'pointer'
                                             }}
@@ -808,8 +808,8 @@ const SimpleBilling = () => {
 
                     {/* Quick-Pick Product Chips Carousel */}
                     {quickPickProducts.length > 0 && (
-                        <div style={{ marginTop: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            <span style={{ fontSize: '0.74rem', fontWeight: 850, color: '#64748B', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <div style={{ marginTop: '0.77rem', display: 'flex', alignItems: 'center', gap: '0.453rem', flexWrap: 'wrap' }}>
+                            <span style={{ fontSize: '0.671rem', fontWeight: 850, color: '#64748B', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 <Tag size={12} /> Popular:
                             </span>
                             {quickPickProducts.map((p, i) => {
@@ -827,7 +827,7 @@ const SimpleBilling = () => {
                                             border: '1px solid #BBF7D0',
                                             borderRadius: '999px',
                                             padding: '4px 10px',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: 800,
                                             color: '#166534',
                                             cursor: 'pointer',
@@ -851,14 +851,14 @@ const SimpleBilling = () => {
                     background: '#FFFFFF',
                     borderRadius: '18px',
                     border: '1px solid #E2E8F0',
-                    padding: '1.25rem 1.5rem',
-                    marginBottom: '1.5rem',
+                    padding: '1.133rem 1.359rem',
+                    marginBottom: '1.359rem',
                     boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <Receipt size={17} style={{ color: '#1B6B3A' }} />
-                            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 850, color: '#1E293B' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.906rem', fontWeight: 850, color: '#1E293B' }}>
                                 Items in Bill ({products.length})
                             </h3>
                         </div>
@@ -873,9 +873,9 @@ const SimpleBilling = () => {
                                 background: '#F8FAFC',
                                 color: '#1B6B3A',
                                 border: '1px solid #CBD5E1',
-                                padding: '0.45rem 0.85rem',
+                                padding: '0.408rem 0.77rem',
                                 borderRadius: '10px',
-                                fontSize: '0.78rem',
+                                fontSize: '0.707rem',
                                 fontWeight: 800,
                                 cursor: 'pointer',
                                 transition: 'all 0.15s'
@@ -888,15 +888,15 @@ const SimpleBilling = () => {
                     </div>
 
                     {/* Table View */}
-                    <div style={{ overflowX: 'auto' }}>
-                        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 0.5rem', textAlign: 'left' }}>
+                    <div className="cliks-table-scroll">
+                        <table style={{ width: '100%', minWidth: '580px', borderCollapse: 'separate', borderSpacing: '0 0.453rem', textAlign: 'left' }}>
                             <thead>
-                                <tr style={{ color: '#64748B', fontSize: '0.72rem', fontWeight: 850, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                                    <th style={{ padding: '0.4rem 0.75rem', width: '42%' }}>Item Description</th>
-                                    <th style={{ padding: '0.4rem 0.75rem', width: '20%' }}>Rate (₹)</th>
-                                    <th style={{ padding: '0.4rem 0.75rem', width: '18%', textAlign: 'center' }}>Quantity</th>
-                                    <th style={{ padding: '0.4rem 0.75rem', width: '15%', textAlign: 'right' }}>Total (₹)</th>
-                                    <th style={{ padding: '0.4rem 0.75rem', width: '5%', textAlign: 'center' }}></th>
+                                <tr style={{ color: '#64748B', fontSize: '0.652rem', fontWeight: 850, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                    <th style={{ padding: '0.363rem 0.68rem', width: '42%' }}>Item Description</th>
+                                    <th style={{ padding: '0.363rem 0.68rem', width: '20%' }}>Rate (₹)</th>
+                                    <th style={{ padding: '0.363rem 0.68rem', width: '18%', textAlign: 'center' }}>Quantity</th>
+                                    <th style={{ padding: '0.363rem 0.68rem', width: '15%', textAlign: 'right' }}>Total (₹)</th>
+                                    <th style={{ padding: '0.363rem 0.68rem', width: '5%', textAlign: 'center' }}></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -914,7 +914,7 @@ const SimpleBilling = () => {
                                             }}
                                         >
                                             {/* Item Name */}
-                                            <td style={{ padding: '0.65rem 0.75rem', borderTopLeftRadius: '12px', borderBottomLeftRadius: '12px' }}>
+                                            <td style={{ padding: '0.589rem 0.68rem', borderTopLeftRadius: '12px', borderBottomLeftRadius: '12px' }}>
                                                 <input
                                                     type="text"
                                                     placeholder="Product Name (e.g. Wireless Mouse)"
@@ -923,10 +923,10 @@ const SimpleBilling = () => {
                                                     required
                                                     style={{
                                                         width: '100%',
-                                                        padding: '0.55rem 0.75rem',
+                                                        padding: '0.498rem 0.68rem',
                                                         borderRadius: '10px',
                                                         border: '1px solid #CBD5E1',
-                                                        fontSize: '0.88rem',
+                                                        fontSize: '0.797rem',
                                                         fontWeight: 750,
                                                         color: '#0F172A',
                                                         background: '#FFFFFF',
@@ -937,9 +937,9 @@ const SimpleBilling = () => {
                                             </td>
 
                                             {/* Rate */}
-                                            <td style={{ padding: '0.65rem 0.75rem' }}>
+                                            <td style={{ padding: '0.589rem 0.68rem' }}>
                                                 <div style={{ position: 'relative' }}>
-                                                    <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8', fontWeight: 800, fontSize: '0.85rem' }}>₹</span>
+                                                    <span style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8', fontWeight: 800, fontSize: '0.77rem' }}>₹</span>
                                                     <input
                                                         type="number"
                                                         min="0"
@@ -950,10 +950,10 @@ const SimpleBilling = () => {
                                                         required
                                                         style={{
                                                             width: '100%',
-                                                            padding: '0.55rem 0.75rem 0.55rem 1.6rem',
+                                                            padding: '0.498rem 0.68rem 0.498rem 1.45rem',
                                                             borderRadius: '10px',
                                                             border: '1px solid #CBD5E1',
-                                                            fontSize: '0.88rem',
+                                                            fontSize: '0.797rem',
                                                             fontWeight: 750,
                                                             color: '#0F172A',
                                                             background: '#FFFFFF',
@@ -965,7 +965,7 @@ const SimpleBilling = () => {
                                             </td>
 
                                             {/* Quantity with Smooth Stepper Buttons */}
-                                            <td style={{ padding: '0.65rem 0.75rem' }}>
+                                            <td style={{ padding: '0.589rem 0.68rem' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px' }}>
                                                     <button
                                                         type="button"
@@ -997,10 +997,10 @@ const SimpleBilling = () => {
                                                         style={{
                                                             width: '50px',
                                                             textAlign: 'center',
-                                                            padding: '0.5rem 0.25rem',
+                                                            padding: '0.453rem 0.227rem',
                                                             borderRadius: '8px',
                                                             border: '1px solid #CBD5E1',
-                                                            fontSize: '0.88rem',
+                                                            fontSize: '0.797rem',
                                                             fontWeight: 850,
                                                             color: '#0F172A',
                                                             background: '#FFFFFF',
@@ -1031,12 +1031,12 @@ const SimpleBilling = () => {
                                             </td>
 
                                             {/* Automatic Line Total */}
-                                            <td style={{ padding: '0.65rem 0.75rem', textAlign: 'right', fontWeight: 900, color: '#166534', fontSize: '0.95rem' }}>
+                                            <td style={{ padding: '0.589rem 0.68rem', textAlign: 'right', fontWeight: 900, color: '#166534', fontSize: '0.861rem' }}>
                                                 ₹{itemTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                             </td>
 
                                             {/* Delete Row Button */}
-                                            <td style={{ padding: '0.65rem 0.75rem', borderTopRightRadius: '12px', borderBottomRightRadius: '12px', textAlign: 'center' }}>
+                                            <td style={{ padding: '0.589rem 0.68rem', borderTopRightRadius: '12px', borderBottomRightRadius: '12px', textAlign: 'center' }}>
                                                 <button
                                                     type="button"
                                                     onClick={() => handleRemoveProduct(index)}
@@ -1072,45 +1072,45 @@ const SimpleBilling = () => {
                 <div style={{
                     background: 'linear-gradient(135deg, #064E3B 0%, #166534 100%)',
                     borderRadius: '20px',
-                    padding: '1.25rem 1.75rem',
+                    padding: '1.133rem 1.586rem',
                     color: '#FFFFFF',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
-                    gap: '1.25rem',
+                    gap: '1.133rem',
                     boxShadow: '0 10px 25px -5px rgba(22, 101, 52, 0.4)'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2.5rem', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '2.266rem', flexWrap: 'wrap' }}>
                         <div>
-                            <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
+                            <span style={{ display: 'block', fontSize: '0.652rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
                                 Total Items
                             </span>
-                            <span style={{ fontSize: '1.35rem', fontWeight: 900 }}>
-                                {totalQuantity} <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#D1FAE5' }}>units ({products.length} products)</span>
+                            <span style={{ fontSize: '1.223rem', fontWeight: 900 }}>
+                                {totalQuantity} <span style={{ fontSize: '0.77rem', fontWeight: 600, color: '#D1FAE5' }}>units ({products.length} products)</span>
                             </span>
                         </div>
 
                         <div>
-                            <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
+                            <span style={{ display: 'block', fontSize: '0.652rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
                                 Payment By
                             </span>
-                            <span style={{ fontSize: '1.15rem', fontWeight: 850, color: '#FFFFFF' }}>
+                            <span style={{ fontSize: '1.042rem', fontWeight: 850, color: '#FFFFFF' }}>
                                 {paymentMode}
                             </span>
                         </div>
 
                         <div>
-                            <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
+                            <span style={{ display: 'block', fontSize: '0.652rem', fontWeight: 800, textTransform: 'uppercase', color: '#A7F3D0', letterSpacing: '0.04em' }}>
                                 Grand Total
                             </span>
-                            <span style={{ fontSize: '1.85rem', fontWeight: 900, color: '#FFFFFF' }}>
+                            <span style={{ fontSize: '1.677rem', fontWeight: 900, color: '#FFFFFF' }}>
                                 ₹{grandTotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center' }}>
                         <button
                             id="btn-submit-bill"
                             type="submit"
@@ -1121,9 +1121,9 @@ const SimpleBilling = () => {
                                 background: '#FFFFFF',
                                 color: '#166534',
                                 border: 'none',
-                                padding: '0.85rem 1.75rem',
+                                padding: '0.77rem 1.586rem',
                                 borderRadius: '14px',
-                                fontSize: '0.98rem',
+                                fontSize: '0.888rem',
                                 fontWeight: 900,
                                 cursor: 'pointer',
                                 boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
@@ -1150,7 +1150,7 @@ const SimpleBilling = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     zIndex: 1000,
-                    padding: '1rem'
+                    padding: '0.906rem'
                 }}>
                     <div style={{
                         background: '#FFFFFF',
@@ -1162,7 +1162,7 @@ const SimpleBilling = () => {
                     }}>
                         {/* Receipt Top Bar */}
                         <div style={{
-                            padding: '1rem 1.25rem',
+                            padding: '0.906rem 1.133rem',
                             background: '#F8FAFC',
                             borderBottom: '1px solid #E2E8F0',
                             display: 'flex',
@@ -1171,7 +1171,7 @@ const SimpleBilling = () => {
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <CheckCircle2 size={18} style={{ color: '#16A34A' }} />
-                                <span style={{ fontWeight: 850, fontSize: '0.9rem', color: '#1E293B' }}>Bill Generated Successfully</span>
+                                <span style={{ fontWeight: 850, fontSize: '0.816rem', color: '#1E293B' }}>Bill Generated Successfully</span>
                             </div>
                             <button
                                 type="button"
@@ -1183,20 +1183,20 @@ const SimpleBilling = () => {
                         </div>
 
                         {/* Printable Thermal Receipt Layout */}
-                        <div id="printable-bill-receipt" style={{ padding: '1.5rem', fontFamily: "'Courier New', Courier, monospace" }}>
-                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                <h3 style={{ margin: '0 0 4px 0', fontSize: '1.2rem', fontWeight: 900, color: '#0F172A', fontFamily: 'sans-serif' }}>
+                        <div id="printable-bill-receipt" style={{ padding: '1.359rem', fontFamily: "'Courier New', Courier, monospace" }}>
+                            <div style={{ textAlign: 'center', marginBottom: '0.906rem' }}>
+                                <h3 style={{ margin: '0 0 4px 0', fontSize: '1.087rem', fontWeight: 900, color: '#0F172A', fontFamily: 'sans-serif' }}>
                                     TAX INVOICE / CASH BILL
                                 </h3>
-                                <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>
+                                <p style={{ margin: 0, fontSize: '0.707rem', color: '#64748B' }}>
                                     Bill #{submittedRecord.id}
                                 </p>
-                                <p style={{ margin: '2px 0 0 0', fontSize: '0.74rem', color: '#64748B' }}>
+                                <p style={{ margin: '2px 0 0 0', fontSize: '0.671rem', color: '#64748B' }}>
                                     {submittedRecord.formattedDate}
                                 </p>
                             </div>
 
-                            <div style={{ borderTop: '1px dashed #CBD5E1', borderBottom: '1px dashed #CBD5E1', padding: '0.6rem 0', margin: '0.75rem 0', fontSize: '0.78rem' }}>
+                            <div style={{ borderTop: '1px dashed #CBD5E1', borderBottom: '1px dashed #CBD5E1', padding: '0.544rem 0', margin: '0.68rem 0', fontSize: '0.707rem' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <span>Customer:</span>
                                     <strong>{submittedRecord.customerName}</strong>
@@ -1208,7 +1208,7 @@ const SimpleBilling = () => {
                             </div>
 
                             {/* Items List */}
-                            <table style={{ width: '100%', fontSize: '0.78rem', margin: '0.75rem 0', borderCollapse: 'collapse' }}>
+                            <table style={{ width: '100%', fontSize: '0.707rem', margin: '0.68rem 0', borderCollapse: 'collapse' }}>
                                 <thead>
                                     <tr style={{ borderBottom: '1px solid #E2E8F0', textAlign: 'left', color: '#64748B' }}>
                                         <th style={{ padding: '4px 0' }}>Item</th>
@@ -1220,39 +1220,39 @@ const SimpleBilling = () => {
                                 <tbody>
                                     {submittedRecord.products.map((item, idx) => (
                                         <tr key={idx} style={{ borderBottom: '1px dotted #F1F5F9' }}>
-                                            <td style={{ padding: '4px 0', fontWeight: 600 }}>{item.name}</td>
-                                            <td style={{ padding: '4px 0', textAlign: 'center' }}>{item.quantity}</td>
-                                            <td style={{ padding: '4px 0', textAlign: 'right' }}>₹{item.rate}</td>
-                                            <td style={{ padding: '4px 0', textAlign: 'right', fontWeight: 700 }}>₹{item.total}</td>
+                                            <td style={{ padding: '4px 6px 4px 0', fontWeight: 600 }}>{item.name}</td>
+                                            <td style={{ padding: '4px 4px', textAlign: 'center', whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                                            <td style={{ padding: '4px 4px', textAlign: 'right', whiteSpace: 'nowrap' }}>₹{item.rate}</td>
+                                            <td style={{ padding: '4px 0 4px 4px', textAlign: 'right', fontWeight: 700, whiteSpace: 'nowrap' }}>₹{item.total}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
 
                             {/* Total Breakdown */}
-                            <div style={{ borderTop: '1.5px dashed #0F172A', paddingTop: '0.6rem', marginTop: '0.6rem' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                            <div style={{ borderTop: '1.5px dashed #0F172A', paddingTop: '0.544rem', marginTop: '0.544rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.77rem' }}>
                                     <span>Total Items:</span>
                                     <strong>{submittedRecord.totalQuantity}</strong>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.15rem', fontWeight: 900, marginTop: '4px', color: '#0F172A' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.042rem', fontWeight: 900, marginTop: '4px', color: '#0F172A' }}>
                                     <span>GRAND TOTAL:</span>
                                     <span>₹{submittedRecord.grandTotal.toFixed(2)}</span>
                                 </div>
                             </div>
 
-                            <p style={{ textAlign: 'center', fontSize: '0.72rem', color: '#94A3B8', marginTop: '1.25rem', marginBottom: 0 }}>
+                            <p style={{ textAlign: 'center', fontSize: '0.652rem', color: '#94A3B8', marginTop: '1.133rem', marginBottom: 0 }}>
                                 Thank you for your business!
                             </p>
                         </div>
 
                         {/* Actions */}
                         <div style={{
-                            padding: '1rem 1.25rem',
+                            padding: '0.906rem 1.133rem',
                             background: '#F8FAFC',
                             borderTop: '1px solid #E2E8F0',
                             display: 'flex',
-                            gap: '0.65rem'
+                            gap: '0.589rem'
                         }}>
                             <button
                                 type="button"
@@ -1266,10 +1266,10 @@ const SimpleBilling = () => {
                                     background: '#166534',
                                     color: '#FFFFFF',
                                     border: 'none',
-                                    padding: '0.65rem',
+                                    padding: '0.589rem',
                                     borderRadius: '10px',
                                     fontWeight: 800,
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     cursor: 'pointer'
                                 }}
                             >
@@ -1290,10 +1290,10 @@ const SimpleBilling = () => {
                                     background: '#FFFFFF',
                                     color: '#475569',
                                     border: '1px solid #CBD5E1',
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.589rem 0.77rem',
                                     borderRadius: '10px',
                                     fontWeight: 750,
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     cursor: 'pointer'
                                 }}
                             >
@@ -1311,10 +1311,10 @@ const SimpleBilling = () => {
                                     background: '#E2E8F0',
                                     color: '#1E293B',
                                     border: 'none',
-                                    padding: '0.65rem 0.85rem',
+                                    padding: '0.589rem 0.77rem',
                                     borderRadius: '10px',
                                     fontWeight: 750,
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     cursor: 'pointer'
                                 }}
                             >

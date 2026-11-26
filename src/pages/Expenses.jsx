@@ -97,15 +97,15 @@ const Expenses = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.363rem' }}>
                         <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'linear-gradient(135deg,#DC2626 0%,#991B1B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                             <TrendingDown size={20} />
                         </div>
-                        <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 900, color: 'var(--text-main, #0F172A)', lineHeight: 1.1 }}>Expenses</h1>
+                        <h1 style={{ margin: 0, fontSize: '1.586rem', fontWeight: 900, color: 'var(--text-main, #0F172A)', lineHeight: 1.1 }}>Expenses</h1>
                     </div>
-                    <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.9rem', fontWeight: 500 }}>Monitor and control your spending habits</p>
+                    <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.816rem', fontWeight: 500 }}>Monitor and control your spending habits</p>
                 </div>
-                <button className="btn-primary">
+                <button className="btn-primary" data-tour="expense-add-button">
                     <Plus size={18} />
                     <span>Add Expense</span>
                 </button>
@@ -174,7 +174,7 @@ const Expenses = () => {
                         <tbody>
                             {expenseData.length === 0 ? (
                                 <tr>
-                                    <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                                    <td colSpan="6" style={{ textAlign: 'center', padding: '2.719rem', color: '#94a3b8' }}>
                                         No expenses found.
                                     </td>
                                 </tr>
@@ -232,21 +232,21 @@ const Expenses = () => {
                 .expense-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .expense-stat-card {
                     background: white;
-                    padding: 1.5rem;
+                    padding: 1.359rem;
                     border-radius: 16px;
                     border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; color: var(--text-muted); font-weight: 500; }
                 
                 .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
                 .icon-red { background: #FEE2E2; color: #EF4444; }
@@ -256,21 +256,21 @@ const Expenses = () => {
                 /* Reuse search/filter styles from Income page implicitly via copy-paste consistency or global classes if promoted */
                 .search-wrapper { position: relative; flex: 1; max-width: 400px; }
                 .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-                .search-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.5rem; border: 1px solid var(--border-color); border-radius: 10px; outline: none; font-size: 0.9rem; background: white; transition: border-color 0.2s; }
+                .search-input { width: 100%; padding: 0.68rem 0.906rem 0.68rem 2.266rem; border: 1px solid var(--border-color); border-radius: 10px; outline: none; font-size: 0.816rem; background: white; transition: border-color 0.2s; }
                 .search-input:focus { border-color: var(--primary); }
 
-                .filter-btn { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; background: white; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.9rem; font-weight: 500; color: var(--text-main); transition: all 0.2s; }
+                .filter-btn { display: flex; align-items: center; gap: 0.453rem; padding: 0.68rem 0.906rem; background: white; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.816rem; font-weight: 500; color: var(--text-main); transition: all 0.2s; }
                 .filter-btn:hover { background: #F8FAFC; border-color: #CBD5E1; }
 
-                .expense-list-container { background: white; border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+                .expense-list-container { background: white; border-radius: 16px; border: 1px solid var(--border-color); overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
                 .expense-table { width: 100%; border-collapse: collapse; }
-                .expense-table th { text-align: left; padding: 1rem 1.5rem; background: #F8FAFC; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-                .expense-table td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-main); }
+                .expense-table th { text-align: left; padding: 0.625rem 0.906rem; background: #F8FAFC; border-bottom: 1px solid var(--border-color); color: var(--text-muted); font-weight: 700; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+                .expense-table td { padding: 0.625rem 0.906rem; border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-main); font-size: 0.8rem; }
                 .expense-table tr:last-child td { border-bottom: none; }
                 .expense-table tr:hover td { background: #F8FAFC; }
 
-                .table-icon-bg { width: 36px; height: 36px; background: #F0FDF4; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-                .category-pill { padding: 0.25rem 0.75rem; background: #FEE2E2; border-radius: 6px; font-size: 0.85rem; color: #000000; fontWeight: 700; }
+                .table-icon-bg { width: 34px; height: 34px; background: #F0FDF4; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); flex-shrink: 0; }
+                .category-pill { display: inline-flex; align-items: center; white-space: nowrap; padding: 0.227rem 0.68rem; background: #FEE2E2; border-radius: 6px; font-size: 0.725rem; color: #000000; font-weight: 700; }
                 
                 .text-danger { color: #EF4444; }
                 .text-main { color: var(--text-main); }
@@ -281,7 +281,7 @@ const Expenses = () => {
                 
                 @media (max-width: 768px) {
                     .expense-table thead { display: none; }
-                    .expense-table tr { display: flex; flex-direction: column; padding: 1rem; border-bottom: 1px solid var(--border-color); gap: 0.5rem; }
+                    .expense-table tr { display: flex; flex-direction: column; padding: 0.906rem; border-bottom: 1px solid var(--border-color); gap: 0.453rem; }
                     .expense-table td { padding: 0; border: none; }
                 }
             `}</style>

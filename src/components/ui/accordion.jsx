@@ -59,12 +59,12 @@ const AccordionTrigger = ({ children, isOpen, setIsOpen, className = '' }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 width: '100%',
-                padding: '1rem 0',
+                padding: '0.906rem 0',
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 textAlign: 'left',
-                fontSize: '1rem',
+                fontSize: '0.906rem',
                 fontWeight: 600,
                 color: '#1E293B',
             }}
@@ -99,10 +99,10 @@ const AccordionContent = ({ children, isOpen, className = '' }) => {
                     <div
                         className={`accordion-content ${className}`}
                         style={{
-                            paddingBottom: '1rem',
-                            paddingTop: '0.25rem',
+                            paddingBottom: '0.906rem',
+                            paddingTop: '0.227rem',
                             color: '#64748B',
-                            fontSize: '0.9rem',
+                            fontSize: '0.816rem',
                             lineHeight: 1.65,
                         }}
                     >

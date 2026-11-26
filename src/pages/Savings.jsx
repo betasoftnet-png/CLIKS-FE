@@ -162,18 +162,18 @@ const Savings = () => {
                 .savings-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .savings-stat-card {
-                    background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);
+                    background: white; padding: 1.359rem; border-radius: 16px; border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; font-weight: 500; color: var(--text-muted); }
                 
                 .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
                 .icon-blue { background: #DBEAFE; color: #1B6B3A; }
@@ -184,20 +184,20 @@ const Savings = () => {
                 .goals-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-                    gap: 1.5rem;
+                    gap: 1.359rem;
                 }
 
                 .goal-card {
                     background: white; border-radius: 16px; border: 1px solid var(--border-color);
-                    padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s;
-                    display: flex; flex-direction: column; gap: 1rem;
+                    padding: 1.359rem; transition: transform 0.2s, box-shadow 0.2s;
+                    display: flex; flex-direction: column; gap: 0.906rem;
                 }
                 .goal-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
                 .goal-header { display: flex; justify-content: space-between; align-items: flex-start; }
                 .goal-icon-box { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
                 
-                .priority-badge { font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 99px; border: 1px solid; font-weight: 500; }
+                .priority-badge { font-size: 0.68rem; padding: 0.227rem 0.544rem; border-radius: 99px; border: 1px solid; font-weight: 500; }
                 .priority-High { background: #FEE2E2; color: #DC2626; border-color: #FECACA; }
                 .priority-Medium { background: #FEF3C7; color: #D97706; border-color: #FDE68A; }
                 .priority-Low { background: #F0FDF4; color: #64748B; border-color: #E2E8F0; }
@@ -207,18 +207,18 @@ const Savings = () => {
                 .bg-green { background: #22C55E; }
                 .bg-orange { background: #F97316; }
 
-                .goal-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.25rem; }
-                .goal-dates { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); }
+                .goal-title { font-size: 0.997rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.227rem; }
+                .goal-dates { display: flex; align-items: center; gap: 0.453rem; font-size: 0.77rem; color: var(--text-muted); }
 
                 /* Progress Section */
-                .progress-info { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 0.5rem; }
-                .current-amt { font-size: 1.25rem; font-weight: 700; color: var(--text-main); }
-                .target-amt { font-size: 0.9rem; color: var(--text-muted); }
+                .progress-info { display: flex; align-items: baseline; gap: 0.227rem; margin-bottom: 0.453rem; }
+                .current-amt { font-size: 1.133rem; font-weight: 700; color: var(--text-main); }
+                .target-amt { font-size: 0.816rem; color: var(--text-muted); }
 
-                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 0.5rem; }
+                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 0.453rem; }
                 .progress-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease-out; }
                 
-                .pct-text { text-align: right; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+                .pct-text { text-align: right; font-size: 0.77rem; font-weight: 600; color: var(--text-muted); }
             `}</style>
         </div>
     );

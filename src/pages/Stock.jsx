@@ -308,28 +308,29 @@ const Stock = () => {
     };
 
     return (
-        <div style={{ padding: '1.5rem 2rem', background: '#F8FAFC', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.359rem 1.812rem', background: '#F8FAFC', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
             {/* Top Navigation / Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <Box size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Inventory Suite</h1>
+                        <h1 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Inventory Suite</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1.05rem', fontWeight: '500' }}>Precision stock management for enterprise growth.</p>
+                    <p style={{ color: '#475569', fontSize: '0.797rem', fontWeight: '500' }}>Precision stock management for enterprise growth.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button onClick={handleExportReport} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'white', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
+                <div style={{ display: 'flex', gap: '0.906rem' }}>
+                    <button data-tour="stock-export-report" onClick={handleExportReport} style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', background: 'white', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
                         <Download size={18} />
                         Export Report
                     </button>
                     <button 
+                        data-tour="stock-add-product"
                         onClick={() => setIsModalOpen(true)}
                         style={{ 
-                            display: 'flex', alignItems: 'center', gap: '0.6rem', 
-                            padding: '0.85rem 1.75rem', borderRadius: '14px', 
+                            display: 'flex', alignItems: 'center', gap: '0.544rem', 
+                            padding: '0.544rem 1.042rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', 
                             background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
                             fontWeight: '700', cursor: 'pointer',
                             boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)',
@@ -345,86 +346,87 @@ const Stock = () => {
             </div>
 
             {/* Premium Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.359rem' }}>
                 {/* Total Inventory Value */}
-                <div style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1B6B3A' }}>
+                <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
+                        <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1B6B3A' }}>
                             <TrendingUp size={24} />
                         </div>
-                        <div style={{ background: '#F8FAFC', padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
+                        <div style={{ background: '#F8FAFC', padding: '0.363rem 0.544rem', borderRadius: '8px', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
                     </div>
-                    <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginBottom: '0.25rem' }}>Total Inventory Value</p>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{formatCurrency(totalValue)}</h3>
+                    <p style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}>Total Inventory Value</p>
+                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{formatCurrency(totalValue)}</h3>
                 </div>
 
                 {/* Active Items */}
-                <div style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#064E3B' }}>
+                <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
+                        <div data-tour="stock-active-items-icon" style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#ECFDF5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#064E3B' }}>
                             <Layers size={24} />
                         </div>
-                        <div style={{ background: '#F8FAFC', padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
+                        <div style={{ background: '#F8FAFC', padding: '0.363rem 0.544rem', borderRadius: '8px', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
                     </div>
-                    <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginBottom: '0.25rem' }}>Active Items</p>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{items.filter(item => Number(item.quantity) > 0).length}</h3>
+                    <p data-tour="stock-active-items-heading" style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}>Active Items</p>
+                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{items.filter(item => Number(item.quantity) > 0).length}</h3>
                 </div>
 
                 {/* Total Units */}
-                <div style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#F0FDFA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0D9488' }}>
+                <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
+                        <div data-tour="stock-total-units-icon" style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#F0FDFA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0D9488' }}>
                             <Package size={24} />
                         </div>
-                        <div style={{ background: '#F8FAFC', padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
+                        <div style={{ background: '#F8FAFC', padding: '0.363rem 0.544rem', borderRadius: '8px', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
                     </div>
-                    <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginBottom: '0.25rem' }}>Total Units</p>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{totalUnits}</h3>
+                    <p data-tour="stock-total-units-heading" style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}>Total Units</p>
+                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{totalUnits}</h3>
                 </div>
 
                 {/* Split fourth slot into two side-by-side square cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
                     {/* Low Stock Alerts */}
-                    <div style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
+                    <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
+                            <div data-tour="stock-low-alerts-icon" style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
                                 <AlertTriangle size={24} />
                             </div>
-                            <div style={{ background: '#F8FAFC', padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
+                            <div style={{ background: '#F8FAFC', padding: '0.363rem 0.544rem', borderRadius: '8px', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
                         </div>
-                        <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginBottom: '0.25rem' }}>Low Stock Alerts</p>
-                        <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{lowStockCount}</h3>
+                        <p data-tour="stock-low-alerts-heading" style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}>Low Stock Alerts</p>
+                        <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{lowStockCount}</h3>
                     </div>
 
                     {/* Out of Stock */}
-                    <div style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
+                    <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
+                            <div data-tour="stock-out-of-stock-icon" style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
                                 <AlertCircle size={24} />
                             </div>
-                            <div style={{ background: '#F8FAFC', padding: '0.4rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
+                            <div style={{ background: '#F8FAFC', padding: '0.363rem 0.544rem', borderRadius: '8px', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8' }}>+2.4%</div>
                         </div>
-                        <p style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginBottom: '0.25rem' }}>Out of Stock</p>
-                        <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{outOfStockCount}</h3>
+                        <p data-tour="stock-out-of-stock-heading" style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}>Out of Stock</p>
+                        <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', letterSpacing: '-0.02em' }}>{outOfStockCount}</h3>
                     </div>
                 </div>
             </div>
 
             {/* Main Content Area */}
-            <div style={{ background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
                 {/* Custom Toolbar */}
-                <div style={{ padding: '1rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
-                    <div style={{ position: 'relative', width: '400px' }}>
+                <div style={{ padding: '0.68rem 0.906rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                    <div style={{ position: 'relative', width: '320px', maxWidth: '100%' }}>
                         <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                         <input 
                             type="text" 
+                            data-tour="stock-search"
                             placeholder="Search by product name or category..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{ 
-                                width: '100%', padding: '0.85rem 1rem 0.85rem 3.25rem', borderRadius: '16px', 
+                                width: '100%', padding: '0.544rem 0.77rem 0.544rem 2.356rem', borderRadius: '10px', 
                                 border: '1px solid #E2E8F0', outline: 'none', background: 'white',
-                                fontSize: '0.95rem', fontWeight: '500', transition: 'all 0.2s'
+                                fontSize: '0.861rem', fontWeight: '500', transition: 'all 0.2s'
                             }}
                             onFocus={(e) => {
                                 e.target.style.borderColor = '#1B6B3A';
@@ -436,11 +438,12 @@ const Stock = () => {
                             }}
                         />
                     </div>
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center' }}>
                         <select 
+                            data-tour="stock-category-filter"
                             value={categoryFilter} 
                             onChange={(e) => setCategoryFilter(e.target.value)}
-                            style={{ padding: '0.5rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer', height: '44px' }}
+                            style={{ padding: '0.453rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer', height: '44px' }}
                         >
                             <option value="All">All Categories</option>
                             {uniqueCategories.map(c => (
@@ -449,9 +452,10 @@ const Stock = () => {
                         </select>
 
                         <select 
+                            data-tour="stock-status-filter"
                             value={stockStatusFilter} 
                             onChange={(e) => setStockStatusFilter(e.target.value)}
-                            style={{ padding: '0.5rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer', height: '44px' }}
+                            style={{ padding: '0.453rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer', height: '44px' }}
                         >
                             <option value="All">All Statuses</option>
                             <option value="In Stock">In Stock</option>
@@ -461,37 +465,39 @@ const Stock = () => {
 
                         <div style={{ display: 'flex', background: '#F1F5F9', padding: '4px', borderRadius: '14px', height: '44px', boxSizing: 'border-box', alignItems: 'center' }}>
                             <button 
+                                data-tour="stock-all-items-filter"
                                 onClick={() => setFilterStatus('all')}
-                                style={{ padding: '0.5rem 1.25rem', borderRadius: '10px', border: 'none', background: filterStatus === 'all' ? 'white' : 'transparent', color: filterStatus === 'all' ? '#064E3B' : '#64748B', fontWeight: '700', fontSize: '0.85rem', boxShadow: filterStatus === 'all' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none', cursor: 'pointer', height: '100%' }}
+                                style={{ padding: '0.453rem 1.133rem', borderRadius: '10px', border: 'none', background: filterStatus === 'all' ? 'white' : 'transparent', color: filterStatus === 'all' ? '#064E3B' : '#64748B', fontWeight: '700', fontSize: '0.77rem', boxShadow: filterStatus === 'all' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none', cursor: 'pointer', height: '100%' }}
                             >All Stock</button>
                             <button 
+                                data-tour="stock-low-items-filter"
                                 onClick={() => setFilterStatus('low')}
-                                style={{ padding: '0.5rem 1.25rem', borderRadius: '10px', border: 'none', background: filterStatus === 'low' ? 'white' : 'transparent', color: filterStatus === 'low' ? '#064E3B' : '#64748B', fontWeight: '700', fontSize: '0.85rem', boxShadow: filterStatus === 'low' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none', cursor: 'pointer', height: '100%' }}
+                                style={{ padding: '0.453rem 1.133rem', borderRadius: '10px', border: 'none', background: filterStatus === 'low' ? 'white' : 'transparent', color: filterStatus === 'low' ? '#064E3B' : '#64748B', fontWeight: '700', fontSize: '0.77rem', boxShadow: filterStatus === 'low' ? '0 2px 4px rgba(0,0,0,0.05)' : 'none', cursor: 'pointer', height: '100%' }}
                             >Low Stock</button>
                         </div>
                     </div>
                 </div>
 
                 {/* Table Container */}
-                <div style={{ overflowX: 'auto' }}>
+                <div className="cliks-table-scroll">
                     {isLoading ? (
-                        <div style={{ padding: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+                        <div style={{ padding: '3.625rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.359rem' }}>
                             <Loader2 className="animate-spin" size={40} color="#1B6B3A" />
                             <p style={{ color: '#64748B', fontWeight: '600' }}>Synchronizing inventory data...</p>
                         </div>
                     ) : (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead 
                                 columns={[
                                     { key: 'name', label: 'Product Details', placeholder: 'Product...' },
                                     { key: 'category', label: 'Category', placeholder: 'Category...' },
                                     { key: 'quantity', label: 'Stock Level', placeholder: 'Stock...' },
-                                    { key: 'unit_price', label: 'Unit Price', placeholder: 'Price...' },
-                                    { key: 'status', label: 'Status', placeholder: 'Status...' },
+                                    { key: 'unit_price', label: 'Unit Price', placeholder: 'Price...', align: 'right' },
+                                    { key: 'status', label: 'Status', placeholder: 'Status...', align: 'center' },
                                     { key: '_actions', label: 'Actions', noFilter: true, align: 'right' }
                                 ]} 
                                 onFilterChange={setColFilters} 
-                                thStyle={{ background: '#F8FAFC', padding: '1rem 1.5rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                                thStyle={{ background: '#F8FAFC', padding: '0.56rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em' }}
                             />
                             <tbody>
                                 {filteredItems.map((item) => {
@@ -501,51 +507,51 @@ const Stock = () => {
 
                                     return (
                                         <tr key={item.id} style={{ borderBottom: '1px solid #F1F5F9', transition: 'all 0.2s' }} className="inventory-row">
-                                            <td style={{ padding: '1rem 1.5rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: '#F0FDF4', border: '1px solid #DCF2E4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1B6B3A' }}>
-                                                        <Package size={20} />
+                                            <td style={{ padding: '0.589rem 0.78rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+                                                    <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#F0FDF4', border: '1px solid #DCF2E4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1B6B3A', flexShrink: 0 }}>
+                                                        <Package size={18} />
                                                     </div>
-                                                    <div>
-                                                        <p style={{ fontWeight: '750', color: '#1E293B', fontSize: '0.95rem', marginBottom: '0.1rem' }}>{item.name}</p>
-                                                        {item.sub_name && <p style={{ fontSize: '0.75rem', fontWeight: '600', color: '#64748B' }}>{item.sub_name}</p>}
+                                                    <div style={{ minWidth: 0, maxWidth: '210px' }}>
+                                                        <p style={{ fontWeight: '750', color: '#1E293B', fontSize: '0.84rem', marginBottom: '0.091rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.name}>{item.name}</p>
+                                                        {item.sub_name && <p style={{ fontSize: '0.68rem', fontWeight: '600', color: '#64748B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={item.sub_name}>{item.sub_name}</p>}
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1rem 1.5rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1B6B3A' }}></div>
-                                                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#475569' }}>{item.category}</span>
+                                            <td style={{ padding: '0.589rem 0.78rem', maxWidth: '160px' }} title={item.category}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                                                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#1B6B3A', flexShrink: 0 }}></div>
+                                                    <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#475569', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.category}</span>
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1rem 1.5rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.4rem' }}>
-                                                    <span style={{ fontSize: '1.1rem', fontWeight: '850', color: isLowStock ? '#EF4444' : '#1E293B' }}>{item.quantity}</span>
-                                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#94A3B8', marginBottom: '2px' }}>{item.unit || 'pcs'}</span>
+                                            <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.363rem' }}>
+                                                    <span style={{ fontSize: '0.95rem', fontWeight: '850', color: isLowStock ? '#EF4444' : '#1E293B' }}>{item.quantity}</span>
+                                                    <span style={{ fontSize: '0.74rem', fontWeight: '600', color: '#94A3B8', marginBottom: '2px' }}>{item.unit || 'pcs'}</span>
                                                 </div>
                                                 {isLowStock && (
-                                                    <div style={{ marginTop: '0.4rem', fontSize: '0.7rem', fontWeight: '800', color: '#EF4444', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                    <div style={{ marginTop: '0.25rem', fontSize: '0.634rem', fontWeight: '800', color: '#EF4444', display: 'flex', alignItems: 'center', gap: '0.227rem', whiteSpace: 'nowrap' }}>
                                                         <AlertTriangle size={12} /> CRITICAL LEVEL
                                                     </div>
                                                 )}
                                             </td>
-                                            <td style={{ padding: '1rem 1.5rem' }}>
-                                                <span style={{ fontSize: '1rem', fontWeight: '800', color: '#064E3B' }}>{formatCurrency(item.unit_price || 0)}</span>
+                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                <span style={{ fontSize: '0.86rem', fontWeight: '800', color: '#064E3B' }}>{formatCurrency(item.unit_price || 0)}</span>
                                             </td>
-                                            <td style={{ padding: '1rem 1.5rem' }}>
-                                                <div style={{ 
-                                                    display: 'inline-flex', alignItems: 'center', gap: '0.5rem', 
-                                                    padding: '0.5rem 1rem', borderRadius: '12px',
+                                            <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                                <div className="badge-nowrap" style={{ 
+                                                    gap: '0.35rem', 
+                                                    padding: '0.35rem 0.72rem', borderRadius: '10px',
                                                     background: isOutOfStock ? '#FEF2F2' : (isLowStock ? '#FFFBEB' : '#F0FDF4'),
                                                     color: isOutOfStock ? '#B91C1C' : (isLowStock ? '#B45309' : '#15803D'),
-                                                    fontSize: '0.85rem', fontWeight: '800'
+                                                    fontSize: '0.725rem', fontWeight: '800'
                                                 }}>
                                                     {isOutOfStock ? <Clock size={14} /> : <CheckCircle2 size={14} />}
                                                     {isOutOfStock ? 'OUT OF STOCK' : (isLowStock ? 'LOW STOCK' : 'IN STOCK')}
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1rem 1.5rem', textAlign: 'right' }}>
-                                                <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.5rem' }}>
+                                            <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                <div style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.4rem' }}>
                                                     <div style={{ display: 'flex', background: '#F8FAFC', padding: '4px', borderRadius: '10px', border: '1px solid #F1F5F9' }}>
                                                         <button 
                                                             onClick={() => handleAdjustClick(item, 'in')}
@@ -563,9 +569,9 @@ const Stock = () => {
                                                             <ArrowDownRight size={18} />
                                                         </button>
                                                     </div>
-                                                    <div style={{ width: '1px', height: '20px', background: '#E2E8F0', margin: '0 0.25rem' }}></div>
-                                                    <button onClick={() => handleEdit(item)} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Edit2 size={14} /></button>
-                                                    <button onClick={() => handleDelete(item.id)} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #FEF2F2', background: 'white', color: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                                                    <div style={{ width: '1px', height: '20px', background: '#E2E8F0', margin: '0 0.2rem' }}></div>
+                                                    <button onClick={() => handleEdit(item)} title="Edit item" aria-label="Edit item" style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Edit2 size={14} /></button>
+                                                    <button onClick={() => handleDelete(item.id)} title="Delete item" aria-label="Delete item" style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #FEF2F2', background: 'white', color: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}><Trash2 size={14} /></button>
                                                     <button onClick={() => { setHistoryItem(item); setIsHistoryModalOpen(true); }} style={{ width: '32px', height: '32px', borderRadius: '8px', border: '1px solid #EFF6FF', background: 'white', color: '#3B82F6', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginLeft: '4px' }} title="View History"><History size={14} /></button>
                                                 </div>
                                             </td>
@@ -577,7 +583,7 @@ const Stock = () => {
                     )}
                 </div>
                 {filteredItems.length === 0 && !isLoading && (
-                    <div style={{ padding: '3rem', textAlign: 'center', color: '#94A3B8', fontWeight: '600' }}>
+                    <div style={{ padding: '2.719rem', textAlign: 'center', color: '#94A3B8', fontWeight: '600' }}>
                         {filterStatus === 'low' || stockStatusFilter === 'Low Stock'
                             ? "No low stock products found"
                             : 'No inventory items found. Click "Add New Product" to initialize your stock.'}
@@ -588,76 +594,76 @@ const Stock = () => {
             {/* Modal - Add/Edit Product */}
             {isModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                    <div style={{ background: 'white', width: '560px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                    <div style={{ background: 'white', width: '560px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.2)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.266rem' }}>
                             <div>
-                                <h2 style={{ fontSize: '1.75rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>{editingItem ? 'Edit Product' : 'Register Product'}</h2>
-                                <p style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>Enter product specifications and initial stock levels.</p>
+                                <h2 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>{editingItem ? 'Edit Product' : 'Register Product'}</h2>
+                                <p style={{ color: '#64748B', fontSize: '0.816rem', fontWeight: '500' }}>Enter product specifications and initial stock levels.</p>
                             </div>
-                            <button onClick={closeModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer', color: '#64748B' }}><X size={22} /></button>
+                            <button onClick={closeModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#64748B' }}><X size={22} /></button>
                         </div>
-                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.586rem' }}>
                             {/* API-level error */}
                             {formErrors.submit && (
-                                <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C', padding: '0.875rem 1rem', borderRadius: '12px', fontSize: '0.875rem', fontWeight: 600 }}>
+                                <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C', padding: '0.793rem 0.906rem', borderRadius: '12px', fontSize: '0.793rem', fontWeight: 600 }}>
                                     {formErrors.submit}
                                 </div>
                             )}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Product Name *</label>
-                                    <input placeholder="e.g. MacBook Pro M3" type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.name ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                    {formErrors.name && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.name}</p>}
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Product Name *</label>
+                                    <input placeholder="e.g. MacBook Pro M3" type="text" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.name ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
+                                    {formErrors.name && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.name}</p>}
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sub Name</label>
-                                    <input placeholder="Optional subtitle" type="text" value={formData.sub_name} onChange={(e) => setFormData({...formData, sub_name: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                </div>
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category *</label>
-                                    <input placeholder="e.g. Electronics" type="text" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.category ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                    {formErrors.category && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.category}</p>}
-                                </div>
-                                <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unit Label *</label>
-                                    <input placeholder="pcs / kg / litre / box / packet" type="text" value={formData.unit} onChange={(e) => setFormData({...formData, unit: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.unit ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                    {formErrors.unit && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.unit}</p>}
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sub Name</label>
+                                    <input placeholder="Optional subtitle" type="text" value={formData.sub_name} onChange={(e) => setFormData({...formData, sub_name: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
                                 </div>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Initial Quantity *</label>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Category *</label>
+                                    <input placeholder="e.g. Electronics" type="text" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.category ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
+                                    {formErrors.category && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.category}</p>}
+                                </div>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unit Label *</label>
+                                    <input placeholder="pcs / kg / litre / box / packet" type="text" value={formData.unit} onChange={(e) => setFormData({...formData, unit: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.unit ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
+                                    {formErrors.unit && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.unit}</p>}
+                                </div>
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Initial Quantity *</label>
                                     <input
                                         type="number"
                                         placeholder="Enter quantity"
                                         value={formData.quantity}
                                         onChange={(e) => setFormData({...formData, quantity: e.target.value})}
                                         disabled={!!editingItem}
-                                        style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.quantity ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600', background: editingItem ? '#F8FAFC' : 'white' }}
+                                        style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.quantity ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600', background: editingItem ? '#F8FAFC' : 'white' }}
                                     />
-                                    {formErrors.quantity && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.quantity}</p>}
+                                    {formErrors.quantity && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.quantity}</p>}
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unit Valuation (₹) *</label>
-                                    <input placeholder="Enter price" type="number" step="0.01" value={formData.unit_price} onChange={(e) => setFormData({...formData, unit_price: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.unit_price ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                    {formErrors.unit_price && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.unit_price}</p>}
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unit Valuation (₹) *</label>
+                                    <input placeholder="Enter price" type="number" step="0.01" value={formData.unit_price} onChange={(e) => setFormData({...formData, unit_price: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.unit_price ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
+                                    {formErrors.unit_price && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.unit_price}</p>}
                                 </div>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Level *</label>
-                                    <input placeholder="Alert threshold" type="number" value={formData.low_stock_threshold} onChange={(e) => setFormData({...formData, low_stock_threshold: e.target.value})} style={{ width: '100%', padding: '1rem', borderRadius: '16px', border: `1px solid ${formErrors.low_stock_threshold ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '1rem', fontWeight: '600' }} />
-                                    {formErrors.low_stock_threshold && <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600 }}>{formErrors.low_stock_threshold}</p>}
+                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.544rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Low Stock Level *</label>
+                                    <input placeholder="Alert threshold" type="number" value={formData.low_stock_threshold} onChange={(e) => setFormData({...formData, low_stock_threshold: e.target.value})} style={{ width: '100%', padding: '0.634rem 0.816rem', borderRadius: '10px', border: `1px solid ${formErrors.low_stock_threshold ? '#FCA5A5' : '#E2E8F0'}`, outline: 'none', fontSize: '0.906rem', fontWeight: '600' }} />
+                                    {formErrors.low_stock_threshold && <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600 }}>{formErrors.low_stock_threshold}</p>}
                                 </div>
                             </div>
                             <button type="submit" disabled={addMutation.isPending || addMutation.isLoading || updateMutation.isPending || updateMutation.isLoading} style={{ 
-                                width: '100%', padding: '1.25rem', borderRadius: '18px', 
+                                width: '100%', padding: '1.133rem', borderRadius: '18px', 
                                 background: (addMutation.isPending || addMutation.isLoading || updateMutation.isPending || updateMutation.isLoading) ? '#CBD5E1' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
-                                fontWeight: '750', fontSize: '1.1rem', marginTop: '1rem', cursor: (addMutation.isPending || addMutation.isLoading || updateMutation.isPending || updateMutation.isLoading) ? 'not-allowed' : 'pointer',
+                                fontWeight: '750', fontSize: '0.997rem', marginTop: '0.906rem', cursor: (addMutation.isPending || addMutation.isLoading || updateMutation.isPending || updateMutation.isLoading) ? 'not-allowed' : 'pointer',
                                 boxShadow: '0 10px 20px rgba(27, 107, 58, 0.2)',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.453rem'
                             }}>
                                 {(addMutation.isPending || addMutation.isLoading || updateMutation.isPending || updateMutation.isLoading) ? (
                                     <>
@@ -675,34 +681,34 @@ const Stock = () => {
             {/* History Modal */}
             {isHistoryModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                    <div style={{ background: 'white', width: '560px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <div style={{ background: 'white', width: '560px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem' }}>
                             <div>
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Stock History</h2>
-                                <p style={{ color: '#64748B', fontSize: '0.9rem', fontWeight: '500' }}>{historyItem?.name}</p>
+                                <h2 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Stock History</h2>
+                                <p style={{ color: '#64748B', fontSize: '0.816rem', fontWeight: '500' }}>{historyItem?.name}</p>
                             </div>
-                            <button onClick={() => { setIsHistoryModalOpen(false); setHistoryItem(null); }} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer', color: '#64748B' }}><X size={22} /></button>
+                            <button onClick={() => { setIsHistoryModalOpen(false); setHistoryItem(null); }} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#64748B' }}><X size={22} /></button>
                         </div>
                         
-                        <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem' }}>
+                        <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.453rem' }}>
                             {isHistoryLoading ? (
-                                <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><Loader2 className="animate-spin" size={32} color="#1B6B3A" /></div>
+                                <div style={{ display: 'flex', justifyContent: 'center', padding: '1.812rem' }}><Loader2 className="animate-spin" size={32} color="#1B6B3A" /></div>
                             ) : historyData.length === 0 ? (
-                                <div style={{ textAlign: 'center', color: '#94A3B8', padding: '2rem', fontWeight: '600' }}>No history available for this item.</div>
+                                <div style={{ textAlign: 'center', color: '#94A3B8', padding: '1.812rem', fontWeight: '600' }}>No history available for this item.</div>
                             ) : (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                     {historyData.map((record, idx) => (
-                                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.906rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                                                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: record.type === 'in' ? '#DCFCE7' : '#FEE2E2', color: record.type === 'in' ? '#16A34A' : '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                     {record.type === 'in' ? <ArrowDownRight size={20} /> : <ArrowUpRight size={20} />}
                                                 </div>
                                                 <div>
-                                                    <p style={{ fontWeight: '700', color: '#1E293B', fontSize: '0.95rem', textTransform: 'capitalize' }}>Stock {record.type}</p>
-                                                    <p style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '500' }}>{new Date(record.created_at || record.date).toLocaleString()}</p>
+                                                    <p style={{ fontWeight: '700', color: '#1E293B', fontSize: '0.861rem', textTransform: 'capitalize' }}>Stock {record.type}</p>
+                                                    <p style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '500' }}>{new Date(record.created_at || record.date).toLocaleString()}</p>
                                                 </div>
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: record.type === 'in' ? '#16A34A' : '#EF4444' }}>
+                                            <div style={{ fontSize: '0.997rem', fontWeight: '800', color: record.type === 'in' ? '#16A34A' : '#EF4444' }}>
                                                 {record.type === 'in' ? '+' : '-'}{record.quantity}
                                             </div>
                                         </div>
@@ -717,36 +723,36 @@ const Stock = () => {
             {/* Stock Adjust Modal */}
             {isAdjustModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(10px)' }}>
-                    <div style={{ background: 'white', width: '440px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                    <div style={{ background: 'white', width: '440px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem' }}>
                             <div>
-                                <h2 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>
+                                <h2 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>
                                     {adjustType === 'in' ? 'Stock Induction' : 'Stock Depletion'}
                                 </h2>
-                                <p style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '600' }}>Adjust real-time inventory levels.</p>
+                                <p style={{ color: '#64748B', fontSize: '0.77rem', fontWeight: '600' }}>Adjust real-time inventory levels.</p>
                             </div>
-                            <button onClick={closeAdjustModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={22} /></button>
+                            <button onClick={closeAdjustModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={22} /></button>
                         </div>
                         
-                        <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '20px', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1.25rem', border: '1px solid #F1F5F9' }}>
+                        <div style={{ background: '#F8FAFC', padding: '0.906rem', borderRadius: '14px', marginBottom: '1.812rem', display: 'flex', alignItems: 'center', gap: '1.133rem', border: '1px solid #F1F5F9' }}>
                             <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1B6B3A', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
                                 <Package size={28} />
                             </div>
                             <div>
-                                <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '1.1rem' }}>{selectedItem?.name}</p>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>Available Base:</span>
-                                    <span style={{ fontSize: '0.9rem', fontWeight: '850', color: '#064E3B' }}>{selectedItem?.quantity}</span>
+                                <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.997rem' }}>{selectedItem?.name}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                                    <span style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B' }}>Available Base:</span>
+                                    <span style={{ fontSize: '0.816rem', fontWeight: '850', color: '#064E3B' }}>{selectedItem?.quantity}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '2.5rem' }}>
-                            <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Adjustment Volume</label>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                        <div style={{ marginBottom: '2.266rem' }}>
+                            <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.906rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Adjustment Volume</label>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
                                 <button 
                                     onClick={() => handleAdjustAmountChange(Number(adjustAmount || 0) - 1)}
-                                    style={{ width: '52px', height: '52px', borderRadius: '16px', border: '2px solid #E2E8F0', background: 'white', fontSize: '1.5rem', fontWeight: '800', cursor: 'pointer', transition: 'all 0.2s', color: '#475569' }}
+                                    style={{ width: '52px', height: '52px', borderRadius: '16px', border: '2px solid #E2E8F0', background: 'white', fontSize: '1.359rem', fontWeight: '800', cursor: 'pointer', transition: 'all 0.2s', color: '#475569' }}
                                     onMouseEnter={(e) => e.currentTarget.style.borderColor = '#1B6B3A'}
                                     onMouseLeave={(e) => e.currentTarget.style.borderColor = '#E2E8F0'}
                                 >-</button>
@@ -754,17 +760,17 @@ const Stock = () => {
                                     type="number" 
                                     value={adjustAmount} 
                                     onChange={(e) => handleAdjustAmountChange(e.target.value)}
-                                    style={{ flex: 1, padding: '1rem', borderRadius: '16px', border: '2px solid #1B6B3A', textAlign: 'center', fontSize: '1.5rem', fontWeight: '900', outline: 'none', color: '#1E293B', background: '#F0FDF4' }}
+                                    style={{ flex: 1, padding: '0.634rem 0.816rem', borderRadius: '10px', border: '2px solid #1B6B3A', textAlign: 'center', fontSize: '1.359rem', fontWeight: '900', outline: 'none', color: '#1E293B', background: '#F0FDF4' }}
                                 />
                                 <button 
                                     onClick={() => handleAdjustAmountChange(Number(adjustAmount || 0) + 1)}
-                                    style={{ width: '52px', height: '52px', borderRadius: '16px', border: '2px solid #E2E8F0', background: 'white', fontSize: '1.5rem', fontWeight: '800', cursor: 'pointer', transition: 'all 0.2s', color: '#475569' }}
+                                    style={{ width: '52px', height: '52px', borderRadius: '16px', border: '2px solid #E2E8F0', background: 'white', fontSize: '1.359rem', fontWeight: '800', cursor: 'pointer', transition: 'all 0.2s', color: '#475569' }}
                                     onMouseEnter={(e) => e.currentTarget.style.borderColor = '#1B6B3A'}
                                     onMouseLeave={(e) => e.currentTarget.style.borderColor = '#E2E8F0'}
                                 >+</button>
                             </div>
                             {adjustError && (
-                                <p style={{ color: '#EF4444', fontSize: '0.8rem', fontWeight: '700', marginTop: '0.75rem', textAlign: 'center', margin: '0.75rem 0 0 0' }}>
+                                <p style={{ color: '#EF4444', fontSize: '0.725rem', fontWeight: '700', marginTop: '0.68rem', textAlign: 'center', margin: '0.68rem 0 0 0' }}>
                                     {adjustError}
                                 </p>
                             )}
@@ -783,10 +789,10 @@ const Stock = () => {
                                 (adjustType === 'out' && adjustAmount > (selectedItem ? Number(selectedItem.quantity) : 0))
                             }
                             style={{ 
-                                width: '100%', padding: '1.25rem', borderRadius: '20px', 
+                                width: '100%', padding: '0.906rem', borderRadius: '14px', 
                                 background: adjustType === 'in' ? 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)' : 'linear-gradient(135deg, #EF4444 0%, #B91C1C 100%)', 
-                                color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                                color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.68rem',
                                 boxShadow: adjustType === 'in' ? '0 10px 20px rgba(27, 107, 58, 0.25)' : '0 10px 20px rgba(239, 68, 68, 0.25)'
                             }}
                         >
@@ -804,12 +810,12 @@ const Stock = () => {
             {/* Success toast */}
             {successToast && (
                 <div style={{
-                    position: 'fixed', bottom: '2rem', right: '2rem',
+                    position: 'fixed', bottom: '1.812rem', right: '1.812rem',
                     background: '#065F46', color: 'white',
-                    padding: '0.875rem 1.5rem', borderRadius: '14px',
+                    padding: '0.793rem 1.359rem', borderRadius: '14px',
                     boxShadow: '0 10px 24px rgba(0,0,0,0.15)',
-                    fontWeight: 700, fontSize: '0.9rem',
-                    display: 'flex', alignItems: 'center', gap: '0.5rem',
+                    fontWeight: 700, fontSize: '0.816rem',
+                    display: 'flex', alignItems: 'center', gap: '0.453rem',
                     zIndex: 2000,
                 }}>
                     <CheckCircle2 size={18} /> {successToast}

@@ -191,23 +191,24 @@ const FinancialPlan = () => {
     }, [plans, searchTerm, activeFilter]);
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <CalendarIcon size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Payment Planner</h1>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Payment Planner</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1.05rem', fontWeight: '500' }}>Schedule and manage upcoming transfers and collections with ease.</p>
+                    <p style={{ color: '#475569', fontSize: '0.952rem', fontWeight: '500' }}>Schedule and manage upcoming transfers and collections with ease.</p>
                 </div>
                 <button 
+                    data-tour="planner-actions"
                     onClick={() => setIsModalOpen(true)}
                     style={{ 
-                        display: 'flex', alignItems: 'center', gap: '0.6rem', 
-                        padding: '0.85rem 1.75rem', borderRadius: '14px', 
+                        display: 'flex', alignItems: 'center', gap: '0.544rem', 
+                        padding: '0.77rem 1.586rem', borderRadius: '14px', 
                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
                         fontWeight: '700', cursor: 'pointer',
                         boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)',
@@ -222,17 +223,17 @@ const FinancialPlan = () => {
             </div>
 
             {/* Quick Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.812rem' }}>
                 {[
                     { label: 'Total Scheduled', value: stats.totalScheduled, icon: CalendarIcon, color: '#1B6B3A', bg: '#DCF2E4' },
                     { label: 'Total sended', value: `₹${stats.toSend.toLocaleString()}`, icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
                     { label: 'Total received', value: `₹${stats.toReceive.toLocaleString()}`, icon: ArrowDownRight, color: '#10B981', bg: '#D1FAE5' },
                     { label: 'Pending Task', value: stats.pendingCount, icon: Clock, color: '#F59E0B', bg: '#FEF3C7' }
                 ].map((stat, idx) => (
-                    <div key={idx} style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={idx} style={{ background: 'white', padding: '1.133rem', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <p style={{ fontSize: '0.72rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', margin: 0 }}>{stat.label}</p>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1E293B', margin: '0.2rem 0 0 0' }}>{stat.value}</h3>
+                            <p style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', margin: 0 }}>{stat.label}</p>
+                            <h3 style={{ fontSize: '1.359rem', fontWeight: '900', color: '#1E293B', margin: '0.181rem 0 0 0' }}>{stat.value}</h3>
                         </div>
                         <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: stat.bg, color: stat.color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <stat.icon size={24} />
@@ -242,8 +243,8 @@ const FinancialPlan = () => {
             </div>
 
             {/* Filters and List */}
-            <div style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '28px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.906rem', flexWrap: 'wrap' }}>
                     {/* Subtab Filter Switcher */}
                     <div style={{
                         display: 'inline-flex',
@@ -255,19 +256,20 @@ const FinancialPlan = () => {
                         gap: '4px'
                     }}>
                         <button
+                            data-tour="planner-filter-all"
                             type="button"
                             onClick={() => setActiveFilter('ALL')}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.45rem',
-                                padding: '0.55rem 1.15rem',
+                                gap: '0.408rem',
+                                padding: '0.498rem 1.042rem',
                                 borderRadius: '12px',
                                 border: 'none',
                                 background: activeFilter === 'ALL' ? 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)' : 'transparent',
                                 color: activeFilter === 'ALL' ? '#FFFFFF' : '#64748B',
                                 fontWeight: '800',
-                                fontSize: '0.82rem',
+                                fontSize: '0.743rem',
                                 cursor: 'pointer',
                                 boxShadow: activeFilter === 'ALL' ? '0 4px 10px rgba(27, 107, 58, 0.25)' : 'none',
                                 transition: 'all 0.2s ease'
@@ -276,9 +278,9 @@ const FinancialPlan = () => {
                             <Filter size={14} style={{ color: activeFilter === 'ALL' ? '#FFFFFF' : '#64748B' }} />
                             <span>All</span>
                             <span style={{
-                                padding: '0.15rem 0.5rem',
+                                padding: '0.136rem 0.453rem',
                                 borderRadius: '999px',
-                                fontSize: '0.7rem',
+                                fontSize: '0.634rem',
                                 fontWeight: '800',
                                 background: activeFilter === 'ALL' ? 'rgba(255, 255, 255, 0.22)' : '#E2E8F0',
                                 color: activeFilter === 'ALL' ? '#FFFFFF' : '#475569'
@@ -289,19 +291,20 @@ const FinancialPlan = () => {
 
                         {/* Send Filter Button */}
                         <button
+                            data-tour="planner-filter-send"
                             type="button"
                             onClick={() => setActiveFilter('SEND')}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.45rem',
-                                padding: '0.55rem 1.15rem',
+                                gap: '0.408rem',
+                                padding: '0.498rem 1.042rem',
                                 borderRadius: '12px',
                                 border: 'none',
                                 background: activeFilter === 'SEND' ? '#DC2626' : 'transparent',
                                 color: activeFilter === 'SEND' ? '#FFFFFF' : '#64748B',
                                 fontWeight: '800',
-                                fontSize: '0.82rem',
+                                fontSize: '0.743rem',
                                 cursor: 'pointer',
                                 boxShadow: activeFilter === 'SEND' ? '0 4px 10px rgba(220, 38, 38, 0.25)' : 'none',
                                 transition: 'all 0.2s ease'
@@ -310,9 +313,9 @@ const FinancialPlan = () => {
                             <ArrowUpRight size={15} style={{ color: activeFilter === 'SEND' ? '#FFFFFF' : '#EF4444' }} />
                             <span>Send</span>
                             <span style={{
-                                padding: '0.15rem 0.5rem',
+                                padding: '0.136rem 0.453rem',
                                 borderRadius: '999px',
-                                fontSize: '0.7rem',
+                                fontSize: '0.634rem',
                                 fontWeight: '800',
                                 background: activeFilter === 'SEND' ? 'rgba(255, 255, 255, 0.25)' : '#FEE2E2',
                                 color: activeFilter === 'SEND' ? '#FFFFFF' : '#B91C1C'
@@ -323,19 +326,20 @@ const FinancialPlan = () => {
 
                         {/* Received Filter Button */}
                         <button
+                            data-tour="planner-filter-received"
                             type="button"
                             onClick={() => setActiveFilter('RECEIVE')}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.45rem',
-                                padding: '0.55rem 1.15rem',
+                                gap: '0.408rem',
+                                padding: '0.498rem 1.042rem',
                                 borderRadius: '12px',
                                 border: 'none',
                                 background: activeFilter === 'RECEIVE' ? '#059669' : 'transparent',
                                 color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#64748B',
                                 fontWeight: '800',
-                                fontSize: '0.82rem',
+                                fontSize: '0.743rem',
                                 cursor: 'pointer',
                                 boxShadow: activeFilter === 'RECEIVE' ? '0 4px 10px rgba(5, 150, 105, 0.25)' : 'none',
                                 transition: 'all 0.2s ease'
@@ -344,9 +348,9 @@ const FinancialPlan = () => {
                             <ArrowDownRight size={15} style={{ color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#10B981' }} />
                             <span>Received</span>
                             <span style={{
-                                padding: '0.15rem 0.5rem',
+                                padding: '0.136rem 0.453rem',
                                 borderRadius: '999px',
-                                fontSize: '0.7rem',
+                                fontSize: '0.634rem',
                                 fontWeight: '800',
                                 background: activeFilter === 'RECEIVE' ? 'rgba(255, 255, 255, 0.25)' : '#DCF2E4',
                                 color: activeFilter === 'RECEIVE' ? '#FFFFFF' : '#15803D'
@@ -356,27 +360,28 @@ const FinancialPlan = () => {
                         </button>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.55rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', width: '280px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.498rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', width: '280px' }}>
                         <Search size={18} color="#94A3B8" />
                         <input 
+                            data-tour="planner-search"
                             placeholder="Search schedules..." 
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ background: 'transparent', border: 'none', outline: 'none', marginLeft: '0.75rem', width: '100%', fontSize: '0.85rem', color: '#1E293B', fontWeight: '500' }}
+                            style={{ background: 'transparent', border: 'none', outline: 'none', marginLeft: '0.68rem', width: '100%', fontSize: '0.77rem', color: '#1E293B', fontWeight: '500' }}
                         />
                     </div>
                 </div>
 
-                <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+                <div style={{ flex: 1, overflowY: 'auto', padding: '0.906rem' }}>
                     {isLoading ? (
                         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Loader2 className="animate-spin" color="#1B6B3A" /></div>
                     ) : filteredPlans.length === 0 ? (
                         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#94A3B8' }}>
-                            <CalendarIcon size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
+                            <CalendarIcon size={48} style={{ marginBottom: '0.906rem', opacity: 0.5 }} />
                             <p style={{ fontWeight: '600' }}>No scheduled payments found.</p>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.75rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.68rem' }}>
                             {filteredPlans.map(plan => {
                                 const direction = String(plan.direction || plan.type || plan.entry_type || plan.flow || '').toUpperCase();
                                 const isSend = direction === 'SEND' || direction === 'OUTWARD' || direction === 'OUTGOING' || direction === 'OUT' || plan.is_send === true || String(plan.flow || '').toLowerCase() === 'out';
@@ -389,8 +394,8 @@ const FinancialPlan = () => {
                                 const formattedAmount = parseFloat(plan.amount || 0).toLocaleString();
 
                                 return (
-                                <div key={plan.id} style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                <div key={plan.id} style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
                                         <div style={{ 
                                             width: '50px', height: '50px', borderRadius: '15px', 
                                             background: isSend ? '#FFF1F2' : '#D1FAE5',
@@ -400,35 +405,35 @@ const FinancialPlan = () => {
                                             {isSend ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
                                         </div>
                                         <div>
-                                            <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '800', color: '#1E293B' }}>{displayTitle}</h4>
-                                            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.25rem', flexWrap: 'wrap' }}>
-                                                <span style={{ fontSize: '0.8rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: '600' }}>
+                                            <h4 style={{ margin: 0, fontSize: '0.952rem', fontWeight: '800', color: '#1E293B' }}>{displayTitle}</h4>
+                                            <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center', marginTop: '0.227rem', flexWrap: 'wrap' }}>
+                                                <span style={{ fontSize: '0.725rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.363rem', fontWeight: '600' }}>
                                                     <Clock size={14} /> {displayDate ? new Date(displayDate).toLocaleDateString() : 'No date'}
                                                 </span>
-                                                <span style={{ fontSize: '0.8rem', color: '#1B6B3A', background: '#DCF2E4', padding: '0.1rem 0.5rem', borderRadius: '6px', fontWeight: '750' }}>
+                                                <span style={{ fontSize: '0.725rem', color: '#1B6B3A', background: '#DCF2E4', padding: '0.091rem 0.453rem', borderRadius: '6px', fontWeight: '750' }}>
                                                     {statusText}
                                                 </span>
                                                 {contactName && (
-                                                    <span style={{ fontSize: '0.8rem', color: '#0369A1', background: '#E0F2FE', padding: '0.1rem 0.5rem', borderRadius: '6px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                    <span style={{ fontSize: '0.725rem', color: '#0369A1', background: '#E0F2FE', padding: '0.091rem 0.453rem', borderRadius: '6px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                                                         <User size={12} /> {contactName}
                                                     </span>
                                                 )}
                                             </div>
                                             {(plan.description || plan.notes) && (
-                                                <p className="text-xs text-gray-500 mt-1 line-clamp-2" style={{ margin: '0.25rem 0 0 0', fontSize: '0.75rem', color: '#64748B' }}>
+                                                <p className="text-xs text-gray-500 mt-1 line-clamp-2" style={{ margin: '0.227rem 0 0 0', fontSize: '0.68rem', color: '#64748B' }}>
                                                     {plan.description || plan.notes}
                                                 </p>
                                             )}
                                         </div>
                                     </div>
-                                    <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '2rem' }}>
+                                    <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.812rem' }}>
                                         <div>
-                                            <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
-                                            <h4 style={{ margin: '0.1rem 0 0 0', fontSize: '1.25rem', fontWeight: '900', color: isSend ? '#E11D48' : '#10B981' }}>
+                                            <p style={{ margin: 0, fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
+                                            <h4 style={{ margin: '0.091rem 0 0 0', fontSize: '1.133rem', fontWeight: '900', color: isSend ? '#E11D48' : '#10B981' }}>
                                                 ₹{formattedAmount}
                                             </h4>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                        <div style={{ display: 'flex', gap: '0.453rem' }}>
                                             {plan.status !== 'paid' && (
                                                 <button 
                                                     onClick={() => markPaidMutation.mutate(plan.id)}
@@ -457,10 +462,10 @@ const FinancialPlan = () => {
             {/* Schedule Modal */}
             {isModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                    <div style={{ background: 'white', width: '500px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B' }}>Schedule New Payment</h2>
-                            <button onClick={closeModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={22} /></button>
+                    <div style={{ background: 'white', width: '500px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem' }}>
+                            <h2 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B' }}>Schedule New Payment</h2>
+                            <button onClick={closeModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={22} /></button>
                         </div>
                         <form 
                             onSubmit={(e) => {
@@ -475,18 +480,18 @@ const FinancialPlan = () => {
                                     amount: parsedAmount
                                 });
                             }}
-                            style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}
                         >
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                 <button 
                                     type="button"
                                     onClick={() => setFormData({...formData, type: 'SEND'})}
                                     style={{ 
-                                        padding: '1rem', borderRadius: '16px', border: '2px solid', 
+                                        padding: '0.906rem', borderRadius: '16px', border: '2px solid', 
                                         borderColor: formData.type === 'SEND' ? '#EF4444' : '#E2E8F0',
                                         background: formData.type === 'SEND' ? '#FEF2F2' : 'white',
                                         color: formData.type === 'SEND' ? '#EF4444' : '#64748B',
-                                        fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                                        fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.453rem'
                                     }}
                                 >
                                     <ArrowUpRight size={18} /> I am Sending
@@ -495,11 +500,11 @@ const FinancialPlan = () => {
                                     type="button"
                                     onClick={() => setFormData({...formData, type: 'RECEIVE'})}
                                     style={{ 
-                                        padding: '1rem', borderRadius: '16px', border: '2px solid', 
+                                        padding: '0.906rem', borderRadius: '16px', border: '2px solid', 
                                         borderColor: formData.type === 'RECEIVE' ? '#10B981' : '#E2E8F0',
                                         background: formData.type === 'RECEIVE' ? '#F0FDF4' : 'white',
                                         color: formData.type === 'RECEIVE' ? '#10B981' : '#64748B',
-                                        fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                                        fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.453rem'
                                     }}
                                 >
                                     <ArrowDownRight size={18} /> I am Receiving
@@ -507,22 +512,22 @@ const FinancialPlan = () => {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Reference Name</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Reference Name</label>
                                 <input 
                                     required 
                                     placeholder="e.g. Monthly Rent, Client Payment" 
                                     value={formData.name} 
                                     onChange={e => setFormData({...formData, name: e.target.value})} 
-                                    style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                    style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Link to Person (Optional)</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Link to Person (Optional)</label>
                                 <select 
                                     value={formData.person_id} 
                                     onChange={e => setFormData({...formData, person_id: e.target.value})} 
-                                    style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
+                                    style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}
                                 >
                                     <option value="">Select Person...</option>
                                     {people.map(p => (
@@ -531,9 +536,9 @@ const FinancialPlan = () => {
                                 </select>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Amount (₹)</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Amount (₹)</label>
                                     <input 
                                         required 
                                         type="number" 
@@ -553,17 +558,17 @@ const FinancialPlan = () => {
                                                 setFormData({...formData, amount: val});
                                             }
                                         }}
-                                        style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '700' }} 
+                                        style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '700' }} 
                                     />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Scheduled Date</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#94A3B8', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Scheduled Date</label>
                                     <input 
                                         required 
                                         type="date" 
                                         value={formData.due_date} 
                                         onChange={e => setFormData({...formData, due_date: e.target.value})} 
-                                        style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                        style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                     />
                                 </div>
                             </div>
@@ -574,12 +579,12 @@ const FinancialPlan = () => {
                                 type="submit" 
                                 disabled={createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0}
                                 style={{ 
-                                    width: '100%', padding: '1.1rem', borderRadius: '18px', 
+                                    width: '100%', padding: '0.997rem', borderRadius: '18px', 
                                     background: (!formData.amount || Number(formData.amount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
-                                    color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', 
-                                    marginTop: '0.5rem', 
+                                    color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', 
+                                    marginTop: '0.453rem', 
                                     cursor: (createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0) ? 'not-allowed' : 'pointer', 
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.68rem',
                                     opacity: (createMutation.isLoading || !formData.amount || Number(formData.amount) <= 0) ? 0.6 : 1
                                 }}
                             >

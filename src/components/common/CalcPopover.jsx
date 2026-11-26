@@ -468,7 +468,7 @@ export function CalcPopover({ autoOpen = false, onPanelClose } = {}) {
             zIndex: 2000,
             width: '360px',
             maxHeight: '750px',
-            borderRadius: '24px',
+            borderRadius: '16px',
             backgroundColor: '#FFFFFF',
             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.3)',
             border: '1px solid #E2E8F0',

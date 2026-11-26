@@ -24,7 +24,10 @@ const OverviewCard = (props) => {
             onClick={() => path && navigate(path)}
         >
             <div className="tile-header overview-card-header">
-                <div className="overview-card-header-inner">
+                <div
+                    className="overview-card-header-inner"
+                    data-tour={title !== 'Financial Contacts' ? `books-overview-${title.toLowerCase().replace(/\s+/g, '-')}` : undefined}
+                >
                     <div 
                         className="overview-card-icon-wrapper"
                         style={{ background: `${color}15`, color: color }}
@@ -188,7 +191,7 @@ const Books = () => {
 
                 </div>
                 {/* Interactive Analytics Section */}
-                <div style={{ marginTop: '3rem' }}>
+                <div style={{ marginTop: '2.719rem' }}>
                     <FinanceAnalytics 
                         transactions={allTransactions} 
                         currencySymbol={currencySymbol} 
@@ -196,7 +199,7 @@ const Books = () => {
                 </div>
 
                 {/* Reports Engine Section */}
-                <div style={{ marginTop: '3rem', paddingBottom: '3rem' }}>
+                <div style={{ marginTop: '2.719rem', paddingBottom: '2.719rem' }}>
                     <FinanceReports 
                         transactions={allTransactions} 
                         budget={budget} 
@@ -226,12 +229,13 @@ const Books = () => {
                 }
                 .overview-card-header {
                     border-bottom: none;
-                    padding: 1.5rem 1.5rem 0.5rem;
+                    padding: 1.359rem 1.359rem 0.453rem;
                 }
                 .overview-card-header-inner {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
+                    gap: 0.906rem;
+                    width: fit-content;
                 }
                 .overview-card-icon-wrapper {
                     width: 48px;
@@ -242,33 +246,33 @@ const Books = () => {
                     justify-content: center;
                 }
                 .overview-card-title {
-                    font-size: 1.1rem;
+                    font-size: 0.997rem;
                     font-weight: 600;
                     color: var(--text-main);
                     margin: 0;
                 }
                 .overview-card-view-details {
-                    font-size: 0.8rem;
+                    font-size: 0.725rem;
                     color: var(--text-muted);
                     display: flex;
                     align-items: center;
                     gap: 4px;
                 }
                 .overview-card-content {
-                    padding: 0 1.5rem 1.5rem;
+                    padding: 0 1.359rem 1.359rem;
                     flex: 1;
                 }
                 .overview-card-stats-container {
-                    margin-top: 1rem;
+                    margin-top: 0.906rem;
                     display: flex;
                     flex-direction: column;
-                    gap: 0.75rem;
+                    gap: 0.68rem;
                 }
                 .overview-card-stat-row {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    font-size: 0.9rem;
+                    font-size: 0.816rem;
                 }
                 .overview-card-stat-label {
                     color: var(--text-muted);
@@ -282,7 +286,7 @@ const Books = () => {
                 }
                 .books-dashboard-grid {
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
+                    gap: 1.359rem;
                 }
             `}</style>
         </>

@@ -12,7 +12,7 @@ const ICON_MAP = {
 const GoalItem = (props) => {
     const { title, current, total, percent, color, icon: Icon } = props;
     return (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem 0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem', padding: '0.68rem 0' }}>
             <div style={{ position: 'relative', width: '48px', height: '48px' }}>
                 <svg viewBox="0 0 36 36" style={{ transform: 'rotate(-90deg)', width: '100%', height: '100%' }}>
                     <path
@@ -29,15 +29,15 @@ const GoalItem = (props) => {
                         strokeDasharray={`${percent}, 100`}
                     />
                 </svg>
-                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '0.65rem', fontWeight: 700, color: color }}>
+                <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: '0.589rem', fontWeight: 700, color: color }}>
                     {percent}%
                 </div>
             </div>
             <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ fontWeight: 700, fontSize: '0.816rem', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                     {title} <Icon size={14} className="text-muted-foreground" />
                 </div>
-                <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '2px' }}>
+                <div style={{ fontSize: '0.68rem', color: '#64748B', marginTop: '2px' }}>
                     <span style={{ fontWeight: 600 }}>${current}</span> of ${total}
                 </div>
             </div>
@@ -61,16 +61,16 @@ const MoneyGoalsTile = () => {
         enabled: !!activePlanId
     });
 
-    if (loadingPlans || loadingGoals) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>Loading goals...</div>;
+    if (loadingPlans || loadingGoals) return <div style={{ color: '#64748B', fontSize: '0.816rem' }}>Loading goals...</div>;
 
     const goals = goalsRes?.data || [];
 
     if (goals.length === 0) {
         return (
-            <div style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ color: '#64748B', fontSize: '0.9rem', marginBottom: '1rem' }}>No goals found.</div>
+            <div style={{ padding: '1.359rem', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ color: '#64748B', fontSize: '0.816rem', marginBottom: '0.906rem' }}>No goals found.</div>
                 <button style={{
-                    padding: '0.75rem 1.5rem',
+                    padding: '0.68rem 1.359rem',
                     border: '2px dashed #CBD5E1',
                     borderRadius: '99px',
                     background: 'transparent',
@@ -85,8 +85,8 @@ const MoneyGoalsTile = () => {
     }
 
     return (
-        <div style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+        <div style={{ padding: '1.359rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
                 {goals.slice(0, 3).map(goal => {
                     const percent = Math.min(Math.round((goal.current_amount / goal.target_amount) * 100), 100);
                     const Icon = ICON_MAP[goal.title] || ICON_MAP[goal.name] || Globe;
@@ -107,19 +107,19 @@ const MoneyGoalsTile = () => {
             <button style={{
                 marginTop: 'auto',
                 width: '100%',
-                padding: '0.75rem',
+                padding: '0.68rem',
                 border: '2px dashed #CBD5E1',
                 borderRadius: '99px',
                 background: 'transparent',
                 color: '#1B6B3A',
                 fontWeight: 600,
-                fontSize: '0.9rem',
+                fontSize: '0.816rem',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '0.5rem'
+                gap: '0.453rem'
             }}>
                 <Plus size={16} /> Add New Goal
             </button>

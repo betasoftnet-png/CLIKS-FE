@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { 
     CreditCard, 
     Check, 
@@ -20,13 +20,16 @@ import {
 import { load } from '@cashfreepayments/cashfree-js';
 import { apiClient } from '../api/client';
 import { caService } from '../services';
+import { profileService } from '../services/profileService';
+import { getPlanDuration } from '../utils/subscriptionUtils';
 import '../App.css';
 import { formatCurrency } from '../lib/formatCurrency';
 import { useAuth } from '../context';
 
 const Subscription = () => {
     const navigate = useNavigate();
-    const { user, changePlan } = useAuth();
+    const { user } = useAuth();
+    const queryClient = useQueryClient();
     const { data: icaiData } = useQuery({
         queryKey: ['icaiVerificationStatus'],
         queryFn: () => caService.getIcaiVerification(),
@@ -103,13 +106,51 @@ const Subscription = () => {
             if (result.error) {
                 alert("Gateway Interrupted: " + result.error.message);
             } else {
-                await changePlan(tier.name);
+                const duration = getPlanDuration(tier.name);
+                let cat = categoryKey === 'ca' ? 'fin_pro' : null;
+                if (!cat) {
+                    if (['Fin-Pro Solo', 'Fin-Pro Firm', 'FIN-PRO'].includes(tier.name)) cat = 'fin_pro';
+                    else if (['Basic Investor', 'Pro Investor', 'Investor Club'].includes(tier.name)) cat = 'investor';
+                    else if (['Monthly Innovator', 'Yearly Founder', 'Poster Plan'].includes(tier.name)) cat = 'poster';
+                    else cat = 'business';
+                }
+
+                const now = new Date();
+                const expiryDate = new Date(now.getTime() + duration * 24 * 60 * 60 * 1000).toISOString();
+                const existingSubs = user?.active_subscriptions || {};
+                const updatedSubs = {
+                    ...existingSubs,
+                    [cat]: {
+                        active: true,
+                        plan: tier.name,
+                        startDate: now.toISOString(),
+                        expiryDate,
+                        valid_until: expiryDate,
+                        updated_at: now.toISOString()
+                    }
+                };
+                const updatePayload = { active_subscriptions: updatedSubs };
+                if (cat === 'business') {
+                    updatePayload.tier = tier.name;
+                    updatePayload.subscription_days_remaining = duration;
+                }
+
+                try {
+                    await profileService.updateProfile(updatePayload);
+                } catch (e) {
+                    console.error('Failed to update active subscription after payment:', e);
+                    alert(`Payment completed, but the ${tier.name} subscription could not be activated. Please contact support or refresh and verify your subscription status before retrying.`);
+                    return;
+                }
+
+                queryClient.invalidateQueries();
                 setSelectedTier(tier.name);
                 if (isFinProTier || categoryKey === 'ca') {
                     setActiveFinProPlan(tier.name);
                     window.dispatchEvent(new Event('finpro:subscription-activated'));
                 }
                 alert(`Successfully upgraded to ${tier.name}!`);
+                window.location.reload();
             }
         } catch (err) {
             console.warn("[CASHFREE GATEWAY LOGGER]:", err.message);
@@ -344,7 +385,7 @@ const Subscription = () => {
     const renewal = getRenewalDetails();
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             <style>{`
                 .sub-tab-btn {
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -370,40 +411,40 @@ const Subscription = () => {
             `}</style>
 
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                             <CreditCard size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B' }}>Subscription & Billing</h1>
+                        <h1 data-tour="subscription-heading" style={{ fontSize: '1.812rem', fontWeight: '850', color: '#064E3B' }}>Subscription & Billing</h1>
                     </div>
                     <p style={{ color: '#475569', fontWeight: '500' }}>Manage your active workspace tier, feature access, and transaction statements.</p>
                 </div>
                 
                 {/* Billing Badge */}
-                <div style={{ display: 'flex', background: '#DCF2E4', padding: '0.6rem 1.25rem', borderRadius: '14px', alignItems: 'center', gap: '0.5rem' }}>
-                    <span style={{ color: '#064E3B', fontWeight: '800', fontSize: '0.85rem' }}>
+                <div style={{ display: 'flex', background: '#DCF2E4', padding: '0.544rem 1.133rem', borderRadius: '14px', alignItems: 'center', gap: '0.453rem' }}>
+                    <span style={{ color: '#064E3B', fontWeight: '800', fontSize: '0.77rem' }}>
                         {renewal.billingPeriod
                             ? `${renewal.billingPeriod === 'month' ? 'Monthly' : 'Annual'} Billing Cycle`
                             : 'No Active Plan'}
                     </span>
                     {selectedTier && (
-                        <span style={{ background: '#1B6B3A', color: 'white', fontSize: '0.65rem', padding: '0.15rem 0.4rem', borderRadius: '6px', fontWeight: '800' }}>ACTIVE</span>
+                        <span style={{ background: '#1B6B3A', color: 'white', fontSize: '0.589rem', padding: '0.136rem 0.363rem', borderRadius: '6px', fontWeight: '800' }}>ACTIVE</span>
                     )}
                 </div>
             </div>
 
             {/* Scrollable Main Content Wrapper */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '2rem' }}>
+            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
 
             {/* Current Tier Widget */}
             <div style={{ 
                 background: renewal.gradient, 
-                borderRadius: '24px', 
-                padding: '1.25rem 2rem', 
+                borderRadius: '16px', 
+                padding: '1.133rem 1.812rem', 
                 color: 'white', 
-                marginBottom: '2rem', 
+                marginBottom: '1.812rem', 
                 position: 'relative', 
                 overflow: 'hidden', 
                 boxShadow: `0 12px 20px -8px ${renewal.color}30`, 
@@ -412,50 +453,50 @@ const Subscription = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '1.5rem'
+                gap: '1.359rem'
             }}>
                 <div style={{ position: 'absolute', right: '-50px', top: '-50px', width: '200px', height: '200px', background: 'rgba(255,255,255,0.03)', borderRadius: '50%', pointerEvents: 'none' }} />
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.359rem', flexWrap: 'wrap' }}>
                     <div style={{ background: 'rgba(255,255,255,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Sparkles size={20} />
                     </div>
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
-                            <span style={{ fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.227rem' }}>
+                            <span style={{ fontSize: '0.68rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', opacity: 0.9 }}>
                                 {selectedTier ? 'Active Plan:' : 'Plan Status:'}
                             </span>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: '900', margin: 0, lineHeight: 1.2 }}>
+                            <h2 style={{ fontSize: '1.359rem', fontWeight: '900', margin: 0, lineHeight: 1.2 }}>
                                 {selectedTier === 'Basic Plan' ? 'Business' : selectedTier || 'No Active Plan'}
                             </h2>
                         </div>
-                        <p style={{ color: '#DCF2E4', fontWeight: '500', fontSize: '0.85rem', margin: 0, opacity: 0.95 }}>{renewal.desc}</p>
+                        <p style={{ color: '#DCF2E4', fontWeight: '500', fontSize: '0.77rem', margin: 0, opacity: 0.95 }}>{renewal.desc}</p>
                     </div>
                 </div>
 
                 <div style={{ 
                     background: 'rgba(255, 255, 255, 0.1)', 
-                    padding: '0.75rem 1.5rem', 
+                    padding: '0.68rem 1.359rem', 
                     borderRadius: '16px', 
                     border: '1px solid rgba(255,255,255,0.12)', 
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '1.5rem',
+                    gap: '1.359rem',
                     flexWrap: 'wrap'
                 }}>
                     <div style={{ textAlign: 'left' }}>
-                        <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Next Renewal</p>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>
+                        <p style={{ fontSize: '0.589rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Next Renewal</p>
+                        <h3 style={{ fontSize: '0.997rem', fontWeight: '900', margin: 0 }}>
                             {selectedTier ? '01 May, 2027' : 'Not scheduled'}
                         </h3>
                     </div>
                     <div style={{ width: '1px', height: '24px', background: 'rgba(255,255,255,0.2)' }} />
                     <div style={{ textAlign: 'left' }}>
-                        <p style={{ fontSize: '0.65rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Renewal Amount</p>
-                        <p style={{ fontSize: '1.1rem', fontWeight: '900', margin: 0 }}>
+                        <p style={{ fontSize: '0.589rem', fontWeight: '800', color: '#DCF2E4', textTransform: 'uppercase', margin: 0, letterSpacing: '0.05em' }}>Renewal Amount</p>
+                        <p style={{ fontSize: '0.997rem', fontWeight: '900', margin: 0 }}>
                             {renewal.price == null ? '—' : formatCurrency(renewal.price)}
                             {renewal.price != null && (
-                                <span style={{ fontSize: '0.75rem', fontWeight: '500', opacity: 0.8 }}>
+                                <span style={{ fontSize: '0.68rem', fontWeight: '500', opacity: 0.8 }}>
                                     {' '}+ GST / {renewal.billingPeriod}
                                 </span>
                             )}
@@ -465,16 +506,16 @@ const Subscription = () => {
             </div>
 
             {/* Custom Modern Tabs */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.812rem' }}>
                 <div style={{ 
                     display: 'flex', 
                     background: 'rgba(220, 242, 228, 0.7)', 
                     backdropFilter: 'blur(8px)',
-                    padding: '0.4rem', 
-                    borderRadius: '24px', 
+                    padding: '0.363rem', 
+                    borderRadius: '16px', 
                     border: '1px solid rgba(27, 107, 58, 0.15)',
                     boxShadow: '0 8px 32px 0 rgba(27, 107, 58, 0.04)',
-                    gap: '0.25rem',
+                    gap: '0.227rem',
                     flexWrap: 'wrap',
                     justifyContent: 'center'
                 }}>
@@ -487,24 +528,25 @@ const Subscription = () => {
                         return (
                             <button
                                 key={tab.id}
+                                data-tour={`subscription-category-${tab.id}`}
                                 className="sub-tab-btn"
                                 onClick={() => setActiveCategory(tab.id)}
                                 style={{
-                                    padding: '0.75rem 2rem',
+                                    padding: '0.68rem 1.812rem',
                                     borderRadius: '20px',
                                     border: 'none',
                                     background: isTabActive 
                                         ? `linear-gradient(135deg, ${tab.color} 0%, #0c0f1d 160%)` 
                                         : 'transparent',
                                     color: isTabActive ? 'white' : '#475569',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     fontWeight: '800',
                                     cursor: 'pointer',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.05em',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
+                                    gap: '0.453rem',
                                     transform: isTabActive ? 'scale(1.04)' : 'scale(1)',
                                     boxShadow: isTabActive ? `0 10px 15px -3px ${tab.color}40` : 'none'
                                 }}
@@ -522,8 +564,8 @@ const Subscription = () => {
                 <div style={{ 
                     display: 'flex', 
                     justifyContent: 'center', 
-                    gap: '2rem', 
-                    marginBottom: '3rem', 
+                    gap: '1.812rem', 
+                    marginBottom: '2.719rem', 
                     flexWrap: 'wrap' 
                 }}>
                     <div 
@@ -532,8 +574,8 @@ const Subscription = () => {
                             background: betaSubCategory === 'investor' ? 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 100%)' : 'white',
                             color: betaSubCategory === 'investor' ? 'white' : '#1E293B',
                             border: betaSubCategory === 'investor' ? 'none' : '1px solid #E2E8F0',
-                            padding: '1.25rem 2rem',
-                            borderRadius: '24px',
+                            padding: '1.133rem 1.812rem',
+                            borderRadius: '16px',
                             cursor: 'pointer',
                             width: '280px',
                             textAlign: 'center',
@@ -542,7 +584,7 @@ const Subscription = () => {
                             transform: betaSubCategory === 'investor' ? 'scale(1.05) translateY(-4px)' : 'scale(1)'
                         }}
                     >
-                        <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '850', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <h4 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '850', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.453rem' }}>
                             <Crown size={20} /> Investor Club
                         </h4>
                     </div>
@@ -553,8 +595,8 @@ const Subscription = () => {
                             background: betaSubCategory === 'product' ? 'linear-gradient(135deg, #EC4899 0%, #BE185D 100%)' : 'white',
                             color: betaSubCategory === 'product' ? 'white' : '#1E293B',
                             border: betaSubCategory === 'product' ? 'none' : '1px solid #E2E8F0',
-                            padding: '1.25rem 2rem',
-                            borderRadius: '24px',
+                            padding: '1.133rem 1.812rem',
+                            borderRadius: '16px',
                             cursor: 'pointer',
                             width: '280px',
                             textAlign: 'center',
@@ -563,7 +605,7 @@ const Subscription = () => {
                             transform: betaSubCategory === 'product' ? 'scale(1.05) translateY(-4px)' : 'scale(1)'
                         }}
                     >
-                        <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '850', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                        <h4 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '850', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.453rem' }}>
                             <Zap size={20} /> Products & Ideas
                         </h4>
                     </div>
@@ -571,7 +613,7 @@ const Subscription = () => {
             )}
 
             {/* Pricing Tiers Selection Grid */}
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B', marginBottom: '1.25rem' }}>
+            <h3 data-tour="subscription-plans-heading" style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', marginBottom: '1.133rem' }}>
                 {activeCategory === 'basic' ? 'Business Details' : 'Upgrade Workspace Tier'}
             </h3>
             <div style={{
@@ -581,8 +623,8 @@ const Subscription = () => {
                     : activeCategory === 'ca'
                         ? 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))'
                         : 'repeat(3, 1fr)',
-                gap: activeCategory === 'ca' ? '1rem' : '1.5rem',
-                marginBottom: '3rem',
+                gap: activeCategory === 'ca' ? '0.906rem' : '1.359rem',
+                marginBottom: '2.719rem',
                 justifyContent: activeCategory === 'basic' || activeCategory === 'ca' ? 'center' : 'stretch',
                 maxWidth: activeCategory === 'ca' ? '600px' : 'none',
                 marginLeft: activeCategory === 'ca' ? 'auto' : 0,
@@ -616,9 +658,9 @@ const Subscription = () => {
                             }}
                             style={{ 
                                 background: 'white', 
-                                borderRadius: '24px', 
+                                borderRadius: '16px', 
                                 border: isActive ? `3px solid #0f766e` : '1px solid #E2E8F0',
-                                padding: activeCategory === 'ca' ? '1.5rem' : '1.75rem 2rem',
+                                padding: activeCategory === 'ca' ? '1.359rem' : '1.586rem 1.812rem',
                                 position: 'relative',
                                 cursor: currentCategoryKey === 'ca' ? 'default' : 'pointer',
                                 transform: isActive ? 'translateY(-6px)' : 'none',
@@ -626,37 +668,37 @@ const Subscription = () => {
                             }}
                         >
                             {isActive && (
-                                <span style={{ position: 'absolute', top: '1.25rem', right: '1.25rem', background: '#0f766e', color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '0.4rem 0.8rem', borderRadius: '10px', textTransform: 'uppercase' }}>
+                                <span style={{ position: 'absolute', top: '1.133rem', right: '1.133rem', background: '#0f766e', color: 'white', fontSize: '0.634rem', fontWeight: '800', padding: '0.363rem 0.725rem', borderRadius: '10px', textTransform: 'uppercase' }}>
                                     {tier.badge}
                                 </span>
                             )}
-                            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: `${tier.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tier.color, marginBottom: '1rem' }}>
+                            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: `${tier.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: tier.color, marginBottom: '0.906rem' }}>
                                 <TierIcon size={24} />
                             </div>
-                            <h4 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.5rem' }}>
+                            <h4 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.453rem' }}>
                                 {currentCategoryKey === 'basic' && tier.name === 'Basic Plan' ? 'Business' : tier.name}
                             </h4>
-                            <p style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '500', marginBottom: '1.25rem', minHeight: '34px' }}>{tier.desc}</p>
+                            <p style={{ fontSize: '0.77rem', color: '#64748B', fontWeight: '500', marginBottom: '1.133rem', minHeight: '34px' }}>{tier.desc}</p>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginBottom: '1.25rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.181rem', marginBottom: '1.133rem' }}>
                                 {originalPrice != null && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                        <span style={{ fontSize: '1.25rem', fontWeight: '700', color: '#94A3B8', textDecoration: 'line-through' }}>{formatCurrency(originalPrice)}</span>
-                                        <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1B6B3A', background: '#DCF2E4', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                                        <span style={{ fontSize: '1.133rem', fontWeight: '700', color: '#94A3B8', textDecoration: 'line-through' }}>{formatCurrency(originalPrice)}</span>
+                                        <span style={{ fontSize: '0.725rem', fontWeight: '800', color: '#1B6B3A', background: '#DCF2E4', padding: '0.181rem 0.453rem', borderRadius: '6px' }}>
                                             Save {formatCurrency(originalPrice - price)}
                                         </span>
                                     </div>
                                 )}
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.25rem' }}>
-                                    <span style={{ fontSize: '2.25rem', fontWeight: '900', color: '#1E293B' }}>{formatCurrency(price)}</span>
-                                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '0.9rem' }}>/ {billingPeriod}</span>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.227rem' }}>
+                                    <span style={{ fontSize: '2.039rem', fontWeight: '900', color: '#1E293B' }}>{formatCurrency(price)}</span>
+                                    <span style={{ color: '#64748B', fontWeight: '600', fontSize: '0.816rem' }}>/ {billingPeriod}</span>
                                 </div>
                                 {tier.priceMonthly ? (
-                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>
+                                    <span style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B' }}>
                                         (Billed every month)
                                     </span>
                                 ) : (
-                                    <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B' }}>
+                                    <span style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B' }}>
                                         (Equivalent to {formatCurrency(Math.round(price / 12))} per month)
                                     </span>
                                 )}
@@ -666,19 +708,19 @@ const Subscription = () => {
                                 <div style={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '0.5rem',
-                                    padding: '0.85rem 1.1rem',
-                                    marginBottom: '1rem',
+                                    gap: '0.453rem',
+                                    padding: '0.77rem 0.997rem',
+                                    marginBottom: '0.906rem',
                                     border: '1px solid #E2E8F0',
                                     borderRadius: '20px',
                                     background: '#F8FAFC',
                                     color: '#475569',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     fontWeight: '700'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.68rem' }}>
                                         <span>Total Team Members:</span>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
                                             <button
                                                 type="button"
                                                 aria-label="Decrease team members"
@@ -702,7 +744,7 @@ const Subscription = () => {
                                             >
                                                 <Minus size={14} />
                                             </button>
-                                            <span aria-live="polite" style={{ minWidth: '16px', textAlign: 'center', color: '#475569', fontSize: '1rem' }}>
+                                            <span aria-live="polite" style={{ minWidth: '16px', textAlign: 'center', color: '#475569', fontSize: '0.906rem' }}>
                                                 {firmTeamMembers}
                                             </span>
                                             <button
@@ -730,7 +772,7 @@ const Subscription = () => {
                                         </div>
                                     </div>
                                     {extraTeamMembers > 0 && (
-                                        <span style={{ alignSelf: 'flex-end', color: '#3366FF', fontSize: '0.75rem', fontWeight: '700' }}>
+                                        <span style={{ alignSelf: 'flex-end', color: '#3366FF', fontSize: '0.68rem', fontWeight: '700' }}>
                                             +{extraTeamMembers} extra {extraTeamMembers === 1 ? 'member' : 'members'} ({formatCurrency(tier.additionalMemberMonthlyPrice)}/mo each)
                                         </span>
                                     )}
@@ -742,17 +784,17 @@ const Subscription = () => {
                                     disabled
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.85rem', 
+                                        padding: '0.77rem', 
                                         borderRadius: '9999px', 
                                         border: 'none',
                                         background: '#0f766e',
                                         color: '#FFFFFF',
                                         fontWeight: '700',
-                                        fontSize: '0.875rem',
+                                        fontSize: '0.793rem',
                                         letterSpacing: '0.025em',
                                         textAlign: 'center',
                                         cursor: 'default',
-                                        marginBottom: '1.25rem',
+                                        marginBottom: '1.133rem',
                                         boxShadow: '0 4px 12px rgba(15, 118, 110, 0.25)',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -772,7 +814,7 @@ const Subscription = () => {
                                     className="w-full py-2.5 px-4 border border-purple-400 text-purple-600 bg-white rounded-xl text-sm font-semibold cursor-default select-none transition-none shadow-none"
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.85rem', 
+                                        padding: '0.77rem', 
                                         borderRadius: '16px', 
                                         border: `1px solid ${tier.color || '#a855f7'}`,
                                         background: 'white',
@@ -781,7 +823,7 @@ const Subscription = () => {
                                         cursor: 'default',
                                         pointerEvents: 'none',
                                         userSelect: 'none',
-                                        marginBottom: '1.25rem'
+                                        marginBottom: '1.133rem'
                                     }}
                                 >
                                     Upgrade Plan
@@ -796,26 +838,26 @@ const Subscription = () => {
                                     disabled={isProcessing}
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.85rem', 
+                                        padding: '0.77rem', 
                                         borderRadius: '16px', 
                                         border: `1px solid ${tier.color}`,
                                         background: isProcessing ? '#94A3B8' : 'white',
                                         color: tier.color,
                                         fontWeight: '800',
                                         cursor: isProcessing ? 'not-allowed' : 'pointer',
-                                        marginBottom: '1.25rem'
+                                        marginBottom: '1.133rem'
                                     }}
                                 >
                                     {isProcessing ? 'Connecting...' : 'Upgrade Plan'}
                                 </button>
                             )}
 
-                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.25rem' }}>
-                                <p style={{ fontSize: '0.8rem', fontWeight: '800', color: '#1E293B', textTransform: 'uppercase', marginBottom: '0.75rem', letterSpacing: '0.05em' }}>What's Included</p>
-                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.133rem' }}>
+                                <p style={{ fontSize: '0.725rem', fontWeight: '800', color: '#1E293B', textTransform: 'uppercase', marginBottom: '0.68rem', letterSpacing: '0.05em' }}>What's Included</p>
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                                     {tier.features.map((feature, i) => (
-                                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: '#475569', fontWeight: '500' }}>
-                                            <Check size={16} style={{ color: tier.color, flexShrink: 0, marginTop: '0.15rem' }} />
+                                        <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.453rem', fontSize: '0.77rem', color: '#475569', fontWeight: '500' }}>
+                                            <Check size={16} style={{ color: tier.color, flexShrink: 0, marginTop: '0.136rem' }} />
                                             <span>{feature}</span>
                                         </li>
                                     ))}
@@ -827,38 +869,40 @@ const Subscription = () => {
             </div>
 
             {/* Invoices History list */}
-            <div style={{ background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', padding: '2.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem' }}>
+            <div style={{ background: 'white', borderRadius: '20px', border: '1px solid #E2E8F0', padding: '2.266rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', marginBottom: '1.812rem' }}>
                     <History size={20} style={{ color: '#1B6B3A' }} />
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#064E3B', margin: 0 }}>Billing & Statement History</h3>
+                    <h3 style={{ fontSize: '1.133rem', fontWeight: '800', color: '#064E3B', margin: 0 }}>Billing & Statement History</h3>
                 </div>
-                <div style={{ border: '1px solid #E2E8F0', borderRadius: '24px', overflow: 'hidden' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <div className="cliks-table-scroll" style={{ border: '1px solid #E2E8F0', borderRadius: '16px' }}>
+                    <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                         <thead style={{ background: '#F8FAFC' }}>
-                            <tr style={{ textAlign: 'left' }}>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Invoice ID</th>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Billing Date</th>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Tier Details</th>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Payment Mode</th>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Status</th>
-                                <th style={{ padding: '1.25rem', fontSize: '0.7rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase', textAlign: 'right' }}>Amount Paid</th>
+                            <tr style={{ textAlign: 'left', borderBottom: '1px solid #E2E8F0' }}>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Invoice ID</th>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Billing Date</th>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Tier Details</th>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Payment Mode</th>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap', textAlign: 'center' }}>Status</th>
+                                <th style={{ padding: '0.625rem 0.906rem', fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', whiteSpace: 'nowrap', textAlign: 'right' }}>Amount Paid</th>
                             </tr>
                         </thead>
                         <tbody>
                             {invoices.length > 0 ? (
                                 invoices.map((inv, idx) => (
                                     <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                        <td style={{ padding: '1.25rem', fontWeight: '800', color: '#064E3B' }}>{inv.id}</td>
-                                        <td style={{ padding: '1.25rem', fontSize: '0.85rem', color: '#64748B', fontWeight: '500' }}>{inv.date}</td>
-                                        <td style={{ padding: '1.25rem', fontWeight: '700', color: '#1E293B' }}>{inv.tier}</td>
-                                        <td style={{ padding: '1.25rem', fontSize: '0.8rem', color: '#475569', fontWeight: '600' }}><span style={{ background: '#F1F5F9', padding: '0.3rem 0.6rem', borderRadius: '8px' }}>{inv.method}</span></td>
-                                        <td style={{ padding: '1.25rem' }}><span style={{ padding: '0.4rem 0.8rem', borderRadius: '10px', background: '#F0FDF4', color: '#1B6B3A', fontSize: '0.8rem', fontWeight: '750' }}>{inv.status}</span></td>
-                                        <td style={{ padding: '1.25rem', textAlign: 'right', fontWeight: '850', color: '#1E293B' }}>{formatCurrency(inv.amount)}</td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.906rem', fontWeight: '800', color: '#064E3B', whiteSpace: 'nowrap' }} title={inv.id}>{inv.id}</td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.906rem', fontSize: '0.77rem', color: '#64748B', fontWeight: '500', whiteSpace: 'nowrap' }}>{inv.date}</td>
+                                        <td style={{ padding: '0.625rem 0.906rem', fontWeight: '700', color: '#1E293B', maxWidth: '200px' }} title={inv.tier}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{inv.tier}</div>
+                                        </td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.906rem', fontSize: '0.725rem', color: '#475569', fontWeight: '600', whiteSpace: 'nowrap' }}><span className="badge-nowrap" style={{ background: '#F1F5F9', padding: '0.227rem 0.5rem', borderRadius: '8px' }}>{inv.method}</span></td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.906rem', textAlign: 'center', whiteSpace: 'nowrap' }}><span className="badge-nowrap" style={{ padding: '0.272rem 0.625rem', borderRadius: '10px', background: '#F0FDF4', color: '#1B6B3A', fontSize: '0.725rem', fontWeight: '750' }}>{inv.status}</span></td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.906rem', textAlign: 'right', fontWeight: '850', color: '#1E293B', whiteSpace: 'nowrap' }}>{formatCurrency(inv.amount)}</td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={6} style={{ padding: '2rem 1.25rem', textAlign: 'center', color: '#64748B', fontWeight: '600' }}>
+                                    <td colSpan={6} style={{ padding: '1.812rem 1.133rem', textAlign: 'center', color: '#64748B', fontWeight: '600' }}>
                                         No billing history available.
                                     </td>
                                 </tr>
@@ -869,6 +913,63 @@ const Subscription = () => {
             </div>
 
             {/* ðŸ›¡ ICAI Verification Guard Modal */}
+            <style>{`
+                .icai-modal-card {
+                    background: #ffffff;
+                    border: 1px solid #E2E8F0;
+                    color: #0F172A;
+                }
+                .icai-modal-card h3 {
+                    color: #0F172A;
+                }
+                .icai-modal-card p {
+                    color: #64748B;
+                }
+                .icai-modal-info {
+                    background: #F8FAFC;
+                    border-top: 1px solid #F1F5F9;
+                    border-bottom: 1px solid #F1F5F9;
+                    color: #475569;
+                }
+                .icai-modal-cancel-btn {
+                    background: #F1F5F9;
+                    color: #475569;
+                    border: 1px solid #CBD5E1;
+                }
+                [data-theme='dark'] .icai-modal-card,
+                .dark-theme .icai-modal-card,
+                .dark .icai-modal-card {
+                    background: #141E33 !important;
+                    border-color: #1E293B !important;
+                    color: #F8FAFC !important;
+                }
+                [data-theme='dark'] .icai-modal-card h3,
+                .dark-theme .icai-modal-card h3,
+                .dark .icai-modal-card h3 {
+                    color: #F8FAFC !important;
+                }
+                [data-theme='dark'] .icai-modal-card p,
+                .dark-theme .icai-modal-card p,
+                .dark .icai-modal-card p {
+                    color: #94A3B8 !important;
+                }
+                [data-theme='dark'] .icai-modal-info,
+                .dark-theme .icai-modal-info,
+                .dark .icai-modal-info {
+                    background: #0F172A !important;
+                    border-color: #1E293B !important;
+                    color: #CBD5E1 !important;
+                }
+                [data-theme='dark'] .icai-modal-cancel-btn,
+                .dark-theme .icai-modal-cancel-btn,
+                .dark .icai-modal-cancel-btn {
+                    background: #1E293B !important;
+                    border-color: #334155 !important;
+                    color: #CBD5E1 !important;
+                }
+            `}</style>
+
+            {/* ICAI Verification Guard Modal */}
             {showIcaiGuardModal && (
                 <div style={{
                     position: 'fixed',
@@ -885,7 +986,7 @@ const Subscription = () => {
                     padding: '20px'
                 }}>
                     <div className="icai-modal-card" style={{
-                        borderRadius: '24px',
+                        borderRadius: '16px',
                         width: '100%',
                         maxWidth: '520px',
                         overflow: 'hidden',

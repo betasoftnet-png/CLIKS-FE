@@ -73,7 +73,7 @@ const Investments = () => {
 
                 .investments-layout-container {
                     display: flex;
-                    gap: 2rem;
+                    gap: 1.812rem;
                     align-items: flex-start;
                     flex: 1;
                 }
@@ -82,11 +82,11 @@ const Investments = () => {
                     width: 260px;
                     background: white;
                     border-radius: 16px;
-                    padding: 1rem;
+                    padding: 0.906rem;
                     border: 1px solid var(--border-color);
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                     flex-shrink: 0;
                     position: sticky;
                     top: 80px;
@@ -137,13 +137,13 @@ const Investments = () => {
                     to { opacity: 1; transform: translateY(0); }
                 }
 
-                .inv-view-header { margin-bottom: 1.5rem; }
-                .inv-view-title { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .inv-view-subtitle { color: var(--text-muted); font-size: 0.9rem; }
-                .inv-section-title { font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin-bottom: 1rem; }
+                .inv-view-header { margin-bottom: 1.359rem; }
+                .inv-view-title { font-size: 1.359rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .inv-view-subtitle { color: var(--text-muted); font-size: 0.816rem; }
+                .inv-section-title { font-size: 1.042rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.906rem; }
 
                 @media (max-width: 1024px) {
-                    .investments-layout-container { flex-direction: column; gap: 1rem; }
+                    .investments-layout-container { flex-direction: column; gap: 0.906rem; }
                     .investments-sidebar { width: 100%; flex-direction: row; overflow-x: auto; position: static; }
                     .inv-nav-item { width: auto; white-space: nowrap; }
                 }

@@ -113,8 +113,8 @@ const Breadcrumbs = ({ items }) => {
                 display: 'flex',
                 alignItems: 'center',
                 listStyle: 'none',
-                padding: '0.5rem 1rem', // Pill like padding
-                margin: '0 0 1.5rem 0',
+                padding: '0.453rem 0.906rem', // Pill like padding
+                margin: '0 0 1.359rem 0',
                 backgroundColor: 'white',
                 borderRadius: '99px',
                 width: 'fit-content',
@@ -135,7 +135,7 @@ const Breadcrumbs = ({ items }) => {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        marginRight: '0.75rem',
+                        marginRight: '0.68rem',
                         transition: 'transform 0.2s',
                     }}
                         onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
@@ -155,7 +155,7 @@ const Breadcrumbs = ({ items }) => {
 
                     return (
                         <li key={`${item.href}-${index}`} style={{ display: 'flex', alignItems: 'center' }}>
-                            <span style={{ margin: '0 0.5rem', color: '#CBD5E1', display: 'flex', alignItems: 'center' }}>
+                            <span style={{ margin: '0 0.453rem', color: '#CBD5E1', display: 'flex', alignItems: 'center' }}>
                                 <ChevronRight size={16} strokeWidth={2.5} />
                             </span>
 
@@ -163,7 +163,7 @@ const Breadcrumbs = ({ items }) => {
                                 <span style={{
                                     color: '#1B6B3A',
                                     fontWeight: 700,
-                                    fontSize: '1rem'
+                                    fontSize: '0.906rem'
                                 }}>
                                     {item.label}
                                 </span>
@@ -173,7 +173,7 @@ const Breadcrumbs = ({ items }) => {
                                     style={{
                                         color: '#64748B',
                                         textDecoration: 'none',
-                                        fontSize: '1rem',
+                                        fontSize: '0.906rem',
                                         fontWeight: 600,
                                         transition: 'color 0.2s'
                                     }}

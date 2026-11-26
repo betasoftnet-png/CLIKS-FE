@@ -155,7 +155,7 @@ const ChartMockup = ({ label, price, change, bars }) => {
                     />
                 ))}
             </div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.453rem' }}>
                 <span className="sf-chart-price">{price}</span>
                 <span className="sf-chart-change">{change}</span>
             </div>
@@ -221,7 +221,7 @@ export default function SocialFeed() {
                 ═══════════════════════════════ */}
             <aside className="sf-sidebar-left">
                 {/* Mini profile */}
-                <div className="sf-community-card" style={{ marginBottom: '1rem' }}>
+                <div className="sf-community-card" style={{ marginBottom: '0.906rem' }}>
                     <div className="sf-profile-mini">
                         <div className="sf-profile-avatar">You</div>
                         <div>
@@ -284,7 +284,7 @@ export default function SocialFeed() {
                             </button>
                         </div>
                         <button className="sf-post-btn" onClick={handlePost}>
-                            <Send size={13} style={{ marginRight: '0.35rem', display: 'inline' }} />
+                            <Send size={13} style={{ marginRight: '0.317rem', display: 'inline' }} />
                             Post
                         </button>
                     </div>
@@ -399,7 +399,7 @@ export default function SocialFeed() {
                 {/* Trending Stocks */}
                 <div className="sf-widget">
                     <div className="sf-widget-title">
-                        <TrendingUp size={12} style={{ marginRight: '0.4rem', display: 'inline', verticalAlign: 'middle' }} />
+                        <TrendingUp size={12} style={{ marginRight: '0.363rem', display: 'inline', verticalAlign: 'middle' }} />
                         Trending Stocks
                     </div>
                     {TRENDING_STOCKS.map(stock => (
@@ -419,12 +419,12 @@ export default function SocialFeed() {
                 {/* Crypto Market */}
                 <div className="sf-widget">
                     <div className="sf-widget-title">
-                        <Bitcoin size={12} style={{ marginRight: '0.4rem', display: 'inline', verticalAlign: 'middle' }} />
+                        <Bitcoin size={12} style={{ marginRight: '0.363rem', display: 'inline', verticalAlign: 'middle' }} />
                         Crypto Market
                     </div>
                     {CRYPTO_DATA.map(coin => (
                         <div key={coin.ticker} className="sf-crypto-row">
-                            <div className="sf-crypto-icon" style={{ background: '#FEF3C7', fontSize: '1.2rem' }}>
+                            <div className="sf-crypto-icon" style={{ background: '#FEF3C7', fontSize: '1.087rem' }}>
                                 {coin.symbol}
                             </div>
                             <div style={{ flex: 1 }}>
@@ -441,7 +441,7 @@ export default function SocialFeed() {
                 {/* Upcoming Events */}
                 <div className="sf-widget">
                     <div className="sf-widget-title">
-                        <Calendar size={12} style={{ marginRight: '0.4rem', display: 'inline', verticalAlign: 'middle' }} />
+                        <Calendar size={12} style={{ marginRight: '0.363rem', display: 'inline', verticalAlign: 'middle' }} />
                         Upcoming Events
                     </div>
                     {EVENTS.map(ev => (
@@ -459,18 +459,18 @@ export default function SocialFeed() {
                 {/* Community Stats mini card */}
                 <div className="sf-widget sf-community-stats">
                     <div className="sf-widget-title">
-                        <Star size={12} style={{ marginRight: '0.4rem', display: 'inline', verticalAlign: 'middle' }} />
+                        <Star size={12} style={{ marginRight: '0.363rem', display: 'inline', verticalAlign: 'middle' }} />
                         Community
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.25rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '0.227rem' }}>
                         {[
                             { val: '12.4K', label: 'Members' },
                             { val: '3.2K', label: 'Posts'   },
                             { val: '840',  label: 'Online'  },
                         ].map(stat => (
                             <div key={stat.label} style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '1.1rem', fontWeight: '800', color: 'var(--primary)' }}>{stat.val}</div>
-                                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: '600' }}>{stat.label}</div>
+                                <div style={{ fontSize: '0.997rem', fontWeight: '800', color: 'var(--primary)' }}>{stat.val}</div>
+                                <div style={{ fontSize: '0.634rem', color: 'var(--text-muted)', fontWeight: '600' }}>{stat.label}</div>
                             </div>
                         ))}
                     </div>

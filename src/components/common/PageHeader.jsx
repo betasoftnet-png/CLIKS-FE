@@ -16,18 +16,18 @@ const PageHeader = ({
                     display: flex;
                     justify-content: space-between;
                     align-items: flex-end;
-                    margin-bottom: 3rem;
+                    margin-bottom: 1.359rem;
                     font-family: 'Inter', -apple-system, sans-serif;
                 }
                 .header-titles {
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                 }
                 .breadcrumb-area {
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                 }
                 .badge-pro {
                     background: #1B6B3A;
@@ -49,7 +49,7 @@ const PageHeader = ({
                     text-transform: uppercase;
                 }
                 .premium-page-header h1 {
-                    font-size: 3rem;
+                    font-size: 1.677rem;
                     font-weight: 900;
                     letter-spacing: -2px;
                     margin: 0;
@@ -61,16 +61,16 @@ const PageHeader = ({
                 }
                 .header-subtitle {
                     color: #64748B;
-                    font-size: 1rem;
+                    font-size: 0.906rem;
                     font-weight: 500;
-                    margin: 0.5rem 0 0 0;
+                    margin: 0.453rem 0 0 0;
                 }
                 .header-actions {
                     display: flex;
                     align-items: center;
-                    gap: 1rem;
+                    gap: 0.906rem;
                     background: white;
-                    padding: 0.5rem;
+                    padding: 0.453rem;
                     border-radius: 20px;
                     border: 1px solid #F0FDF4;
                     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
@@ -79,12 +79,12 @@ const PageHeader = ({
                     background: linear-gradient(135deg, #1B6B3A, #22C55E);
                     color: white;
                     border: none;
-                    padding: 12px 24px;
-                    border-radius: 14px;
+                    padding: 10px 18px;
+                    border-radius: 10px;
                     font-weight: 700;
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                     cursor: pointer;
                     transition: all 0.2s;
                     box-shadow: 0 4px 12px rgba(27, 107, 58, 0.2);
@@ -120,10 +120,10 @@ const PageHeader = ({
                     .premium-page-header {
                         flex-direction: column;
                         align-items: flex-start;
-                        gap: 2rem;
+                        gap: 1.812rem;
                     }
                     .premium-page-header h1 {
-                        font-size: 2.2rem;
+                        font-size: 1.994rem;
                     }
                 }
             `}</style>

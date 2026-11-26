@@ -30,7 +30,7 @@ const AuditorLayout = ({ children }) => {
             <div className="app-body">
                 <AuditorSidebar isOpen={isSidebarOpen} />
                 <div className="main-content-area">
-                    <div className="content-scrollable" style={{ padding: '2rem' }}>
+                    <div className="content-scrollable" style={{ padding: '1.812rem' }}>
                         {children}
                     </div>
                 </div>

@@ -577,6 +577,7 @@ export function ProfileDropdown({
         <div style={styles.container} ref={dropdownRef}>
             <button
                 type="button"
+                data-tour="profile-dropdown-toggle"
                 onClick={() => setOpen(!open)}
                 className="profile-trigger-btn"
                 style={{
@@ -926,7 +927,7 @@ export function ProfileDropdown({
                                         color: '#111827',
                                         marginBottom: '2px',
                                         lineHeight: 1.2
-                                    }}>
+                                    }} data-tour="profile-summary">
                                         {displayName}
                                     </div>
 
@@ -1242,11 +1243,11 @@ export function ProfileDropdown({
 
             {/* View Profile Photo Modal Overlay */}
             {isViewPhotoModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(8px)', padding: '2rem' }}>
-                    <div style={{ background: '#ffffff', borderRadius: '24px', padding: '1.5rem', width: '100%', maxWidth: '400px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '1.5rem' }}>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
+                    <div style={{ background: '#ffffff', borderRadius: '16px', padding: '1.359rem', width: '100%', maxWidth: '400px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '1.359rem' }}>
                             <span style={{ fontSize: '15px', fontWeight: '800', color: '#1f2937' }}>Profile photo</span>
-                            <button onClick={() => setIsViewPhotoModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
+                            <button onClick={() => setIsViewPhotoModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={16} /></button>
                         </div>
                         
                         {profilePhoto && !imgError ? (
@@ -1257,7 +1258,7 @@ export function ProfileDropdown({
                             </div>
                         )}
                         
-                        <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', width: '100%' }}>
+                        <div style={{ display: 'flex', gap: '0.906rem', marginTop: '1.812rem', width: '100%' }}>
                             <button 
                                 onClick={() => {
                                     setIsViewPhotoModalOpen(false);

@@ -359,6 +359,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             <div className="sidebar-header">
                 <div 
                     className="brand-logo" 
+                    data-tour="sidebar-product-launcher"
                     onClick={onLogoClick}
                     role="button"
                     tabIndex={0}
@@ -396,6 +397,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     <>
                         {/* 1. Add Transaction */}
                         <button
+                            data-tour="sidebar-payments-add-tx"
                             onClick={() => {
                                 navigate('/payments/transactions?add=true');
                                 if (typeof window !== 'undefined') {
@@ -443,6 +445,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                         {/* 3. Transaction */}
                         <button
+                            data-tour="sidebar-transactions"
                             className={`sidebar-item ${activeItem === 'Transaction' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Transaction', '/payments/transactions')}
                         >
@@ -490,8 +493,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 {showBooksSidebar && (
                     <>
                         {/* Action Buttons: Add Income & Add Expense */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem', margin: '0.15rem 0.5rem 0.45rem 0.5rem' }}>
+                        <div data-tour="sidebar-books-quick-entry" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem', margin: '0.15rem 0.5rem 0.45rem 0.5rem' }}>
                             <button
+                                data-tour="sidebar-quick-income"
                                 onClick={() => openBookTxModal('income')}
                                 style={{
                                     display: 'flex',
@@ -517,6 +521,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 <Plus size={12} strokeWidth={3} /> Add Income
                             </button>
                             <button
+                                data-tour="sidebar-quick-expense"
                                 onClick={() => openBookTxModal('expense')}
                                 style={{
                                     display: 'flex',
@@ -558,6 +563,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         <div style={{ height: '1px', background: '#E2E8F0', margin: '0.2rem 0.5rem' }} />
                         {/* 2. Accounts */}
                         <button
+                            data-tour="sidebar-accounts"
                             className={`sidebar-item ${activeItem === 'Accounts' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Accounts', '/books/accounting')}
                         >
@@ -569,6 +575,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                         {/* 3. Purchases */}
                         <button
+                            data-tour="sidebar-purchases"
                             className={`sidebar-item ${activeItem === 'Purchases' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Purchases', '/books/purchase-details')}
                         >
@@ -580,6 +587,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                         {/* 4. Income */}
                         <button
+                            data-tour="sidebar-income"
                             className={`sidebar-item ${activeItem === 'Income' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Income', '/books/income')}
                         >
@@ -591,6 +599,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                         {/* 5. Expense */}
                         <button
+                            data-tour="sidebar-expenses"
                             className={`sidebar-item ${activeItem === 'Expense' || activeItem === 'Expenses' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Expense', '/books/expenses')}
                         >
@@ -600,19 +609,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             </div>
                         </button>
 
-                        {/* 6. Split & Collect */}
-                        <button
-                            className={`sidebar-item ${activeItem === 'Split & Collect' ? 'active' : ''}`}
-                            onClick={() => handleItemClick('Split & Collect', '/books/split-collect')}
-                        >
-                            <div className="flex items-center gap-3">
-                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
-                                <span className="sidebar-label">Split & Collect</span>
-                            </div>
-                        </button>
-
                         {/* 8. Report */}
                         <button
+                            data-tour="sidebar-report"
                             className={`sidebar-item ${activeItem === 'Report' ? 'active' : ''}`}
                             onClick={() => handleItemClick('Report', '/books')}
                         >
@@ -702,7 +701,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             </div>
 
             {/* Fixed Sidebar Footer */}
-            <div className="sidebar-footer-container" style={{ 
+            <div data-tour="sidebar-footer-system" className="sidebar-footer-container" style={{ 
                 padding: '0.55rem 0.75rem 0.65rem 0.75rem', 
                 borderTop: '1px solid #F1F5F9', 
                 display: 'flex', 
@@ -811,6 +810,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
 
                     <button
                         type="button"
+                        data-tour="sidebar-help-support"
                         onClick={() => handleItemClick('Help & Support', '/books/faq')}
                         className="sidebar-footer-btn"
                         style={{

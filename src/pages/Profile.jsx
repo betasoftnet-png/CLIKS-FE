@@ -71,8 +71,8 @@ const Profile = () => {
 
         return (
             <div className="dashboard-tile" style={{ maxWidth: '100%', height: '100%' }}>
-                <div className="tile-header" style={{ padding: '0.75rem 1rem' }}>
-                    <div className="tile-title" style={{ fontSize: '0.9rem' }}>
+                <div className="tile-header" style={{ padding: '0.68rem 0.906rem' }}>
+                    <div data-tour="profile-basic-heading" className="tile-title" style={{ fontSize: '0.816rem' }}>
                         <User size={18} className="text-blue-600" />
                         Basic Information
                     </div>
@@ -80,26 +80,26 @@ const Profile = () => {
                         onClick={handleSave}
                         disabled={mutation.isLoading}
                         style={{
-                            padding: '0.4rem 0.8rem',
+                            padding: '0.363rem 0.725rem',
                             background: isEditing ? '#1B6B3A' : 'white',
                             color: isEditing ? 'white' : '#1B6B3A',
                             border: '1px solid #1B6B3A',
                             borderRadius: '6px',
-                            fontSize: '0.8rem',
+                            fontSize: '0.725rem',
                             fontWeight: 600,
                             cursor: mutation.isLoading ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
+                            gap: '0.453rem',
                         }}
                         className="transition"
                     >
                         {mutation.isLoading ? 'Saving...' : (isEditing ? 'Save' : 'Edit')}
                     </button>
                 </div>
-                <div className="tile-content" style={{ padding: '1.5rem' }}>
-                    <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                <div className="tile-content" style={{ padding: '1.359rem' }}>
+                    <div style={{ display: 'flex', gap: '1.812rem', alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem' }}>
                             <div style={{
                                 width: '100px', height: '100px', borderRadius: '50%', background: '#E2E8F0',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
@@ -108,27 +108,27 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0, overflowX: "auto" }}>
                             <table className="table-auto border-separate border-spacing-2 border border-gray-400 dark:border-gray-500 w-full" style={{ borderCollapse: 'collapse' }}>
                                 <tbody>
                                     <tr>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.9rem', color: '#64748B' }}>Full Name</td>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.95rem' }}>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.816rem', color: '#64748B' }}>Full Name</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.861rem' }}>
                                             {isEditing ? <input value={localUser.name} onChange={e => setLocalUser({...localUser, name: e.target.value})} /> : user.name}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.9rem', color: '#64748B' }}>Email Address</td>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.95rem' }}>{user.email}</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.816rem', color: '#64748B' }}>Email Address</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.861rem' }}>{user.email}</td>
                                     </tr>
                                     <tr>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.9rem', color: '#64748B' }}>Phone</td>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.95rem' }}>{user.phone || 'Not set'}</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.816rem', color: '#64748B' }}>Phone</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontWeight: 600, color: '#0F172A', fontSize: '0.861rem' }}>{user.phone || 'Not set'}</td>
                                     </tr>
                                     <tr>
-                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.9rem', color: '#64748B' }}>Account Type</td>
+                                        <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px', fontSize: '0.816rem', color: '#64748B' }}>Account Type</td>
                                         <td className="border border-gray-300 dark:border-gray-700" style={{ padding: '8px' }}>
-                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.25rem 0.75rem', background: '#DBEAFE', color: '#1E40AF', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 600 }}>
+                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.363rem', padding: '0.227rem 0.68rem', background: '#DBEAFE', color: '#1E40AF', borderRadius: '999px', fontSize: '0.77rem', fontWeight: 600 }}>
                                                 {user.account_type || 'Basic'}
                                             </span>
                                         </td>
@@ -144,14 +144,14 @@ const Profile = () => {
 
     const AccountSummaryView = () => (
         <div className="dashboard-tile" style={{ maxWidth: '100%' }}>
-            <div className="tile-header" style={{ padding: '0.75rem 1rem' }}>
-                <div className="tile-title" style={{ fontSize: '0.9rem' }}><Wallet size={18} /> Account Summary</div>
+            <div className="tile-header" style={{ padding: '0.68rem 0.906rem' }}>
+                <div data-tour="profile-summary-heading" className="tile-title" style={{ fontSize: '0.816rem' }}><Wallet size={18} /> Account Summary</div>
             </div>
-            <div className="tile-content" style={{ padding: '1.5rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: '#F8FAFC', borderRadius: '8px' }}>
-                        <span style={{ color: '#64748B', fontSize: '0.9rem' }}>Total Combined Balance</span>
-                        <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#0F172A' }}>₹ {(summary.total || 0).toLocaleString()}</span>
+            <div className="tile-content" style={{ padding: '1.359rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.68rem', background: '#F8FAFC', borderRadius: '8px' }}>
+                        <span style={{ color: '#64748B', fontSize: '0.816rem' }}>Total Combined Balance</span>
+                        <span style={{ fontWeight: 700, fontSize: '0.997rem', color: '#0F172A' }}>₹ {(summary.total || 0).toLocaleString()}</span>
                     </div>
                 </div>
             </div>
@@ -160,25 +160,25 @@ const Profile = () => {
 
     const DataBackupView = () => (
         <div className="dashboard-tile" style={{ maxWidth: '100%' }}>
-            <div className="tile-header" style={{ padding: '0.75rem 1rem' }}>
-                <div className="tile-title" style={{ fontSize: '0.9rem' }}><Database size={18} /> Data & Backup</div>
+            <div className="tile-header" style={{ padding: '0.68rem 0.906rem' }}>
+                <div data-tour="profile-backup-heading" className="tile-title" style={{ fontSize: '0.816rem' }}><Database size={18} /> Data & Backup</div>
             </div>
-            <div className="tile-content" style={{ padding: '1.5rem' }}>
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
-                        <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.9rem' }}>Cloud Sync Status</span>
-                        <span style={{ color: '#166534', fontWeight: 700, fontSize: '0.8rem', background: '#DCFCE7', padding: '0.2rem 0.6rem', borderRadius: '999px' }}>Active</span>
+            <div className="tile-content" style={{ padding: '1.359rem' }}>
+                <div style={{ marginBottom: '1.359rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.453rem', alignItems: 'center' }}>
+                        <span style={{ color: '#334155', fontWeight: 500, fontSize: '0.816rem' }}>Cloud Sync Status</span>
+                        <span style={{ color: '#166534', fontWeight: 700, fontSize: '0.725rem', background: '#DCFCE7', padding: '0.181rem 0.544rem', borderRadius: '999px' }}>Active</span>
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: '#64748B' }}>Your data is securely stored in PostgreSQL.</div>
+                    <div style={{ fontSize: '0.725rem', color: '#64748B' }}>Your data is securely stored in PostgreSQL.</div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <button style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '1rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', cursor: 'pointer' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
+                    <button style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem', padding: '0.906rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', cursor: 'pointer' }}>
                         <Download size={24} color="#1B6B3A" />
-                        <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Export All Data</span>
+                        <span style={{ fontWeight: 600, fontSize: '0.77rem' }}>Export All Data</span>
                     </button>
-                    <button style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '1rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', cursor: 'pointer' }}>
+                    <button style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem', padding: '0.906rem', background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '8px', cursor: 'pointer' }}>
                         <Upload size={24} color="#1B6B3A" />
-                        <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Import Records</span>
+                        <span style={{ fontWeight: 600, fontSize: '0.77rem' }}>Import Records</span>
                     </button>
                 </div>
             </div>
@@ -199,25 +199,25 @@ const Profile = () => {
             <div className="app-body" style={{ height: 'calc(100vh - 64px)', overflow: 'hidden' }}>
                 <div className="main-content-area" style={{ background: '#F8FAFC', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', padding: '0' }}>
                     <div className="content-scrollable" style={{ overflowY: 'auto' }}>
-                        <div className="content-wrapper" style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.5rem 2rem', height: '100%' }}>
-                            <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div className="content-wrapper" style={{ maxWidth: '1000px', margin: '0 auto', padding: '1.359rem 1.812rem', height: '100%' }}>
+                            <div style={{ marginBottom: '1.359rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div>
-                                    <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1E293B', letterSpacing: '-0.02em', marginBottom: '0.25rem' }}>Account Settings</h1>
-                                    <p style={{ color: '#64748B', fontSize: '0.9rem' }}>Manage your data and personal information.</p>
+                                    <h1 data-tour="profile-heading" style={{ fontSize: '1.586rem', fontWeight: 800, color: '#1E293B', letterSpacing: '-0.02em', marginBottom: '0.227rem', width: 'fit-content' }}>Account Settings</h1>
+                                    <p style={{ color: '#64748B', fontSize: '0.816rem' }}>Manage your data and personal information.</p>
                                 </div>
                                 <button
                                     onClick={() => navigate(-1)}
                                     style={{
                                         display: 'inline-flex',
                                         alignItems: 'center',
-                                        gap: '0.5rem',
+                                        gap: '0.453rem',
                                         color: '#64748B',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         fontWeight: 600,
                                         cursor: 'pointer',
                                         background: 'transparent',
                                         border: '1px solid #E2E8F0',
-                                        padding: '0.5rem 1rem',
+                                        padding: '0.453rem 0.906rem',
                                         borderRadius: '8px',
                                         transition: 'all 0.2s'
                                     }}
@@ -230,24 +230,25 @@ const Profile = () => {
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '2rem',
+                                gap: '1.812rem',
                                 borderBottom: '1px solid #E2E8F0',
-                                marginBottom: '1.5rem',
+                                marginBottom: '1.359rem',
                                 paddingBottom: '1px'
                             }}>
                                 {sidebarItems.map((item) => (
                                     <button
                                         key={item.label}
+                                        data-tour={`profile-tab-${item.label.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
                                         onClick={() => setActiveSection(item.label)}
                                         style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '0.5rem',
-                                            padding: '0.75rem 0',
+                                            gap: '0.453rem',
+                                            padding: '0.68rem 0',
                                             borderBottom: activeSection === item.label ? '2px solid #1B6B3A' : '2px solid transparent',
                                             background: 'transparent',
                                             color: activeSection === item.label ? '#1B6B3A' : '#64748B',
-                                            fontSize: '0.95rem',
+                                            fontSize: '0.861rem',
                                             fontWeight: activeSection === item.label ? 600 : 500,
                                             cursor: 'pointer',
                                             whiteSpace: 'nowrap',

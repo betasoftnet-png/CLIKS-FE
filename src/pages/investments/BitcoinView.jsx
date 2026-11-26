@@ -115,36 +115,36 @@ const BitcoinView = () => {
             </div>
 
             <style>{`
-                .btc-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-                .btc-price-box { display: flex; align-items: center; gap: 1rem; background: white; padding: 0.75rem 1.25rem; border-radius: 14px; border: 1px solid var(--border-color); }
+                .btc-header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.359rem; flex-wrap: wrap; gap: 0.906rem; }
+                .btc-price-box { display: flex; align-items: center; gap: 0.906rem; background: white; padding: 0.68rem 1.133rem; border-radius: 14px; border: 1px solid var(--border-color); }
                 .btc-curr-price { display: flex; flex-direction: column; }
-                .btc-price-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
-                .btc-price-val { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
-                .btc-change-badge { display: flex; align-items: center; gap: 0.2rem; padding: 0.3rem 0.6rem; border-radius: 8px; background: #DCFCE7; color: #16A34A; font-weight: 700; font-size: 0.85rem; }
+                .btc-price-label { font-size: 0.68rem; color: var(--text-muted); font-weight: 500; }
+                .btc-price-val { font-size: 1.269rem; font-weight: 700; color: var(--text-main); }
+                .btc-change-badge { display: flex; align-items: center; gap: 0.181rem; padding: 0.272rem 0.544rem; border-radius: 8px; background: #DCFCE7; color: #16A34A; font-weight: 700; font-size: 0.77rem; }
 
-                .btc-chart-card { background: white; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 1.5rem; overflow: hidden; }
-                .btc-chart-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); }
-                .btc-chart-tabs { display: flex; gap: 0.35rem; }
-                .btc-chart-tab { padding: 0.3rem 0.7rem; border-radius: 6px; border: none; background: #F0FDF4; color: var(--text-muted); font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+                .btc-chart-card { background: white; border-radius: 16px; border: 1px solid var(--border-color); margin-bottom: 1.359rem; overflow: hidden; }
+                .btc-chart-header { display: flex; justify-content: space-between; align-items: center; padding: 1.133rem 1.359rem; border-bottom: 1px solid var(--border-color); }
+                .btc-chart-tabs { display: flex; gap: 0.317rem; }
+                .btc-chart-tab { padding: 0.272rem 0.634rem; border-radius: 6px; border: none; background: #F0FDF4; color: var(--text-muted); font-size: 0.725rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
                 .btc-chart-tab.active { background: var(--primary); color: white; }
-                .btc-chart-area { position: relative; height: 220px; padding: 1rem; }
+                .btc-chart-area { position: relative; height: 220px; padding: 0.906rem; }
                 .btc-chart-svg { width: 100%; height: 100%; }
                 .btc-chart-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); opacity: 0.5; pointer-events: none; }
-                .btc-chart-overlay p { font-size: 0.85rem; margin-top: 0.5rem; }
+                .btc-chart-overlay p { font-size: 0.77rem; margin-top: 0.453rem; }
 
-                .btc-trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-                .btc-trade-panel { background: white; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color); }
-                .btc-trade-panel-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.25rem; color: #16A34A; }
-                .btc-trade-panel-header h4 { font-size: 1.05rem; font-weight: 600; color: var(--text-main); }
+                .btc-trade-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.133rem; }
+                .btc-trade-panel { background: white; border-radius: 16px; padding: 1.359rem; border: 1px solid var(--border-color); }
+                .btc-trade-panel-header { display: flex; align-items: center; gap: 0.544rem; margin-bottom: 1.133rem; color: #16A34A; }
+                .btc-trade-panel-header h4 { font-size: 0.952rem; font-weight: 600; color: var(--text-main); }
                 .btc-trade-panel-header.sell-header { color: #DC2626; }
-                .btc-trade-field { margin-bottom: 1rem; }
-                .btc-field-label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.4rem; }
+                .btc-trade-field { margin-bottom: 0.906rem; }
+                .btc-field-label { display: block; font-size: 0.725rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.363rem; }
                 .btc-input-wrap { position: relative; }
                 .btc-input-prefix { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 600; }
-                .btc-input { width: 100%; padding: 0.75rem 1rem 0.75rem 2rem; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.95rem; outline: none; transition: border 0.2s; background: #F8FAFC; }
+                .btc-input { width: 100%; padding: 0.68rem 0.906rem 0.68rem 1.812rem; border: 1px solid var(--border-color); border-radius: 10px; font-size: 0.861rem; outline: none; transition: border 0.2s; background: #F8FAFC; }
                 .btc-input:focus { border-color: var(--primary); background: white; }
-                .btc-calc-val { padding: 0.65rem 1rem; background: #F0FDF4; border-radius: 10px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
-                .btc-action-btn { width: 100%; padding: 0.75rem; border: none; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+                .btc-calc-val { padding: 0.589rem 0.906rem; background: #F0FDF4; border-radius: 10px; font-weight: 600; color: var(--text-main); font-size: 0.861rem; }
+                .btc-action-btn { width: 100%; padding: 0.68rem; border: none; border-radius: 10px; font-weight: 600; font-size: 0.816rem; cursor: pointer; transition: all 0.2s; margin-top: 0.453rem; }
                 .buy-btn { background: #16A34A; color: white; }
                 .buy-btn:hover { background: #15803D; }
                 .sell-btn { background: #DC2626; color: white; }

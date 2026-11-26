@@ -1,17 +1,34 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './App';
-import * as AuthContextModule from './context/AuthContext';
+import { CurrencyProvider } from './context/CurrencyContext';
+import { LanguageProvider } from './context/LanguageContext';
+import * as AuthContextModule from './context/auth-context';
 
-// Mock AuthContext
-vi.mock('./context/AuthContext', async (importOriginal) => {
+// Mock auth-context (used by Landing, ProtectedRoute, Topbar, Sidebar, OnboardingContext via src/context)
+vi.mock('./context/auth-context', async (importOriginal) => {
     const actual = await importOriginal();
     return {
         ...actual,
-        AuthProvider: ({ children }) => <div data-testid="auth-provider">{children}</div>,
         useAuth: vi.fn(),
     };
 });
+
+const renderApp = () => {
+    const queryClient = new QueryClient({
+        defaultOptions: { queries: { retry: false } },
+    });
+    return render(
+        <QueryClientProvider client={queryClient}>
+            <CurrencyProvider>
+                <LanguageProvider>
+                    <App />
+                </LanguageProvider>
+            </CurrencyProvider>
+        </QueryClientProvider>
+    );
+};
 
 describe('App Smoke Tests', () => {
     beforeEach(() => {
@@ -27,7 +44,7 @@ describe('App Smoke Tests', () => {
             isLoading: false
         });
 
-        render(<App />);
+        renderApp();
 
         // Landing page should be visible
         // "Books & Finance" is in Topbar (always visible?) No, Topbar is in MainLayout.
@@ -47,15 +64,15 @@ describe('App Smoke Tests', () => {
             isLoading: false
         });
 
-        window.history.pushState({}, 'Home', '/home');
+        window.history.pushState({}, 'Dashboard', '/books/dashboard');
 
-        render(<App />);
+        renderApp();
 
-        // MainLayout -> Sidebar -> "Stock" link
+        // MainLayout -> Sidebar -> "Accounts" link
         // Suspense fallback might show first "Loading..."
 
         await waitFor(() => {
-            // Check for home sidebar item
+            // Check for books sidebar item
             expect(screen.getByText('Accounts')).toBeInTheDocument();
         });
     });
@@ -68,7 +85,7 @@ describe('App Smoke Tests', () => {
 
         window.history.pushState({}, 'Home', '/home');
 
-        render(<App />);
+        renderApp();
 
         // Should NOT see Sidebar
         await waitFor(() => {

@@ -93,15 +93,15 @@ const Income = () => {
         <div className="page-fade-in">
             <div className="dashboard-header">
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.363rem' }}>
                         <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'linear-gradient(135deg,#1B6B3A 0%,#064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                             <TrendingUp size={20} />
                         </div>
-                        <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 900, color: 'var(--text-main, #0F172A)', lineHeight: 1.1 }}>Income</h1>
+                        <h1 style={{ margin: 0, fontSize: '1.586rem', fontWeight: 900, color: 'var(--text-main, #0F172A)', lineHeight: 1.1 }}>Income</h1>
                     </div>
-                    <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.9rem', fontWeight: 500 }}>Track and manage your revenue streams</p>
+                    <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.816rem', fontWeight: 500 }}>Track and manage your revenue streams</p>
                 </div>
-                <button className="btn-primary">
+                <button className="btn-primary" data-tour="income-record-button">
                     <Plus size={18} />
                     <span>Record Income</span>
                 </button>
@@ -169,7 +169,7 @@ const Income = () => {
                         <tbody>
                             {incomeData.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: '#94a3b8' }}>
+                                    <td colSpan="5" style={{ textAlign: 'center', padding: '2.719rem', color: '#94a3b8' }}>
                                         No income records found.
                                     </td>
                                 </tr>
@@ -232,13 +232,13 @@ const Income = () => {
                 .income-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .income-stat-card {
                     background: white;
-                    padding: 1.5rem;
+                    padding: 1.359rem;
                     border-radius: 16px;
                     border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
@@ -252,20 +252,20 @@ const Income = () => {
 
                 .stat-label {
                     color: var(--text-muted);
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     font-weight: 500;
-                    margin-bottom: 0.5rem;
+                    margin-bottom: 0.453rem;
                 }
 
                 .stat-value {
-                    font-size: 1.75rem;
+                    font-size: 1.586rem;
                     font-weight: 700;
                     color: var(--text-main);
-                    margin-bottom: 0.25rem;
+                    margin-bottom: 0.227rem;
                 }
 
                 .stat-subtext {
-                    font-size: 0.8rem;
+                    font-size: 0.725rem;
                     color: #10B981; /* Green for positive growth hints */
                     font-weight: 500;
                 }
@@ -298,11 +298,11 @@ const Income = () => {
                 }
                 .search-input {
                     width: 100%;
-                    padding: 0.75rem 1rem 0.75rem 2.5rem;
+                    padding: 0.68rem 0.906rem 0.68rem 2.266rem;
                     border: 1px solid var(--border-color);
                     border-radius: 10px;
                     outline: none;
-                    font-size: 0.9rem;
+                    font-size: 0.816rem;
                     background: white;
                     transition: border-color 0.2s;
                 }
@@ -314,12 +314,12 @@ const Income = () => {
                 .filter-btn {
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.75rem 1rem;
+                    gap: 0.453rem;
+                    padding: 0.68rem 0.906rem;
                     background: white;
                     border: 1px solid var(--border-color);
                     border-radius: 10px;
-                    font-size: 0.9rem;
+                    font-size: 0.816rem;
                     font-weight: 500;
                     color: var(--text-main);
                     transition: all 0.2s;
@@ -334,7 +334,9 @@ const Income = () => {
                     background: white;
                     border-radius: 16px;
                     border: 1px solid var(--border-color);
-                    overflow: hidden;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    -webkit-overflow-scrolling: touch;
                     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
                 }
 
@@ -345,21 +347,23 @@ const Income = () => {
 
                 .income-table th {
                     text-align: left;
-                    padding: 1rem 1.5rem;
+                    padding: 0.625rem 0.906rem;
                     background: #F8FAFC;
                     border-bottom: 1px solid var(--border-color);
                     color: var(--text-muted);
-                    font-weight: 600;
-                    font-size: 0.8rem;
+                    font-weight: 700;
+                    font-size: 0.68rem;
                     text-transform: uppercase;
-                    letter-spacing: 0.05em;
+                    letter-spacing: 0.04em;
+                    white-space: nowrap;
                 }
 
                 .income-table td {
-                    padding: 1rem 1.5rem;
+                    padding: 0.625rem 0.906rem;
                     border-bottom: 1px solid var(--border-color);
                     vertical-align: middle;
                     color: var(--text-main);
+                    font-size: 0.8rem;
                 }
 
                 .income-table tr:last-child td {
@@ -383,8 +387,8 @@ const Income = () => {
 
                 .recurring-badge {
                     display: inline-block;
-                    font-size: 0.65rem;
-                    padding: 0.1rem 0.5rem;
+                    font-size: 0.589rem;
+                    padding: 0.091rem 0.453rem;
                     background: #F0FDF4;
                     color: #1B6B3A;
                     border-radius: 999px;
@@ -394,10 +398,10 @@ const Income = () => {
                 }
 
                 .category-pill {
-                    padding: 0.25rem 0.75rem;
+                    padding: 0.227rem 0.68rem;
                     background: #FEE2E2;
                     border-radius: 6px;
-                    font-size: 0.85rem;
+                    font-size: 0.77rem;
                     color: #000000;
                     font-weight: 700;
                 }
@@ -421,9 +425,9 @@ const Income = () => {
 
                 @media (max-width: 768px) {
                     .income-table thead { display: none; }
-                    .income-table tr { display: block; border-bottom: 1px solid var(--border-color); padding: 1rem; }
-                    .income-table td { display: flex; justify-content: space-between; padding: 0.5rem 0; border: none; }
-                    .income-table td::before { content: attr(date-label); font-weight: 600; color: var(--text-muted); display: block; }
+                    .income-table tr { display: block; border-bottom: 1px solid var(--border-color); padding: 0.75rem; }
+                    .income-table td { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border: none; }
+                    .income-table td::before { content: attr(data-label); font-weight: 600; color: var(--text-muted); display: block; }
                 }
             `}</style>
         </div>

@@ -257,25 +257,25 @@ const Accounts = () => {
 
                 .btn-secondary {
                     background: white; border: 1px solid var(--border-color); color: var(--text-muted);
-                    padding: 0.5rem 1rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; font-weight: 500; font-size: 0.875rem;
+                    padding: 0.453rem 0.906rem; border-radius: 8px; display: flex; align-items: center; gap: 0.453rem; font-weight: 500; font-size: 0.793rem;
                 }
                 .btn-secondary:hover { background: #F8FAFC; color: var(--text-main); }
 
                 .account-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
                 
                 .account-stat-card {
-                    background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);
+                    background: white; padding: 1.359rem; border-radius: 16px; border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; font-weight: 500; color: var(--text-muted); }
                 
                 .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
                 .icon-blue { background: #DBEAFE; color: #1B6B3A; }
@@ -285,11 +285,11 @@ const Accounts = () => {
                 .cards-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-                    gap: 2rem;
+                    gap: 1.812rem;
                 }
 
                 .bank-card {
-                    height: 220px; border-radius: 20px; padding: 1.5rem; color: white;
+                    height: 220px; border-radius: 20px; padding: 1.359rem; color: white;
                     display: flex; flex-direction: column; justify-content: space-between;
                     position: relative; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
                     transition: transform 0.3s; overflow: hidden; cursor: pointer;
@@ -307,26 +307,26 @@ const Accounts = () => {
                 .card-chip { width: 40px; height: 30px; background: rgba(255,255,255,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.3); }
                 .card-contactless { opacity: 0.8; }
 
-                .card-balance-section { margin-top: 1rem; }
-                .card-label { font-size: 0.75rem; opacity: 0.8; letter-spacing: 0.05em; text-transform: uppercase; }
-                .card-balance { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+                .card-balance-section { margin-top: 0.906rem; }
+                .card-label { font-size: 0.68rem; opacity: 0.8; letter-spacing: 0.05em; text-transform: uppercase; }
+                .card-balance { font-size: 1.812rem; font-weight: 700; letter-spacing: -0.02em; }
 
                 .card-details { display: flex; justify-content: space-between; align-items: flex-end; }
-                .card-holder { font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
-                .card-number { font-family: monospace; font-size: 1rem; opacity: 0.9; }
-                .card-brand { font-size: 1rem; font-weight: 700; font-style: italic; opacity: 0.9; }
+                .card-holder { font-size: 0.816rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.227rem; }
+                .card-number { font-family: monospace; font-size: 0.906rem; opacity: 0.9; }
+                .card-brand { font-size: 0.906rem; font-weight: 700; font-style: italic; opacity: 0.9; }
 
                 .card-actions-overlay {
                     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
                     background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-                    display: flex; align-items: center; justify-content: center; gap: 1rem;
+                    display: flex; align-items: center; justify-content: center; gap: 0.906rem;
                     opacity: 0; transition: opacity 0.2s;
                 }
 
                 .overlay-btn {
                     background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-                    padding: 0.5rem 1rem; border-radius: 8px; color: white; display: flex; align-items: center; gap: 0.5rem;
-                    font-weight: 500; font-size: 0.9rem; transition: background 0.2s;
+                    padding: 0.453rem 0.906rem; border-radius: 8px; color: white; display: flex; align-items: center; gap: 0.453rem;
+                    font-weight: 500; font-size: 0.816rem; transition: background 0.2s;
                 }
                 .overlay-btn:hover { background: white; color: var(--text-main); }
 
@@ -336,7 +336,7 @@ const Accounts = () => {
                     cursor: pointer; background: #F8FAFC; transition: all 0.2s; color: var(--text-muted);
                 }
                 .add-card-placeholder:hover { border-color: var(--primary); color: var(--primary); background: #F0FDF4; }
-                .placeholder-content { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+                .placeholder-content { display: flex; flex-direction: column; align-items: center; gap: 0.68rem; }
                 .plus-circle { width: 48px; height: 48px; border-radius: 50%; background: white; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
             `}</style>
         </div>

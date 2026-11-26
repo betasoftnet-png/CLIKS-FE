@@ -419,24 +419,25 @@ const PurchaseDetails = () => {
     return (
         <div className="content-wrapper">
             {/* Page Header */}
-            <div style={{ padding: '2rem 0 1rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ padding: '1.812rem 0 0.906rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.906rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Purchases & Loyalty Points</h1>
-                    <p style={{ color: '#64748B', marginTop: '0.4rem', fontSize: '0.95rem' }}>
+                    <h1 style={{ fontSize: '1.586rem', fontWeight: '800', color: '#1E293B', margin: 0 }}>Purchases & Loyalty Points</h1>
+                    <p style={{ color: '#64748B', marginTop: '0.363rem', fontSize: '0.861rem' }}>
                         Track your cross-store purchase bills, store-wise loyalty balances, and warranty products in one place.
                     </p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     <button
                         onClick={handleSync}
                         disabled={loadingPurchases}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '10px', fontWeight: '700', color: '#1B6B3A', cursor: 'pointer', opacity: loadingPurchases ? 0.6 : 1 }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '10px', fontWeight: '700', color: '#1B6B3A', cursor: 'pointer', opacity: loadingPurchases ? 0.6 : 1 }}
                     >
                         <RefreshCcw size={18} className={loadingPurchases ? 'animate-spin' : ''} /> {loadingPurchases ? 'Syncing...' : 'Sync Data'}
                     </button>
                     <button
+                        data-tour="purchases-link-store"
                         onClick={() => setIsShopModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', background: '#1B6B3A', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 2px 8px rgba(27,107,58,0.2)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: '#1B6B3A', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 2px 8px rgba(27,107,58,0.2)' }}
                     >
                         <ExternalLink size={16} /> Link Store
                     </button>
@@ -444,26 +445,26 @@ const PurchaseDetails = () => {
             </div>
 
             {/* Active Integrations & Loyalty Points on TOP for UI Context */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', marginBottom: '1.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.359rem', marginBottom: '1.586rem' }}>
                 
                 {/* 1. Active Integrations Top Card */}
-                <div style={{ background: '#fff', borderRadius: '24px', padding: '1.5rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 style={{ fontSize: '1rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
+                        <h3 data-tour="purchases-stores-heading" style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                             <Building2 size={18} color="#1B6B3A" /> Active Store Integrations
                         </h3>
-                        <span style={{ fontSize: '0.72rem', fontWeight: '800', background: '#ECFDF5', color: '#059669', padding: '0.2rem 0.6rem', borderRadius: '12px' }}>
+                        <span style={{ fontSize: '0.652rem', fontWeight: '800', background: '#ECFDF5', color: '#059669', padding: '0.181rem 0.544rem', borderRadius: '12px' }}>
                             {connectedShops.length} Active Stores
                         </span>
                     </div>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                         {loadingIntegrations ? (
-                            <div style={{ padding: '1rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.85rem' }}>
+                            <div style={{ padding: '0.906rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.77rem' }}>
                                 Loading connection requests...
                             </div>
                         ) : (!Array.isArray(integrations) || integrations.length === 0) ? (
-                            <div style={{ padding: '1rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.85rem', border: '1px dashed #E2E8F0', borderRadius: '12px' }}>
+                            <div style={{ padding: '0.906rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.77rem', border: '1px dashed #E2E8F0', borderRadius: '12px' }}>
                                 No active store connection requests yet.
                             </div>
                         ) : (
@@ -480,32 +481,32 @@ const PurchaseDetails = () => {
                                 else if (isRejected) { statusColor = '#DC2626'; statusBg = '#FEF2F2'; }
 
                                 return (
-                                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '14px', border: '1px solid #F1F5F9' }}>
+                                    <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.68rem 0.906rem', background: '#F8FAFC', borderRadius: '14px', border: '1px solid #F1F5F9' }}>
                                         <div>
-                                            <div style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.88rem' }}>{item.business_name || item.name}</div>
-                                            <div style={{ fontSize: '0.74rem', color: '#64748B' }}>Requested by merchant</div>
+                                            <div style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.797rem' }}>{item.business_name || item.name}</div>
+                                            <div style={{ fontSize: '0.671rem', color: '#64748B' }}>Requested by merchant</div>
                                         </div>
 
                                         <div>
                                             {isPending ? (
-                                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                <div style={{ display: 'flex', gap: '0.453rem' }}>
                                                     <button
                                                         onClick={() => handleRespondConnection(item.id, 'accept')}
                                                         disabled={actionLoadingId === item.id}
-                                                        style={{ padding: '0.4rem 0.8rem', background: '#10B981', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '0.75rem', cursor: 'pointer' }}
+                                                        style={{ padding: '0.363rem 0.725rem', background: '#10B981', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '0.68rem', cursor: 'pointer' }}
                                                     >
                                                         {actionLoadingId === item.id ? '...' : 'Accept'}
                                                     </button>
                                                     <button
                                                         onClick={() => handleRespondConnection(item.id, 'reject')}
                                                         disabled={actionLoadingId === item.id}
-                                                        style={{ padding: '0.4rem 0.8rem', background: '#EF4444', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '0.75rem', cursor: 'pointer' }}
+                                                        style={{ padding: '0.363rem 0.725rem', background: '#EF4444', color: 'white', border: 'none', borderRadius: '6px', fontWeight: '700', fontSize: '0.68rem', cursor: 'pointer' }}
                                                     >
                                                         {actionLoadingId === item.id ? '...' : 'Reject'}
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <span style={{ fontSize: '0.7rem', fontWeight: 850, padding: '0.2rem 0.6rem', borderRadius: '6px', background: statusBg, color: statusColor }}>
+                                                <span style={{ fontSize: '0.634rem', fontWeight: 850, padding: '0.181rem 0.544rem', borderRadius: '6px', background: statusBg, color: statusColor }}>
                                                     {isConnected ? 'CONNECTED' : isRejected ? 'REJECTED' : item.status}
                                                 </span>
                                             )}
@@ -518,27 +519,27 @@ const PurchaseDetails = () => {
                 </div>
 
                 {/* 2. Loyalty & Rewards Overview Top Card */}
-                <div style={{ background: '#fff', borderRadius: '24px', padding: '1.5rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h3 style={{ fontSize: '1rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
+                            <h3 style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                 <Star size={18} color="#1B6B3A" /> Overall Loyalty Points Wallet
                             </h3>
                             <button 
                                 onClick={() => setShowPointsModal(true)}
-                                style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: '0.75rem', fontWeight: '800', padding: '0.25rem 0.65rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#1D4ED8', fontSize: '0.68rem', fontWeight: '800', padding: '0.227rem 0.589rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                             >
                                 <Calculator size={14} /> Points Rules
                             </button>
                         </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem 1.25rem', background: '#F0FDF4', borderRadius: '16px', border: '1px solid #BBF7D0', marginBottom: '0.85rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.906rem 1.133rem', background: '#F0FDF4', borderRadius: '16px', border: '1px solid #BBF7D0', marginBottom: '0.77rem' }}>
                             <div>
-                                <div style={{ fontSize: '0.72rem', color: '#166534', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em' }}>TOTAL AVAILABLE POINTS</div>
-                                <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#1B6B3A', margin: '2px 0' }}>
-                                    {Number(currentPoints).toLocaleString()} <span style={{ fontSize: '0.9rem', fontWeight: 800 }}>pts</span>
+                                <div style={{ fontSize: '0.652rem', color: '#166534', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em' }}>TOTAL AVAILABLE POINTS</div>
+                                <div style={{ fontSize: '1.586rem', fontWeight: 900, color: '#1B6B3A', margin: '2px 0' }}>
+                                    {Number(currentPoints).toLocaleString()} <span style={{ fontSize: '0.816rem', fontWeight: 800 }}>pts</span>
                                 </div>
-                                <div style={{ fontSize: '0.78rem', color: '#15803D', fontWeight: '700' }}>
+                                <div style={{ fontSize: '0.707rem', color: '#15803D', fontWeight: '700' }}>
                                     ≈ ₹{Number(currentMoneyValue).toLocaleString('en-IN', { minimumFractionDigits: 2 })} Cashback Value
                                 </div>
                             </div>
@@ -549,7 +550,7 @@ const PurchaseDetails = () => {
                     </div>
 
                     {/* Points-to-Money Ratio Explanation Banner */}
-                    <div style={{ background: '#F8FAFC', padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem' }}>
+                    <div style={{ background: '#F8FAFC', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.707rem' }}>
                         <div>
                             <span style={{ fontWeight: '800', color: '#334155' }}>Points Ratio: </span>
                             <span style={{ color: '#059669', fontWeight: '800' }}>₹100 Spent = 1 Pt</span>
@@ -558,7 +559,7 @@ const PurchaseDetails = () => {
                         </div>
                         <button 
                             onClick={() => setShowPointsModal(true)} 
-                            style={{ background: 'none', border: 'none', color: '#2563EB', fontWeight: '800', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '2px' }}
+                            style={{ background: 'none', border: 'none', color: '#2563EB', fontWeight: '800', fontSize: '0.68rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '2px' }}
                         >
                             Calculator <ChevronRight size={12} />
                         </button>
@@ -567,7 +568,7 @@ const PurchaseDetails = () => {
             </div>
 
             {/* 4 Navigation Sub-Tabs */}
-            <div style={{ display: 'flex', gap: '0.6rem', borderBottom: '2px solid #E2E8F0', paddingBottom: '0.6rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.544rem', borderBottom: '2px solid #E2E8F0', paddingBottom: '0.544rem', marginBottom: '1.359rem', flexWrap: 'wrap' }}>
                 {[
                     { id: 'shop-points', label: '🏪 Store Points & Balances', count: rawMerchants.length },
                     { id: 'point-history', label: '📜 Point History Ledger', count: (walletData.transactions || []).length },
@@ -579,15 +580,16 @@ const PurchaseDetails = () => {
                         <button
                             key={tab.id}
                             type="button"
+                            data-tour={`purchases-tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
                             style={{
-                                padding: '0.6rem 1.1rem',
+                                padding: '0.544rem 0.997rem',
                                 borderRadius: '12px',
                                 border: 'none',
                                 background: isActive ? '#1B6B3A' : '#F1F5F9',
                                 color: isActive ? '#FFFFFF' : '#475569',
                                 fontWeight: '800',
-                                fontSize: '0.85rem',
+                                fontSize: '0.77rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -599,7 +601,7 @@ const PurchaseDetails = () => {
                             <span>{tab.label}</span>
                             {tab.count !== undefined && tab.count > 0 && (
                                 <span style={{
-                                    fontSize: '0.72rem',
+                                    fontSize: '0.652rem',
                                     fontWeight: '850',
                                     padding: '1px 6px',
                                     borderRadius: '10px',
@@ -616,39 +618,39 @@ const PurchaseDetails = () => {
 
             {/* TAB CONTENT 1: STORE POINTS & BALANCES */}
             {activeTab === 'shop-points' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <h3 style={{ fontSize: '1.15rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <h3 data-tour="purchases-store-points-heading" style={{ fontSize: '1.042rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                                 <Store size={20} color="#1B6B3A" /> Points Earned Across Stores
                             </h3>
-                            <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '4px 0 0 0' }}>
+                            <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 View how many loyalty points you have collected in each CLIKS Business store and their redeemable value.
                             </p>
                         </div>
                     </div>
 
                     {loadingMerchants ? (
-                        <div style={{ padding: '3rem', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
-                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.5rem' }} />
+                        <div style={{ padding: '2.719rem', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
+                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.453rem' }} />
                             <div style={{ color: '#64748B', fontWeight: 600 }}>Loading store balances...</div>
                         </div>
                     ) : rawMerchants.length === 0 ? (
-                        <div style={{ padding: '3.5rem 1rem', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px dashed #CBD5E1' }}>
-                            <Store size={48} style={{ color: '#94A3B8', marginBottom: '1rem' }} />
-                            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#334155', margin: 0 }}>No Store Loyalty Points Found</h4>
-                            <p style={{ fontSize: '0.85rem', color: '#64748B', marginTop: '0.5rem', maxWidth: '420px', margin: '0.5rem auto 1.5rem auto' }}>
+                        <div style={{ padding: '3.172rem 0.906rem', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px dashed #CBD5E1' }}>
+                            <Store size={48} style={{ color: '#94A3B8', marginBottom: '0.906rem' }} />
+                            <h4 style={{ fontSize: '0.997rem', fontWeight: 800, color: '#334155', margin: 0 }}>No Store Loyalty Points Found</h4>
+                            <p style={{ fontSize: '0.77rem', color: '#64748B', marginTop: '0.453rem', maxWidth: '420px', margin: '0.453rem auto 1.359rem auto' }}>
                                 Whenever you purchase items from any store using CLIKS Business for billing, your loyalty points for that shop will appear here automatically.
                             </p>
                             <button
                                 onClick={() => setIsShopModalOpen(true)}
-                                style={{ padding: '0.6rem 1.25rem', borderRadius: '10px', background: '#1B6B3A', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer' }}
+                                style={{ padding: '0.544rem 1.133rem', borderRadius: '10px', background: '#1B6B3A', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer' }}
                             >
                                 Link A Store
                             </button>
                         </div>
                     ) : (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.133rem' }}>
                             {rawMerchants.map((merchant, mIdx) => {
                                 const pts = merchant.available_points || merchant.points_balance || 0;
                                 const val = merchant.cashback_value || (pts * pointsToMoneyRatio).toFixed(2);
@@ -656,49 +658,49 @@ const PurchaseDetails = () => {
                                 const ordersCount = merchant.total_orders || merchant.orders_count || merchant.invoices_count || 0;
 
                                 return (
-                                    <div key={merchant.id || merchant.business_id || mIdx} style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E2E8F0', padding: '1.35rem', display: 'flex', flexDirection: 'column', gap: '1rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                                    <div key={merchant.id || merchant.business_id || mIdx} style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E2E8F0', padding: '1.223rem', display: 'flex', flexDirection: 'column', gap: '0.906rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                                                <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '1.1rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
+                                                <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.997rem' }}>
                                                     {(merchant.business_name || 'Store').charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
-                                                    <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 850, color: '#0F172A' }}>
+                                                    <h4 style={{ margin: 0, fontSize: '0.952rem', fontWeight: 850, color: '#0F172A' }}>
                                                         {merchant.business_name || 'Store'}
                                                     </h4>
-                                                    <span style={{ fontSize: '0.7rem', color: '#059669', background: '#ECFDF5', padding: '1px 6px', borderRadius: '6px', fontWeight: 800, textTransform: 'uppercase' }}>
+                                                    <span style={{ fontSize: '0.634rem', color: '#059669', background: '#ECFDF5', padding: '1px 6px', borderRadius: '6px', fontWeight: 800, textTransform: 'uppercase' }}>
                                                         Connected Store
                                                     </span>
                                                 </div>
                                             </div>
 
                                             <div style={{ textAlign: 'right' }}>
-                                                <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Available In Store</span>
-                                                <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#1B6B3A' }}>
-                                                    {Number(pts).toLocaleString()} <span style={{ fontSize: '0.8rem' }}>pts</span>
+                                                <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Available In Store</span>
+                                                <div style={{ fontSize: '1.223rem', fontWeight: 900, color: '#1B6B3A' }}>
+                                                    {Number(pts).toLocaleString()} <span style={{ fontSize: '0.725rem' }}>pts</span>
                                                 </div>
-                                                <span style={{ fontSize: '0.72rem', color: '#166534', fontWeight: 700 }}>
+                                                <span style={{ fontSize: '0.652rem', color: '#166534', fontWeight: 700 }}>
                                                     ≈ ₹{Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem', background: '#F8FAFC', padding: '0.75rem', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.453rem', background: '#F8FAFC', padding: '0.68rem', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
                                             <div>
-                                                <span style={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Earned</span>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: 850, color: '#059669' }}>+{merchant.points_earned || pts} pts</span>
+                                                <span style={{ fontSize: '0.562rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Earned</span>
+                                                <span style={{ fontSize: '0.743rem', fontWeight: 850, color: '#059669' }}>+{merchant.points_earned || pts} pts</span>
                                             </div>
                                             <div>
-                                                <span style={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Redeemed</span>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: 850, color: '#D97706' }}>-{merchant.points_redeemed || 0} pts</span>
+                                                <span style={{ fontSize: '0.562rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Redeemed</span>
+                                                <span style={{ fontSize: '0.743rem', fontWeight: 850, color: '#D97706' }}>-{merchant.points_redeemed || 0} pts</span>
                                             </div>
                                             <div style={{ textAlign: 'right' }}>
-                                                <span style={{ fontSize: '0.62rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Total Spend</span>
-                                                <span style={{ fontSize: '0.82rem', fontWeight: 850, color: '#0F172A' }}>₹{Number(totalSpent).toLocaleString('en-IN')}</span>
+                                                <span style={{ fontSize: '0.562rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase', display: 'block' }}>Total Spend</span>
+                                                <span style={{ fontSize: '0.743rem', fontWeight: 850, color: '#0F172A' }}>₹{Number(totalSpent).toLocaleString('en-IN')}</span>
                                             </div>
                                         </div>
 
-                                        <div style={{ display: 'flex', gap: '0.6rem' }}>
+                                        <div style={{ display: 'flex', gap: '0.544rem' }}>
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -711,14 +713,14 @@ const PurchaseDetails = () => {
                                                     });
                                                     setActiveTab('purchases');
                                                 }}
-                                                style={{ flex: 1, padding: '0.6rem 0.8rem', borderRadius: '10px', background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#166534', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                                                style={{ flex: 1, padding: '0.544rem 0.725rem', borderRadius: '10px', background: '#F0FDF4', border: '1px solid #BBF7D0', color: '#166534', fontWeight: 800, fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
                                             >
                                                 <Receipt size={14} /> View Store Bills ({ordersCount})
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => setActiveTab('point-history')}
-                                                style={{ padding: '0.6rem 0.8rem', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', color: '#475569', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer' }}
+                                                style={{ padding: '0.544rem 0.725rem', borderRadius: '10px', background: '#F8FAFC', border: '1px solid #E2E8F0', color: '#475569', fontWeight: 800, fontSize: '0.707rem', cursor: 'pointer' }}
                                             >
                                                 History
                                             </button>
@@ -733,41 +735,41 @@ const PurchaseDetails = () => {
 
             {/* TAB CONTENT 2: POINT HISTORY LEDGER */}
             {activeTab === 'point-history' && (
-                <div style={{ background: '#FFFFFF', borderRadius: '24px', border: '1px solid #E2E8F0', padding: '1.75rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '1.586rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem', flexWrap: 'wrap', gap: '0.453rem' }}>
                         <div>
-                            <h3 style={{ fontSize: '1.15rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <h3 data-tour="purchases-history-heading" style={{ fontSize: '1.042rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                                 <History size={20} color="#1B6B3A" /> Loyalty Points Ledger
                             </h3>
-                            <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '4px 0 0 0' }}>
+                            <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 Chronological audit trail of points earned from purchases and points redeemed across all stores.
                             </p>
                         </div>
                     </div>
 
                     {loadingWallet ? (
-                        <div style={{ padding: '3rem', textAlign: 'center' }}>
-                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.5rem' }} />
+                        <div style={{ padding: '2.719rem', textAlign: 'center' }}>
+                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.453rem' }} />
                             <div style={{ color: '#64748B', fontWeight: 600 }}>Loading point transactions...</div>
                         </div>
                     ) : (!walletData.transactions || walletData.transactions.length === 0) ? (
-                        <div style={{ padding: '3rem 1rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
-                            <History size={40} style={{ color: '#94A3B8', marginBottom: '0.75rem' }} />
-                            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: '#475569', margin: 0 }}>No Point Transactions Yet</h4>
-                            <p style={{ fontSize: '0.82rem', color: '#94A3B8', marginTop: '0.35rem' }}>
+                        <div style={{ padding: '2.719rem 0.906rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
+                            <History size={40} style={{ color: '#94A3B8', marginBottom: '0.68rem' }} />
+                            <h4 style={{ fontSize: '0.906rem', fontWeight: 800, color: '#475569', margin: 0 }}>No Point Transactions Yet</h4>
+                            <p style={{ fontSize: '0.743rem', color: '#94A3B8', marginTop: '0.317rem' }}>
                                 Points earned on each checkout will be credited and logged here with the invoice reference.
                             </p>
                         </div>
                     ) : (
-                        <div style={{ overflowX: 'auto' }}>
-                            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                        <div className="cliks-table-scroll">
+                            <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.77rem' }}>
                                 <thead>
-                                    <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.72rem' }}>
-                                        <th style={{ padding: '0.75rem 1rem', textAlign: 'left' }}>Date</th>
-                                        <th style={{ padding: '0.75rem 1rem', textAlign: 'left' }}>Store</th>
-                                        <th style={{ padding: '0.75rem 1rem', textAlign: 'left' }}>Activity / Description</th>
-                                        <th style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>Points</th>
-                                        <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Invoice Ref</th>
+                                    <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.652rem' }}>
+                                        <th style={{ padding: '0.56rem 0.78rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Date</th>
+                                        <th style={{ padding: '0.56rem 0.78rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Store</th>
+                                        <th style={{ padding: '0.56rem 0.78rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Activity / Description</th>
+                                        <th style={{ padding: '0.56rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Points</th>
+                                        <th style={{ padding: '0.56rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Invoice Ref</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -777,22 +779,20 @@ const PurchaseDetails = () => {
 
                                         return (
                                             <tr key={tx.id || tIdx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                                <td style={{ padding: '0.85rem 1rem', color: '#64748B', fontWeight: 600, fontSize: '0.8rem' }}>
+                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', color: '#64748B', fontWeight: 600, fontSize: '0.725rem', whiteSpace: 'nowrap' }}>
                                                     {tx.created_at ? new Date(tx.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Recent'}
                                                 </td>
-                                                <td style={{ padding: '0.85rem 1rem', fontWeight: 800, color: '#0F172A' }}>
-                                                    {tx.merchant_name || 'Store'}
+                                                <td style={{ padding: '0.589rem 0.78rem', fontWeight: 800, color: '#0F172A', maxWidth: '170px' }} title={tx.merchant_name || 'Store'}>
+                                                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.merchant_name || 'Store'}</div>
                                                 </td>
-                                                <td style={{ padding: '0.85rem 1rem', color: '#475569', fontWeight: 600 }}>
-                                                    {tx.description || (isCredit ? 'Purchase Points Earned' : 'Points Redeemed')}
+                                                <td style={{ padding: '0.589rem 0.78rem', color: '#475569', fontWeight: 600, maxWidth: '240px' }} title={tx.description || (isCredit ? 'Purchase Points Earned' : 'Points Redeemed')}>
+                                                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.description || (isCredit ? 'Purchase Points Earned' : 'Points Redeemed')}</div>
                                                 </td>
-                                                <td style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>
-                                                    <span style={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
+                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                                    <span className="badge-nowrap" style={{
                                                         gap: '3px',
                                                         fontWeight: 900,
-                                                        fontSize: '0.88rem',
+                                                        fontSize: '0.77rem',
                                                         color: isCredit ? '#059669' : '#D97706',
                                                         background: isCredit ? '#ECFDF5' : '#FFFBEB',
                                                         padding: '3px 8px',
@@ -802,16 +802,16 @@ const PurchaseDetails = () => {
                                                         {isCredit ? `+${pts}` : `-${pts}`} pts
                                                     </span>
                                                 </td>
-                                                <td style={{ padding: '0.85rem 1rem', textAlign: 'right' }}>
+                                                <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                                     {tx.invoice_id || tx.invoice_number ? (
                                                         <button
                                                             onClick={() => setViewingInvoiceId(tx.invoice_id || tx.invoice_number)}
-                                                            style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.75rem', fontWeight: 800, padding: '0.25rem 0.65rem', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '3px' }}
+                                                            style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.68rem', fontWeight: 800, padding: '0.227rem 0.589rem', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap' }}
                                                         >
                                                             {tx.invoice_number || `POS-${tx.invoice_id}`} <ChevronRight size={12} />
                                                         </button>
                                                     ) : (
-                                                        <span style={{ color: '#94A3B8', fontSize: '0.75rem' }}>-</span>
+                                                        <span style={{ color: '#94A3B8', fontSize: '0.68rem' }}>-</span>
                                                     )}
                                                 </td>
                                             </tr>
@@ -826,47 +826,47 @@ const PurchaseDetails = () => {
 
             {/* TAB CONTENT 3: PURCHASE INVOICES */}
             {activeTab === 'purchases' && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                    <div style={{ background: '#fff', borderRadius: '24px', padding: '2rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', paddingBottom: '1rem', borderBottom: '1px solid #F1F5F9', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
+                    <div style={{ background: '#fff', borderRadius: '16px', padding: '1.812rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem', paddingBottom: '0.906rem', borderBottom: '1px solid #F1F5F9', flexWrap: 'wrap', gap: '0.906rem' }}>
                             <div>
                                 {selectedShop ? (
                                     <>
                                         <button
                                             onClick={() => setSelectedShop(null)}
-                                            style={{ background: 'none', border: 'none', color: '#2563EB', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.4rem' }}
+                                            style={{ background: 'none', border: 'none', color: '#2563EB', fontWeight: '700', fontSize: '0.77rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.317rem', marginBottom: '0.363rem' }}
                                         >
                                             ← View All Stores
                                         </button>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                            <h3 style={{ fontSize: '1.3rem', fontWeight: '850', color: '#1E293B', margin: 0 }}>{selectedShop.business_name}</h3>
-                                            <span style={{ fontSize: '0.7rem', fontWeight: '850', color: '#10B981', background: '#ECFDF5', padding: '0.2rem 0.6rem', borderRadius: '6px', textTransform: 'uppercase' }}>FILTERED</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
+                                            <h3 style={{ fontSize: '1.178rem', fontWeight: '850', color: '#1E293B', margin: 0 }}>{selectedShop.business_name}</h3>
+                                            <span style={{ fontSize: '0.634rem', fontWeight: '850', color: '#10B981', background: '#ECFDF5', padding: '0.181rem 0.544rem', borderRadius: '6px', textTransform: 'uppercase' }}>FILTERED</span>
                                         </div>
                                     </>
                                 ) : (
                                     <div>
-                                        <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <h3 data-tour="purchases-invoices-heading" style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                                             <Receipt size={20} color="#1B6B3A" /> All Store Invoices ({purchases.length})
                                         </h3>
-                                        <p style={{ fontSize: '0.8rem', color: '#64748B', margin: '4px 0 0 0' }}>Showing all digital bills received across all connected shops</p>
+                                        <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Showing all digital bills received across all connected shops</p>
                                     </div>
                                 )}
                             </div>
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                                    <Search size={16} style={{ position: 'absolute', left: '0.75rem', color: '#94A3B8', pointerEvents: 'none' }} />
+                                    <Search size={16} style={{ position: 'absolute', left: '0.68rem', color: '#94A3B8', pointerEvents: 'none' }} />
                                     <input 
                                         type="text" 
                                         placeholder="Search invoice #..." 
                                         value={warrantySearchQuery} 
                                         onChange={(e) => setWarrantySearchQuery(e.target.value)} 
-                                        style={{ padding: '0.5rem 0.85rem 0.5rem 2.2rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.8rem', fontWeight: '600', color: '#1E293B', outline: 'none', width: '200px' }} 
+                                        style={{ padding: '0.453rem 0.77rem 0.453rem 1.994rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.725rem', fontWeight: '600', color: '#1E293B', outline: 'none', width: '200px' }} 
                                     />
                                     {warrantySearchQuery && (
                                         <button 
                                             onClick={() => setWarrantySearchQuery('')} 
-                                            style={{ position: 'absolute', right: '0.5rem', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
+                                            style={{ position: 'absolute', right: '0.453rem', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
                                         >
                                             <X size={14} />
                                         </button>
@@ -874,7 +874,7 @@ const PurchaseDetails = () => {
                                 </div>
                                 <button
                                     onClick={() => setIsShopModalOpen(true)}
-                                    style={{ padding: '0.5rem 1rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.8rem', fontWeight: '700', color: '#475569', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                    style={{ padding: '0.453rem 0.906rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.725rem', fontWeight: '700', color: '#475569', cursor: 'pointer', whiteSpace: 'nowrap' }}
                                 >
                                     {selectedShop ? 'Switch Shop' : 'Filter by Shop'}
                                 </button>
@@ -882,63 +882,63 @@ const PurchaseDetails = () => {
                         </div>
 
                         {displayedPurchases.length === 0 ? (
-                            <div style={{ padding: '3rem 1rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
-                                <Receipt size={40} style={{ color: '#CBD5E1', marginBottom: '1rem' }} />
-                                <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#64748B', margin: 0 }}>
+                            <div style={{ padding: '2.719rem 0.906rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
+                                <Receipt size={40} style={{ color: '#CBD5E1', marginBottom: '0.906rem' }} />
+                                <h4 style={{ fontSize: '0.906rem', fontWeight: '700', color: '#64748B', margin: 0 }}>
                                     {warrantySearchQuery ? `No matching invoices found for "${warrantySearchQuery}"` : 'No purchases found'}
                                 </h4>
-                                <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '0.5rem' }}>
+                                <p style={{ fontSize: '0.77rem', color: '#94A3B8', marginTop: '0.453rem' }}>
                                     New purchase bills from CLIKS Business merchants will automatically appear here.
                                 </p>
                             </div>
                         ) : (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                 {displayedPurchases.map((inv, iIdx) => {
                                     const invId = inv?.id || inv?.invoice_number || `POS-${iIdx}`;
                                     const isInlineExpanded = expandedInvoiceIds.includes(invId);
 
                                     return (
-                                        <div key={invId} style={{ border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.25rem', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                        <div key={invId} style={{ border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.133rem', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                                                 <div>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                         <Receipt size={18} style={{ color: '#1B6B3A' }} />
-                                                        <span style={{ fontSize: '1rem', fontWeight: 850, color: '#1E293B' }}>{inv?.invoice_number || `POS-${iIdx}`}</span>
-                                                        <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#475569', background: '#F1F5F9', padding: '0.15rem 0.5rem', borderRadius: '6px' }}>
+                                                        <span style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B' }}>{inv?.invoice_number || `POS-${iIdx}`}</span>
+                                                        <span style={{ fontSize: '0.652rem', fontWeight: 800, color: '#475569', background: '#F1F5F9', padding: '0.136rem 0.453rem', borderRadius: '6px' }}>
                                                             {inv?.merchant_name || selectedShop?.business_name || 'Store'}
                                                         </span>
                                                         {invoiceHasWarranty(inv) && (
-                                                            <span style={{ fontSize: '0.65rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.15rem 0.5rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                                            <span style={{ fontSize: '0.589rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.136rem 0.453rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                                                                 🛡️ Warranty Product
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                                                    <span style={{ fontSize: '0.68rem', color: '#94A3B8', fontWeight: 600, display: 'block', marginTop: '4px' }}>
                                                         {formatInvoiceDate(inv)}
                                                     </span>
                                                 </div>
                                                 <div style={{ textAlign: 'right' }}>
-                                                    <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#1B6B3A' }}>₹{(inv?.grand_total || inv?.total_amount || 0).toLocaleString()}</div>
-                                                    <span style={{ fontSize: '0.65rem', fontWeight: 850, textTransform: 'uppercase', padding: '0.2rem 0.5rem', borderRadius: '6px', ...getStatusStyle(inv?.payment_status) }}>{inv?.payment_status || 'Paid'}</span>
+                                                    <div style={{ fontSize: '1.042rem', fontWeight: 900, color: '#1B6B3A' }}>₹{(inv?.grand_total || inv?.total_amount || 0).toLocaleString()}</div>
+                                                    <span style={{ fontSize: '0.589rem', fontWeight: 850, textTransform: 'uppercase', padding: '0.181rem 0.453rem', borderRadius: '6px', ...getStatusStyle(inv?.payment_status) }}>{inv?.payment_status || 'Paid'}</span>
                                                 </div>
                                             </div>
 
-                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', borderTop: '1px dashed #E2E8F0', paddingTop: '1rem' }}>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.906rem', borderTop: '1px dashed #E2E8F0', paddingTop: '0.906rem' }}>
                                                 <div>
-                                                    <div style={{ fontSize: '0.6rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>GST Tax</div>
-                                                    <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569' }}>₹{(inv?.tax_amount || 0).toLocaleString()}</div>
+                                                    <div style={{ fontSize: '0.544rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>GST Tax</div>
+                                                    <div style={{ fontSize: '0.725rem', fontWeight: 700, color: '#475569' }}>₹{(inv?.tax_amount || 0).toLocaleString()}</div>
                                                 </div>
                                                 <div>
-                                                    <div style={{ fontSize: '0.6rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>Points Earned</div>
-                                                    <div style={{ fontSize: '0.8rem', fontWeight: 850, color: '#7C3AED' }}>+{inv?.points_earned || 0} pts</div>
+                                                    <div style={{ fontSize: '0.544rem', color: '#94A3B8', fontWeight: 700, textTransform: 'uppercase' }}>Points Earned</div>
+                                                    <div style={{ fontSize: '0.725rem', fontWeight: 850, color: '#7C3AED' }}>+{inv?.points_earned || 0} pts</div>
                                                 </div>
-                                                <div style={{ textAlign: 'right', display: 'flex', gap: '0.5rem', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                                <div style={{ textAlign: 'right', display: 'flex', gap: '0.453rem', justifyContent: 'flex-end', alignItems: 'center' }}>
                                                     <button
                                                         onClick={() => {
                                                             toggleInvoiceItemsInline(invId);
                                                             setViewingInvoiceId(invId);
                                                         }}
-                                                        style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.78rem', fontWeight: 800, padding: '0.35rem 0.75rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                                        style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.707rem', fontWeight: 800, padding: '0.317rem 0.68rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                                                     >
                                                         View Items {isInlineExpanded ? <ChevronUp size={14} /> : <ChevronRight size={14} />}
                                                     </button>
@@ -947,32 +947,32 @@ const PurchaseDetails = () => {
 
                                             {/* Inline Purchased Items List View */}
                                             {isInlineExpanded && (
-                                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ marginTop: '1rem', borderTop: '1px solid #F1F5F9', paddingTop: '1rem' }}>
-                                                    <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Purchased Line Items:</div>
-                                                    <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', overflow: 'hidden' }}>
-                                                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+                                                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ marginTop: '0.906rem', borderTop: '1px solid #F1F5F9', paddingTop: '0.906rem' }}>
+                                                    <div style={{ fontSize: '0.68rem', fontWeight: 800, color: '#475569', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Purchased Line Items:</div>
+                                                    <div className="cliks-table-scroll" style={{ border: '1px solid #E2E8F0', borderRadius: '12px' }}>
+                                                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.725rem' }}>
                                                             <thead>
-                                                                <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.68rem' }}>
-                                                                    <th style={{ padding: '0.6rem 0.75rem', textAlign: 'left' }}>Item Name</th>
-                                                                    <th style={{ padding: '0.6rem 0.75rem', textAlign: 'center' }}>Qty</th>
-                                                                    <th style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }}>Unit Price</th>
-                                                                    <th style={{ padding: '0.6rem 0.75rem', textAlign: 'right' }}>Total</th>
+                                                                <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.616rem' }}>
+                                                                    <th style={{ padding: '0.5rem 0.68rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Item Name</th>
+                                                                    <th style={{ padding: '0.5rem 0.68rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
+                                                                    <th style={{ padding: '0.5rem 0.68rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Unit Price</th>
+                                                                    <th style={{ padding: '0.5rem 0.68rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Total</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {parseInvoiceItems(inv).map((it, idx) => (
                                                                     <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                                                        <td style={{ padding: '0.6rem 0.75rem', fontWeight: 700, color: '#1E293B' }}>
+                                                                        <td style={{ padding: '0.5rem 0.68rem', fontWeight: 700, color: '#1E293B' }} title={it.product_name || it.name}>
                                                                             {it.product_name || it.name}
                                                                             {hasProductWarranty(it) && (
-                                                                                <span style={{ fontSize: '0.68rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.15rem 0.5rem', borderRadius: '6px', marginLeft: '0.5rem', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                                                                <span className="badge-nowrap" style={{ fontSize: '0.616rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.136rem 0.453rem', borderRadius: '6px', marginLeft: '0.453rem', gap: '3px' }}>
                                                                                     🛡️ Warranty ({getProductWarrantyPeriod(it)})
                                                                                 </span>
                                                                             )}
                                                                         </td>
-                                                                        <td style={{ padding: '0.6rem 0.75rem', textAlign: 'center', fontWeight: 800, color: '#1B6B3A' }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
-                                                                        <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', color: '#475569' }}>₹{(it.price || 0).toLocaleString()}</td>
-                                                                        <td style={{ padding: '0.6rem 0.75rem', textAlign: 'right', fontWeight: 850, color: '#1E293B' }}>₹{(it.amount || ((it.quantity || 1) * (it.price || 0))).toLocaleString()}</td>
+                                                                        <td className="cell-nowrap" style={{ padding: '0.5rem 0.68rem', textAlign: 'center', fontWeight: 800, color: '#1B6B3A', whiteSpace: 'nowrap' }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
+                                                                        <td className="cell-num" style={{ padding: '0.5rem 0.68rem', textAlign: 'right', color: '#475569', whiteSpace: 'nowrap' }}>₹{(it.price || 0).toLocaleString()}</td>
+                                                                        <td className="cell-num" style={{ padding: '0.5rem 0.68rem', textAlign: 'right', fontWeight: 850, color: '#1E293B', whiteSpace: 'nowrap' }}>₹{(it.amount || ((it.quantity || 1) * (it.price || 0))).toLocaleString()}</td>
                                                                     </tr>
                                                                 ))}
                                                             </tbody>
@@ -991,30 +991,30 @@ const PurchaseDetails = () => {
 
             {/* TAB CONTENT 4: WARRANTY PRODUCTS */}
             {activeTab === 'warranty' && (
-                <div style={{ background: '#fff', borderRadius: '24px', padding: '2rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.812rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem', flexWrap: 'wrap', gap: '0.906rem' }}>
                         <div>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <h3 data-tour="purchases-warranty-heading" style={{ fontSize: '1.133rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                                 <Shield size={20} color="#1B6B3A" /> Customer Warranty Tracking ({filteredWarrantyProducts.length})
                             </h3>
-                            <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '4px 0 0 0' }}>
+                            <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 Products with warranty coverage automatically tracked from your purchase invoices.
                             </p>
                         </div>
 
                         <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                            <Search size={16} style={{ position: 'absolute', left: '0.75rem', color: '#94A3B8', pointerEvents: 'none' }} />
+                            <Search size={16} style={{ position: 'absolute', left: '0.68rem', color: '#94A3B8', pointerEvents: 'none' }} />
                             <input 
                                 type="text" 
                                 placeholder="Search warranty products..." 
                                 value={warrantySearchQuery} 
                                 onChange={(e) => setWarrantySearchQuery(e.target.value)} 
-                                style={{ padding: '0.5rem 0.85rem 0.5rem 2.2rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.8rem', fontWeight: '600', color: '#1E293B', outline: 'none', width: '220px' }} 
+                                style={{ padding: '0.453rem 0.77rem 0.453rem 1.994rem', background: '#F8FAFC', border: '1px solid #CBD5E1', borderRadius: '10px', fontSize: '0.725rem', fontWeight: '600', color: '#1E293B', outline: 'none', width: '220px' }} 
                             />
                             {warrantySearchQuery && (
                                 <button 
                                     onClick={() => setWarrantySearchQuery('')} 
-                                    style={{ position: 'absolute', right: '0.5rem', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
+                                    style={{ position: 'absolute', right: '0.453rem', background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
                                 >
                                     <X size={14} />
                                 </button>
@@ -1023,37 +1023,37 @@ const PurchaseDetails = () => {
                     </div>
 
                     {filteredWarrantyProducts.length === 0 ? (
-                        <div style={{ padding: '3rem 1rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
-                            <Shield size={40} style={{ color: '#CBD5E1', marginBottom: '1rem' }} />
-                            <h4 style={{ fontSize: '1rem', fontWeight: '700', color: '#64748B', margin: 0 }}>
+                        <div style={{ padding: '2.719rem 0.906rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1' }}>
+                            <Shield size={40} style={{ color: '#CBD5E1', marginBottom: '0.906rem' }} />
+                            <h4 style={{ fontSize: '0.906rem', fontWeight: '700', color: '#64748B', margin: 0 }}>
                                 {warrantySearchQuery ? `No matching warranty products for "${warrantySearchQuery}"` : 'No Warranty Products Found'}
                             </h4>
-                            <p style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '0.5rem' }}>
+                            <p style={{ fontSize: '0.77rem', color: '#94A3B8', marginTop: '0.453rem' }}>
                                 When you buy warranty-covered devices (phones, electronics, appliances) from connected stores, they appear here.
                             </p>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                             {filteredWarrantyProducts.map((wItem) => (
-                                <div key={wItem.id} style={{ border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.25rem', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                                <div key={wItem.id} style={{ border: '1px solid #E2E8F0', borderRadius: '16px', padding: '1.133rem', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                 <Package size={18} style={{ color: '#1B6B3A' }} />
-                                                <span style={{ fontSize: '1.05rem', fontWeight: 850, color: '#1E293B' }}>{wItem.product_name}</span>
-                                                <span style={{ fontSize: '0.68rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.15rem 0.6rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                                                <span style={{ fontSize: '0.952rem', fontWeight: 850, color: '#1E293B' }}>{wItem.product_name}</span>
+                                                <span style={{ fontSize: '0.616rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.136rem 0.544rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                                                     🛡️ Warranty: {wItem.warranty_period}
                                                 </span>
                                             </div>
-                                            <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                                            <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 600, display: 'block', marginTop: '4px' }}>
                                                 Store: <strong>{wItem.merchant_name}</strong> • SKU: {wItem.sku} • Purchased On: <strong>{formatInvoiceDate(wItem)}</strong> • Ref: <strong>{wItem.invoice_number}</strong>
                                             </span>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#1B6B3A' }}>₹{wItem.amount.toLocaleString()}</div>
+                                            <div style={{ fontSize: '1.042rem', fontWeight: 900, color: '#1B6B3A' }}>₹{wItem.amount.toLocaleString()}</div>
                                             <button
                                                 onClick={() => setViewingInvoiceId(wItem.invoice_id)}
-                                                style={{ marginTop: '4px', background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.75rem', fontWeight: 800, padding: '0.25rem 0.65rem', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                                                style={{ marginTop: '4px', background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.68rem', fontWeight: 800, padding: '0.227rem 0.589rem', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                                             >
                                                 View Order Details <ChevronRight size={12} />
                                             </button>
@@ -1069,60 +1069,60 @@ const PurchaseDetails = () => {
             {/* FULL INVOICE VIEW MODAL */}
             <AnimatePresence>
                 {viewingInvoiceId && (
-                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.906rem' }}>
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setViewingInvoiceId(null)} style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)' }} />
-                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '750px', maxHeight: '90vh', background: '#fff', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ padding: '1.25rem 1.75rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '750px', maxHeight: '90vh', background: '#fff', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ padding: '1.133rem 1.586rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '1.2rem', fontWeight: 850, color: '#1E293B', margin: 0 }}>
+                                    <h3 style={{ fontSize: '1.087rem', fontWeight: 850, color: '#1E293B', margin: 0 }}>
                                         Invoice #{activeModalInvoice?.invoice_number || viewingInvoiceId}
                                     </h3>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748B', margin: '3px 0 0 0' }}>
+                                    <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '3px 0 0 0' }}>
                                         Store: <strong>{activeModalInvoice?.merchant_name || 'Store'}</strong> • Date: {formatInvoiceDate(activeModalInvoice)}
                                     </p>
                                 </div>
                                 <button onClick={() => setViewingInvoiceId(null)} style={{ width: 36, height: 36, borderRadius: '10px', background: '#fff', border: '1px solid #E2E8F0', color: '#64748B', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={20} /></button>
                             </div>
 
-                            <div style={{ padding: '1.5rem 1.75rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ border: '1px solid #E2E8F0', borderRadius: '14px', overflow: 'hidden' }}>
-                                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
+                            <div style={{ padding: '1.359rem 1.586rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                                <div className="cliks-table-scroll" style={{ border: '1px solid #E2E8F0', borderRadius: '14px' }}>
+                                    <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.77rem' }}>
                                         <thead>
-                                            <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.72rem' }}>
-                                                <th style={{ padding: '0.75rem 1rem', textAlign: 'left' }}>Item & SKU</th>
-                                                <th style={{ padding: '0.75rem 1rem', textAlign: 'center' }}>Qty</th>
-                                                <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Price</th>
-                                                <th style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>Total</th>
+                                            <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', textTransform: 'uppercase', color: '#64748B', fontSize: '0.652rem' }}>
+                                                <th style={{ padding: '0.56rem 0.78rem', textAlign: 'left', whiteSpace: 'nowrap' }}>Item & SKU</th>
+                                                <th style={{ padding: '0.56rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
+                                                <th style={{ padding: '0.56rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Price</th>
+                                                <th style={{ padding: '0.56rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {parseInvoiceItems(activeModalInvoice).map((it, idx) => (
                                                 <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                                    <td style={{ padding: '0.75rem 1rem', fontWeight: 700, color: '#1E293B' }}>
+                                                    <td style={{ padding: '0.56rem 0.78rem', fontWeight: 700, color: '#1E293B' }} title={it.product_name || it.name}>
                                                         {it.product_name || it.name}
                                                         {hasProductWarranty(it) && (
-                                                            <div style={{ fontSize: '0.7rem', color: '#15803D', fontWeight: 800, marginTop: '2px' }}>
+                                                            <div style={{ fontSize: '0.634rem', color: '#15803D', fontWeight: 800, marginTop: '2px' }}>
                                                                 🛡️ {getProductWarrantyPeriod(it)}
                                                             </div>
                                                         )}
                                                     </td>
-                                                    <td style={{ padding: '0.75rem 1rem', textAlign: 'center', fontWeight: 800 }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
-                                                    <td style={{ padding: '0.75rem 1rem', textAlign: 'right', color: '#475569' }}>₹{(it.price || 0).toLocaleString()}</td>
-                                                    <td style={{ padding: '0.75rem 1rem', textAlign: 'right', fontWeight: 850, color: '#1E293B' }}>₹{(it.amount || ((it.quantity || 1) * (it.price || 0))).toLocaleString()}</td>
+                                                    <td className="cell-nowrap" style={{ padding: '0.56rem 0.78rem', textAlign: 'center', fontWeight: 800, whiteSpace: 'nowrap' }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
+                                                    <td className="cell-num" style={{ padding: '0.56rem 0.78rem', textAlign: 'right', color: '#475569', whiteSpace: 'nowrap' }}>₹{(it.price || 0).toLocaleString()}</td>
+                                                    <td className="cell-num" style={{ padding: '0.56rem 0.78rem', textAlign: 'right', fontWeight: 850, color: '#1E293B', whiteSpace: 'nowrap' }}>₹{(it.amount || ((it.quantity || 1) * (it.price || 0))).toLocaleString()}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ background: '#F8FAFC', padding: '1.133rem', borderRadius: '14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 600 }}>Payment Status: <strong style={{ color: '#059669' }}>{activeModalInvoice?.payment_status || 'PAID'}</strong></div>
-                                        <div style={{ fontSize: '0.75rem', color: '#7C3AED', fontWeight: 800, marginTop: '4px' }}>Points Credited: +{activeModalInvoice?.points_earned || 0} pts</div>
+                                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 600 }}>Payment Status: <strong style={{ color: '#059669' }}>{activeModalInvoice?.payment_status || 'PAID'}</strong></div>
+                                        <div style={{ fontSize: '0.68rem', color: '#7C3AED', fontWeight: 800, marginTop: '4px' }}>Points Credited: +{activeModalInvoice?.points_earned || 0} pts</div>
                                     </div>
                                     <div style={{ textAlign: 'right' }}>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Grand Total</div>
-                                        <div style={{ fontSize: '1.5rem', fontWeight: 900, color: '#1B6B3A' }}>
+                                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Grand Total</div>
+                                        <div style={{ fontSize: '1.359rem', fontWeight: 900, color: '#1B6B3A' }}>
                                             ₹{(activeModalInvoice?.grand_total || activeModalInvoice?.total_amount || 0).toLocaleString()}
                                         </div>
                                     </div>
@@ -1136,52 +1136,52 @@ const PurchaseDetails = () => {
             {/* Points Rules & Calculator Modal */}
             <AnimatePresence>
                 {showPointsModal && (
-                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.906rem' }}>
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowPointsModal(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)' }} />
-                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '540px', background: '#fff', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', overflow: 'hidden' }}>
-                            <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '540px', background: '#fff', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)', overflow: 'hidden' }}>
+                            <div style={{ padding: '1.359rem 1.586rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '1.2rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <h3 style={{ fontSize: '1.087rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                         <Calculator size={20} color="#1B6B3A" /> Loyalty Points Rules & Calculator
                                     </h3>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748B', margin: '4px 0 0 0' }}>Standard conversion rules across CLIKS Business</p>
+                                    <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Standard conversion rules across CLIKS Business</p>
                                 </div>
                                 <button onClick={() => setShowPointsModal(false)} style={{ width: 34, height: 34, borderRadius: '8px', background: '#fff', border: '1px solid #E2E8F0', color: '#64748B', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                             </div>
 
-                            <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <div style={{ background: '#F0FDF4', padding: '1rem', borderRadius: '14px', border: '1px solid #BBF7D0' }}>
-                                        <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase' }}>1. Earning Ratio</div>
-                                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#1B6B3A', margin: '4px 0' }}>₹100 = 1 Pt</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#15803D' }}>1% of purchase bill credited as loyalty points.</div>
+                            <div style={{ padding: '1.586rem', display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
+                                    <div style={{ background: '#F0FDF4', padding: '0.906rem', borderRadius: '14px', border: '1px solid #BBF7D0' }}>
+                                        <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase' }}>1. Earning Ratio</div>
+                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#1B6B3A', margin: '4px 0' }}>₹100 = 1 Pt</div>
+                                        <div style={{ fontSize: '0.68rem', color: '#15803D' }}>1% of purchase bill credited as loyalty points.</div>
                                     </div>
-                                    <div style={{ background: '#FAF5FF', padding: '1rem', borderRadius: '14px', border: '1px solid #E9D5FF' }}>
-                                        <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#6B21A8', textTransform: 'uppercase' }}>2. Redemption Ratio</div>
-                                        <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#7C3AED', margin: '4px 0' }}>10 Pts = ₹1.00</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#7E22CE' }}>Points convert into cash discounts at checkout.</div>
+                                    <div style={{ background: '#FAF5FF', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E9D5FF' }}>
+                                        <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#6B21A8', textTransform: 'uppercase' }}>2. Redemption Ratio</div>
+                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#7C3AED', margin: '4px 0' }}>10 Pts = ₹1.00</div>
+                                        <div style={{ fontSize: '0.68rem', color: '#7E22CE' }}>Points convert into cash discounts at checkout.</div>
                                     </div>
                                 </div>
 
-                                <div style={{ background: '#F8FAFC', padding: '1.25rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                                    <label style={{ fontSize: '0.8rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '0.5rem' }}>
+                                <div style={{ background: '#F8FAFC', padding: '1.133rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                    <label style={{ fontSize: '0.725rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '0.453rem' }}>
                                         Calculate for a Purchase Amount (₹):
                                     </label>
                                     <input
                                         type="number"
                                         value={calcAmountInput}
                                         onChange={(e) => setCalcAmountInput(e.target.value)}
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '10px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: 700, fontSize: '1.1rem', boxSizing: 'border-box' }}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '10px', border: '1px solid #CBD5E1', outline: 'none', fontWeight: 700, fontSize: '0.997rem', boxSizing: 'border-box' }}
                                     />
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px dashed #CBD5E1' }}>
-                                        <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 700 }}>Points Earned:</span>
-                                        <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#059669' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.68rem', paddingTop: '0.68rem', borderTop: '1px dashed #CBD5E1' }}>
+                                        <span style={{ fontSize: '0.743rem', color: '#64748B', fontWeight: 700 }}>Points Earned:</span>
+                                        <span style={{ fontSize: '0.997rem', fontWeight: 900, color: '#059669' }}>
                                             +{Math.floor((Number(calcAmountInput) || 0) / 100)} pts
                                         </span>
                                     </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.35rem' }}>
-                                        <span style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: 700 }}>Redemption Cash Value:</span>
-                                        <span style={{ fontSize: '1.1rem', fontWeight: 900, color: '#7C3AED' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.317rem' }}>
+                                        <span style={{ fontSize: '0.743rem', color: '#64748B', fontWeight: 700 }}>Redemption Cash Value:</span>
+                                        <span style={{ fontSize: '0.997rem', fontWeight: 900, color: '#7C3AED' }}>
                                             ₹{((Math.floor((Number(calcAmountInput) || 0) / 100)) * pointsToMoneyRatio).toFixed(2)}
                                         </span>
                                     </div>
@@ -1195,25 +1195,25 @@ const PurchaseDetails = () => {
             {/* Connected Shops Modal */}
             <AnimatePresence>
                 {isShopModalOpen && (
-                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, zIndex: 1200, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.906rem' }}>
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsShopModalOpen(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.5)', backdropFilter: 'blur(4px)' }} />
-                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '600px', maxHeight: '85vh', background: '#fff', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ padding: '1.5rem 1.75rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} style={{ position: 'relative', width: '100%', maxWidth: '600px', maxHeight: '85vh', background: '#fff', borderRadius: '16px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.2)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ padding: '1.359rem 1.586rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
                                 <div>
-                                    <h3 style={{ fontSize: '1.2rem', fontWeight: 850, color: '#1E293B', margin: 0 }}>Select Connected Store</h3>
-                                    <p style={{ fontSize: '0.8rem', color: '#64748B', margin: '4px 0 0 0' }}>Filter invoices and loyalty points for a specific store</p>
+                                    <h3 style={{ fontSize: '1.087rem', fontWeight: 850, color: '#1E293B', margin: 0 }}>Select Connected Store</h3>
+                                    <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Filter invoices and loyalty points for a specific store</p>
                                 </div>
                                 <button onClick={() => setIsShopModalOpen(false)} style={{ width: 34, height: 34, borderRadius: '8px', background: '#fff', border: '1px solid #E2E8F0', color: '#64748B', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                             </div>
 
-                            <div style={{ padding: '1.5rem 1.75rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                            <div style={{ padding: '1.359rem 1.586rem', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                                 <button
                                     onClick={() => {
                                         setSelectedShop(null);
                                         setIsShopModalOpen(false);
                                     }}
                                     style={{
-                                        padding: '1rem 1.25rem',
+                                        padding: '0.906rem 1.133rem',
                                         borderRadius: '14px',
                                         border: !selectedShop ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                         background: !selectedShop ? '#F0FDF4' : '#fff',
@@ -1225,8 +1225,8 @@ const PurchaseDetails = () => {
                                     }}
                                 >
                                     <div>
-                                        <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.95rem' }}>All Stores (Combined)</div>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748B' }}>Show purchase bills and points across all merchants</div>
+                                        <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.861rem' }}>All Stores (Combined)</div>
+                                        <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Show purchase bills and points across all merchants</div>
                                     </div>
                                     <ChevronRight size={18} color="#1B6B3A" />
                                 </button>
@@ -1240,7 +1240,7 @@ const PurchaseDetails = () => {
                                             setActiveTab('purchases');
                                         }}
                                         style={{
-                                            padding: '1rem 1.25rem',
+                                            padding: '0.906rem 1.133rem',
                                             borderRadius: '14px',
                                             border: selectedShop?.business_id === shop.business_id ? '2px solid #1B6B3A' : '1px solid #E2E8F0',
                                             background: '#fff',
@@ -1251,10 +1251,10 @@ const PurchaseDetails = () => {
                                         }}
                                     >
                                         <div>
-                                            <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.95rem' }}>{shop.business_name}</div>
-                                            <div style={{ fontSize: '0.75rem', color: '#64748B' }}>Customer: {shop.customer_name}</div>
+                                            <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.861rem' }}>{shop.business_name}</div>
+                                            <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Customer: {shop.customer_name}</div>
                                         </div>
-                                        <span style={{ fontSize: '0.75rem', color: '#1B6B3A', fontWeight: 800 }}>Select →</span>
+                                        <span style={{ fontSize: '0.68rem', color: '#1B6B3A', fontWeight: 800 }}>Select →</span>
                                     </div>
                                 ))}
                             </div>

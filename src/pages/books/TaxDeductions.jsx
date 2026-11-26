@@ -55,111 +55,111 @@ const TaxDeductions = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto', fontFamily: "'Inter', sans-serif" }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+    <div style={{ padding: '1.812rem', maxWidth: '1000px', margin: '0 auto', fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem' }}>
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+          <div data-tour="tax-deductions-heading" style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.453rem', width: 'fit-content' }}>
             <div style={{ width: 42, height: 42, borderRadius: '12px', background: '#FEE2E2', color: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ShieldCheck size={24} /></div>
-            <h1 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0F172A', margin: 0 }}>Tax & Deductions</h1>
+            <h1 style={{ fontSize: '1.586rem', fontWeight: 900, color: '#0F172A', margin: 0 }}>Tax & Deductions</h1>
           </div>
-          <p style={{ color: '#64748B', fontSize: '0.95rem', margin: 0 }}>Calculate and manage your annual tax liability</p>
+          <p style={{ color: '#64748B', fontSize: '0.861rem', margin: 0 }}>Calculate and manage your annual tax liability</p>
         </div>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-            <select value={taxYear} onChange={e => setTaxYear(e.target.value)} style={{ padding: '0.6rem 1rem', borderRadius: '10px', border: '1px solid #E2E8F0', fontWeight: 700, outline: 'none' }}>
+        <div style={{ display: 'flex', gap: '0.906rem' }}>
+            <select value={taxYear} onChange={e => setTaxYear(e.target.value)} style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', border: '1px solid #E2E8F0', fontWeight: 700, outline: 'none' }}>
                 <option value="2023-24">FY 2023-24</option>
                 <option value="2024-25">FY 2024-25</option>
             </select>
-            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.5rem', background: '#1B6B3A', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
+            <button onClick={() => window.print()} style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.359rem', background: '#1B6B3A', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer' }}>
                 <Download size={18} /> Export Summary
             </button>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.812rem' }}>
         {[
           { label: 'Estimated Tax', val: taxData.income_tax, color: '#1E293B' },
           { label: 'Total Paid', val: totalTaxPaid, color: '#059669' },
           { label: 'Due Amount', val: remainingTax, color: '#EF4444' },
           { label: 'Potential Refund', val: refund, color: '#2563EB' },
         ].map(card => (
-          <div key={card.label} style={{ background: 'white', padding: '1.25rem', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase' }}>{card.label}</span>
-            <div style={{ fontSize: '1.25rem', fontWeight: 900, color: card.color, marginTop: '4px' }}>₹{Number(card.val).toLocaleString('en-IN')}</div>
+          <div key={card.label} style={{ background: 'white', padding: '1.133rem', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
+            <span style={{ fontSize: '0.634rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase' }}>{card.label}</span>
+            <div style={{ fontSize: '1.133rem', fontWeight: 900, color: card.color, marginTop: '4px' }}>₹{Number(card.val).toLocaleString('en-IN')}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
-        <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1px solid #E2E8F0' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.5rem' }}>Annual Tax Breakdown</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.812rem' }}>
+        <div style={{ background: 'white', borderRadius: '16px', padding: '1.812rem', border: '1px solid #E2E8F0' }}>
+          <h3 style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.359rem' }}>Annual Tax Breakdown</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.359rem' }}>
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>GROSS ANNUAL INCOME</label>
-                <input type="number" value={taxData.income_tax} onChange={e => setTaxData({...taxData, income_tax: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
+                <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>GROSS ANNUAL INCOME</label>
+                <input type="number" value={taxData.income_tax} onChange={e => setTaxData({...taxData, income_tax: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
               </div>
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>TDS ALREADY PAID</label>
-                <input type="number" value={taxData.tds_paid} onChange={e => setTaxData({...taxData, tds_paid: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
+                <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>TDS ALREADY PAID</label>
+                <input type="number" value={taxData.tds_paid} onChange={e => setTaxData({...taxData, tds_paid: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
               </div>
             </div>
 
             <div style={{ height: '1px', background: '#F1F5F9' }} />
 
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>Standard Deductions</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+            <h4 style={{ fontSize: '0.77rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase' }}>Standard Deductions</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.906rem' }}>
               <div>
-                <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.4rem' }}>EPF</label>
-                <input type="number" value={taxData.epf} onChange={e => setTaxData({...taxData, epf: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
+                <label style={{ fontSize: '0.634rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.363rem' }}>EPF</label>
+                <input type="number" value={taxData.epf} onChange={e => setTaxData({...taxData, epf: e.target.value})} style={{ width: '100%', padding: '0.544rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
               </div>
               <div>
-                <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.4rem' }}>ESI</label>
-                <input type="number" value={taxData.esi} onChange={e => setTaxData({...taxData, esi: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
+                <label style={{ fontSize: '0.634rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.363rem' }}>ESI</label>
+                <input type="number" value={taxData.esi} onChange={e => setTaxData({...taxData, esi: e.target.value})} style={{ width: '100%', padding: '0.544rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
               </div>
               <div>
-                <label style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.4rem' }}>PROF TAX</label>
-                <input type="number" value={taxData.prof_tax} onChange={e => setTaxData({...taxData, prof_tax: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
+                <label style={{ fontSize: '0.634rem', fontWeight: 700, color: '#94A3B8', display: 'block', marginBottom: '0.363rem' }}>PROF TAX</label>
+                <input type="number" value={taxData.prof_tax} onChange={e => setTaxData({...taxData, prof_tax: e.target.value})} style={{ width: '100%', padding: '0.544rem', borderRadius: '8px', border: '1px solid #E2E8F0' }} />
               </div>
             </div>
 
             <div>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>ADDITIONAL TAX SAVINGS (80C, 80D, etc.)</label>
-              <input type="number" value={taxData.tax_savings} onChange={e => setTaxData({...taxData, tax_savings: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
+              <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>ADDITIONAL TAX SAVINGS (80C, 80D, etc.)</label>
+              <input type="number" value={taxData.tax_savings} onChange={e => setTaxData({...taxData, tax_savings: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0' }} />
             </div>
 
-            <button onClick={handleSave} style={{ width: '100%', padding: '1rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', marginTop: '1rem' }}>
+            <button onClick={handleSave} style={{ width: '100%', padding: '0.906rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', marginTop: '0.906rem' }}>
               Update Tax Records
             </button>
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div style={{ background: '#F8FAFC', borderRadius: '24px', padding: '1.5rem', border: '1px solid #E2E8F0' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.25rem' }}>Quick Calculator</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ padding: '1rem', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: 700, marginBottom: '4px' }}>Taxable Base</div>
-                    <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#0F172A' }}>₹{(Number(taxData.income_tax) - totalDeductions).toLocaleString('en-IN')}</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.812rem' }}>
+          <div style={{ background: '#F8FAFC', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0' }}>
+            <h3 style={{ fontSize: '0.906rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.133rem' }}>Quick Calculator</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
+                <div style={{ padding: '0.906rem', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700, marginBottom: '4px' }}>Taxable Base</div>
+                    <div style={{ fontSize: '0.997rem', fontWeight: 900, color: '#0F172A' }}>₹{(Number(taxData.income_tax) - totalDeductions).toLocaleString('en-IN')}</div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: '#059669', fontSize: '0.85rem', fontWeight: 700 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', color: '#059669', fontSize: '0.77rem', fontWeight: 700 }}>
                     <PieChart size={18} />
                     View Detailed Projection
                 </div>
             </div>
           </div>
 
-          <div style={{ background: '#1E293B', borderRadius: '24px', padding: '1.5rem', color: 'white' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 800, marginBottom: '1rem' }}>Tax Compliance</h3>
-            <p style={{ fontSize: '0.85rem', opacity: 0.8, lineHeight: 1.5 }}>
+          <div style={{ background: '#1E293B', borderRadius: '16px', padding: '1.359rem', color: 'white' }}>
+            <h3 style={{ fontSize: '0.906rem', fontWeight: 800, marginBottom: '0.906rem' }}>Tax Compliance</h3>
+            <p style={{ fontSize: '0.77rem', opacity: 0.8, lineHeight: 1.5 }}>
               Ensure all your TDS certificates (Form 16/16A) are collected and verified against Form 26AS for smooth filing.
             </p>
-            <div style={{ marginTop: '1rem', display: 'flex', gap: '8px' }}>
+            <div style={{ marginTop: '0.906rem', display: 'flex', gap: '8px' }}>
                 <span 
                     onClick={() => setIsItrModalOpen(true)}
                     style={{ 
-                        fontSize: '0.65rem', 
+                        fontSize: '0.589rem', 
                         fontWeight: 800, 
-                        padding: '0.3rem 0.6rem', 
+                        padding: '0.272rem 0.544rem', 
                         borderRadius: '6px', 
                         background: 'rgba(255,255,255,0.1)',
                         cursor: 'pointer',
@@ -171,7 +171,7 @@ const TaxDeductions = () => {
                 >
                     ITR-1 ⚡ Click to Calculate
                 </span>
-                <span style={{ fontSize: '0.65rem', fontWeight: 800, padding: '0.3rem 0.6rem', borderRadius: '6px', background: 'rgba(255,255,255,0.1)' }}>AY 2024</span>
+                <span style={{ fontSize: '0.589rem', fontWeight: 800, padding: '0.272rem 0.544rem', borderRadius: '6px', background: 'rgba(255,255,255,0.1)' }}>AY 2024</span>
             </div>
           </div>
         </div>

@@ -294,7 +294,7 @@ const ContactPanel = ({ onClose }) => {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    padding: 1rem 1.5rem;
+                    padding: 0.906rem 1.359rem;
                     border-bottom: 1px solid #f1f5f9;
                     background: #ffffff;
                     position: sticky;
@@ -317,14 +317,14 @@ const ContactPanel = ({ onClose }) => {
                     color: #4f46e5;
                 }
                 .contact-header-title {
-                    font-size: 1.125rem;
+                    font-size: 1.02rem;
                     font-weight: 600;
                     color: #111827;
                     margin: 0;
                     line-height: 1.2;
                 }
                 .contact-header-subtitle {
-                    font-size: 0.75rem;
+                    font-size: 0.68rem;
                     color: #6b7280;
                     margin: 0;
                 }
@@ -344,7 +344,7 @@ const ContactPanel = ({ onClose }) => {
                 }
 
                 .contact-search-bar {
-                    padding: 1rem;
+                    padding: 0.906rem;
                     border-bottom: 1px solid #f1f5f9;
                     background: #f8fafc;
                     display: flex;
@@ -369,7 +369,7 @@ const ContactPanel = ({ onClose }) => {
                     background: #ffffff;
                     border: 1px solid #e2e8f0;
                     border-radius: 8px;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     outline: none;
                     transition: all 0.2s;
                     box-sizing: border-box;
@@ -401,7 +401,7 @@ const ContactPanel = ({ onClose }) => {
                 .contact-content-list {
                     flex: 1;
                     overflow-y: auto;
-                    padding: 1rem;
+                    padding: 0.906rem;
                     background: #f8fafc;
                     display: flex;
                     flex-direction: column;
@@ -412,10 +412,10 @@ const ContactPanel = ({ onClose }) => {
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    height: 12rem;
+                    height: 10.875rem;
                     gap: 12px;
                     color: #9ca3af;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                 }
                 .contact-state-message.error {
                     color: #ef4444;
@@ -431,7 +431,7 @@ const ContactPanel = ({ onClose }) => {
                     color: #ef4444;
                     text-decoration: underline;
                     font-weight: 500;
-                    font-size: 0.75rem;
+                    font-size: 0.68rem;
                     cursor: pointer;
                 }
                 .contact-retry-btn:hover {
@@ -447,7 +447,7 @@ const ContactPanel = ({ onClose }) => {
 
                 .contact-card {
                     background: #ffffff;
-                    padding: 1rem;
+                    padding: 0.906rem;
                     border-radius: 12px;
                     border: 1px solid #f1f5f9;
                     box-shadow: 0 2px 10px -4px rgba(0,0,0,0.05);
@@ -466,14 +466,14 @@ const ContactPanel = ({ onClose }) => {
                     font-weight: 600;
                     color: #111827;
                     margin: 0;
-                    font-size: 1rem;
+                    font-size: 0.906rem;
                     transition: color 0.2s;
                 }
                 .contact-card:hover .contact-card-name {
                     color: #4f46e5;
                 }
                 .contact-app-badge {
-                    font-size: 0.625rem;
+                    font-size: 0.566rem;
                     padding: 2px 8px;
                     border-radius: 9999px;
                     font-weight: 500;
@@ -483,7 +483,7 @@ const ContactPanel = ({ onClose }) => {
                     display: flex;
                     align-items: center;
                     gap: 8px;
-                    font-size: 0.75rem;
+                    font-size: 0.68rem;
                     color: #4b5563;
                 }
                 .contact-detail-icon {
@@ -541,12 +541,12 @@ const ContactPanel = ({ onClose }) => {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    padding: 1rem 1.5rem;
+                    padding: 0.906rem 1.359rem;
                     border-bottom: 1px solid #f1f5f9;
                     flex-shrink: 0;
                 }
                 .contact-modal-title {
-                    font-size: 1.125rem;
+                    font-size: 1.02rem;
                     font-weight: 600;
                     color: #111827;
                     margin: 0;
@@ -566,14 +566,14 @@ const ContactPanel = ({ onClose }) => {
                     background: #e5e7eb;
                 }
                 .contact-modal-body {
-                    padding: 1.5rem;
+                    padding: 1.359rem;
                     flex: 1;
                     overflow-y: auto;
                 }
                 .contact-form {
                     display: flex;
                     flex-direction: column;
-                    gap: 1.25rem;
+                    gap: 1.133rem;
                 }
                 .contact-form-group {
                     display: flex;
@@ -581,7 +581,7 @@ const ContactPanel = ({ onClose }) => {
                     gap: 4px;
                 }
                 .contact-form-group label {
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     font-weight: 500;
                     color: #374151;
                 }
@@ -591,7 +591,7 @@ const ContactPanel = ({ onClose }) => {
                     background: #f9fafb;
                     border: 1px solid #e2e8f0;
                     border-radius: 8px;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     outline: none;
                     transition: all 0.2s;
                     box-sizing: border-box;
@@ -603,8 +603,8 @@ const ContactPanel = ({ onClose }) => {
                     box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
                 }
                 .contact-form-actions {
-                    padding-top: 1rem;
-                    margin-top: 1.5rem;
+                    padding-top: 0.906rem;
+                    margin-top: 1.359rem;
                     border-top: 1px solid #f1f5f9;
                     display: flex;
                     gap: 12px;
@@ -612,7 +612,7 @@ const ContactPanel = ({ onClose }) => {
                 .contact-btn-secondary, .contact-btn-primary {
                     flex: 1;
                     padding: 10px 16px;
-                    font-size: 0.875rem;
+                    font-size: 0.793rem;
                     font-weight: 500;
                     border-radius: 8px;
                     cursor: pointer;

@@ -35,7 +35,7 @@ const ErrorState = ({
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          padding: 3rem 1.5rem;
+          padding: 2.719rem 1.359rem;
           color: var(--text-muted, #64748B);
           text-align: center;
           background-color: white;
@@ -44,30 +44,30 @@ const ErrorState = ({
         }
         .error-icon {
           color: #EF4444;
-          margin-bottom: 1rem;
+          margin-bottom: 0.906rem;
         }
         .error-title {
-          font-size: 1.125rem;
+          font-size: 1.02rem;
           font-weight: 600;
           color: #1E293B;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.453rem;
         }
         .error-message {
-          font-size: 0.875rem;
+          font-size: 0.793rem;
           color: #DC2626;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.359rem;
           max-width: 300px;
         }
         /* Reusing btn-secondary style if available, else defining it */
         .btn-secondary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            gap: 0.453rem;
+            padding: 0.453rem 0.906rem;
             background: #F0FDF4;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
-            font-size: 0.875rem;
+            font-size: 0.793rem;
             font-weight: 500;
             color: #1E293B;
             cursor: pointer;

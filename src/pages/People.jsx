@@ -1018,105 +1018,205 @@ const BusinessPeople = () => {
     }, [transactions, searchTerm]);
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 2.266rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.042rem', flexWrap: 'wrap', gap: '0.68rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.317rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <Users size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em' }}>People Network & Escrow</h1>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em' }}>People Network & Escrow</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1.05rem', fontWeight: '500' }}>Track peer-to-peer relationships, log personal advances, track friendly loans, and set ledger alerts.</p>
+                    <p style={{ color: '#475569', fontSize: '0.952rem', fontWeight: '500' }}>Track peer-to-peer relationships, log personal advances, track friendly loans, and set ledger alerts.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.68rem' }}>
                     <button 
+                        data-tour="people-log-transaction"
                         onClick={() => setIsTxModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'white', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', background: 'white', fontSize: '0.77rem', whiteSpace: 'nowrap', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
                     >
                         <ArrowLeftRight size={16} /> Log Transaction
                     </button>
                     <button 
+                        data-tour="people-add-contact"
                         onClick={() => setIsContactModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}
                     >
                         <Plus size={16} /> Add People Contact
                     </button>
                 </div>
             </div>
 
-            {/* Receivables & Payables Summary */}
-            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-                {/* TO RECEIVE */}
-                <div style={{ background: '#FFFFFF', borderRadius: '18px', border: '1px solid #E7EAF0', padding: '1.1rem 1.25rem', boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', minWidth: 0 }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#ECFDF5', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <TrendingUp size={20} />
-                        </div>
-                        <div style={{ minWidth: 0 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
-                                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#16A34A', letterSpacing: '0.04em', textTransform: 'uppercase' }}>To Receive</span>
-                                <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#22C55E' }}>
-                                    {summary.totalReceivables > 0 ? Math.min(100, Math.round((summary.totalReceivablesCollected / summary.totalReceivables) * 100)) : 0}% Collected
-                                </span>
-                            </div>
-                            <div style={{ fontSize: '2rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                                {formatCurr(summary.outstandingReceivables)}
-                            </div>
-                        </div>
-                    </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600' }}>Total: <span style={{ color: '#334155', fontWeight: '700' }}>{formatCurr(summary.totalReceivables)}</span></div>
-                        <div style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600', marginTop: '0.2rem' }}>Received: <span style={{ color: '#334155', fontWeight: '700' }}>{formatCurr(summary.totalReceivablesCollected)}</span></div>
-                    </div>
-                </div>
+            {/* Receivables & Payables Summary (Compact Minimized Strip matching reference) */}
+            {(() => {
+                const recPct = summary.totalReceivables > 0 ? Math.min(100, Math.round((summary.totalReceivablesCollected / summary.totalReceivables) * 100)) : 0;
+                const payPct = summary.totalPayables > 0 ? Math.min(100, Math.round((summary.totalPayablesPaid / summary.totalPayables) * 100)) : 0;
 
-                {/* TO PAY */}
-                <div style={{ background: '#FFFFFF', borderRadius: '18px', border: '1px solid #E7EAF0', padding: '1.1rem 1.25rem', boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', minWidth: 0 }}>
-                        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#FEF2F2', color: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <TrendingDown size={20} />
-                        </div>
-                        <div style={{ minWidth: 0 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
-                                <span style={{ fontSize: '0.82rem', fontWeight: '800', color: '#EF4444', letterSpacing: '0.04em', textTransform: 'uppercase' }}>To Pay</span>
-                                <span style={{ fontSize: '0.78rem', fontWeight: '700', color: '#F87171' }}>
-                                    {summary.totalPayables > 0 ? Math.min(100, Math.round((summary.totalPayablesPaid / summary.totalPayables) * 100)) : 0}% Settled
-                                </span>
+                return (
+                    <div
+                        className="shrink-0 w-full"
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                            gap: '0.68rem',
+                            marginBottom: '0.906rem',
+                            maxWidth: '58rem'
+                        }}
+                    >
+                        {/* Compact Receivables Card */}
+                        <div
+                            style={{
+                                background: '#FFFFFF',
+                                borderRadius: '12px',
+                                border: '1px solid #E2E8F0',
+                                padding: '0.68rem 0.906rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '0.68rem',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
+                                <div style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '10px',
+                                    background: '#ECFDF5',
+                                    color: '#059669',
+                                    border: '1px solid #A7F3D0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}>
+                                    <TrendingUp size={18} />
+                                </div>
+                                <div style={{ minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span style={{ fontSize: '0.616rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
+                                            To Receive
+                                        </span>
+                                        <span style={{ fontSize: '0.589rem', fontWeight: '800', color: '#047857', background: '#ECFDF5', border: '1px solid #D1FAE5', padding: '1px 6px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
+                                            {recPct}% Collected
+                                        </span>
+                                    </div>
+                                    <div style={{ fontSize: '1.042rem', fontWeight: '900', color: '#065F46', letterSpacing: '-0.02em', lineHeight: '1.2', marginTop: '2px' }}>
+                                        {formatCurr(summary.outstandingReceivables)}
+                                    </div>
+                                </div>
                             </div>
-                            <div style={{ fontSize: '2rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                                {formatCurr(summary.outstandingPayables)}
+
+                            <div style={{ textAlign: 'right', flexShrink: 0, borderLeft: '1px solid #F1F5F9', paddingLeft: '0.68rem' }}>
+                                <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600', whiteSpace: 'nowrap' }}>
+                                    Total: <strong style={{ color: '#1E293B', fontWeight: '800' }}>{formatCurr(summary.totalReceivables)}</strong>
+                                </div>
+                                <div style={{ fontSize: '0.634rem', color: '#059669', fontWeight: '600', marginTop: '2px', whiteSpace: 'nowrap' }}>
+                                    Received: <strong style={{ fontWeight: '800' }}>{formatCurr(summary.totalReceivablesCollected)}</strong>
+                                </div>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: '#F1F5F9' }}>
+                                <div data-tour="people-pay-icon" style={{
+                                    height: '100%',
+                                    width: `${recPct}%`,
+                                    background: 'linear-gradient(90deg, #10B981, #059669)',
+                                    transition: 'width 0.4s ease'
+                                }} />
+                            </div>
+                        </div>
+
+                        {/* Compact Payables Card */}
+                        <div
+                            style={{
+                                background: '#FFFFFF',
+                                borderRadius: '12px',
+                                border: '1px solid #E2E8F0',
+                                padding: '0.68rem 0.906rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                gap: '0.68rem',
+                                position: 'relative',
+                                overflow: 'hidden',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
+                            }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
+                                <div style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '10px',
+                                    background: '#FEF2F2',
+                                    color: '#DC2626',
+                                    border: '1px solid #FECACA',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0
+                                }}>
+                                    <TrendingDown size={18} />
+                                </div>
+                                <div style={{ minWidth: 0 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <span data-tour="people-pay-heading" style={{ fontSize: '0.616rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
+                                            To Pay
+                                        </span>
+                                        <span style={{ fontSize: '0.589rem', fontWeight: '800', color: '#B91C1C', background: '#FEF2F2', border: '1px solid #FEE2E2', padding: '1px 6px', borderRadius: '999px', whiteSpace: 'nowrap' }}>
+                                            {payPct}% Settled
+                                        </span>
+                                    </div>
+                                    <div style={{ fontSize: '1.042rem', fontWeight: '900', color: '#991B1B', letterSpacing: '-0.02em', lineHeight: '1.2', marginTop: '2px' }}>
+                                        {formatCurr(summary.outstandingPayables)}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ textAlign: 'right', flexShrink: 0, borderLeft: '1px solid #F1F5F9', paddingLeft: '0.68rem' }}>
+                                <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600', whiteSpace: 'nowrap' }}>
+                                    Total: <strong style={{ color: '#1E293B', fontWeight: '800' }}>{formatCurr(summary.totalPayables)}</strong>
+                                </div>
+                                <div style={{ fontSize: '0.634rem', color: '#DC2626', fontWeight: '600', marginTop: '2px', whiteSpace: 'nowrap' }}>
+                                    Paid: <strong style={{ fontWeight: '800' }}>{formatCurr(summary.totalPayablesPaid)}</strong>
+                                </div>
+                            </div>
+
+                            <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '3px', background: '#F1F5F9' }}>
+                                <div style={{
+                                    height: '100%',
+                                    width: `${payPct}%`,
+                                    background: 'linear-gradient(90deg, #F87171, #DC2626)',
+                                    transition: 'width 0.4s ease'
+                                }} />
                             </div>
                         </div>
                     </div>
-                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                        <div style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600' }}>Total: <span style={{ color: '#334155', fontWeight: '700' }}>{formatCurr(summary.totalPayables)}</span></div>
-                        <div style={{ fontSize: '0.82rem', color: '#64748B', fontWeight: '600', marginTop: '0.2rem' }}>Paid: <span style={{ color: '#334155', fontWeight: '700' }}>{formatCurr(summary.totalPayablesPaid)}</span></div>
-                    </div>
-                </div>
-            </div>
+                );
+            })()}
 
             {/* Incoming Connection & Financial Group Requests Banner */}
             {((incomingRequests && incomingRequests.length > 0) || (groupIncomingRequests && groupIncomingRequests.length > 0)) && activeTab !== 'requests' && (
                 <div style={{
-                    marginBottom: '1.25rem',
-                    padding: '1.25rem',
+                    marginBottom: '1.133rem',
+                    padding: '1.133rem',
                     borderRadius: '18px',
                     background: 'linear-gradient(135deg, #EFF6FF 0%, #F8FAFC 100%)',
                     border: '1.5px solid #BFDBFE',
                     boxShadow: '0 4px 14px rgba(37, 99, 235, 0.08)'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.85rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.77rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
                             <div style={{ width: '32px', height: '32px', borderRadius: '10px', background: '#DBEAFE', color: '#1D4ED8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <UserPlus size={18} />
                             </div>
                             <div>
-                                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '850', color: '#1E3A8A' }}>
+                                <h4 style={{ margin: 0, fontSize: '0.861rem', fontWeight: '850', color: '#1E3A8A' }}>
                                     Pending Invitations ({((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))})
                                 </h4>
-                                <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B' }}>
+                                <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B' }}>
                                     {incomingRequests.length > 0 ? `${incomingRequests.length} contact request(s)` : ''}
                                     {incomingRequests.length > 0 && groupIncomingRequests.length > 0 ? ' and ' : ''}
                                     {groupIncomingRequests.length > 0 ? `${groupIncomingRequests.length} financial group invitation(s)` : ''} sent to your @bnxmail.com address.
@@ -1129,9 +1229,9 @@ const BusinessPeople = () => {
                                 border: 'none',
                                 background: '#DBEAFE',
                                 color: '#1E40AF',
-                                padding: '0.35rem 0.85rem',
+                                padding: '0.317rem 0.77rem',
                                 borderRadius: '999px',
-                                fontSize: '0.75rem',
+                                fontSize: '0.68rem',
                                 fontWeight: '800',
                                 cursor: 'pointer'
                             }}
@@ -1139,34 +1239,34 @@ const BusinessPeople = () => {
                             Review All ({((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))})
                         </button>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '0.85rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '0.77rem' }}>
                         {/* Direct Contacts requests */}
                         {incomingRequests.slice(0, 2).map(req => (
                             <div key={`contact-${req.id}`} style={{
                                 background: '#FFFFFF',
                                 border: '1px solid #E2E8F0',
                                 borderRadius: '14px',
-                                padding: '0.85rem 1rem',
+                                padding: '0.77rem 0.906rem',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                gap: '0.75rem',
+                                gap: '0.68rem',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
-                                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#004aad', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
+                                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#004aad', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.77rem', flexShrink: 0 }}>
                                         {(req.requester_username || req.requester_business_name || 'U').charAt(0).toUpperCase()}
                                     </div>
                                     <div style={{ minWidth: 0 }}>
-                                        <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                        <p style={{ margin: 0, fontSize: '0.77rem', fontWeight: '800', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                             {req.requester_username || req.requester_business_name || 'Network Contact'}
                                         </p>
-                                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                             <Mail size={11} /> {req.requester_email}
                                         </p>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
+                                <div style={{ display: 'flex', gap: '0.363rem', flexShrink: 0 }}>
                                     <button
                                         onClick={() => respondRequestMutation.mutate({ id: req.id, action: 'accept' })}
                                         disabled={respondRequestMutation.isPending}
@@ -1177,9 +1277,9 @@ const BusinessPeople = () => {
                                             border: 'none',
                                             background: '#10B981',
                                             color: '#FFFFFF',
-                                            padding: '0.45rem 0.75rem',
+                                            padding: '0.408rem 0.68rem',
                                             borderRadius: '8px',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '750',
                                             cursor: 'pointer'
                                         }}
@@ -1196,9 +1296,9 @@ const BusinessPeople = () => {
                                             border: '1px solid #E2E8F0',
                                             background: '#FFFFFF',
                                             color: '#EF4444',
-                                            padding: '0.45rem 0.65rem',
+                                            padding: '0.408rem 0.589rem',
                                             borderRadius: '8px',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '700',
                                             cursor: 'pointer'
                                         }}
@@ -1215,32 +1315,32 @@ const BusinessPeople = () => {
                                 background: '#FFFFFF',
                                 border: '1.5px solid #E0E7FF',
                                 borderRadius: '14px',
-                                padding: '0.85rem 1rem',
+                                padding: '0.77rem 0.906rem',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                gap: '0.75rem',
+                                gap: '0.68rem',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
-                                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#4F46E5', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', minWidth: 0 }}>
+                                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#4F46E5', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.77rem', flexShrink: 0 }}>
                                         <FolderKanban size={18} />
                                     </div>
                                     <div style={{ minWidth: 0 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                            <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '800', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            <p style={{ margin: 0, fontSize: '0.77rem', fontWeight: '800', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                 {req.group_name}
                                             </p>
-                                            <span style={{ padding: '0.1rem 0.4rem', borderRadius: '4px', background: '#EEF2FF', color: '#4338CA', fontSize: '0.65rem', fontWeight: '800', textTransform: 'capitalize' }}>
+                                            <span style={{ padding: '0.091rem 0.363rem', borderRadius: '4px', background: '#EEF2FF', color: '#4338CA', fontSize: '0.589rem', fontWeight: '800', textTransform: 'capitalize' }}>
                                                 {req.group_type || 'Group'}
                                             </span>
                                         </div>
-                                        <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748B' }}>
+                                        <p style={{ margin: 0, fontSize: '0.652rem', color: '#64748B' }}>
                                             Invited by {req.inviter_business_name || req.inviter_username || req.inviter_email}
                                         </p>
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', gap: '0.4rem', flexShrink: 0 }}>
+                                <div style={{ display: 'flex', gap: '0.363rem', flexShrink: 0 }}>
                                     <button
                                         onClick={() => respondGroupRequestMutation.mutate({ membershipId: req.membership_id, action: 'accept' })}
                                         disabled={respondGroupRequestMutation.isPending}
@@ -1251,9 +1351,9 @@ const BusinessPeople = () => {
                                             border: 'none',
                                             background: '#4F46E5',
                                             color: '#FFFFFF',
-                                            padding: '0.45rem 0.75rem',
+                                            padding: '0.408rem 0.68rem',
                                             borderRadius: '8px',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '750',
                                             cursor: 'pointer'
                                         }}
@@ -1270,9 +1370,9 @@ const BusinessPeople = () => {
                                             border: '1px solid #E2E8F0',
                                             background: '#FFFFFF',
                                             color: '#EF4444',
-                                            padding: '0.45rem 0.65rem',
+                                            padding: '0.408rem 0.589rem',
                                             borderRadius: '8px',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '700',
                                             cursor: 'pointer'
                                         }}
@@ -1287,8 +1387,8 @@ const BusinessPeople = () => {
             )}
 
             {/* Tabs Row & Global Tools */}
-            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem', flexWrap: 'wrap', gap: '0.906rem' }}>
+                <div style={{ display: 'flex', gap: '0.68rem', flexWrap: 'wrap' }}>
                     {[
                         { id: 'contacts', label: 'Contacts', icon: Users },
                         { id: 'groups', label: `Financial Groups ${groupsList && groupsList.length > 0 ? `(${groupsList.length})` : ''}`, icon: FolderKanban },
@@ -1302,14 +1402,15 @@ const BusinessPeople = () => {
                         { id: 'reminders', label: 'Repayment Alerts', icon: Bell }
                     ].map(tab => (
                         <button 
+                            data-tour={`people-tab-${tab.id}`}
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             style={{ 
-                                padding: '0.85rem 1.5rem', borderRadius: '14px', 
+                                padding: '0.544rem 0.997rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap',
                                 background: activeTab === tab.id ? '#064E3B' : 'white', 
                                 color: activeTab === tab.id ? 'white' : '#475569',
                                 border: '1px solid #E2E8F0', fontWeight: '700', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: '0.6rem',
+                                display: 'flex', alignItems: 'center', gap: '0.544rem',
                                 boxShadow: activeTab === tab.id ? '0 8px 16px rgba(6, 78, 59, 0.15)' : 'none',
                                 transition: 'all 0.2s',
                                 position: 'relative'
@@ -1323,11 +1424,11 @@ const BusinessPeople = () => {
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     {activeTab === 'groups' && (
                         <button 
                             onClick={() => setIsCreateGroupModalOpen(true)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', borderRadius: '12px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', cursor: 'pointer', flexShrink: 0, boxShadow: '0 4px 10px rgba(6, 78, 59, 0.2)' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.589rem 1.133rem', borderRadius: '12px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', cursor: 'pointer', flexShrink: 0, boxShadow: '0 4px 10px rgba(6, 78, 59, 0.2)' }}
                         >
                             <Plus size={16} /> New Financial Group
                         </button>
@@ -1337,7 +1438,7 @@ const BusinessPeople = () => {
                         <select 
                             value={groupFilter} 
                             onChange={(e) => setGroupFilter(e.target.value)}
-                            style={{ padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
+                            style={{ padding: '0.453rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
                         >
                             <option value="All">All Groups</option>
                             {uniqueGroups.map(g => (
@@ -1350,7 +1451,7 @@ const BusinessPeople = () => {
                         <select 
                             value={statusFilter} 
                             onChange={(e) => setStatusFilter(e.target.value)}
-                            style={{ padding: '0.5rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
+                            style={{ padding: '0.453rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
                         >
                             <option value="All">All Statuses</option>
                             <option value="active">Active</option>
@@ -1364,7 +1465,7 @@ const BusinessPeople = () => {
                         background: '#FFF', 
                         border: '1px solid #E2E8F0', 
                         borderRadius: '12px', 
-                        padding: showSearch ? '0.5rem 1rem' : '0.5rem', 
+                        padding: showSearch ? '0.453rem 0.906rem' : '0.453rem', 
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
                         width: showSearch ? '280px' : '40px', 
                         height: '40px',
@@ -1386,9 +1487,9 @@ const BusinessPeople = () => {
                                 border: 'none', 
                                 outline: 'none', 
                                 background: 'transparent', 
-                                marginLeft: '0.75rem', 
+                                marginLeft: '0.68rem', 
                                 width: '100%', 
-                                fontSize: '0.9rem', 
+                                fontSize: '0.816rem', 
                                 color: '#1E293B',
                                 display: showSearch ? 'block' : 'none'
                             }}
@@ -1398,7 +1499,7 @@ const BusinessPeople = () => {
                     {activeTab === 'reminders' && (
                         <button 
                             onClick={() => setIsReminderModalOpen(true)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.15rem', borderRadius: '12px', background: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0', fontWeight: '750', cursor: 'pointer', flexShrink: 0 }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.589rem 1.042rem', borderRadius: '12px', background: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0', fontWeight: '750', cursor: 'pointer', flexShrink: 0 }}
                         >
                             <Bell size={16} /> Dispatch Alert
                         </button>
@@ -1407,11 +1508,11 @@ const BusinessPeople = () => {
             </div>
 
             {/* Main Dynamic Content */}
-            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
-                <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0 }}>
+            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+                <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
                     {/* TAB 1: Contacts List */}
                     {activeTab === 'contacts' && (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead 
                                 columns={[
                                     { key: 'name', label: 'Profile Contact', placeholder: 'Name...' },
@@ -1421,14 +1522,14 @@ const BusinessPeople = () => {
                                     { key: 'company', label: 'Company / Link', placeholder: 'Company...' },
                                     { key: 'phone_email', label: 'Phone / Email', placeholder: 'Contact...' },
                                     { key: 'net_balance', label: 'Net Exposure', placeholder: 'Exposure...', align: 'right' },
-                                    { key: '_actions', label: '', noFilter: true }
+                                    { key: '_actions', label: '', noFilter: true, align: 'right' }
                                 ]} 
                                 onFilterChange={setColFilters} 
-                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '1.25rem 2rem' }}
+                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
                                 {isPeopleLoading ? (
-                                    <tr><td colSpan={10} style={{ padding: '4rem', textAlign: 'center', color: '#64748B' }}>Streaming network directory...</td></tr>
+                                    <tr><td colSpan={10} style={{ padding: '3.625rem', textAlign: 'center', color: '#64748B' }}>Streaming network directory...</td></tr>
                                 ) : filteredPeople
                                     .map(p => {
                                         const meta = getContactMeta(p.contact_info);
@@ -1440,7 +1541,7 @@ const BusinessPeople = () => {
                                         };
                                     })
                                     .filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).length === 0 ? (
-                                    <tr><td colSpan={10} style={{ padding: '4rem', textAlign: 'center', color: '#94A3B8' }}>Zero network contacts found. Start adding!</td></tr>
+                                    <tr><td colSpan={10} style={{ padding: '3.625rem', textAlign: 'center', color: '#94A3B8' }}>Zero network contacts found. Start adding!</td></tr>
                                 ) : filteredPeople
                                     .map(p => {
                                         const meta = getContactMeta(p.contact_info);
@@ -1473,31 +1574,31 @@ const BusinessPeople = () => {
                                                 onMouseOver={(e) => { e.currentTarget.style.background = '#F8FAFC'; }}
                                                 onMouseOut={(e) => { e.currentTarget.style.background = 'white'; }}
                                             >
-                                            <td style={{ padding: '1.5rem 2rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                                    <div style={{ position: 'relative' }}>
-                                                        {renderAvatar(p.name, 42)}
+                                            <td style={{ padding: '0.589rem 0.78rem' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
+                                                    <div style={{ position: 'relative', flexShrink: 0 }}>
+                                                        {renderAvatar(p.name, 36)}
                                                         {isPinned && (
                                                             <div style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#004aad', color: 'white', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
                                                                 <Pin size={10} style={{ transform: 'rotate(45deg)' }} />
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div>
+                                                    <div style={{ minWidth: 0 }}>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                                            <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '1rem', margin: 0 }}>{p.name}</p>
+                                                            <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.793rem', margin: 0, whiteSpace: 'nowrap' }} title={p.name}>{p.name}</p>
                                                             {p.status === 'pending' && (
-                                                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#FEF3C7', color: '#B45309', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.65rem', fontWeight: '800' }}>
+                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#FEF3C7', color: '#B45309', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
                                                                     <Clock size={10} /> Pending Request
                                                                 </span>
                                                             )}
                                                             {p.status === 'accepted' && (
-                                                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#ECFDF5', color: '#047857', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.65rem', fontWeight: '800' }}>
+                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#ECFDF5', color: '#047857', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
                                                                     <Check size={10} /> Connected
                                                                 </span>
                                                             )}
                                                             {p.status === 'rejected' && (
-                                                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', background: '#FEE2E2', color: '#DC2626', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.65rem', fontWeight: '800' }}>
+                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#FEE2E2', color: '#DC2626', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
                                                                     <X size={10} /> Declined
                                                                 </span>
                                                             )}
@@ -1505,7 +1606,7 @@ const BusinessPeople = () => {
                                                         {activeConfig.payReminder && netBal !== 0 && (
                                                             <button 
                                                                 onClick={(e) => { e.stopPropagation(); handleSendWhatsAppReminder(p, netBal); }}
-                                                                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', border: 'none', background: '#ECFDF5', color: '#047857', padding: '0.2rem 0.5rem', borderRadius: '6px', fontSize: '0.65rem', fontWeight: '750', marginTop: '4px', cursor: 'pointer' }}
+                                                                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', border: 'none', background: '#ECFDF5', color: '#047857', padding: '0.181rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '750', marginTop: '4px', cursor: 'pointer', whiteSpace: 'nowrap' }}
                                                             >
                                                                 <MessageSquare size={11} /> Send Reminder
                                                             </button>
@@ -1513,37 +1614,39 @@ const BusinessPeople = () => {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1.5rem 2rem' }}>
-                                                <span style={{ padding: '0.3rem 0.6rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontWeight: '800', fontSize: '0.72rem', textTransform: 'uppercase' }}>{p.role_type}</span>
+                                            <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.role_type}</span>
                                             </td>
                                             {activeConfig.partyGroup && (
-                                                <td style={{ padding: '1.5rem 2rem' }}>
+                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
                                                     {p.relationship ? (
-                                                        <span style={{ padding: '0.3rem 0.6rem', borderRadius: '6px', background: '#FEF3C7', color: '#D97706', fontWeight: '800', fontSize: '0.72rem', textTransform: 'uppercase' }}>{p.relationship}</span>
+                                                        <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#FEF3C7', color: '#D97706', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.relationship}</span>
                                                     ) : (
-                                                        <span style={{ color: '#94A3B8', fontSize: '0.8rem' }}>None</span>
+                                                        <span style={{ color: '#94A3B8', fontSize: '0.725rem' }}>None</span>
                                                     )}
                                                 </td>
                                             )}
                                             {activeConfig.partyStatus && (
-                                                <td style={{ padding: '1.5rem 2rem' }}>
-                                                    <span style={{ padding: '0.3rem 0.6rem', borderRadius: '6px', background: meta.status === 'active' ? '#ECFDF5' : '#FEE2E2', color: meta.status === 'active' ? '#047857' : '#EF4444', fontWeight: '800', fontSize: '0.72rem', textTransform: 'uppercase' }}>
+                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                    <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: meta.status === 'active' ? '#ECFDF5' : '#FEE2E2', color: meta.status === 'active' ? '#047857' : '#EF4444', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>
                                                         {meta.status}
                                                     </span>
                                                 </td>
                                             )}
-                                            <td style={{ padding: '1.5rem 2rem', color: '#64748B', fontWeight: '600' }}>{p.company || 'Individual'}</td>
-                                            <td style={{ padding: '1.5rem 2rem', color: '#475569' }}>
-                                                <div style={{ fontSize: '0.85rem', fontWeight: '650' }}>{p.phone || 'N/A'}</div>
-                                                <div style={{ fontSize: '0.75rem', color: '#94A3B8' }}>{p.email || ''}</div>
+                                            <td style={{ padding: '0.589rem 0.78rem', color: '#64748B', fontWeight: '600', fontSize: '0.77rem', maxWidth: '170px' }} title={p.company || 'Individual'}>
+                                                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>{p.company || 'Individual'}</div>
                                             </td>
-                                            <td style={{ padding: '1.5rem 2rem', textAlign: 'right' }}>
-                                                <span style={{ fontWeight: '900', fontSize: '1.1rem', color: netBal >= 0 ? '#16A34A' : '#EF4444' }}>
+                                            <td style={{ padding: '0.589rem 0.78rem', color: '#475569', maxWidth: '210px' }}>
+                                                <div style={{ fontSize: '0.77rem', fontWeight: '650', whiteSpace: 'nowrap' }}>{p.phone || 'N/A'}</div>
+                                                <div style={{ fontSize: '0.68rem', color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }} title={p.email || ''}>{p.email || ''}</div>
+                                            </td>
+                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                <span style={{ fontWeight: '900', fontSize: '0.793rem', color: netBal >= 0 ? '#16A34A' : '#EF4444', whiteSpace: 'nowrap' }}>
                                                     {formatCurr(p.net_balance)}
                                                 </span>
-                                                <div style={{ fontSize: '0.7rem', color: '#94A3B8', fontWeight: '700' }}>{netBal >= 0 ? 'RECEIVABLE' : 'PAYABLE'}</div>
+                                                <div style={{ fontSize: '0.634rem', color: '#94A3B8', fontWeight: '700', whiteSpace: 'nowrap' }}>{netBal >= 0 ? 'RECEIVABLE' : 'PAYABLE'}</div>
                                             </td>
-                                            <td style={{ padding: '1.5rem 2rem', textAlign: 'right', position: 'relative' }}>
+                                            <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', position: 'relative', whiteSpace: 'nowrap' }}>
                                                 <div style={{ display: 'inline-block', position: 'relative' }}>
                                                     <button 
                                                         onClick={(e) => {
@@ -1590,7 +1693,7 @@ const BusinessPeople = () => {
                                                                     border: 'none',
                                                                     background: 'none',
                                                                     color: '#334155',
-                                                                    fontSize: '0.85rem',
+                                                                    fontSize: '0.77rem',
                                                                     fontWeight: '600',
                                                                     cursor: 'pointer',
                                                                     borderRadius: '8px',
@@ -1627,7 +1730,7 @@ const BusinessPeople = () => {
                                                                     border: 'none',
                                                                     background: 'none',
                                                                     color: '#334155',
-                                                                    fontSize: '0.85rem',
+                                                                    fontSize: '0.77rem',
                                                                     fontWeight: '600',
                                                                     cursor: 'pointer',
                                                                     borderRadius: '8px',
@@ -1654,7 +1757,7 @@ const BusinessPeople = () => {
                                                                     border: 'none',
                                                                     background: 'none',
                                                                     color: '#EF4444',
-                                                                    fontSize: '0.85rem',
+                                                                    fontSize: '0.77rem',
                                                                     fontWeight: '600',
                                                                     cursor: 'pointer',
                                                                     borderRadius: '8px',
@@ -1679,27 +1782,27 @@ const BusinessPeople = () => {
 
                     {/* TAB: Financial Groups */}
                     {activeTab === 'groups' && (
-                        <div style={{ padding: '2rem' }}>
-                            <div style={{ marginBottom: '1.75rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div style={{ padding: '1.812rem' }}>
+                            <div style={{ marginBottom: '1.586rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.906rem' }}>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '900', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '900', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <FolderKanban size={22} style={{ color: '#064E3B' }} /> Financial Groups & Syndicates
                                     </h3>
-                                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#64748B' }}>
+                                    <p style={{ margin: '0.227rem 0 0 0', fontSize: '0.77rem', color: '#64748B' }}>
                                         Collaborative ledgers, joint business pools, and shared credit circles with verified @bnxmail.com partners.
                                     </p>
                                 </div>
-                                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem' }}>
                                     <button
                                         onClick={() => setIsCreateGroupModalOpen(true)}
                                         style={{
-                                            padding: '0.65rem 1.25rem',
+                                            padding: '0.589rem 1.133rem',
                                             borderRadius: '12px',
                                             background: '#064E3B',
                                             color: 'white',
                                             border: 'none',
                                             fontWeight: '800',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -1713,24 +1816,24 @@ const BusinessPeople = () => {
                             </div>
 
                             {groupsList.length === 0 ? (
-                                <div style={{ padding: '4rem 2rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '24px', border: '1.5px dashed #CBD5E1' }}>
-                                    <div style={{ width: '56px', height: '56px', borderRadius: '20px', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem' }}>
+                                <div style={{ padding: '3.625rem 1.812rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '24px', border: '1.5px dashed #CBD5E1' }}>
+                                    <div style={{ width: '56px', height: '56px', borderRadius: '20px', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.133rem' }}>
                                         <FolderKanban size={28} />
                                     </div>
-                                    <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '800', color: '#1E293B' }}>No Financial Groups Yet</h4>
-                                    <p style={{ margin: '0.5rem 0 1.5rem', fontSize: '0.85rem', color: '#64748B', maxWidth: '420px', marginLeft: 'auto', marginRight: 'auto' }}>
+                                    <h4 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '800', color: '#1E293B' }}>No Financial Groups Yet</h4>
+                                    <p style={{ margin: '0.453rem 0 1.359rem', fontSize: '0.77rem', color: '#64748B', maxWidth: '420px', marginLeft: 'auto', marginRight: 'auto' }}>
                                         Create a joint syndicate, savings circle, or project outlay pool. Invite partners using their @bnxmail.com address.
                                     </p>
                                     <button
                                         onClick={() => setIsCreateGroupModalOpen(true)}
                                         style={{
-                                            padding: '0.75rem 1.5rem',
+                                            padding: '0.68rem 1.359rem',
                                             borderRadius: '12px',
                                             background: '#064E3B',
                                             color: 'white',
                                             border: 'none',
                                             fontWeight: '800',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             display: 'inline-flex',
                                             alignItems: 'center',
@@ -1741,7 +1844,7 @@ const BusinessPeople = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.5rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.359rem' }}>
                                     {groupsList.map(group => {
                                         const typeColor = 
                                             group.group_type === 'syndicate' ? { bg: '#EFF6FF', text: '#1E40AF', border: '#DBEAFE' } :
@@ -1758,24 +1861,24 @@ const BusinessPeople = () => {
                                                 background: '#FFFFFF',
                                                 borderRadius: '20px',
                                                 border: '1.5px solid #E2E8F0',
-                                                padding: '1.5rem',
+                                                padding: '1.359rem',
                                                 boxShadow: '0 4px 14px rgba(0,0,0,0.03)',
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 justifyContent: 'space-between',
-                                                gap: '1.25rem',
+                                                gap: '1.133rem',
                                                 transition: 'all 0.2s',
                                                 position: 'relative'
                                             }}>
                                                 <div>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.68rem' }}>
                                                         <span style={{
-                                                            padding: '0.25rem 0.65rem',
+                                                            padding: '0.227rem 0.589rem',
                                                             borderRadius: '8px',
                                                             background: typeColor.bg,
                                                             color: typeColor.text,
                                                             border: `1px solid ${typeColor.border}`,
-                                                            fontSize: '0.72rem',
+                                                            fontSize: '0.652rem',
                                                             fontWeight: '800',
                                                             textTransform: 'uppercase'
                                                         }}>
@@ -1783,7 +1886,7 @@ const BusinessPeople = () => {
                                                              group.group_type === 'pool' ? 'Contribution Pool' :
                                                              group.group_type === 'credit' ? 'Credit Circle' : 'Project Outlays'}
                                                         </span>
-                                                        <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                        <span style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                             <Users size={12} /> {group.member_count} active
                                                             {group.pending_member_count > 0 && (
                                                                 <span style={{ color: '#D97706', marginLeft: '4px' }}>
@@ -1793,19 +1896,19 @@ const BusinessPeople = () => {
                                                         </span>
                                                     </div>
 
-                                                    <h4 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '900', color: '#0F172A' }}>
+                                                    <h4 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '900', color: '#0F172A' }}>
                                                         {group.name}
                                                     </h4>
                                                     {group.description && (
-                                                        <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.8rem', color: '#64748B', lineHeight: '1.3' }}>
+                                                        <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.725rem', color: '#64748B', lineHeight: '1.3' }}>
                                                             {group.description}
                                                         </p>
                                                     )}
 
                                                     {/* Progress bar for pools */}
                                                     {progressPercent !== null && (
-                                                        <div style={{ marginTop: '1rem', padding: '0.85rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>
+                                                        <div style={{ marginTop: '0.906rem', padding: '0.77rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #F1F5F9' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.652rem', fontWeight: '800', color: '#475569', marginBottom: '0.317rem' }}>
                                                                 <span>Pool Goal ({formatCurr(group.target_amount)})</span>
                                                                 <span style={{ color: '#065F46' }}>{progressPercent}%</span>
                                                             </div>
@@ -1816,19 +1919,19 @@ const BusinessPeople = () => {
                                                     )}
 
                                                     {/* Metrics breakdown */}
-                                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginTop: '1rem' }}>
-                                                        <div style={{ padding: '0.65rem 0.85rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                                                            <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Contributed</p>
-                                                            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.9rem', fontWeight: '900', color: '#065F46' }}>{formatCurr(group.total_contributed)}</p>
+                                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem', marginTop: '0.906rem' }}>
+                                                        <div style={{ padding: '0.589rem 0.77rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                                                            <p style={{ margin: 0, fontSize: '0.634rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Contributed</p>
+                                                            <p style={{ margin: '0.181rem 0 0 0', fontSize: '0.816rem', fontWeight: '900', color: '#065F46' }}>{formatCurr(group.total_contributed)}</p>
                                                         </div>
-                                                        <div style={{ padding: '0.65rem 0.85rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
-                                                            <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Expenses</p>
-                                                            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.9rem', fontWeight: '900', color: '#991B1B' }}>{formatCurr(group.total_expenses)}</p>
+                                                        <div style={{ padding: '0.589rem 0.77rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0' }}>
+                                                            <p style={{ margin: 0, fontSize: '0.634rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Expenses</p>
+                                                            <p style={{ margin: '0.181rem 0 0 0', fontSize: '0.816rem', fontWeight: '900', color: '#991B1B' }}>{formatCurr(group.total_expenses)}</p>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
+                                                <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                     <button
                                                         onClick={() => {
                                                             setSelectedGroupId(group.id);
@@ -1836,13 +1939,13 @@ const BusinessPeople = () => {
                                                         }}
                                                         style={{
                                                             flex: 1,
-                                                            padding: '0.65rem 1rem',
+                                                            padding: '0.589rem 0.906rem',
                                                             borderRadius: '10px',
                                                             background: '#064E3B',
                                                             color: 'white',
                                                             border: 'none',
                                                             fontWeight: '800',
-                                                            fontSize: '0.85rem',
+                                                            fontSize: '0.77rem',
                                                             cursor: 'pointer',
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -1860,7 +1963,7 @@ const BusinessPeople = () => {
                                                                 }
                                                             }}
                                                             style={{
-                                                                padding: '0.65rem',
+                                                                padding: '0.589rem',
                                                                 borderRadius: '10px',
                                                                 background: '#FFF',
                                                                 color: '#EF4444',
@@ -1886,66 +1989,66 @@ const BusinessPeople = () => {
 
                     {/* TAB: Connection & Financial Group Requests */}
                     {activeTab === 'requests' && (
-                        <div style={{ padding: '2rem' }}>
-                            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+                        <div style={{ padding: '1.812rem' }}>
+                            <div style={{ marginBottom: '1.359rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.906rem' }}>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '900', color: '#0F172A' }}>Incoming Requests & Invitations</h3>
-                                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.85rem', color: '#64748B' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '900', color: '#0F172A' }}>Incoming Requests & Invitations</h3>
+                                    <p style={{ margin: '0.227rem 0 0 0', fontSize: '0.77rem', color: '#64748B' }}>
                                         Contact connections and financial group invitations sent to your @bnxmail.com address.
                                     </p>
                                 </div>
-                                <span style={{ padding: '0.35rem 0.85rem', borderRadius: '999px', background: '#DBEAFE', color: '#1D4ED8', fontWeight: '800', fontSize: '0.8rem' }}>
+                                <span style={{ padding: '0.317rem 0.77rem', borderRadius: '999px', background: '#DBEAFE', color: '#1D4ED8', fontWeight: '800', fontSize: '0.725rem' }}>
                                     {incomingRequests.length + groupIncomingRequests.length} Pending
                                 </span>
                             </div>
 
                             {/* Section 1: Financial Group Invitations */}
                             {groupIncomingRequests && groupIncomingRequests.length > 0 && (
-                                <div style={{ marginBottom: '2.5rem' }}>
-                                    <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#1E3A8A', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <div style={{ marginBottom: '2.266rem' }}>
+                                    <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#1E3A8A', margin: '0 0 0.906rem 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         <FolderKanban size={18} /> Financial Group Invitations ({groupIncomingRequests.length})
                                     </h4>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.25rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.133rem' }}>
                                         {groupIncomingRequests.map((req) => (
                                             <div key={`group-invite-${req.membership_id}`} style={{
                                                 background: '#FFFFFF',
                                                 borderRadius: '18px',
                                                 border: '1.5px solid #BFDBFE',
-                                                padding: '1.5rem',
+                                                padding: '1.359rem',
                                                 boxShadow: '0 4px 14px rgba(37, 99, 235, 0.05)',
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 justifyContent: 'space-between',
-                                                gap: '1rem'
+                                                gap: '0.906rem'
                                             }}>
                                                 <div>
-                                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.906rem' }}>
                                                         <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#4F46E5', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                                             <FolderKanban size={24} />
                                                         </div>
                                                         <div style={{ minWidth: 0, flex: 1 }}>
                                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                                                                <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '900', color: '#0F172A' }}>
+                                                                <h4 style={{ margin: 0, fontSize: '0.952rem', fontWeight: '900', color: '#0F172A' }}>
                                                                     {req.group_name}
                                                                 </h4>
-                                                                <span style={{ padding: '0.15rem 0.5rem', borderRadius: '6px', background: '#EEF2FF', color: '#4338CA', fontSize: '0.68rem', fontWeight: '800', textTransform: 'capitalize' }}>
+                                                                <span style={{ padding: '0.136rem 0.453rem', borderRadius: '6px', background: '#EEF2FF', color: '#4338CA', fontSize: '0.616rem', fontWeight: '800', textTransform: 'capitalize' }}>
                                                                     {req.group_type || 'Syndicate'}
                                                                 </span>
                                                             </div>
                                                             {req.group_description && (
-                                                                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: '#64748B' }}>
+                                                                <p style={{ margin: '0.227rem 0 0 0', fontSize: '0.725rem', color: '#64748B' }}>
                                                                     {req.group_description}
                                                                 </p>
                                                             )}
-                                                            <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.78rem', color: '#475569' }}>
+                                                            <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.707rem', color: '#475569' }}>
                                                                 Invited by: <strong>{req.inviter_business_name || req.inviter_username || 'Admin'}</strong> ({req.inviter_email})
                                                             </p>
-                                                            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                                                                <span style={{ padding: '0.2rem 0.55rem', borderRadius: '6px', background: '#F1F5F9', color: '#334155', fontSize: '0.7rem', fontWeight: '800' }}>
+                                                            <div style={{ display: 'flex', gap: '0.453rem', marginTop: '0.453rem', flexWrap: 'wrap' }}>
+                                                                <span style={{ padding: '0.181rem 0.498rem', borderRadius: '6px', background: '#F1F5F9', color: '#334155', fontSize: '0.634rem', fontWeight: '800' }}>
                                                                     Role: {req.invited_role?.toUpperCase()}
                                                                 </span>
                                                                 {req.target_amount > 0 && (
-                                                                    <span style={{ padding: '0.2rem 0.55rem', borderRadius: '6px', background: '#ECFDF5', color: '#065F46', fontSize: '0.7rem', fontWeight: '800' }}>
+                                                                    <span style={{ padding: '0.181rem 0.498rem', borderRadius: '6px', background: '#ECFDF5', color: '#065F46', fontSize: '0.634rem', fontWeight: '800' }}>
                                                                         Pool Goal: {formatCurr(req.target_amount)}
                                                                     </span>
                                                                 )}
@@ -1954,19 +2057,19 @@ const BusinessPeople = () => {
                                                     </div>
                                                 </div>
 
-                                                <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
+                                                <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                     <button
                                                         onClick={() => respondGroupRequestMutation.mutate({ membershipId: req.membership_id, action: 'accept' })}
                                                         disabled={respondGroupRequestMutation.isPending}
                                                         style={{
                                                             flex: 1,
-                                                            padding: '0.65rem 1rem',
+                                                            padding: '0.589rem 0.906rem',
                                                             borderRadius: '10px',
                                                             background: '#4F46E5',
                                                             color: 'white',
                                                             border: 'none',
                                                             fontWeight: '800',
-                                                            fontSize: '0.85rem',
+                                                            fontSize: '0.77rem',
                                                             cursor: 'pointer',
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -1980,13 +2083,13 @@ const BusinessPeople = () => {
                                                         onClick={() => respondGroupRequestMutation.mutate({ membershipId: req.membership_id, action: 'reject' })}
                                                         disabled={respondGroupRequestMutation.isPending}
                                                         style={{
-                                                            padding: '0.65rem 1rem',
+                                                            padding: '0.589rem 0.906rem',
                                                             borderRadius: '10px',
                                                             background: '#FFFFFF',
                                                             color: '#EF4444',
                                                             border: '1.5px solid #FECACA',
                                                             fontWeight: '800',
-                                                            fontSize: '0.85rem',
+                                                            fontSize: '0.77rem',
                                                             cursor: 'pointer',
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -2004,68 +2107,68 @@ const BusinessPeople = () => {
                             )}
 
                             {/* Section 2: Contact Connection Requests */}
-                            <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#0F172A', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                            <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.906rem 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <Users size={18} /> Contact Connections ({incomingRequests.length})
                             </h4>
                             {incomingRequests.length === 0 ? (
-                                <div style={{ padding: '3rem 2rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '20px', border: '1px dashed #CBD5E1' }}>
-                                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#E2E8F0', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+                                <div style={{ padding: '2.719rem 1.812rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '20px', border: '1px dashed #CBD5E1' }}>
+                                    <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#E2E8F0', color: '#64748B', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.906rem' }}>
                                         <UserPlus size={24} />
                                     </div>
-                                    <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '800', color: '#334155' }}>No Pending Contact Requests</h4>
-                                    <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.85rem', color: '#94A3B8' }}>
+                                    <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '800', color: '#334155' }}>No Pending Contact Requests</h4>
+                                    <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.77rem', color: '#94A3B8' }}>
                                         When someone adds your @bnxmail.com address to their directory, you can accept or decline their connection request here.
                                     </p>
                                 </div>
                             ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.25rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.133rem' }}>
                                     {incomingRequests.map((req) => (
                                         <div key={req.id} style={{
                                             background: '#FFFFFF',
                                             borderRadius: '18px',
                                             border: '1.5px solid #E2E8F0',
-                                            padding: '1.5rem',
+                                            padding: '1.359rem',
                                             boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
                                             display: 'flex',
                                             flexDirection: 'column',
                                             justifyContent: 'space-between',
-                                            gap: '1rem'
+                                            gap: '0.906rem'
                                         }}>
-                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                                                <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#004aad', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '1.1rem', flexShrink: 0 }}>
+                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.906rem' }}>
+                                                <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: '#004aad', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.997rem', flexShrink: 0 }}>
                                                     {(req.requester_username || req.requester_business_name || 'U').charAt(0).toUpperCase()}
                                                 </div>
                                                 <div style={{ minWidth: 0, flex: 1 }}>
-                                                    <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '900', color: '#0F172A' }}>
+                                                    <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '900', color: '#0F172A' }}>
                                                         {req.requester_username || req.requester_business_name || 'Network Member'}
                                                     </h4>
-                                                    <p style={{ margin: '0.2rem 0', fontSize: '0.8rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                    <p style={{ margin: '0.181rem 0', fontSize: '0.725rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                                         <Mail size={12} /> {req.requester_email}
                                                     </p>
-                                                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
-                                                        <span style={{ padding: '0.2rem 0.55rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase' }}>
+                                                    <div style={{ display: 'flex', gap: '0.453rem', marginTop: '0.453rem', flexWrap: 'wrap' }}>
+                                                        <span style={{ padding: '0.181rem 0.498rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>
                                                             {req.role_type || 'Contact'}
                                                         </span>
-                                                        <span style={{ padding: '0.2rem 0.55rem', borderRadius: '6px', background: '#FEF3C7', color: '#92400E', fontSize: '0.7rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                                        <span style={{ padding: '0.181rem 0.498rem', borderRadius: '6px', background: '#FEF3C7', color: '#92400E', fontSize: '0.634rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '3px' }}>
                                                             <Clock size={10} /> Pending
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div style={{ display: 'flex', gap: '0.75rem', paddingTop: '1rem', borderTop: '1px solid #F1F5F9' }}>
+                                            <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                 <button
                                                     onClick={() => respondRequestMutation.mutate({ id: req.id, action: 'accept' })}
                                                     disabled={respondRequestMutation.isPending}
                                                     style={{
                                                         flex: 1,
-                                                        padding: '0.65rem 1rem',
+                                                        padding: '0.589rem 0.906rem',
                                                         borderRadius: '10px',
                                                         background: '#10B981',
                                                         color: 'white',
                                                         border: 'none',
                                                         fontWeight: '800',
-                                                        fontSize: '0.85rem',
+                                                        fontSize: '0.77rem',
                                                         cursor: 'pointer',
                                                         display: 'flex',
                                                         alignItems: 'center',
@@ -2080,13 +2183,13 @@ const BusinessPeople = () => {
                                                     onClick={() => respondRequestMutation.mutate({ id: req.id, action: 'reject' })}
                                                     disabled={respondRequestMutation.isPending}
                                                     style={{
-                                                        padding: '0.65rem 1rem',
+                                                        padding: '0.589rem 0.906rem',
                                                         borderRadius: '10px',
                                                         background: '#FFFFFF',
                                                         color: '#EF4444',
                                                         border: '1.5px solid #FECACA',
                                                         fontWeight: '800',
-                                                        fontSize: '0.85rem',
+                                                        fontSize: '0.77rem',
                                                         cursor: 'pointer',
                                                         display: 'flex',
                                                         alignItems: 'center',
@@ -2106,7 +2209,7 @@ const BusinessPeople = () => {
 
                     {/* TAB 2: Transactions Ledger */}
                     {activeTab === 'transactions' && (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead 
                                 columns={[
                                     { key: 'date', label: 'Execution Date', placeholder: 'Date...' },
@@ -2114,35 +2217,41 @@ const BusinessPeople = () => {
                                     { key: 'description', label: 'Activity Description', placeholder: 'Description...' },
                                     { key: 'type', label: 'Classification', placeholder: 'Type...' },
                                     { key: 'amount', label: 'Ledger Flow', placeholder: 'Flow...', align: 'right' },
-                                    { key: '_actions', label: '', noFilter: true }
+                                    { key: '_actions', label: '', noFilter: true, align: 'right' }
                                 ]} 
                                 onFilterChange={setColFilters} 
-                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '1.25rem 2rem' }}
+                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
                                 {isTxLoading ? (
-                                    <tr><td colSpan={6} style={{ padding: '4rem', textAlign: 'center', color: '#64748B' }}>Accessing Ledger Database...</td></tr>
+                                    <tr><td colSpan={6} style={{ padding: '2.5rem', textAlign: 'center', color: '#64748B' }}>Accessing Ledger Database...</td></tr>
                                 ) : filteredTx.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).length === 0 ? (
-                                    <tr><td colSpan={6} style={{ padding: '4rem', textAlign: 'center', color: '#94A3B8' }}>No logged P2P activities found.</td></tr>
+                                    <tr><td colSpan={6} style={{ padding: '2.5rem', textAlign: 'center', color: '#94A3B8' }}>No logged P2P activities found.</td></tr>
                                 ) : filteredTx.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((t) => (
-                                    <tr key={t.id} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B', fontWeight: '600' }}>{new Date(t.date).toLocaleDateString('en-IN')}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '800', color: '#1E293B' }}>{t.person_name}</td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '600' }}>{t.description}</td>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <span style={{ padding: '0.3rem 0.6rem', borderRadius: '6px', background: t.type === 'lent' ? '#ECFDF5' : '#FEF2F2', color: t.type === 'lent' ? '#059669' : '#DC2626', fontWeight: '800', fontSize: '0.72rem', textTransform: 'uppercase' }}>
+                                    <tr key={t.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', color: '#64748B', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{new Date(t.date).toLocaleDateString('en-IN')}</td>
+                                        <td style={{ padding: '0.589rem 0.78rem', fontWeight: '800', color: '#1E293B', fontSize: '0.793rem', maxWidth: '180px' }} title={t.person_name}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{t.person_name}</div>
+                                        </td>
+                                        <td style={{ padding: '0.589rem 0.78rem', color: '#475569', fontWeight: '600', fontSize: '0.78rem', maxWidth: '240px' }} title={t.description}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '240px' }}>{t.description}</div>
+                                        </td>
+                                        <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                            <span className="badge-nowrap" style={{ padding: '0.227rem 0.5rem', borderRadius: '6px', background: t.type === 'lent' ? '#ECFDF5' : '#FEF2F2', color: t.type === 'lent' ? '#059669' : '#DC2626', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>
                                                 {t.type}
                                             </span>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right', fontWeight: '900', fontSize: '1.1rem', color: t.type === 'lent' ? '#059669' : '#DC2626' }}>
+                                        <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '900', fontSize: '0.84rem', whiteSpace: 'nowrap', color: t.type === 'lent' ? '#059669' : '#DC2626' }}>
                                             {t.type === 'lent' ? '+' : '-'}{formatCurr(t.amount)}
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right' }}>
+                                        <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                             <button 
                                                 onClick={() => deleteTxMutation.mutate(t)}
+                                                title="Delete entry"
+                                                aria-label="Delete entry"
                                                 style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer' }}
                                             >
-                                                <Trash2 size={18} />
+                                                <Trash2 size={16} />
                                             </button>
                                         </td>
                                     </tr>
@@ -2153,39 +2262,43 @@ const BusinessPeople = () => {
 
                     {/* TAB 3: Reminders & Tasks */}
                     {activeTab === 'reminders' && (
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead 
                                 columns={[
                                     { key: 'due_date', label: 'MATURITY / DUE DATE', placeholder: 'Due Date...' },
                                     { key: 'person_name', label: 'TARGET CONTACT', placeholder: 'Contact...' },
                                     { key: 'title', label: 'MEMO LABEL', placeholder: 'Memo...' },
                                     { key: 'amount', label: 'CLAIM CAP', placeholder: 'Claim...', align: 'right' },
-                                    { key: '_actions', label: '', noFilter: true }
+                                    { key: '_actions', label: '', noFilter: true, align: 'right' }
                                 ]} 
                                 onFilterChange={setColFilters} 
-                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '1.25rem 2rem' }}
+                                thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
                                 {isRemindersLoading ? (
-                                    <tr><td colSpan={5} style={{ padding: '4rem', textAlign: 'center', color: '#64748B' }}>Resolving dispatch statuses...</td></tr>
+                                    <tr><td colSpan={5} style={{ padding: '2.5rem', textAlign: 'center', color: '#64748B' }}>Resolving dispatch statuses...</td></tr>
                                 ) : displayAlerts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).length === 0 ? (
-                                    <tr><td colSpan={5} style={{ padding: '4rem', textAlign: 'center', color: '#94A3B8' }}>Zero pending alerts scheduled.</td></tr>
+                                    <tr><td colSpan={5} style={{ padding: '2.5rem', textAlign: 'center', color: '#94A3B8' }}>Zero pending alerts scheduled.</td></tr>
                                 ) : displayAlerts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((r) => (
-                                    <tr key={r.id} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#E11D48', fontWeight: '800' }}>
-                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                                    <tr key={r.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', color: '#E11D48', fontWeight: '800', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>
+                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
                                                 <Calendar size={14} />
                                                 {new Date(r.maturity_date || r.due_date).toLocaleDateString('en-IN')}
                                             </span>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '800', color: '#1E293B' }}>{r.target_contact || r.person_name}</td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '650' }}>{r.memo_label || r.title}</td>
-                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right', fontWeight: '900', color: '#0F172A' }}>{formatCurr(r.claim_cap !== undefined ? r.claim_cap : r.amount)}</td>
-                                        <td style={{ padding: '1.5rem 2rem', textAlign: 'right' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
+                                        <td style={{ padding: '0.589rem 0.78rem', fontWeight: '800', color: '#1E293B', fontSize: '0.793rem', maxWidth: '180px' }} title={r.target_contact || r.person_name}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{r.target_contact || r.person_name}</div>
+                                        </td>
+                                        <td style={{ padding: '0.589rem 0.78rem', color: '#475569', fontWeight: '650', fontSize: '0.78rem', maxWidth: '220px' }} title={r.memo_label || r.title}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '220px' }}>{r.memo_label || r.title}</div>
+                                        </td>
+                                        <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '900', color: '#0F172A', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>{formatCurr(r.claim_cap !== undefined ? r.claim_cap : r.amount)}</td>
+                                        <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                            <div style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
                                                 <button 
                                                     onClick={() => alert(`Dispatched WhatsApp alert reminder to ${r.target_contact || r.person_name}.`)}
-                                                    style={{ border: 'none', background: '#F0FDF4', padding: '0.5rem 0.75rem', borderRadius: '8px', color: '#1B6B3A', fontWeight: '800', cursor: 'pointer', fontSize: '0.8rem' }}
+                                                    style={{ border: 'none', background: '#F0FDF4', padding: '0.35rem 0.65rem', borderRadius: '8px', color: '#1B6B3A', fontWeight: '800', cursor: 'pointer', fontSize: '0.725rem', whiteSpace: 'nowrap' }}
                                                 >
                                                     Send
                                                 </button>
@@ -2219,26 +2332,26 @@ const BusinessPeople = () => {
             <AnimatePresence>
                 {isContactModalOpen && (
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', overflowY: 'auto' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>{editingContactId ? 'Edit Contact Profile' : 'Enroll New Contact'}</h3>
-                                <button onClick={() => { setIsContactModalOpen(false); setEditingContactId(null); setContactForm({ name: '', role_type: 'friend', phone: '', email: '', company: '', relationship: '', contact_info: '' }); }} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', overflowY: 'auto' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>{editingContactId ? 'Edit Contact Profile' : 'Enroll New Contact'}</h3>
+                                <button onClick={() => { setIsContactModalOpen(false); setEditingContactId(null); setContactForm({ name: '', role_type: 'friend', phone: '', email: '', company: '', relationship: '', contact_info: '' }); }} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                             </div>
-                            <form onSubmit={handleSaveContact} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleSaveContact} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Full Identity Name <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <input required placeholder="e.g., Rahul Dev" type="text" value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Full Identity Name <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <input required placeholder="e.g., Rahul Dev" type="text" value={contactForm.name} onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Network Role</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Network Role</label>
                                         <select 
                                             value={['friend', 'family', 'colleague', 'business'].includes(contactForm.role_type) ? contactForm.role_type : 'others'} 
                                             onChange={(e) => {
                                                 const val = e.target.value;
                                                 setContactForm({ ...contactForm, role_type: val === 'others' ? '' : val });
                                             }} 
-                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
                                         >
                                             <option value="friend">Friend</option>
                                             <option value="family">Family</option>
@@ -2252,23 +2365,23 @@ const BusinessPeople = () => {
                                                 type="text" 
                                                 value={contactForm.role_type} 
                                                 onChange={(e) => setContactForm({ ...contactForm, role_type: e.target.value })} 
-                                                style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', marginTop: '0.5rem' }} 
+                                                style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', marginTop: '0.453rem' }} 
                                                 required
                                             />
                                         )}
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Company Label</label>
-                                        <input placeholder="Dunder Mifflin" type="text" value={contactForm.company} onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Company Label</label>
+                                        <input placeholder="Dunder Mifflin" type="text" value={contactForm.company} onChange={(e) => setContactForm({ ...contactForm, company: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                     </div>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Phone Contact <span style={{ color: '#EF4444' }}>*</span></label>
-                                        <input required placeholder="+91 ..." type="text" value={contactForm.phone} onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value.replace(/[^0-9+]/g, '') })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Phone Contact <span style={{ color: '#EF4444' }}>*</span></label>
+                                        <input required placeholder="+91 ..." type="text" value={contactForm.phone} onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value.replace(/[^0-9+]/g, '') })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>
                                             E-Mail Address (bnxmail) <span style={{ color: '#EF4444' }}>*</span>
                                         </label>
                                         <input 
@@ -2290,13 +2403,13 @@ const BusinessPeople = () => {
                                                     setContactEmailError('');
                                                 }
                                             }} 
-                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: contactEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }} 
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: contactEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }} 
                                         />
-                                        <span style={{ fontSize: '0.72rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.35rem' }}>
+                                        <span style={{ fontSize: '0.652rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.317rem' }}>
                                             <Mail size={12} /> Only @bnxmail.com accepted. Request will be sent for approval.
                                         </span>
                                         {contactEmailError && (
-                                            <span style={{ fontSize: '0.75rem', color: '#EF4444', fontWeight: '700', marginTop: '0.3rem', display: 'block' }}>
+                                            <span style={{ fontSize: '0.68rem', color: '#EF4444', fontWeight: '700', marginTop: '0.272rem', display: 'block' }}>
                                                 {contactEmailError}
                                             </span>
                                         )}
@@ -2305,11 +2418,11 @@ const BusinessPeople = () => {
 
                                 {activeConfig.partyGroup && (
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Group</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Group</label>
                                         <select 
                                             value={contactForm.relationship || ''} 
                                             onChange={(e) => setContactForm({ ...contactForm, relationship: e.target.value })}
-                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
                                         >
                                             <option value="">No Group</option>
                                             <option value="Family">Family</option>
@@ -2324,7 +2437,7 @@ const BusinessPeople = () => {
 
                                 {activeConfig.partyStatus && (
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Status</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Status</label>
                                         <select 
                                             value={getContactMeta(contactForm.contact_info).status || 'active'} 
                                             onChange={(e) => {
@@ -2334,7 +2447,7 @@ const BusinessPeople = () => {
                                                     contact_info: serializeContactMeta(e.target.value, meta.loyalty_points) 
                                                 });
                                             }}
-                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
                                         >
                                             <option value="active">Active</option>
                                             <option value="inactive">Inactive</option>
@@ -2342,7 +2455,7 @@ const BusinessPeople = () => {
                                     </div>
                                 )}
 
-                                <button type="submit" disabled={createContactMutation.isPending || updateContactMutation.isPending} style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', marginTop: '0.5rem' }}>
+                                <button type="submit" disabled={createContactMutation.isPending || updateContactMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer', marginTop: '0.453rem' }}>
                                     {editingContactId ? (updateContactMutation.isPending ? 'Updating Profile...' : 'Save Profile Changes') : (createContactMutation.isPending ? 'Saving Contact...' : 'Create Contact Node')}
                                 </button>
                             </form>
@@ -2355,34 +2468,34 @@ const BusinessPeople = () => {
             <AnimatePresence>
                 {isTxModalOpen && (
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Record Peer Transaction</h3>
-                                <button onClick={() => setIsTxModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Peer Transaction</h3>
+                                <button onClick={() => setIsTxModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                             </div>
-                            <form onSubmit={handleSaveTx} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleSaveTx} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Target Network User</label>
-                                    <select required value={txForm.person_id} onChange={(e) => setTxForm({ ...txForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Target Network User</label>
+                                    <select required value={txForm.person_id} onChange={(e) => setTxForm({ ...txForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}>
                                         <option value="">Select contact from registry...</option>
                                         {people.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                                     </select>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Entry Direction</label>
-                                        <select value={txForm.type} onChange={(e) => setTxForm({ ...txForm, type: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white' }}>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Entry Direction</label>
+                                        <select value={txForm.type} onChange={(e) => setTxForm({ ...txForm, type: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}>
                                             <option value="lent">I Lent Assets / Money</option>
                                             <option value="borrowed">I Borrowed Assets / Money</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Ledger Date</label>
-                                        <input type="date" value={txForm.date} onChange={(e) => setTxForm({ ...txForm, date: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Ledger Date</label>
+                                        <input type="date" value={txForm.date} onChange={(e) => setTxForm({ ...txForm, date: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                     </div>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Value Cap Amount ({currency.symbol})</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Value Cap Amount ({currency.symbol})</label>
                                     <input 
                                         required 
                                         type="text" 
@@ -2391,14 +2504,14 @@ const BusinessPeople = () => {
                                         placeholder="0.00" 
                                         value={txForm.amount} 
                                         onChange={handleAmountChange} 
-                                        style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1.1rem', fontWeight: '900' }} 
+                                        style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.997rem', fontWeight: '900' }} 
                                     />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Asset narrative / Memo</label>
-                                    <input placeholder="e.g., Advance for marketing services" type="text" value={txForm.description} onChange={(e) => setTxForm({ ...txForm, description: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Asset narrative / Memo</label>
+                                    <input placeholder="e.g., Advance for marketing services" type="text" value={txForm.description} onChange={(e) => setTxForm({ ...txForm, description: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer' }}>
+                                <button type="submit" style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer' }}>
                                     Authorize Entry Log
                                 </button>
                             </form>
@@ -2411,26 +2524,26 @@ const BusinessPeople = () => {
             <AnimatePresence>
                 {isReminderModalOpen && (
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Schedule Repayment Alert</h3>
-                                <button onClick={() => setIsReminderModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Schedule Repayment Alert</h3>
+                                <button onClick={() => setIsReminderModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                             </div>
-                            <form onSubmit={handleSaveReminder} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleSaveReminder} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Target Contact <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <select required value={reminderForm.person_id} onChange={(e) => setReminderForm({ ...reminderForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontWeight: '600' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Target Contact <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <select required value={reminderForm.person_id} onChange={(e) => setReminderForm({ ...reminderForm, person_id: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white', fontWeight: '600' }}>
                                         <option value="">Select contact...</option>
                                         {people.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                                     </select>
                                 </div>
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.5fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Memo Label <span style={{ color: '#EF4444' }}>*</span></label>
-                                        <input required placeholder="e.g. Loan Repayment Due" type="text" value={reminderForm.title} onChange={(e) => setReminderForm({ ...reminderForm, title: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Memo Label <span style={{ color: '#EF4444' }}>*</span></label>
+                                        <input required placeholder="e.g. Loan Repayment Due" type="text" value={reminderForm.title} onChange={(e) => setReminderForm({ ...reminderForm, title: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Claim Cap (₹)</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Claim Cap (₹)</label>
                                         <input 
                                             type="text" 
                                             inputMode="decimal"
@@ -2445,15 +2558,15 @@ const BusinessPeople = () => {
                                                 val = intPart + decPart;
                                                 setReminderForm({ ...reminderForm, amount: val });
                                             }} 
-                                            style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }} 
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }} 
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Maturity / Due Date <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <input required type="date" value={reminderForm.due_date} onChange={(e) => setReminderForm({ ...reminderForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Maturity / Due Date <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <input required type="date" value={reminderForm.due_date} onChange={(e) => setReminderForm({ ...reminderForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" disabled={isSubmittingAlert || createReminderMutation.isPending} style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: isSubmittingAlert || createReminderMutation.isPending ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: isSubmittingAlert || createReminderMutation.isPending ? 'not-allowed' : 'pointer' }}>
+                                <button type="submit" disabled={isSubmittingAlert || createReminderMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: isSubmittingAlert || createReminderMutation.isPending ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: isSubmittingAlert || createReminderMutation.isPending ? 'not-allowed' : 'pointer' }}>
                                     {isSubmittingAlert || createReminderMutation.isPending ? 'Scheduling Alert...' : 'Dispatch Repayment Alert'}
                                 </button>
                             </form>
@@ -2465,23 +2578,23 @@ const BusinessPeople = () => {
             <AnimatePresence>
                 {selectedPersonId && (
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '750px', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '750px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
                             {/* Header */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '2rem', background: '#F0F9F4', borderBottom: '1px solid #DCF2E4' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '1.812rem', background: '#F0F9F4', borderBottom: '1px solid #DCF2E4' }}>
                                 {isPersonDetailLoading ? (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', height: '80px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', height: '80px' }}>
                                         <div className="premium-loader" style={{ width: '24px', height: '24px', border: '3px solid #DCF2E4', borderTopColor: '#1B6B3A', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
                                         <p style={{ margin: 0, fontWeight: '700', color: '#064E3B' }}>Accessing network dossier...</p>
                                     </div>
                                 ) : (
-                                    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+                                    <div style={{ display: 'flex', gap: '1.359rem', alignItems: 'center' }}>
                                         {renderAvatar(personDetails?.name, 80)}
                                         <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem', flexWrap: 'wrap' }}>
-                                                <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '900', color: '#064E3B', textTransform: 'uppercase' }}>{personDetails?.name}</h2>
-                                                <span style={{ padding: '0.25rem 0.75rem', borderRadius: '8px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase' }}>{personDetails?.role_type}</span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.227rem', flexWrap: 'wrap' }}>
+                                                <h2 style={{ margin: 0, fontSize: '1.586rem', fontWeight: '900', color: '#064E3B', textTransform: 'uppercase' }}>{personDetails?.name}</h2>
+                                                <span style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>{personDetails?.role_type}</span>
                                                 {activeConfig.partyGroup && personDetails?.relationship && (
-                                                    <span style={{ padding: '0.25rem 0.75rem', borderRadius: '8px', background: '#FEF3C7', color: '#D97706', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase' }}>Group: {personDetails.relationship}</span>
+                                                    <span style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: '#FEF3C7', color: '#D97706', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>Group: {personDetails.relationship}</span>
                                                 )}
                                                 {activeConfig.partyStatus && (
                                                     <span 
@@ -2494,14 +2607,14 @@ const BusinessPeople = () => {
                                                                 data: { ...personDetails, contact_info: updatedMeta }
                                                             });
                                                         }}
-                                                        style={{ padding: '0.25rem 0.75rem', borderRadius: '8px', background: getContactMeta(personDetails.contact_info).status === 'active' ? '#DCF2E4' : '#FEE2E2', color: getContactMeta(personDetails.contact_info).status === 'active' ? '#16A34A' : '#EF4444', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', cursor: 'pointer' }}
+                                                        style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: getContactMeta(personDetails.contact_info).status === 'active' ? '#DCF2E4' : '#FEE2E2', color: getContactMeta(personDetails.contact_info).status === 'active' ? '#16A34A' : '#EF4444', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase', cursor: 'pointer' }}
                                                         title="Click to toggle status"
                                                     >
                                                         {getContactMeta(personDetails.contact_info).status}
                                                     </span>
                                                 )}
                                             </div>
-                                            <div style={{ margin: 0, color: '#64748B', fontWeight: '600', display: 'flex', gap: '1rem', fontSize: '0.85rem' }}>
+                                            <div style={{ margin: 0, color: '#64748B', fontWeight: '600', display: 'flex', gap: '0.906rem', fontSize: '0.77rem' }}>
                                                 {personDetails?.company && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Building2 size={14} /> {personDetails.company}</span>}
                                                 {personDetails?.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Phone size={14} /> {personDetails.phone}</span>}
                                                 {personDetails?.email && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Mail size={14} /> {personDetails.email}</span>}
@@ -2509,36 +2622,36 @@ const BusinessPeople = () => {
                                         </div>
                                     </div>
                                 )}
-                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', gap: '0.453rem', alignItems: 'center' }}>
                                     <button 
                                         onClick={() => handleSendWhatsAppReminder(personDetails, computedNetBalance)}
-                                        style={{ border: 'none', background: 'white', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        style={{ border: 'none', background: 'white', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         title="Share Contact"
                                     >
                                         <Share2 size={18} />
                                     </button>
-                                    <button onClick={() => setSelectedPersonId(null)} style={{ border: 'none', background: 'white', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                    <button onClick={() => setSelectedPersonId(null)} style={{ border: 'none', background: 'white', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <X size={20} />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Content Body */}
-                            <div style={{ padding: '2rem', overflowY: 'auto', flex: 1, background: '#FAFAF9' }}>
+                            <div style={{ padding: '1.812rem', overflowY: 'auto', flex: 1, background: '#FAFAF9' }}>
                                 {!isPersonDetailLoading && personDetails && (
                                     <>
 
                                         {/* Exposure Card */}
-                                        <div style={{ background: computedNetBalance >= 0 ? '#ECFDF5' : '#FEF2F2', padding: '1.75rem', borderRadius: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', border: '1.5px solid', borderColor: computedNetBalance >= 0 ? '#A7F3D0' : '#FCA5A5', boxShadow: '0 4px 10px -2px rgba(0,0,0,0.02)' }}>
+                                        <div style={{ background: computedNetBalance >= 0 ? '#ECFDF5' : '#FEF2F2', padding: '1.586rem', borderRadius: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem', border: '1.5px solid', borderColor: computedNetBalance >= 0 ? '#A7F3D0' : '#FCA5A5', boxShadow: '0 4px 10px -2px rgba(0,0,0,0.02)' }}>
                                             <div>
-                                                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '850', textTransform: 'uppercase', color: computedNetBalance >= 0 ? '#047857' : '#B91C1C', letterSpacing: '0.05em' }}>Consolidated Ledger Stand</p>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '2.25rem', fontWeight: '950', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', letterSpacing: '-0.03em' }}>
+                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '850', textTransform: 'uppercase', color: computedNetBalance >= 0 ? '#047857' : '#B91C1C', letterSpacing: '0.05em' }}>Consolidated Ledger Stand</p>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '2.039rem', fontWeight: '950', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', letterSpacing: '-0.03em' }}>
                                                     {formatCurr(computedNetBalance)}
                                                 </h3>
                                                 {activeConfig.payReminder && computedNetBalance !== 0 && (
                                                     <button 
                                                         onClick={() => handleSendWhatsAppReminder(personDetails, computedNetBalance)}
-                                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: 'none', background: computedNetBalance >= 0 ? '#D1FAE5' : '#FEE2E2', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', padding: '0.4rem 0.8rem', borderRadius: '10px', fontSize: '0.75rem', fontWeight: '800', marginTop: '0.75rem', cursor: 'pointer' }}
+                                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: 'none', background: computedNetBalance >= 0 ? '#D1FAE5' : '#FEE2E2', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', padding: '0.363rem 0.725rem', borderRadius: '10px', fontSize: '0.68rem', fontWeight: '800', marginTop: '0.68rem', cursor: 'pointer' }}
                                                     >
                                                         <MessageSquare size={13} /> Send Payment Reminder
                                                     </button>
@@ -2549,7 +2662,7 @@ const BusinessPeople = () => {
                                             </div>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '2rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1.812rem' }}>
                                             {/* Recent Ledger List */}
                                            <div>
     <div
@@ -2557,12 +2670,12 @@ const BusinessPeople = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '0.75rem'
+            marginBottom: '0.68rem'
         }}
     >
         <h4
             style={{
-                fontSize: '0.95rem',
+                fontSize: '0.861rem',
                 fontWeight: '900',
                 color: '#1E293B',
                 margin: 0,
@@ -2573,7 +2686,7 @@ const BusinessPeople = () => {
             Direct Ledger Activity
         </h4>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
             <button
                 onClick={() => {
                     setShowLedgerSearch(prev => !prev);
@@ -2600,7 +2713,7 @@ const BusinessPeople = () => {
     </div>
 
     {showLedgerSearch && (
-        <div style={{ marginBottom: '0.75rem' }}>
+        <div style={{ marginBottom: '0.68rem' }}>
             <input
                 type="text"
                 placeholder="Search by amount, date, or memo..."
@@ -2609,11 +2722,11 @@ const BusinessPeople = () => {
                 autoFocus
                 style={{
                     width: '100%',
-                    padding: '0.6rem 1rem',
+                    padding: '0.544rem 0.906rem',
                     borderRadius: '12px',
                     border: '1px solid #E2E8F0',
                     outline: 'none',
-                    fontSize: '0.82rem',
+                    fontSize: '0.743rem',
                     fontWeight: '600',
                     color: '#1E293B',
                     background: 'white',
@@ -2628,13 +2741,13 @@ const BusinessPeople = () => {
         style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '0.75rem',
+            gap: '0.68rem',
             maxHeight: '320px',
             overflowY: 'auto'
         }}
     >
         {isPersonTxLoading ? (
-            <p style={{ color: '#94A3B8', fontSize: '0.85rem' }}>
+            <p style={{ color: '#94A3B8', fontSize: '0.77rem' }}>
                 Loading transactions...
             </p>
         ) : (!personTx ||
@@ -2643,7 +2756,7 @@ const BusinessPeople = () => {
               : personTx.length === 0)) ? (
             <div
                 style={{
-                    padding: '2rem',
+                    padding: '1.812rem',
                     border: '2px dashed #E2E8F0',
                     borderRadius: '16px',
                     textAlign: 'center',
@@ -2654,7 +2767,7 @@ const BusinessPeople = () => {
                     style={{
                         margin: 0,
                         color: '#94A3B8',
-                        fontSize: '0.85rem',
+                        fontSize: '0.77rem',
                         fontStyle: 'italic',
                         fontWeight: '600'
                     }}
@@ -2701,7 +2814,7 @@ const BusinessPeople = () => {
                 return filtered.length === 0 ? (
                     <div
                         style={{
-                            padding: '1.5rem',
+                            padding: '1.359rem',
                             border: '2px dashed #E2E8F0',
                             borderRadius: '16px',
                             textAlign: 'center',
@@ -2712,7 +2825,7 @@ const BusinessPeople = () => {
                             style={{
                                 margin: 0,
                                 color: '#94A3B8',
-                                fontSize: '0.85rem',
+                                fontSize: '0.77rem',
                                 fontStyle: 'italic',
                                 fontWeight: '600'
                             }}
@@ -2726,7 +2839,7 @@ const BusinessPeople = () => {
                         <div
                             key={i}
                             style={{
-                                padding: '1.1rem 1.25rem',
+                                padding: '0.997rem 1.133rem',
                                 background: 'white',
                                 border: '1px solid #E2E8F0',
                                 borderRadius: '16px',
@@ -2734,21 +2847,21 @@ const BusinessPeople = () => {
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                                 boxShadow: '0 2px 4px rgba(0,0,0,0.01)',
-                                gap: '1rem'
+                                gap: '0.906rem'
                             }}
                         >
                             <div
                                 style={{
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '0.25rem',
+                                    gap: '0.227rem',
                                     flex: 1
                                 }}
                             >
                                 <p
                                     style={{
                                         margin: 0,
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         fontWeight: '800',
                                         color: '#334155'
                                     }}
@@ -2759,7 +2872,7 @@ const BusinessPeople = () => {
                                 <p
                                     style={{
                                         margin: 0,
-                                        fontSize: '0.75rem',
+                                        fontSize: '0.68rem',
                                         color: '#94A3B8',
                                         fontWeight: '600'
                                     }}
@@ -2774,13 +2887,13 @@ const BusinessPeople = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.75rem'
+                                    gap: '0.68rem'
                                 }}
                             >
                                 <div style={{ textAlign: 'right' }}>
                                     <span
                                         style={{
-                                            fontSize: '1.05rem',
+                                            fontSize: '0.952rem',
                                             fontWeight: '900',
                                             color:
                                                 t.type === 'lent'
@@ -2794,7 +2907,7 @@ const BusinessPeople = () => {
 
                                     <div
                                         style={{
-                                            fontSize: '0.65rem',
+                                            fontSize: '0.589rem',
                                             fontWeight: '850',
                                             textTransform: 'uppercase',
                                             color:
@@ -2811,9 +2924,9 @@ const BusinessPeople = () => {
                                 <div
                                     style={{
                                         display: 'flex',
-                                        gap: '0.35rem',
+                                        gap: '0.317rem',
                                         borderLeft: '1px solid #E2E8F0',
-                                        paddingLeft: '0.75rem',
+                                        paddingLeft: '0.68rem',
                                         alignItems: 'center'
                                     }}
                                 >
@@ -2903,24 +3016,24 @@ const BusinessPeople = () => {
                                             {/* Right Column: Reminders OR Inline Transaction Form OR Inline Reminder Form */}
                                             <AnimatePresence mode="wait">
                                                 {isInlineTxOpen ? (
-                                                    <Motion.div key="tx-form" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} style={{ background: '#F8FAFC', padding: '1.5rem', borderRadius: '24px', border: '1px solid #E2E8F0' }}>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                                            <h4 style={{ fontSize: '0.95rem', fontWeight: '900', color: '#064E3B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                                                    <Motion.div key="tx-form" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} style={{ background: '#F8FAFC', padding: '1.359rem', borderRadius: '24px', border: '1px solid #E2E8F0' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                                            <h4 style={{ fontSize: '0.861rem', fontWeight: '900', color: '#064E3B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                                                                 {editingTxId ? 'Edit Registry Entry' : 'Log New Entry'}
                                                             </h4>
                                                             <button type="button" onClick={() => { setIsInlineTxOpen(false); setEditingTxId(null); setInlineTxForm({ type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '' }); }} style={{ border: 'none', background: 'white', padding: '4px', borderRadius: '8px', cursor: 'pointer', display: 'flex', color: '#64748B' }}><X size={16} /></button>
                                                         </div>
-                                                        <form onSubmit={handleSaveInlineTx} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                        <form onSubmit={handleSaveInlineTx} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                                             <div>
-                                                                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>DIRECTION</label>
-                                                                <select value={inlineTxForm.type} onChange={(e) => setInlineTxForm({ ...inlineTxForm, type: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white', outline: 'none', fontSize: '0.85rem' }}>
+                                                                <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>DIRECTION</label>
+                                                                <select value={inlineTxForm.type} onChange={(e) => setInlineTxForm({ ...inlineTxForm, type: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white', outline: 'none', fontSize: '0.77rem' }}>
                                                                     <option value="lent">I Lent Money (+)</option>
                                                                     <option value="borrowed">I Borrowed Money (-)</option>
                                                                 </select>
                                                             </div>
-                                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
                                                                 <div>
-                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>AMOUNT ({currency.symbol})</label>
+                                                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>AMOUNT ({currency.symbol})</label>
                                                                     <input 
                                                                         required 
                                                                         type="text" 
@@ -2929,75 +3042,75 @@ const BusinessPeople = () => {
                                                                         placeholder="0.00" 
                                                                         value={inlineTxForm.amount} 
                                                                         onChange={handleInlineTxAmountChange} 
-                                                                        style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.9rem' }} 
+                                                                        style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.816rem' }} 
                                                                     />
                                                                 </div>
                                                                 <div>
-                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>DATE</label>
-                                                                    <input type="date" value={inlineTxForm.date} onChange={(e) => setInlineTxForm({ ...inlineTxForm, date: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} />
+                                                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>DATE</label>
+                                                                    <input type="date" value={inlineTxForm.date} onChange={(e) => setInlineTxForm({ ...inlineTxForm, date: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} />
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#64748B', marginBottom: '0.25rem' }}>MEMO / NARRATIVE</label>
-                                                                <input placeholder="Registry note..." type="text" value={inlineTxForm.description} onChange={(e) => setInlineTxForm({ ...inlineTxForm, description: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} />
+                                                                <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>MEMO / NARRATIVE</label>
+                                                                <input placeholder="Registry note..." type="text" value={inlineTxForm.description} onChange={(e) => setInlineTxForm({ ...inlineTxForm, description: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} />
                                                             </div>
-                                                            <button type="submit" disabled={createTxMutation.isPending || updateTxMutation.isPending} style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem' }}>
+                                                            <button type="submit" disabled={createTxMutation.isPending || updateTxMutation.isPending} style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.816rem', cursor: 'pointer', marginTop: '0.453rem' }}>
                                                                 {createTxMutation.isPending || updateTxMutation.isPending ? 'Saving...' : editingTxId ? 'Update Entry' : 'Submit Entry'}
                                                             </button>
                                                         </form>
                                                     </Motion.div>
                                                 ) : isInlineRemOpen ? (
-                                                    <Motion.div key="rem-form" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} style={{ background: '#FFFBEB', padding: '1.5rem', borderRadius: '24px', border: '1px solid #FEF3C7' }}>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                                            <h4 style={{ fontSize: '0.95rem', fontWeight: '900', color: '#B45309', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>Set Maturity Alarm</h4>
+                                                    <Motion.div key="rem-form" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} style={{ background: '#FFFBEB', padding: '1.359rem', borderRadius: '24px', border: '1px solid #FEF3C7' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                                            <h4 style={{ fontSize: '0.861rem', fontWeight: '900', color: '#B45309', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>Set Maturity Alarm</h4>
                                                             <button type="button" onClick={() => setIsInlineRemOpen(false)} style={{ border: 'none', background: 'white', padding: '4px', borderRadius: '8px', cursor: 'pointer', display: 'flex', color: '#D97706' }}><X size={16} /></button>
                                                         </div>
-                                                        <form onSubmit={handleSaveInlineRem} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                                        <form onSubmit={handleSaveInlineRem} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                                             <div>
-                                                                <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#B45309', marginBottom: '0.25rem' }}>PURPOSE / DETAILS</label>
-                                                                <input required placeholder="e.g. Handloan Repayment Date" type="text" value={inlineRemForm.title} onChange={(e) => setInlineRemForm({ ...inlineRemForm, title: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontSize: '0.85rem' }} />
+                                                                <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#B45309', marginBottom: '0.227rem' }}>PURPOSE / DETAILS</label>
+                                                                <input required placeholder="e.g. Handloan Repayment Date" type="text" value={inlineRemForm.title} onChange={(e) => setInlineRemForm({ ...inlineRemForm, title: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontSize: '0.77rem' }} />
                                                             </div>
-                                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
                                                                 <div>
-                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#B45309', marginBottom: '0.25rem' }}>EXPECTED ({currency.symbol})</label>
-                                                                    <input required type="number" placeholder="0.00" value={inlineRemForm.amount} onChange={(e) => setInlineRemForm({ ...inlineRemForm, amount: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontWeight: '800', fontSize: '0.9rem' }} />
+                                                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#B45309', marginBottom: '0.227rem' }}>EXPECTED ({currency.symbol})</label>
+                                                                    <input required type="number" placeholder="0.00" value={inlineRemForm.amount} onChange={(e) => setInlineRemForm({ ...inlineRemForm, amount: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontWeight: '800', fontSize: '0.816rem' }} />
                                                                 </div>
                                                                 <div>
-                                                                    <label style={{ display: 'block', fontSize: '0.7rem', fontWeight: '800', color: '#B45309', marginBottom: '0.25rem' }}>DUE MATURITY</label>
-                                                                    <input required type="date" value={inlineRemForm.due_date} onChange={(e) => setInlineRemForm({ ...inlineRemForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.65rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontSize: '0.85rem' }} />
+                                                                    <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#B45309', marginBottom: '0.227rem' }}>DUE MATURITY</label>
+                                                                    <input required type="date" value={inlineRemForm.due_date} onChange={(e) => setInlineRemForm({ ...inlineRemForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #FCD34D', outline: 'none', fontSize: '0.77rem' }} />
                                                                 </div>
                                                             </div>
-                                                            <button type="submit" disabled={createReminderMutation.isPending || updateReminderMutation.isPending} style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                                                            <button type="submit" disabled={createReminderMutation.isPending || updateReminderMutation.isPending} style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', background: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.816rem', cursor: 'pointer', marginTop: '0.453rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
                                                                 <Bell size={16} /> {createReminderMutation.isPending || updateReminderMutation.isPending ? 'Saving...' : editingRemId ? 'Update Alarm' : 'Enable Alarm'}
                                                             </button>
                                                         </form>
                                                     </Motion.div>
                                                 ) : (
                                                     <Motion.div key="reminders" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }}>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                                            <h4 style={{ fontSize: '0.95rem', fontWeight: '900', color: '#1E293B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>Maturity Due Alerts</h4>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                                            <h4 style={{ fontSize: '0.861rem', fontWeight: '900', color: '#1E293B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>Maturity Due Alerts</h4>
                                                             <Bell size={16} style={{ color: '#94A3B8' }} />
                                                         </div>
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem' }}>
                                                             {isPersonRemLoading ? (
-                                                                <p style={{ color: '#94A3B8', fontSize: '0.85rem' }}>Fetching deadlines...</p>
+                                                                <p style={{ color: '#94A3B8', fontSize: '0.77rem' }}>Fetching deadlines...</p>
                                                             ) : (!personReminders || (personReminders.data ? personReminders.data.length === 0 : personReminders.length === 0)) ? (
-                                                                <div style={{ padding: '2rem', border: '2px dashed #E2E8F0', borderRadius: '16px', textAlign: 'center', background: 'white' }}>
-                                                                    <p style={{ margin: 0, color: '#94A3B8', fontSize: '0.85rem', fontStyle: 'italic', fontWeight: '600' }}>All accounts cleared.</p>
+                                                                <div style={{ padding: '1.812rem', border: '2px dashed #E2E8F0', borderRadius: '16px', textAlign: 'center', background: 'white' }}>
+                                                                    <p style={{ margin: 0, color: '#94A3B8', fontSize: '0.77rem', fontStyle: 'italic', fontWeight: '600' }}>All accounts cleared.</p>
                                                                 </div>
                                                             ) : (
                                                                 (personReminders.data || personReminders || []).slice(0, 4).map((rem, i) => (
-                                                                    <div key={i} style={{ padding: '1.1rem 1.25rem', background: 'white', border: '1px solid #E2E8F0', borderLeft: '4px solid #F59E0B', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.5rem', boxShadow: '0 2px 4px rgba(0,0,0,0.01)' }}>
+                                                                    <div key={i} style={{ padding: '0.997rem 1.133rem', background: 'white', border: '1px solid #E2E8F0', borderLeft: '4px solid #F59E0B', borderRadius: '16px', display: 'flex', flexDirection: 'column', gap: '0.453rem', boxShadow: '0 2px 4px rgba(0,0,0,0.01)' }}>
                                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                                                            <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#334155' }}>{rem.title}</span>
-                                                                            <span style={{ fontSize: '0.95rem', fontWeight: '900', color: '#1E293B' }}>{(rem.amount !== undefined && rem.amount !== null && rem.amount !== '') ? formatCurr(rem.amount) : ''}</span>
+                                                                            <span style={{ fontSize: '0.77rem', fontWeight: '800', color: '#334155' }}>{rem.title}</span>
+                                                                            <span style={{ fontSize: '0.861rem', fontWeight: '900', color: '#1E293B' }}>{(rem.amount !== undefined && rem.amount !== null && rem.amount !== '') ? formatCurr(rem.amount) : ''}</span>
                                                                         </div>
                                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem', color: '#E11D48', fontWeight: '800' }}>
+                                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.68rem', color: '#E11D48', fontWeight: '800' }}>
                                                                                 <Calendar size={12} />
                                                                                 <span>Matures: {new Date(rem.due_date).toLocaleDateString('en-IN')}</span>
                                                                             </div>
-                                                                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                                                            <div style={{ display: 'flex', gap: '0.453rem' }}>
                                                                                 <button
                                                                                     onClick={(e) => {
                                                                                         e.stopPropagation();
@@ -3041,14 +3154,14 @@ const BusinessPeople = () => {
                                 )}
                             </div>
                             {/* Footer */}
-                            <div style={{ padding: '1.5rem 2rem', borderTop: '1px solid #E2E8F0', background: 'white', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                            <div style={{ padding: '0.816rem 0.906rem', borderTop: '1px solid #E2E8F0', background: 'white', display: 'flex', justifyContent: 'flex-end', gap: '0.906rem' }}>
                                 {!isInlineRemOpen && (
-                                    <button onClick={() => { setIsInlineTxOpen(prev => !prev); setIsInlineRemOpen(false); if (isInlineTxOpen) { setEditingTxId(null); setInlineTxForm({ type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '' }); } }} style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', background: isInlineTxOpen ? '#FEE2E2' : '#F1F5F9', border: 'none', color: isInlineTxOpen ? '#991B1B' : '#475569', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <button onClick={() => { setIsInlineTxOpen(prev => !prev); setIsInlineRemOpen(false); if (isInlineTxOpen) { setEditingTxId(null); setInlineTxForm({ type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '' }); } }} style={{ padding: '0.68rem 1.359rem', borderRadius: '12px', background: isInlineTxOpen ? '#FEE2E2' : '#F1F5F9', border: 'none', color: isInlineTxOpen ? '#991B1B' : '#475569', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         {isInlineTxOpen ? 'Cancel Entry' : <><Plus size={15} /> Record Transaction</>}
                                     </button>
                                 )}
                                 {!isInlineTxOpen && (
-                                    <button onClick={() => { setIsInlineRemOpen(prev => !prev); setIsInlineTxOpen(false); if (isInlineRemOpen) { setEditingRemId(null); setInlineRemForm({ title: '', amount: '', due_date: new Date().toISOString().split('T')[0] }); } }} style={{ padding: '0.75rem 1.5rem', borderRadius: '12px', background: isInlineRemOpen ? '#FEF2F2' : '#FEF3C7', border: 'none', color: isInlineRemOpen ? '#991B1B' : '#D97706', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <button onClick={() => { setIsInlineRemOpen(prev => !prev); setIsInlineTxOpen(false); if (isInlineRemOpen) { setEditingRemId(null); setInlineRemForm({ title: '', amount: '', due_date: new Date().toISOString().split('T')[0] }); } }} style={{ padding: '0.68rem 1.359rem', borderRadius: '12px', background: isInlineRemOpen ? '#FEF2F2' : '#FEF3C7', border: 'none', color: isInlineRemOpen ? '#991B1B' : '#D97706', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         {isInlineRemOpen ? 'Cancel Alarm' : <><Bell size={15} /> Set Maturity Due</>}
                                     </button>
                                 )}
@@ -3215,68 +3328,68 @@ const BusinessPeople = () => {
                                 initial={{ opacity: 0, y: 20, scale: 0.98 }} 
                                 animate={{ opacity: 1, y: 0, scale: 1 }} 
                                 exit={{ opacity: 0, y: 20, scale: 0.98 }} 
-                                style={{ background: '#F8FAFC', width: '92%', maxWidth: '820px', borderRadius: '36px', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}
+                                style={{ background: '#F8FAFC', width: '92%', maxWidth: '820px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}
                             >
                                 {/* Header Banner */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem 2rem', background: '#FFFFFF', borderBottom: '1.5px solid #F1F5F9' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.816rem 0.906rem', background: '#FFFFFF', borderBottom: '1.5px solid #F1F5F9' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                         <div style={{ background: '#ECFDF5', padding: '8px', borderRadius: '12px', color: '#16A34A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <Share2 size={20} />
                                         </div>
                                         <div>
-                                            <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '900', color: '#064E3B' }}>Share Ledger Reminder</h3>
-                                            <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>Customize and send a premium statement log to {person?.name}</span>
+                                            <h3 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '900', color: '#064E3B' }}>Share Ledger Reminder</h3>
+                                            <span style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>Customize and send a premium statement log to {person?.name}</span>
                                         </div>
                                     </div>
-                                    <button onClick={() => setIsShareModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.65rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
+                                    <button onClick={() => setIsShareModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.589rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                                 </div>
 
                                 {/* Body Container split in two columns */}
                                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.1fr) 1fr', overflowY: 'auto', flex: 1, background: '#F8FAFC' }} className="share-grid-responsive">
                                     
                                     {/* Left Side: Controls */}
-                                    <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', borderRight: '1.5px solid #F1F5F9' }}>
+                                    <div style={{ padding: '1.812rem', display: 'flex', flexDirection: 'column', gap: '1.359rem', borderRight: '1.5px solid #F1F5F9' }}>
                                         
                                         {/* Amount input */}
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.45rem' }}>Outstanding Amount ({currency.symbol})</label>
+                                            <label style={{ display: 'block', fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.408rem' }}>Outstanding Amount ({currency.symbol})</label>
                                             <div style={{ position: 'relative' }}>
                                                 <input 
                                                     type="text" 
                                                     readOnly
                                                     disabled
                                                     value={parseFloat(shareAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-                                                    style={{ width: '100%', padding: '0.85rem 1rem', paddingLeft: '2rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.15rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: '#F1F5F9', cursor: 'not-allowed', boxSizing: 'border-box' }} 
+                                                    style={{ width: '100%', padding: '0.77rem 0.906rem', paddingLeft: '1.812rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.042rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: '#F1F5F9', cursor: 'not-allowed', boxSizing: 'border-box' }} 
                                                 />
-                                                <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontWeight: '900', fontSize: '1.25rem', color: '#94A3B8' }}>{currency.symbol}</span>
+                                                <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontWeight: '900', fontSize: '1.133rem', color: '#94A3B8' }}>{currency.symbol}</span>
                                             </div>
                                         </div>
 
                                         {/* Date selector */}
                                         <div>
-                                            <label style={{ display: 'block', fontSize: '0.72rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.45rem' }}>Maturity / Statement Date</label>
+                                            <label style={{ display: 'block', fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.408rem' }}>Maturity / Statement Date</label>
                                             <input 
                                                 type="date" 
                                                 value={shareDate} 
                                                 onChange={(e) => setShareDate(e.target.value)} 
-                                                style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.9rem', fontWeight: '750', outline: 'none', background: 'white' }} 
+                                                style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.816rem', fontWeight: '750', outline: 'none', background: 'white' }} 
                                             />
                                         </div>
 
                                         {/* Action buttons */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: 'auto' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', marginTop: 'auto' }}>
                                             <button 
                                                 onClick={handleWhatsAppShare} 
-                                                style={{ width: '100%', padding: '0.9rem', borderRadius: '16px', border: 'none', background: '#16A34A', color: 'white', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)' }}
+                                                style={{ width: '100%', padding: '0.816rem', borderRadius: '16px', border: 'none', background: '#16A34A', color: 'white', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)' }}
                                             >
                                                 <MessageSquare size={18} />
                                                 <span>Share on WhatsApp</span>
                                             </button>
                                             
-                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+                                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
                                                 <button 
                                                     onClick={handleDownloadCard} 
-                                                    style={{ padding: '0.85rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
+                                                    style={{ padding: '0.77rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.725rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                                                 >
                                                     <ChevronRight size={16} style={{ transform: 'rotate(90deg)' }} />
                                                     <span>Get PNG Card</span>
@@ -3284,7 +3397,7 @@ const BusinessPeople = () => {
                                                 
                                                 <button 
                                                     onClick={handleCopyCardAndText} 
-                                                    style={{ padding: '0.85rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
+                                                    style={{ padding: '0.77rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.725rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                                                 >
                                                     <CheckCircle2 size={16} />
                                                     <span>Copy Card & Text</span>
@@ -3295,8 +3408,8 @@ const BusinessPeople = () => {
                                     </div>
 
                                     {/* Right Side: Live Visual Preview */}
-                                    <div style={{ padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
-                                        <div style={{ background: 'white', width: '100%', maxWidth: '340px', borderRadius: '24px', padding: '1.75rem', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden' }}>
+                                    <div style={{ padding: '1.812rem', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
+                                        <div style={{ background: 'white', width: '100%', maxWidth: '340px', borderRadius: '24px', padding: '1.586rem', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden' }}>
                                             
                                             {/* Mandala Ornament SVG (Elegant Flower Motif) */}
                                             <svg style={{ position: 'absolute', top: '-10px', right: '-10px', width: '130px', height: '130px', opacity: 0.22, pointerEvents: 'none' }} viewBox="0 0 100 100">
@@ -3310,35 +3423,35 @@ const BusinessPeople = () => {
                                                 ))}
                                             </svg>
 
-                                            <div style={{ textAlign: 'center', marginTop: '1rem', position: 'relative', zIndex: 1 }}>
-                                                <p style={{ margin: 0, fontSize: '0.82rem', fontWeight: '750', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                            <div style={{ textAlign: 'center', marginTop: '0.906rem', position: 'relative', zIndex: 1 }}>
+                                                <p style={{ margin: 0, fontSize: '0.743rem', fontWeight: '750', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                     {isReceivable ? 'Payment reminder for' : 'Ledger stand statement for'}
                                                 </p>
                                                 
-                                                <h2 style={{ margin: '0.75rem 0', fontSize: '2.3rem', fontWeight: '950', color: isReceivable ? '#DC2626' : '#16A34A', letterSpacing: '-0.02em' }}>
+                                                <h2 style={{ margin: '0.68rem 0', fontSize: '2.084rem', fontWeight: '950', color: isReceivable ? '#DC2626' : '#16A34A', letterSpacing: '-0.02em' }}>
                                                     {currency.symbol}{parseFloat(shareAmount || 0).toLocaleString()}
                                                 </h2>
                                                 
-                                                <p style={{ margin: 0, fontSize: '0.78rem', fontWeight: '700', color: '#64748B' }}>
+                                                <p style={{ margin: 0, fontSize: '0.707rem', fontWeight: '700', color: '#64748B' }}>
                                                     on {displayDate}
                                                 </p>
                                             </div>
 
                                             {/* Center Divider */}
-                                            <div style={{ height: '1px', borderTop: '2px dashed #E2E8F0', margin: '2rem 1rem' }}></div>
+                                            <div style={{ height: '1px', borderTop: '2px dashed #E2E8F0', margin: '1.812rem 0.906rem' }}></div>
 
-                                            <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                                                <span style={{ display: 'block', fontSize: '0.85rem', fontWeight: '800', color: '#1E293B' }}>
+                                            <div style={{ textAlign: 'center', marginBottom: '0.906rem' }}>
+                                                <span style={{ display: 'block', fontSize: '0.77rem', fontWeight: '800', color: '#1E293B' }}>
                                                     Sent by {senderName}
                                                 </span>
-                                                <span style={{ display: 'block', fontSize: '0.7rem', fontWeight: '600', color: '#64748B', marginTop: '3px' }}>
+                                                <span style={{ display: 'block', fontSize: '0.634rem', fontWeight: '600', color: '#64748B', marginTop: '3px' }}>
                                                     {senderName}{senderPhone ? ` | ${senderPhone}` : ''}
                                                 </span>
                                             </div>
 
                                             {/* Bottom Brand Seal */}
-                                            <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-                                                <span style={{ fontSize: '0.52rem', fontWeight: '900', color: '#10B981', letterSpacing: '0.15em', textTransform: 'uppercase', background: '#ECFDF5', padding: '4px 10px', borderRadius: '999px', border: '1px solid #A7F3D0' }}>
+                                            <div style={{ textAlign: 'center', marginTop: '2.266rem' }}>
+                                                <span style={{ fontSize: '0.471rem', fontWeight: '900', color: '#10B981', letterSpacing: '0.15em', textTransform: 'uppercase', background: '#ECFDF5', padding: '4px 10px', borderRadius: '999px', border: '1px solid #A7F3D0' }}>
                                                     CLIKS BUSINESS STATEMENT
                                                 </span>
                                             </div>
@@ -3368,19 +3481,19 @@ const BusinessPeople = () => {
             {/* Modal: Create Financial Group */}
             <AnimatePresence>
                 {isCreateGroupModalOpen && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(8px)', padding: '1rem' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '580px', borderRadius: '28px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', overflowY: 'auto' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(8px)', padding: '0.906rem' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '580px', borderRadius: '28px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', overflowY: 'auto' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{ width: '38px', height: '38px', borderRadius: '12px', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <FolderKanban size={20} />
                                     </div>
                                     <div>
-                                        <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '900', color: '#0F172A' }}>New Financial Group</h3>
-                                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B' }}>Create a shared syndicate or pool with verified @bnxmail.com partners</p>
+                                        <h3 style={{ margin: 0, fontSize: '1.087rem', fontWeight: '900', color: '#0F172A' }}>New Financial Group</h3>
+                                        <p style={{ margin: 0, fontSize: '0.707rem', color: '#64748B' }}>Create a shared syndicate or pool with verified @bnxmail.com partners</p>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsCreateGroupModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer' }}>
+                                <button onClick={() => setIsCreateGroupModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer' }}>
                                     <X size={18} />
                                 </button>
                             </div>
@@ -3392,26 +3505,26 @@ const BusinessPeople = () => {
                                     ...newGroupForm,
                                     target_amount: Number(newGroupForm.target_amount) || 0
                                 });
-                            }} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
+                            }} style={{ display: 'flex', flexDirection: 'column', gap: '1.042rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Group Title <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Group Title <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input 
                                         required 
                                         placeholder="e.g. Q4 Inventory Syndicate or Retail Expansion Pool" 
                                         type="text" 
                                         value={newGroupForm.name} 
                                         onChange={(e) => setNewGroupForm({ ...newGroupForm, name: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.9rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
                                     />
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Group Financial Model</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Group Financial Model</label>
                                         <select 
                                             value={newGroupForm.group_type} 
                                             onChange={(e) => setNewGroupForm({ ...newGroupForm, group_type: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700' }}
+                                            style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                         >
                                             <option value="syndicate">Business Syndicate</option>
                                             <option value="pool">Savings & Contribution Pool</option>
@@ -3420,46 +3533,46 @@ const BusinessPeople = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Target Pool Amount (Optional)</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Target Pool Amount (Optional)</label>
                                         <input 
                                             placeholder="e.g. 500000" 
                                             type="number" 
                                             value={newGroupForm.target_amount} 
                                             onChange={(e) => setNewGroupForm({ ...newGroupForm, target_amount: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.9rem' }} 
+                                            style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Description & Purpose</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Description & Purpose</label>
                                     <textarea 
                                         placeholder="Outline capital objectives, expense boundaries, or settlement frequency..." 
                                         rows={2}
                                         value={newGroupForm.description} 
                                         onChange={(e) => setNewGroupForm({ ...newGroupForm, description: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                     />
                                 </div>
 
                                 {/* Member Invitations Sub-Section */}
-                                <div style={{ padding: '1rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                                        <label style={{ fontSize: '0.78rem', fontWeight: '850', color: '#1E293B' }}>
+                                <div style={{ padding: '0.906rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.68rem' }}>
+                                        <label style={{ fontSize: '0.707rem', fontWeight: '850', color: '#1E293B' }}>
                                             Invite Group Partners (Strictly @bnxmail.com)
                                         </label>
-                                        <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                                        <span style={{ fontSize: '0.652rem', color: '#64748B' }}>
                                             {newGroupForm.members.length} invited
                                         </span>
                                     </div>
 
                                     {/* Partner Input Row */}
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.6fr 1fr auto', gap: '0.5rem', alignItems: 'center' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.6fr 1fr auto', gap: '0.453rem', alignItems: 'center' }}>
                                         <input 
                                             placeholder="Name" 
                                             value={tempMemberInput.name} 
                                             onChange={(e) => setTempMemberInput({ ...tempMemberInput, name: e.target.value })} 
-                                            style={{ padding: '0.6rem 0.75rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.8rem', outline: 'none' }} 
+                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }} 
                                         />
                                         <input 
                                             placeholder="partner@bnxmail.com" 
@@ -3468,12 +3581,12 @@ const BusinessPeople = () => {
                                                 setTempMemberInput({ ...tempMemberInput, email: e.target.value });
                                                 setTempMemberEmailError('');
                                             }}
-                                            style={{ padding: '0.6rem 0.75rem', borderRadius: '8px', border: tempMemberEmailError ? '1.5px solid #EF4444' : '1px solid #CBD5E1', fontSize: '0.8rem', outline: 'none' }} 
+                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: tempMemberEmailError ? '1.5px solid #EF4444' : '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }} 
                                         />
                                         <select 
                                             value={tempMemberInput.role} 
                                             onChange={(e) => setTempMemberInput({ ...tempMemberInput, role: e.target.value })} 
-                                            style={{ padding: '0.6rem 0.5rem', borderRadius: '8px', border: '1px solid #CBD5E1', background: 'white', fontSize: '0.75rem', fontWeight: '700' }}
+                                            style={{ padding: '0.544rem 0.453rem', borderRadius: '8px', border: '1px solid #CBD5E1', background: 'white', fontSize: '0.68rem', fontWeight: '700' }}
                                         >
                                             <option value="member">Member</option>
                                             <option value="manager">Manager</option>
@@ -3507,25 +3620,25 @@ const BusinessPeople = () => {
                                                 setTempMemberInput({ name: '', email: '', role: 'member' });
                                                 setTempMemberEmailError('');
                                             }}
-                                            style={{ padding: '0.6rem 0.85rem', borderRadius: '8px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', fontSize: '0.8rem', cursor: 'pointer' }}
+                                            style={{ padding: '0.544rem 0.77rem', borderRadius: '8px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', fontSize: '0.725rem', cursor: 'pointer' }}
                                         >
                                             Add
                                         </button>
                                     </div>
                                     {tempMemberEmailError && (
-                                        <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.72rem', color: '#EF4444', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <p style={{ margin: '0.363rem 0 0 0', fontSize: '0.652rem', color: '#EF4444', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                             <AlertCircle size={12} /> {tempMemberEmailError}
                                         </p>
                                     )}
 
                                     {/* Invited Members Badges List */}
                                     {newGroupForm.members.length > 0 && (
-                                        <div style={{ marginTop: '0.75rem', display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                        <div style={{ marginTop: '0.68rem', display: 'flex', flexWrap: 'wrap', gap: '0.453rem' }}>
                                             {newGroupForm.members.map((m, idx) => (
-                                                <div key={idx} style={{ background: '#FFFFFF', padding: '0.35rem 0.65rem', borderRadius: '8px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.75rem' }}>
+                                                <div key={idx} style={{ background: '#FFFFFF', padding: '0.317rem 0.589rem', borderRadius: '8px', border: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.68rem' }}>
                                                     <span style={{ fontWeight: '800', color: '#1E293B' }}>{m.name}</span>
                                                     <span style={{ color: '#64748B' }}>({m.email})</span>
-                                                    <span style={{ padding: '0.1rem 0.35rem', borderRadius: '4px', background: '#ECFDF5', color: '#065F46', fontSize: '0.65rem', fontWeight: '800' }}>{m.role}</span>
+                                                    <span style={{ padding: '0.091rem 0.317rem', borderRadius: '4px', background: '#ECFDF5', color: '#065F46', fontSize: '0.589rem', fontWeight: '800' }}>{m.role}</span>
                                                     <X 
                                                         size={12} 
                                                         style={{ cursor: 'pointer', color: '#EF4444' }} 
@@ -3542,18 +3655,18 @@ const BusinessPeople = () => {
                                     )}
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
                                     <button 
                                         type="button" 
                                         onClick={() => setIsCreateGroupModalOpen(false)} 
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
                                     <button 
                                         type="submit" 
                                         disabled={createGroupMutation.isPending}
-                                        style={{ flex: 2, padding: '0.75rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                                     >
                                         {createGroupMutation.isPending ? 'Dispatching Invites...' : 'Create Group & Send Invites'}
                                     </button>
@@ -3567,47 +3680,47 @@ const BusinessPeople = () => {
             {/* Modal: Full Group Details & Financial Ledger */}
             <AnimatePresence>
                 {selectedGroupId && selectedGroupDetails && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050, backdropFilter: 'blur(8px)', padding: '1.25rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050, backdropFilter: 'blur(8px)', padding: '1.133rem' }}>
                         <Motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} style={{ background: '#FFFFFF', width: '100%', maxWidth: '960px', height: '88vh', borderRadius: '28px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                             {/* Header */}
-                            <div style={{ padding: '1.5rem 2rem', background: '#064E3B', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            <div style={{ padding: '0.816rem 0.906rem', background: '#064E3B', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                                     <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <FolderKanban size={24} />
                                     </div>
                                     <div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '900', color: 'white' }}>{selectedGroupDetails.name}</h3>
-                                            <span style={{ padding: '0.2rem 0.6rem', borderRadius: '6px', background: 'rgba(255,255,255,0.2)', fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase' }}>
+                                            <h3 style={{ margin: 0, fontSize: '1.178rem', fontWeight: '900', color: 'white' }}>{selectedGroupDetails.name}</h3>
+                                            <span style={{ padding: '0.181rem 0.544rem', borderRadius: '6px', background: 'rgba(255,255,255,0.2)', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>
                                                 {selectedGroupDetails.group_type}
                                             </span>
                                         </div>
                                         {selectedGroupDetails.description && (
-                                            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#A7F3D0' }}>{selectedGroupDetails.description}</p>
+                                            <p style={{ margin: '0.181rem 0 0 0', fontSize: '0.725rem', color: '#A7F3D0' }}>{selectedGroupDetails.description}</p>
                                         )}
                                     </div>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                     <button 
                                         onClick={() => setIsAddGroupTxModalOpen(true)}
-                                        style={{ padding: '0.6rem 1rem', borderRadius: '10px', background: '#10B981', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                        style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', background: '#10B981', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                     >
                                         <Plus size={14} /> Record Entry
                                     </button>
                                     <button 
                                         onClick={() => setIsInviteMemberModalOpen(true)}
-                                        style={{ padding: '0.6rem 1rem', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                        style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                     >
                                         <UserPlus size={14} /> Invite Member
                                     </button>
-                                    <button onClick={() => setSelectedGroupId(null)} style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: 'white', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer' }}>
+                                    <button onClick={() => setSelectedGroupId(null)} style={{ border: 'none', background: 'rgba(255,255,255,0.15)', color: 'white', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer' }}>
                                         <X size={18} />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Subtab Navigator */}
-                            <div style={{ display: 'flex', borderBottom: '1px solid #E2E8F0', padding: '0 2rem', background: '#F8FAFC' }}>
+                            <div style={{ display: 'flex', borderBottom: '1px solid #E2E8F0', padding: '0 1.812rem', background: '#F8FAFC' }}>
                                 {[
                                     { id: 'balances', label: 'Net Balances & Overview', icon: PieChart },
                                     { id: 'transactions', label: `Transactions (${selectedGroupDetails.transactions?.length || 0})`, icon: ArrowLeftRight },
@@ -3617,13 +3730,13 @@ const BusinessPeople = () => {
                                         key={tab.id}
                                         onClick={() => setGroupActiveSubTab(tab.id)}
                                         style={{
-                                            padding: '1rem 1.5rem',
+                                            padding: '0.906rem 1.359rem',
                                             border: 'none',
                                             background: 'none',
                                             borderBottom: groupActiveSubTab === tab.id ? '3px solid #064E3B' : '3px solid transparent',
                                             color: groupActiveSubTab === tab.id ? '#064E3B' : '#64748B',
                                             fontWeight: groupActiveSubTab === tab.id ? '850' : '650',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -3636,65 +3749,65 @@ const BusinessPeople = () => {
                             </div>
 
                             {/* Modal Content Body */}
-                            <div style={{ flex: 1, overflowY: 'auto', padding: '2rem' }}>
+                            <div style={{ flex: 1, overflowY: 'auto', padding: '1.812rem' }}>
                                 {/* SUBTAB 1: Net Balances & Summary */}
                                 {groupActiveSubTab === 'balances' && (
                                     <div>
                                         {/* Financial Highlights */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-                                            <div style={{ padding: '1.25rem', background: '#F0FDF4', borderRadius: '18px', border: '1px solid #BBF7D0' }}>
-                                                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#166534', textTransform: 'uppercase' }}>Total Contributed</p>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '1.4rem', fontWeight: '900', color: '#065F46' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '0.906rem', marginBottom: '1.812rem' }}>
+                                            <div style={{ padding: '1.133rem', background: '#F0FDF4', borderRadius: '18px', border: '1px solid #BBF7D0' }}>
+                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#166534', textTransform: 'uppercase' }}>Total Contributed</p>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#065F46' }}>
                                                     {formatCurr(selectedGroupDetails.summary?.total_contributed || 0)}
                                                 </h3>
                                             </div>
-                                            <div style={{ padding: '1.25rem', background: '#FEF2F2', borderRadius: '18px', border: '1px solid #FECACA' }}>
-                                                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#991B1B', textTransform: 'uppercase' }}>Total Expenses</p>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '1.4rem', fontWeight: '900', color: '#991B1B' }}>
+                                            <div style={{ padding: '1.133rem', background: '#FEF2F2', borderRadius: '18px', border: '1px solid #FECACA' }}>
+                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#991B1B', textTransform: 'uppercase' }}>Total Expenses</p>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#991B1B' }}>
                                                     {formatCurr(selectedGroupDetails.summary?.total_expenses || 0)}
                                                 </h3>
                                             </div>
-                                            <div style={{ padding: '1.25rem', background: '#EFF6FF', borderRadius: '18px', border: '1px solid #BFDBFE' }}>
-                                                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#1E40AF', textTransform: 'uppercase' }}>Net Fund In Hand</p>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '1.4rem', fontWeight: '900', color: '#1D4ED8' }}>
+                                            <div style={{ padding: '1.133rem', background: '#EFF6FF', borderRadius: '18px', border: '1px solid #BFDBFE' }}>
+                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#1E40AF', textTransform: 'uppercase' }}>Net Fund In Hand</p>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#1D4ED8' }}>
                                                     {formatCurr(Math.max(0, (selectedGroupDetails.summary?.total_contributed || 0) - (selectedGroupDetails.summary?.total_expenses || 0)))}
                                                 </h3>
                                             </div>
-                                            <div style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0' }}>
-                                                <p style={{ margin: 0, fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Target Pool</p>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '1.4rem', fontWeight: '900', color: '#1E293B' }}>
+                                            <div style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '18px', border: '1px solid #E2E8F0' }}>
+                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>Target Pool</p>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#1E293B' }}>
                                                     {selectedGroupDetails.target_amount > 0 ? formatCurr(selectedGroupDetails.target_amount) : 'Open Pool'}
                                                 </h3>
                                             </div>
-                                            <div style={{ padding: '1.25rem', background: '#F0FDF4', borderRadius: '18px', border: '1.5px solid #86EFAC' }}>
+                                            <div style={{ padding: '1.133rem', background: '#F0FDF4', borderRadius: '18px', border: '1.5px solid #86EFAC' }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                    <p style={{ margin: 0, fontSize: '0.72rem', fontWeight: '850', color: '#166534', textTransform: 'uppercase' }}>To Give (Private)</p>
-                                                    <span style={{ fontSize: '0.65rem', fontWeight: '800', background: '#DCFCE7', color: '#15803D', padding: '2px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                                    <p style={{ margin: 0, fontSize: '0.652rem', fontWeight: '850', color: '#166534', textTransform: 'uppercase' }}>To Give (Private)</p>
+                                                    <span style={{ fontSize: '0.589rem', fontWeight: '800', background: '#DCFCE7', color: '#15803D', padding: '2px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
                                                         <Lock size={10} /> Only You
                                                     </span>
                                                 </div>
-                                                <h3 style={{ margin: '0.35rem 0 0 0', fontSize: '1.4rem', fontWeight: '900', color: '#14532D' }}>
+                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#14532D' }}>
                                                     {formatCurr(selectedGroupDetails.summary?.total_private_commitments || 0)}
                                                 </h3>
                                             </div>
                                         </div>
 
                                         {/* Member Ledger Matrix */}
-                                        <h4 style={{ fontSize: '1rem', fontWeight: '850', color: '#0F172A', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                        <h4 style={{ fontSize: '0.906rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.906rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                             <ShieldCheck size={18} style={{ color: '#064E3B' }} /> Member Financial Positions & Net Dues
                                         </h4>
-                                        <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-                                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                                        <div className="cliks-table-scroll" style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                            <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                                 <thead>
                                                     <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Member</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Role / Status</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textAlign: 'right' }}>Total Paid</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textAlign: 'right' }}>Contributed</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textAlign: 'right' }}>Owed</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textAlign: 'right' }}>Net Balance</th>
-                                                        <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#047857', textAlign: 'right' }}>
-                                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Member</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Role / Status</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textAlign: 'right', whiteSpace: 'nowrap' }}>Total Paid</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textAlign: 'right', whiteSpace: 'nowrap' }}>Contributed</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textAlign: 'right', whiteSpace: 'nowrap' }}>Owed</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textAlign: 'right', whiteSpace: 'nowrap' }}>Net Balance</th>
+                                                        <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#047857', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                                                                 <Lock size={11} /> Money to Give
                                                             </span>
                                                         </th>
@@ -3703,44 +3816,44 @@ const BusinessPeople = () => {
                                                 <tbody>
                                                     {(selectedGroupDetails.balances || []).map(b => (
                                                         <tr key={b.member_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                                            <td style={{ padding: '1rem 1.25rem' }}>
-                                                                <p style={{ margin: 0, fontWeight: '800', fontSize: '0.85rem', color: '#0F172A' }}>{b.name}</p>
-                                                                <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B' }}>{b.email}</p>
+                                                            <td style={{ padding: '0.589rem 0.78rem', maxWidth: '180px' }} title={`${b.name || ''} (${b.email || ''})`}>
+                                                                <p style={{ margin: 0, fontWeight: '800', fontSize: '0.77rem', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.name}</p>
+                                                                <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.email}</p>
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem' }}>
-                                                                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-                                                                    <span style={{ padding: '0.15rem 0.45rem', borderRadius: '4px', background: '#F1F5F9', color: '#334155', fontSize: '0.68rem', fontWeight: '800' }}>{b.role}</span>
-                                                                    <span style={{ padding: '0.15rem 0.45rem', borderRadius: '4px', background: b.status === 'accepted' ? '#ECFDF5' : '#FEF3C7', color: b.status === 'accepted' ? '#065F46' : '#92400E', fontSize: '0.68rem', fontWeight: '800' }}>
+                                                            <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                                <div style={{ display: 'inline-flex', gap: '4px', alignItems: 'center', whiteSpace: 'nowrap' }}>
+                                                                    <span className="badge-nowrap" style={{ padding: '0.136rem 0.408rem', borderRadius: '4px', background: '#F1F5F9', color: '#334155', fontSize: '0.616rem', fontWeight: '800' }}>{b.role}</span>
+                                                                    <span className="badge-nowrap" style={{ padding: '0.136rem 0.408rem', borderRadius: '4px', background: b.status === 'accepted' ? '#ECFDF5' : '#FEF3C7', color: b.status === 'accepted' ? '#065F46' : '#92400E', fontSize: '0.616rem', fontWeight: '800' }}>
                                                                         {b.status === 'accepted' ? 'Active' : 'Pending Invite'}
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem', textAlign: 'right', fontWeight: '750', color: '#1E293B', fontSize: '0.85rem' }}>
+                                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '750', color: '#1E293B', fontSize: '0.77rem', whiteSpace: 'nowrap' }}>
                                                                 {formatCurr(b.total_paid)}
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem', textAlign: 'right', fontWeight: '750', color: '#065F46', fontSize: '0.85rem' }}>
+                                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '750', color: '#065F46', fontSize: '0.77rem', whiteSpace: 'nowrap' }}>
                                                                 {formatCurr(b.total_contributed)}
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem', textAlign: 'right', fontWeight: '750', color: '#991B1B', fontSize: '0.85rem' }}>
+                                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '750', color: '#991B1B', fontSize: '0.77rem', whiteSpace: 'nowrap' }}>
                                                                 {formatCurr(b.total_owed)}
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem', textAlign: 'right' }}>
+                                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                                                 <span style={{
                                                                     fontWeight: '900',
-                                                                    fontSize: '0.9rem',
+                                                                    fontSize: '0.816rem',
                                                                     color: b.net_balance > 0 ? '#10B981' : b.net_balance < 0 ? '#EF4444' : '#64748B'
                                                                 }}>
                                                                     {b.net_balance > 0 ? `+${formatCurr(b.net_balance)}` : b.net_balance < 0 ? `-${formatCurr(Math.abs(b.net_balance))}` : formatCurr(0)}
                                                                 </span>
                                                             </td>
-                                                            <td style={{ padding: '1rem 1.25rem', textAlign: 'right' }}>
+                                                            <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                                                 {b.private_note ? (
                                                                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '2px' }}>
-                                                                        <span style={{ fontWeight: '900', fontSize: '0.9rem', color: '#047857' }}>
+                                                                        <span style={{ fontWeight: '900', fontSize: '0.816rem', color: '#047857' }}>
                                                                             {formatCurr(b.private_note.amount)}
                                                                         </span>
                                                                         {b.private_note.notes && (
-                                                                            <span style={{ fontSize: '0.7rem', color: '#64748B', maxWidth: '140px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={b.private_note.notes}>
+                                                                            <span style={{ fontSize: '0.634rem', color: '#64748B', maxWidth: '140px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={b.private_note.notes}>
                                                                                 {b.private_note.notes}
                                                                             </span>
                                                                         )}
@@ -3749,7 +3862,7 @@ const BusinessPeople = () => {
                                                                                 setPrivateNoteModalData({ member_id: b.member_id, name: b.name, email: b.email });
                                                                                 setPrivateNoteForm({ amount: b.private_note.amount || '', notes: b.private_note.notes || '' });
                                                                             }}
-                                                                            style={{ border: 'none', background: 'none', color: '#059669', fontSize: '0.7rem', fontWeight: '750', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                                                                            style={{ border: 'none', background: 'none', color: '#059669', fontSize: '0.634rem', fontWeight: '750', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                                                                         >
                                                                             Edit Note
                                                                         </button>
@@ -3764,12 +3877,12 @@ const BusinessPeople = () => {
                                                                             display: 'inline-flex',
                                                                             alignItems: 'center',
                                                                             gap: '3px',
-                                                                            padding: '0.35rem 0.65rem',
+                                                                            padding: '0.317rem 0.589rem',
                                                                             borderRadius: '8px',
                                                                             border: '1px dashed #86EFAC',
                                                                             background: '#F0FDF4',
                                                                             color: '#15803D',
-                                                                            fontSize: '0.72rem',
+                                                                            fontSize: '0.652rem',
                                                                             fontWeight: '800',
                                                                             cursor: 'pointer'
                                                                         }}
@@ -3789,63 +3902,63 @@ const BusinessPeople = () => {
                                 {/* SUBTAB 2: Group Transactions */}
                                 {groupActiveSubTab === 'transactions' && (
                                     <div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '850', color: '#0F172A' }}>Shared Financial Entries</h4>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
+                                            <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '850', color: '#0F172A' }}>Shared Financial Entries</h4>
                                             <button 
                                                 onClick={() => setIsAddGroupTxModalOpen(true)}
-                                                style={{ padding: '0.55rem 0.95rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                             >
                                                 <Plus size={14} /> Record Entry
                                             </button>
                                         </div>
 
                                         {selectedGroupDetails.transactions?.length === 0 ? (
-                                            <div style={{ padding: '3rem 1rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '18px', border: '1px dashed #CBD5E1' }}>
-                                                <p style={{ margin: 0, color: '#64748B', fontSize: '0.85rem' }}>No financial transactions logged yet. Click "Record Entry" to log contributions, expenditures, or settlements.</p>
+                                            <div style={{ padding: '2.719rem 0.906rem', textAlign: 'center', background: '#F8FAFC', borderRadius: '18px', border: '1px dashed #CBD5E1' }}>
+                                                <p style={{ margin: 0, color: '#64748B', fontSize: '0.77rem' }}>No financial transactions logged yet. Click "Record Entry" to log contributions, expenditures, or settlements.</p>
                                             </div>
                                         ) : (
-                                            <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', overflow: 'hidden' }}>
-                                                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                                            <div className="cliks-table-scroll" style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                                <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                                     <thead>
                                                         <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
-                                                            <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Date</th>
-                                                            <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Type</th>
-                                                            <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Title & Category</th>
-                                                            <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B' }}>Recorded By / Payer</th>
-                                                            <th style={{ padding: '1rem 1.25rem', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textAlign: 'right' }}>Amount</th>
-                                                            <th style={{ padding: '1rem 1.25rem', width: '50px' }}></th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Date</th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Type</th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Title &amp; Category</th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', whiteSpace: 'nowrap' }}>Recorded By / Payer</th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textAlign: 'right', whiteSpace: 'nowrap' }}>Amount</th>
+                                                            <th style={{ padding: '0.589rem 0.78rem', width: '48px', textAlign: 'center' }}></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {selectedGroupDetails.transactions?.map(tx => (
                                                             <tr key={tx.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                                                <td style={{ padding: '1rem 1.25rem', fontSize: '0.8rem', color: '#64748B', fontWeight: '700' }}>
+                                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', fontSize: '0.725rem', color: '#64748B', fontWeight: '700', whiteSpace: 'nowrap' }}>
                                                                     {String(tx.date || tx.created_at).slice(0, 10)}
                                                                 </td>
-                                                                <td style={{ padding: '1rem 1.25rem' }}>
-                                                                    <span style={{
-                                                                        padding: '0.2rem 0.55rem',
+                                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                                    <span className="badge-nowrap" style={{
+                                                                        padding: '0.181rem 0.498rem',
                                                                         borderRadius: '6px',
                                                                         background: tx.type === 'contribution' ? '#ECFDF5' : tx.type === 'expense' ? '#FEF2F2' : '#EFF6FF',
                                                                         color: tx.type === 'contribution' ? '#065F46' : tx.type === 'expense' ? '#991B1B' : '#1E40AF',
-                                                                        fontSize: '0.7rem',
+                                                                        fontSize: '0.634rem',
                                                                         fontWeight: '800',
                                                                         textTransform: 'uppercase'
                                                                     }}>
                                                                         {tx.type}
                                                                     </span>
                                                                 </td>
-                                                                <td style={{ padding: '1rem 1.25rem' }}>
-                                                                    <p style={{ margin: 0, fontWeight: '800', fontSize: '0.85rem', color: '#0F172A' }}>{tx.title}</p>
-                                                                    <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748B' }}>{tx.category || 'General'}</p>
+                                                                <td style={{ padding: '0.589rem 0.78rem', maxWidth: '210px' }} title={tx.title}>
+                                                                    <p style={{ margin: 0, fontWeight: '800', fontSize: '0.77rem', color: '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.title}</p>
+                                                                    <p style={{ margin: 0, fontSize: '0.652rem', color: '#64748B' }}>{tx.category || 'General'}</p>
                                                                 </td>
-                                                                <td style={{ padding: '1rem 1.25rem', fontSize: '0.85rem', color: '#334155' }}>
-                                                                    {tx.paid_by_name || 'Group'}
+                                                                <td style={{ padding: '0.589rem 0.78rem', fontSize: '0.77rem', color: '#334155', maxWidth: '160px' }} title={tx.paid_by_name || 'Group'}>
+                                                                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tx.paid_by_name || 'Group'}</div>
                                                                 </td>
-                                                                <td style={{ padding: '1rem 1.25rem', textAlign: 'right', fontWeight: '900', fontSize: '0.9rem', color: tx.type === 'contribution' ? '#065F46' : '#991B1B' }}>
+                                                                <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '900', fontSize: '0.816rem', whiteSpace: 'nowrap', color: tx.type === 'contribution' ? '#065F46' : '#991B1B' }}>
                                                                     {formatCurr(tx.amount)}
                                                                 </td>
-                                                                <td style={{ padding: '1rem 1.25rem', textAlign: 'center' }}>
+                                                                <td style={{ padding: '0.906rem 1.133rem', textAlign: 'center' }}>
                                                                     <button
                                                                         onClick={async () => {
                                                                             if (window.confirm('Delete this entry?')) {
@@ -3870,35 +3983,35 @@ const BusinessPeople = () => {
                                 {/* SUBTAB 3: Members & Invitations */}
                                 {groupActiveSubTab === 'members' && (
                                     <div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: '850', color: '#0F172A' }}>Group Governance & Participants</h4>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
+                                            <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '850', color: '#0F172A' }}>Group Governance & Participants</h4>
                                             <button 
                                                 onClick={() => setIsInviteMemberModalOpen(true)}
-                                                style={{ padding: '0.55rem 0.95rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                             >
                                                 <UserPlus size={14} /> Invite Partner
                                             </button>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.906rem' }}>
                                             {selectedGroupDetails.members?.map(m => (
-                                                <div key={m.id} style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.85rem' }}>
+                                                <div key={m.id} style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.77rem' }}>
                                                     <div>
-                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
-                                                            <h5 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '850', color: '#0F172A' }}>{m.name}</h5>
-                                                            <span style={{ padding: '0.15rem 0.45rem', borderRadius: '4px', background: '#E2E8F0', color: '#334155', fontSize: '0.68rem', fontWeight: '800', textTransform: 'uppercase' }}>
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.363rem' }}>
+                                                            <h5 style={{ margin: 0, fontSize: '0.861rem', fontWeight: '850', color: '#0F172A' }}>{m.name}</h5>
+                                                            <span style={{ padding: '0.136rem 0.408rem', borderRadius: '4px', background: '#E2E8F0', color: '#334155', fontSize: '0.616rem', fontWeight: '800', textTransform: 'uppercase' }}>
                                                                 {m.role}
                                                             </span>
                                                         </div>
-                                                        <p style={{ margin: 0, fontSize: '0.78rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                        <p style={{ margin: 0, fontSize: '0.707rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                             <Mail size={12} /> {m.email}
                                                         </p>
                                                     </div>
 
                                                     {/* Private Commitment Note (Only visible to authenticated user) */}
-                                                    <div style={{ padding: '0.65rem 0.85rem', background: '#F0FDF4', borderRadius: '12px', border: '1px solid #BBF7D0' }}>
+                                                    <div style={{ padding: '0.589rem 0.77rem', background: '#F0FDF4', borderRadius: '12px', border: '1px solid #BBF7D0' }}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                            <span style={{ fontSize: '0.7rem', fontWeight: '850', color: '#065F46', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <span style={{ fontSize: '0.634rem', fontWeight: '850', color: '#065F46', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                                 <Lock size={11} /> My Private Note (Only for me)
                                                             </span>
                                                             <button
@@ -3906,32 +4019,32 @@ const BusinessPeople = () => {
                                                                     setPrivateNoteModalData({ member_id: m.id, name: m.name, email: m.email });
                                                                     setPrivateNoteForm({ amount: m.private_note?.amount || '', notes: m.private_note?.notes || '' });
                                                                 }}
-                                                                style={{ border: 'none', background: 'none', color: '#059669', fontSize: '0.72rem', fontWeight: '800', cursor: 'pointer', padding: 0 }}
+                                                                style={{ border: 'none', background: 'none', color: '#059669', fontSize: '0.652rem', fontWeight: '800', cursor: 'pointer', padding: 0 }}
                                                             >
                                                                 {m.private_note ? 'Edit' : '+ Note to Give'}
                                                             </button>
                                                         </div>
                                                         {m.private_note ? (
                                                             <div style={{ marginTop: '4px' }}>
-                                                                <p style={{ margin: 0, fontSize: '0.88rem', fontWeight: '900', color: '#064E3B' }}>
+                                                                <p style={{ margin: 0, fontSize: '0.797rem', fontWeight: '900', color: '#064E3B' }}>
                                                                     I will give: {formatCurr(m.private_note.amount)}
                                                                 </p>
                                                                 {m.private_note.notes && (
-                                                                    <p style={{ margin: '2px 0 0', fontSize: '0.72rem', color: '#047857', fontStyle: 'italic' }}>
+                                                                    <p style={{ margin: '2px 0 0', fontSize: '0.652rem', color: '#047857', fontStyle: 'italic' }}>
                                                                         "{m.private_note.notes}"
                                                                     </p>
                                                                 )}
                                                             </div>
                                                         ) : (
-                                                            <p style={{ margin: '4px 0 0', fontSize: '0.72rem', color: '#059669' }}>
+                                                            <p style={{ margin: '4px 0 0', fontSize: '0.652rem', color: '#059669' }}>
                                                                 No private commitment set yet
                                                             </p>
                                                         )}
                                                     </div>
 
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.75rem', borderTop: '1px solid #E2E8F0' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.68rem', borderTop: '1px solid #E2E8F0' }}>
                                                         <span style={{
-                                                            fontSize: '0.72rem',
+                                                            fontSize: '0.652rem',
                                                             fontWeight: '800',
                                                             display: 'flex',
                                                             alignItems: 'center',
@@ -3951,7 +4064,7 @@ const BusinessPeople = () => {
                                                                         refetchGroupDetails();
                                                                     }
                                                                 }}
-                                                                style={{ border: 'none', background: 'none', color: '#EF4444', fontSize: '0.75rem', fontWeight: '750', cursor: 'pointer' }}
+                                                                style={{ border: 'none', background: 'none', color: '#EF4444', fontSize: '0.68rem', fontWeight: '750', cursor: 'pointer' }}
                                                             >
                                                                 Remove
                                                             </button>
@@ -3971,11 +4084,11 @@ const BusinessPeople = () => {
             {/* Modal: Add Group Transaction Entry */}
             <AnimatePresence>
                 {isAddGroupTxModalOpen && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1150, backdropFilter: 'blur(8px)', padding: '1rem' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '900', color: '#0F172A' }}>Record Group Transaction</h3>
-                                <button onClick={() => setIsAddGroupTxModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1150, backdropFilter: 'blur(8px)', padding: '0.906rem' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '24px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                <h3 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '900', color: '#0F172A' }}>Record Group Transaction</h3>
+                                <button onClick={() => setIsAddGroupTxModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer' }}>
                                     <X size={18} />
                                 </button>
                             </div>
@@ -3984,14 +4097,14 @@ const BusinessPeople = () => {
                                 e.preventDefault();
                                 if (!groupTxForm.title.trim() || !groupTxForm.amount) return alert('Please enter title and amount');
                                 addGroupTxMutation.mutate(groupTxForm);
-                            }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            }} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Entry Type</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Entry Type</label>
                                         <select 
                                             value={groupTxForm.type} 
                                             onChange={(e) => setGroupTxForm({ ...groupTxForm, type: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700' }}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                         >
                                             <option value="expense">Group Expense</option>
                                             <option value="contribution">Member Deposit</option>
@@ -4000,62 +4113,62 @@ const BusinessPeople = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Amount <span style={{ color: '#EF4444' }}>*</span></label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Amount <span style={{ color: '#EF4444' }}>*</span></label>
                                         <input 
                                             required 
                                             type="number" 
                                             placeholder="0.00" 
                                             value={groupTxForm.amount} 
                                             onChange={(e) => setGroupTxForm({ ...groupTxForm, amount: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.9rem' }} 
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Title / Description <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Title / Description <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input 
                                         required 
                                         placeholder="e.g. Supplier Batch Payment or Initial Capital" 
                                         value={groupTxForm.title} 
                                         onChange={(e) => setGroupTxForm({ ...groupTxForm, title: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                     />
                                 </div>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Category</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Category</label>
                                         <input 
                                             placeholder="Inventory, Rent, Equipment..." 
                                             value={groupTxForm.category} 
                                             onChange={(e) => setGroupTxForm({ ...groupTxForm, category: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                         />
                                     </div>
                                     <div>
-                                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Date</label>
+                                        <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Date</label>
                                         <input 
                                             type="date" 
                                             value={groupTxForm.date} 
                                             onChange={(e) => setGroupTxForm({ ...groupTxForm, date: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                         />
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
                                     <button 
                                         type="button" 
                                         onClick={() => setIsAddGroupTxModalOpen(false)} 
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
                                     <button 
                                         type="submit" 
                                         disabled={addGroupTxMutation.isPending}
-                                        style={{ flex: 2, padding: '0.75rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {addGroupTxMutation.isPending ? 'Logging...' : 'Save Entry'}
                                     </button>
@@ -4069,11 +4182,11 @@ const BusinessPeople = () => {
             {/* Modal: Invite Member to Existing Group */}
             <AnimatePresence>
                 {isInviteMemberModalOpen && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1150, backdropFilter: 'blur(8px)', padding: '1rem' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '900', color: '#0F172A' }}>Invite Partner to Group</h3>
-                                <button onClick={() => setIsInviteMemberModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1150, backdropFilter: 'blur(8px)', padding: '0.906rem' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '24px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                <h3 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '900', color: '#0F172A' }}>Invite Partner to Group</h3>
+                                <button onClick={() => setIsInviteMemberModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer' }}>
                                     <X size={18} />
                                 </button>
                             </div>
@@ -4095,19 +4208,19 @@ const BusinessPeople = () => {
                                     email,
                                     role: inviteMemberForm.role
                                 });
-                            }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            }} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Partner Name</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Partner Name</label>
                                     <input 
                                         placeholder="e.g. Ramesh Patel" 
                                         value={inviteMemberForm.name} 
                                         onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, name: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Partner @bnxmail.com Email <span style={{ color: '#EF4444' }}>*</span></label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Partner @bnxmail.com Email <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input 
                                         required 
                                         placeholder="partner@bnxmail.com" 
@@ -4116,21 +4229,21 @@ const BusinessPeople = () => {
                                             setInviteMemberForm({ ...inviteMemberForm, email: e.target.value });
                                             setInviteMemberEmailError('');
                                         }} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: inviteMemberEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: inviteMemberEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                     />
                                     {inviteMemberEmailError ? (
-                                        <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.72rem', color: '#EF4444', fontWeight: '700' }}>{inviteMemberEmailError}</p>
+                                        <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.652rem', color: '#EF4444', fontWeight: '700' }}>{inviteMemberEmailError}</p>
                                     ) : (
-                                        <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.72rem', color: '#64748B' }}>Only official @bnxmail.com accounts can receive financial invitations</p>
+                                        <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.652rem', color: '#64748B' }}>Only official @bnxmail.com accounts can receive financial invitations</p>
                                     )}
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Assigned Access Role</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Assigned Access Role</label>
                                     <select 
                                         value={inviteMemberForm.role} 
                                         onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, role: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', fontWeight: '700' }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                     >
                                         <option value="member">Member (Can view ledger & contribute)</option>
                                         <option value="manager">Manager (Can record & edit transactions)</option>
@@ -4138,18 +4251,18 @@ const BusinessPeople = () => {
                                     </select>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
                                     <button 
                                         type="button" 
                                         onClick={() => setIsInviteMemberModalOpen(false)} 
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
                                     <button 
                                         type="submit" 
                                         disabled={inviteMemberMutation.isPending}
-                                        style={{ flex: 2, padding: '0.75rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {inviteMemberMutation.isPending ? 'Sending...' : 'Dispatch Invitation'}
                                     </button>
@@ -4163,27 +4276,27 @@ const BusinessPeople = () => {
             {/* Modal: Set Private Note for Member */}
             <AnimatePresence>
                 {privateNoteModalData && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(8px)', padding: '1rem' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '420px', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1200, backdropFilter: 'blur(8px)', padding: '0.906rem' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '420px', borderRadius: '24px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ECFDF5', color: '#065F46', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Lock size={18} />
                                     </div>
                                     <div>
-                                        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '900', color: '#0F172A' }}>Private Member Note</h3>
-                                        <p style={{ margin: 0, fontSize: '0.72rem', color: '#059669', fontWeight: '750' }}>Only visible to you</p>
+                                        <h3 style={{ margin: 0, fontSize: '0.997rem', fontWeight: '900', color: '#0F172A' }}>Private Member Note</h3>
+                                        <p style={{ margin: 0, fontSize: '0.652rem', color: '#059669', fontWeight: '750' }}>Only visible to you</p>
                                     </div>
                                 </div>
-                                <button onClick={() => setPrivateNoteModalData(null)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer' }}>
+                                <button onClick={() => setPrivateNoteModalData(null)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer' }}>
                                     <X size={18} />
                                 </button>
                             </div>
 
-                            <div style={{ padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '1.25rem' }}>
-                                <p style={{ margin: 0, fontSize: '0.72rem', color: '#64748B', textTransform: 'uppercase', fontWeight: '800' }}>Target Member</p>
-                                <p style={{ margin: '2px 0 0', fontSize: '0.92rem', fontWeight: '900', color: '#0F172A' }}>{privateNoteModalData.name}</p>
-                                <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B' }}>{privateNoteModalData.email}</p>
+                            <div style={{ padding: '0.68rem 0.906rem', background: '#F8FAFC', borderRadius: '12px', border: '1px solid #E2E8F0', marginBottom: '1.133rem' }}>
+                                <p style={{ margin: 0, fontSize: '0.652rem', color: '#64748B', textTransform: 'uppercase', fontWeight: '800' }}>Target Member</p>
+                                <p style={{ margin: '2px 0 0', fontSize: '0.834rem', fontWeight: '900', color: '#0F172A' }}>{privateNoteModalData.name}</p>
+                                <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B' }}>{privateNoteModalData.email}</p>
                             </div>
 
                             <form onSubmit={(e) => {
@@ -4193,9 +4306,9 @@ const BusinessPeople = () => {
                                     amount: Number(privateNoteForm.amount) || 0,
                                     notes: privateNoteForm.notes
                                 });
-                            }} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            }} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>
                                         How much money will you give? <span style={{ color: '#EF4444' }}>*</span>
                                     </label>
                                     <input 
@@ -4204,12 +4317,12 @@ const BusinessPeople = () => {
                                         placeholder="e.g. 5000" 
                                         value={privateNoteForm.amount} 
                                         onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, amount: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.95rem', fontWeight: '750' }} 
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.861rem', fontWeight: '750' }} 
                                     />
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>
                                         Private Memo / Reason (Optional)
                                     </label>
                                     <textarea 
@@ -4217,18 +4330,18 @@ const BusinessPeople = () => {
                                         placeholder="e.g. For raw materials share, to be settled next Tuesday..." 
                                         value={privateNoteForm.notes} 
                                         onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, notes: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.85rem' }} 
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
                                     />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.5rem 0.75rem', background: '#ECFDF5', borderRadius: '10px', border: '1px solid #A7F3D0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '0.453rem 0.68rem', background: '#ECFDF5', borderRadius: '10px', border: '1px solid #A7F3D0' }}>
                                     <Lock size={14} style={{ color: '#065F46', flexShrink: 0 }} />
-                                    <span style={{ fontSize: '0.72rem', color: '#065F46', fontWeight: '750' }}>
+                                    <span style={{ fontSize: '0.652rem', color: '#065F46', fontWeight: '750' }}>
                                         This note and amount will NEVER be visible to any other group member or admin.
                                     </span>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.5rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
                                     {selectedGroupDetails?.members?.find(m => m.id === privateNoteModalData.member_id)?.private_note && (
                                         <button 
                                             type="button" 
@@ -4238,7 +4351,7 @@ const BusinessPeople = () => {
                                                 }
                                             }} 
                                             disabled={deletePrivateNoteMutation.isPending}
-                                            style={{ padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #FECACA', background: '#FFFFFF', color: '#EF4444', fontWeight: '800', fontSize: '0.82rem', cursor: 'pointer' }}
+                                            style={{ padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #FECACA', background: '#FFFFFF', color: '#EF4444', fontWeight: '800', fontSize: '0.743rem', cursor: 'pointer' }}
                                         >
                                             Remove
                                         </button>
@@ -4246,14 +4359,14 @@ const BusinessPeople = () => {
                                     <button 
                                         type="button" 
                                         onClick={() => setPrivateNoteModalData(null)} 
-                                        style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
                                     <button 
                                         type="submit" 
                                         disabled={setPrivateNoteMutation.isPending}
-                                        style={{ flex: 2, padding: '0.75rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {setPrivateNoteMutation.isPending ? 'Saving...' : 'Save Private Note'}
                                     </button>

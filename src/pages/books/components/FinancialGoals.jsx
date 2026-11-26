@@ -90,27 +90,27 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
   };
 
   return (
-    <div style={{ background: 'white', borderRadius: '24px', padding: '1.5rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+    <div style={{ background: 'white', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
           <div style={{ width: 42, height: 42, borderRadius: '12px', background: '#F5F3FF', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Target size={22} /></div>
           <div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', margin: 0 }}>Financial Goals</h3>
-            <p style={{ fontSize: '0.75rem', color: '#64748B', margin: 0 }}>Track your long-term milestones</p>
+            <h3 style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', margin: 0 }}>Financial Goals</h3>
+            <p style={{ fontSize: '0.68rem', color: '#64748B', margin: 0 }}>Track your long-term milestones</p>
           </div>
         </div>
         <button
           onClick={() => { setShowAddGoal(true); setEditingId(null); setNewGoal({ name: '', target_amount: '', current_savings: '', target_date: '', category: 'Emergency Fund' }); setTargetError(''); }}
-          style={{ background: '#F5F3FF', border: 'none', color: '#7C3AED', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer' }}
+          style={{ background: '#F5F3FF', border: 'none', color: '#7C3AED', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer' }}
           title="Add New Goal"
         >
           <Plus size={20} />
         </button>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
         {goals.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '2rem', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1', color: '#94A3B8', fontSize: '0.875rem' }}>
+          <div style={{ textAlign: 'center', padding: '1.812rem', background: '#F8FAFC', borderRadius: '16px', border: '1px dashed #CBD5E1', color: '#94A3B8', fontSize: '0.793rem' }}>
             No goals defined. Start planning today!
           </div>
         ) : goals.map(g => {
@@ -118,25 +118,25 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
           const currentSav = Number(g.current_savings) || 0;
           const progress = Math.min(100, (currentSav / targetAmt) * 100);
           return (
-            <div key={g.id} style={{ padding: '1.25rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+            <div key={g.id} style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.68rem', flexWrap: 'wrap', gap: '0.453rem' }}>
                 <div>
-                  <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1E293B', margin: '0 0 2px 0' }}>{g.name}</h4>
-                  <span style={{ fontSize: '0.7rem', color: '#7C3AED', fontWeight: 700, textTransform: 'uppercase' }}>{g.category}</span>
+                  <h4 style={{ fontSize: '0.861rem', fontWeight: 700, color: '#1E293B', margin: '0 0 2px 0' }}>{g.name}</h4>
+                  <span style={{ fontSize: '0.634rem', color: '#7C3AED', fontWeight: 700, textTransform: 'uppercase' }}>{g.category}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                   <button
                     onClick={() => openDepositModal(g)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '0.25rem',
+                      gap: '0.227rem',
                       background: '#EDE9FE',
                       color: '#6D28D9',
                       border: 'none',
-                      padding: '0.35rem 0.65rem',
+                      padding: '0.317rem 0.589rem',
                       borderRadius: '8px',
-                      fontSize: '0.75rem',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
                       cursor: 'pointer',
                       transition: 'all 0.15s ease'
@@ -151,7 +151,7 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', fontWeight: 700, color: '#475569', marginBottom: '0.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.77rem', fontWeight: 700, color: '#475569', marginBottom: '0.453rem' }}>
                 <span>{currencySymbol}{currentSav.toLocaleString('en-IN')} <span style={{ fontWeight: 500, color: '#94A3B8' }}>saved</span></span>
                 <span>{currencySymbol}{targetAmt.toLocaleString('en-IN')} <span style={{ fontWeight: 500, color: '#94A3B8' }}>goal</span></span>
               </div>
@@ -164,9 +164,9 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                   style={{ height: '100%', background: 'linear-gradient(90deg, #7C3AED 0%, #A78BFA 100%)', borderRadius: '999px' }}
                 />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.4rem' }}>
-                <span style={{ fontSize: '0.7rem', color: '#94A3B8', fontWeight: 600 }}>{progress.toFixed(1)}% Complete</span>
-                {g.target_date && <span style={{ fontSize: '0.7rem', color: '#94A3B8', fontWeight: 600 }}>Target: {g.target_date}</span>}
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.363rem' }}>
+                <span style={{ fontSize: '0.634rem', color: '#94A3B8', fontWeight: 600 }}>{progress.toFixed(1)}% Complete</span>
+                {g.target_date && <span style={{ fontSize: '0.634rem', color: '#94A3B8', fontWeight: 600 }}>Target: {g.target_date}</span>}
               </div>
             </div>
           );
@@ -177,28 +177,28 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
       <AnimatePresence>
         {depositGoal && (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ width: '90%', maxWidth: '420px', background: '#fff', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }}>
-              <button onClick={() => setDepositGoal(null)} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: '#F1F5F9', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer' }}><X size={20} /></button>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.35rem' }}>+ Add Money to Goal</h2>
-              <p style={{ fontSize: '0.82rem', color: '#64748B', margin: '0 0 1.25rem 0' }}>{depositGoal.name} • <span style={{ color: '#7C3AED', fontWeight: 600 }}>{depositGoal.category}</span></p>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ width: '90%', maxWidth: '420px', background: '#fff', borderRadius: '16px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }}>
+              <button onClick={() => setDepositGoal(null)} style={{ position: 'absolute', top: '1.359rem', right: '1.359rem', background: '#F1F5F9', border: 'none', borderRadius: '50%', padding: '0.453rem', cursor: 'pointer' }}><X size={20} /></button>
+              <h2 style={{ fontSize: '1.133rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.317rem' }}>+ Add Money to Goal</h2>
+              <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '0 0 1.133rem 0' }}>{depositGoal.name} • <span style={{ color: '#7C3AED', fontWeight: 600 }}>{depositGoal.category}</span></p>
 
-              <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '1rem', border: '1px solid #E2E8F0', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.4rem' }}>
+              <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '0.906rem', border: '1px solid #E2E8F0', marginBottom: '1.133rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', color: '#64748B', marginBottom: '0.363rem' }}>
                   <span>Current Saved:</span>
                   <strong style={{ color: '#1E293B' }}>{currencySymbol}{Number(depositGoal.current_savings || 0).toLocaleString('en-IN')}</strong>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748B', marginBottom: '0.4rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', color: '#64748B', marginBottom: '0.363rem' }}>
                   <span>Goal Target:</span>
                   <strong style={{ color: '#1E293B' }}>{currencySymbol}{Number(depositGoal.target_amount).toLocaleString('en-IN')}</strong>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', color: '#7C3AED', fontWeight: 700, borderTop: '1px dashed #E2E8F0', paddingTop: '0.4rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.77rem', color: '#7C3AED', fontWeight: 700, borderTop: '1px dashed #E2E8F0', paddingTop: '0.363rem' }}>
                   <span>Remaining Needed:</span>
                   <strong>{currencySymbol}{Math.max(0, Number(depositGoal.target_amount) - Number(depositGoal.current_savings || 0)).toLocaleString('en-IN')}</strong>
                 </div>
               </div>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.25rem' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B' }}>DEPOSIT AMOUNT ({currencySymbol})</label>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem', marginBottom: '1.133rem' }}>
+                <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B' }}>DEPOSIT AMOUNT ({currencySymbol})</label>
                 <input
                   type="number"
                   min="1"
@@ -219,14 +219,14 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                     setDepositAmount(val);
                   }}
                   placeholder="Enter amount to add"
-                  style={{ width: '100%', padding: '0.85rem', borderRadius: '12px', border: depositError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '1rem', fontWeight: 700 }}
+                  style={{ width: '100%', padding: '0.77rem', borderRadius: '12px', border: depositError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '0.906rem', fontWeight: 700 }}
                 />
                 {depositError && (
-                  <p style={{ color: '#EF4444', fontSize: '0.75rem', margin: 0, fontWeight: 600 }}>{depositError}</p>
+                  <p style={{ color: '#EF4444', fontSize: '0.68rem', margin: 0, fontWeight: 600 }}>{depositError}</p>
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.25rem' }}>
+              <div style={{ display: 'flex', gap: '0.453rem', marginBottom: '1.133rem' }}>
                 {[500, 1000, 5000].map(quickAmt => {
                   const maxRem = Math.max(0, Number(depositGoal.target_amount) - Number(depositGoal.current_savings || 0));
                   if (quickAmt > maxRem && maxRem > 0) return null;
@@ -240,12 +240,12 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                       }}
                       style={{
                         flex: 1,
-                        padding: '0.4rem',
+                        padding: '0.363rem',
                         borderRadius: '8px',
                         border: '1px solid #DDD6FE',
                         background: '#F5F3FF',
                         color: '#7C3AED',
-                        fontSize: '0.75rem',
+                        fontSize: '0.68rem',
                         fontWeight: 700,
                         cursor: 'pointer'
                       }}
@@ -263,12 +263,12 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                   }}
                   style={{
                     flex: 1.2,
-                    padding: '0.4rem',
+                    padding: '0.363rem',
                     borderRadius: '8px',
                     border: '1px solid #DDD6FE',
                     background: '#EDE9FE',
                     color: '#6D28D9',
-                    fontSize: '0.75rem',
+                    fontSize: '0.68rem',
                     fontWeight: 700,
                     cursor: 'pointer'
                   }}
@@ -279,7 +279,7 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
 
               <button
                 onClick={handleDepositSubmit}
-                style={{ width: '100%', padding: '1rem', borderRadius: '12px', background: '#7C3AED', color: 'white', border: 'none', fontWeight: 700, fontSize: '0.95rem', cursor: 'pointer' }}
+                style={{ width: '100%', padding: '0.906rem', borderRadius: '12px', background: '#7C3AED', color: 'white', border: 'none', fontWeight: 700, fontSize: '0.861rem', cursor: 'pointer' }}
               >
                 Add to Goal
               </button>
@@ -292,24 +292,24 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
       <AnimatePresence>
         {showAddGoal && (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.5)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(8px)' }}>
-            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ width: '90%', maxWidth: '400px', background: '#fff', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }}>
-              <button onClick={() => setShowAddGoal(false)} style={{ position: 'absolute', top: '1.5rem', right: '1.5rem', background: '#F1F5F9', border: 'none', borderRadius: '50%', padding: '0.5rem', cursor: 'pointer' }}><X size={20} /></button>
-              <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.5rem' }}>{editingId ? 'Edit Goal' : 'New Goal'}</h2>
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ width: '90%', maxWidth: '400px', background: '#fff', borderRadius: '16px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }}>
+              <button onClick={() => setShowAddGoal(false)} style={{ position: 'absolute', top: '1.359rem', right: '1.359rem', background: '#F1F5F9', border: 'none', borderRadius: '50%', padding: '0.453rem', cursor: 'pointer' }}><X size={20} /></button>
+              <h2 style={{ fontSize: '1.133rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.359rem' }}>{editingId ? 'Edit Goal' : 'New Goal'}</h2>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                 <div>
-                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>GOAL NAME</label>
-                  <input type="text" value={newGoal.name} onChange={e => setNewGoal({...newGoal, name: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} placeholder="e.g. New Car" />
+                  <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>GOAL NAME</label>
+                  <input type="text" value={newGoal.name} onChange={e => setNewGoal({...newGoal, name: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} placeholder="e.g. New Car" />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>CATEGORY</label>
-                  <select value={newGoal.category} onChange={e => setNewGoal({...newGoal, category: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                  <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>CATEGORY</label>
+                  <select value={newGoal.category} onChange={e => setNewGoal({...newGoal, category: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                     {categories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                   <div>
-                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>TARGET ({currencySymbol})</label>
+                    <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>TARGET ({currencySymbol})</label>
                     <input 
                       type="number" 
                       min="1"
@@ -329,17 +329,17 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                           setTargetError('');
                         }
                       }} 
-                      style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: targetError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }} 
+                      style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: targetError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }} 
                       placeholder="0" 
                     />
                     {targetError && (
-                      <p style={{ color: '#EF4444', fontSize: '0.72rem', marginTop: '0.35rem', fontWeight: 600, margin: '0.35rem 0 0 0' }}>
+                      <p style={{ color: '#EF4444', fontSize: '0.652rem', marginTop: '0.317rem', fontWeight: 600, margin: '0.317rem 0 0 0' }}>
                         {targetError}
                       </p>
                     )}
                   </div>
                   <div>
-                    <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>SAVED ({currencySymbol})</label>
+                    <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>SAVED ({currencySymbol})</label>
                     <input 
                       type="number" 
                       min="0"
@@ -352,16 +352,16 @@ const FinancialGoals = ({ goals = [], onCreate, onUpdate, onDelete, currencySymb
                         if (val.includes('-')) val = val.replace(/-/g, '');
                         setNewGoal({...newGoal, current_savings: val});
                       }} 
-                      style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                      style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} 
                       placeholder="0" 
                     />
                   </div>
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.4rem' }}>TARGET DATE</label>
-                  <input type="date" value={newGoal.target_date} onChange={e => setNewGoal({...newGoal, target_date: e.target.value})} style={{ width: '100%', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                  <label style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', display: 'block', marginBottom: '0.363rem' }}>TARGET DATE</label>
+                  <input type="date" value={newGoal.target_date} onChange={e => setNewGoal({...newGoal, target_date: e.target.value})} style={{ width: '100%', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                 </div>
-                <button onClick={handleSave} style={{ marginTop: '1rem', padding: '1rem', borderRadius: '12px', background: '#7C3AED', color: 'white', border: 'none', fontWeight: 700, cursor: 'pointer' }}>
+                <button onClick={handleSave} style={{ marginTop: '0.906rem', padding: '0.906rem', borderRadius: '12px', background: '#7C3AED', color: 'white', border: 'none', fontWeight: 700, cursor: 'pointer' }}>
                   {editingId ? 'Update Goal' : 'Create Goal'}
                 </button>
               </div>

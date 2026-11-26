@@ -28,7 +28,7 @@ import FinancialGoals from './books/components/FinancialGoals';
 const Segregation = () => {
     const { currency, formatCurrency } = useCurrency();
     const CurrencyIcon = () => (
-        <span style={{ fontSize: '1.25rem', fontWeight: '950', fontFamily: 'inherit' }}>
+        <span style={{ fontSize: '1.133rem', fontWeight: '950', fontFamily: 'inherit' }}>
             {currency.symbol}
         </span>
     );
@@ -369,11 +369,11 @@ const Segregation = () => {
     });
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 2.266rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Main Title Bar */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
                         <div style={{ 
                             width: '44px', 
                             height: '44px', 
@@ -387,7 +387,7 @@ const Segregation = () => {
                         }}>
                             <Target size={24} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Segregation Wallets</h1>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Segregation Wallets</h1>
                         
                         <button 
                             onClick={() => {
@@ -405,7 +405,7 @@ const Segregation = () => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 transition: 'all 0.2s ease',
-                                marginLeft: '0.5rem'
+                                marginLeft: '0.453rem'
                             }}
                             title="Search Wallets"
                         >
@@ -413,7 +413,7 @@ const Segregation = () => {
                         </button>
 
                         {showSearch && (
-                            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '1rem', animation: 'fadeIn 0.2s ease' }}>
+                            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: '0.906rem', animation: 'fadeIn 0.2s ease' }}>
                                 <Search size={16} style={{ position: 'absolute', left: '12px', color: '#64748B' }} />
                                 <input 
                                     type="text"
@@ -422,11 +422,11 @@ const Segregation = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     autoFocus
                                     style={{
-                                        padding: '0.6rem 1.25rem 0.6rem 2.25rem',
+                                        padding: '0.544rem 1.133rem 0.544rem 2.039rem',
                                         borderRadius: '12px',
                                         border: '1px solid #BBF7D0',
                                         outline: 'none',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         fontWeight: '600',
                                         color: '#1E293B',
                                         width: '260px',
@@ -454,15 +454,16 @@ const Segregation = () => {
                             </div>
                         )}
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1.05rem', fontWeight: '500', margin: 0 }}>Create target-based wallets to isolate and secure funds for specific business needs.</p>
+                    <p style={{ color: '#475569', fontSize: '0.952rem', fontWeight: '500', margin: 0 }}>Create target-based wallets to isolate and secure funds for specific business needs.</p>
                 </div>
                 <button 
+                    data-tour="segregation-create"
                     onClick={() => setIsCreateModalOpen(true)}
                     style={{ 
-                        display: 'flex', alignItems: 'center', gap: '0.6rem', 
-                        padding: '0.9rem 1.75rem', borderRadius: '14px', 
+                        display: 'flex', alignItems: 'center', gap: '0.544rem', 
+                        padding: '0.816rem 1.586rem', borderRadius: '14px', 
                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
-                        fontWeight: '800', fontSize: '1rem', cursor: 'pointer',
+                        fontWeight: '800', fontSize: '0.906rem', cursor: 'pointer',
                         boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)',
                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
@@ -475,10 +476,10 @@ const Segregation = () => {
             </div>
 
             {/* Scrollable Main Content Wrapper */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '2rem' }}>
+            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
 
             {/* Statistics Overhead Panel */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.359rem', marginBottom: '2.266rem' }}>
                 {[
                     { label: 'Target Wallets Active', value: activeWallets, icon: Target, color: '#059669', bg: '#ECFDF5' },
                     { label: 'Total Isolated Funds', value: formatCurrency(totalAllocated), icon: CurrencyIcon, color: '#10B981', bg: '#DCF2E4' },
@@ -490,16 +491,16 @@ const Segregation = () => {
                         justifyContent: 'space-between', 
                         alignItems: 'center', 
                         background: 'white', 
-                        padding: '1.5rem', 
+                        padding: '1.359rem', 
                         borderRadius: '20px', 
                         border: '1px solid #E2E8F0', 
                         boxShadow: '0 4px 20px -4px rgba(0,0,0,0.02)' 
                     }}>
                         <div>
-                            <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#64748B', margin: '0 0 0.25rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
+                            <p data-tour={`segregation-stat-heading-${idx}`} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', margin: '0 0 0.227rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
+                            <h3 style={{ fontSize: '1.359rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
                         </div>
-                        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
+                        <div data-tour={`segregation-stat-icon-${idx}`} style={{ width: '48px', height: '48px', borderRadius: '14px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
                             <stat.icon size={22} />
                         </div>
                     </div>
@@ -507,7 +508,7 @@ const Segregation = () => {
             </div>
 
             {/* Container Category Filter Pill Navigation Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '1.812rem', flexWrap: 'wrap' }}>
                 {[
                     { key: 'all', label: `All Containers [${categoryCounts.all}]` },
                     { key: 'in_progress', label: `In Progress [${categoryCounts.inProgress}]` },
@@ -521,10 +522,10 @@ const Segregation = () => {
                             type="button"
                             onClick={() => setCategoryFilter(pill.key)}
                             style={{
-                                padding: '0.5rem 1.15rem',
+                                padding: '0.453rem 1.042rem',
                                 borderRadius: '9999px',
                                 fontWeight: '800',
-                                fontSize: '0.85rem',
+                                fontSize: '0.77rem',
                                 border: isActive ? 'none' : '1px solid #E2E8F0',
                                 background: isActive ? '#064E3B' : 'white',
                                 color: isActive ? 'white' : '#475569',
@@ -541,33 +542,33 @@ const Segregation = () => {
 
             {/* Dynamic Masonry/Grid of Purpose Wallets */}
             {isLoading ? (
-                <div style={{ padding: '8rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: '#059669' }}>
+                <div style={{ padding: '7.25rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem', color: '#059669' }}>
                     <Loader2 className="animate-spin" size={48} strokeWidth={2.5} />
-                    <p style={{ fontWeight: '700', fontSize: '1.1rem' }}>Polishing wallet interfaces...</p>
+                    <p style={{ fontWeight: '700', fontSize: '0.997rem' }}>Polishing wallet interfaces...</p>
                 </div>
             ) : wallets.length === 0 ? (
                 <div style={{ 
                     background: 'white', 
-                    borderRadius: '24px', 
+                    borderRadius: '16px', 
                     border: '1px solid #E2E8F0', 
-                    padding: '6rem 2rem', 
+                    padding: '5.438rem 1.812rem', 
                     textAlign: 'center',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.02)'
                 }}>
                     <div style={{ 
                         width: '80px', 
                         height: '80px', 
-                        borderRadius: '24px', 
+                        borderRadius: '16px', 
                         background: '#F0FDF4', 
                         color: '#059669', 
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        margin: '0 auto 1.5rem auto' 
+                        margin: '0 auto 1.359rem auto' 
                     }}>
                         <Wallet size={36} />
                     </div>
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#1F2937', marginBottom: '0.5rem' }}>No Segregated Wallets</h3>
+                    <h3 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#1F2937', marginBottom: '0.453rem' }}>No Segregated Wallets</h3>
                     <p style={{ color: '#6B7280', maxWidth: '460px', margin: '0 auto', fontWeight: '500', lineHeight: 1.5 }}>
                         Setup isolated purpose-driven buckets! For example, reserve money sequentially to buy future equipment, specialized stationery, or tax deposits.
                     </p>
@@ -575,9 +576,9 @@ const Segregation = () => {
             ) : filteredWallets.length === 0 ? (
                 <div style={{ 
                     background: 'white', 
-                    borderRadius: '24px', 
+                    borderRadius: '16px', 
                     border: '1px solid #E2E8F0', 
-                    padding: '5rem 2rem', 
+                    padding: '4.531rem 1.812rem', 
                     textAlign: 'center',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.02)'
                 }}>
@@ -590,17 +591,17 @@ const Segregation = () => {
                         display: 'flex', 
                         alignItems: 'center', 
                         justifyContent: 'center', 
-                        margin: '0 auto 1.25rem auto' 
+                        margin: '0 auto 1.133rem auto' 
                     }}>
                         <Search size={24} />
                     </div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#1F2937', marginBottom: '0.5rem' }}>No Matching Wallets</h3>
-                    <p style={{ color: '#6B7280', maxWidth: '380px', margin: '0 auto', fontWeight: '500', fontSize: '0.9rem' }}>
+                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1F2937', marginBottom: '0.453rem' }}>No Matching Wallets</h3>
+                    <p style={{ color: '#6B7280', maxWidth: '380px', margin: '0 auto', fontWeight: '500', fontSize: '0.816rem' }}>
                         We couldn't find any segregated wallets matching "{searchTerm}". Check the spelling or clear the filter.
                     </p>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.586rem' }}>
                     {filteredWallets.map((wallet) => {
                         const isClaimed = Boolean(
                             wallet.isClaimed || 
@@ -623,7 +624,7 @@ const Segregation = () => {
                         return (
                             <div key={wallet.id} style={{ 
                                 background: 'white', 
-                                borderRadius: '24px', 
+                                borderRadius: '16px', 
                                 border: '1px solid #E2E8F0', 
                                 boxShadow: isCompleted ? 'none' : '0 10px 25px -5px rgba(0,0,0,0.04)', 
                                 opacity: isCompleted ? 0.85 : 1,
@@ -639,17 +640,17 @@ const Segregation = () => {
                                     background: isCompleted ? '#64748B' : `linear-gradient(90deg, #1B6B3A ${pct}%, #E2E8F0 ${pct}%)` 
                                 }} />
 
-                                <div style={{ padding: '2rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ padding: '1.812rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                                     {/* Header Row */}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.133rem' }}>
                                         <div>
-                                            <h4 style={{ fontSize: '1.2rem', fontWeight: '850', color: '#1E293B', margin: '0 0 0.25rem 0' }}>{wallet.name}</h4>
+                                            <h4 style={{ fontSize: '1.087rem', fontWeight: '850', color: '#1E293B', margin: '0 0 0.227rem 0' }}>{wallet.name}</h4>
                                             <span style={{ 
-                                                fontSize: '0.7rem', 
+                                                fontSize: '0.634rem', 
                                                 fontWeight: '800', 
                                                 textTransform: 'uppercase', 
                                                 letterSpacing: '0.05em', 
-                                                padding: '0.35rem 0.6rem', 
+                                                padding: '0.317rem 0.544rem', 
                                                 borderRadius: '8px',
                                                 background: isCompleted ? '#F1F5F9' : '#ECFDF5',
                                                 color: isCompleted ? '#475569' : '#047857',
@@ -658,7 +659,7 @@ const Segregation = () => {
                                                 {isCompleted ? '🎉 FULLY CLAIMED' : pct >= 100 ? '🎯 TARGET MET' : '🌱 GROWING'}
                                             </span>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                        <div style={{ display: 'flex', gap: '0.453rem', alignItems: 'center' }}>
                                             <button 
                                                 onClick={() => { setHistoryWalletId(wallet.id); setIsHistoryModalOpen(true); }}
                                                 style={{ border: 'none', background: 'transparent', color: '#059669', opacity: 0.6, cursor: 'pointer', padding: '4px', transition: 'opacity 0.2s' }}
@@ -714,7 +715,7 @@ const Segregation = () => {
                                                                     border: 'none',
                                                                     background: 'none',
                                                                     color: '#334155',
-                                                                    fontSize: '0.82rem',
+                                                                    fontSize: '0.743rem',
                                                                     fontWeight: '700',
                                                                     cursor: 'pointer',
                                                                     borderRadius: '8px',
@@ -739,7 +740,7 @@ const Segregation = () => {
                                                                     border: 'none',
                                                                     background: 'none',
                                                                     color: '#94A3B8',
-                                                                    fontSize: '0.82rem',
+                                                                    fontSize: '0.743rem',
                                                                     fontWeight: '700',
                                                                     cursor: 'not-allowed',
                                                                     borderRadius: '8px',
@@ -770,7 +771,7 @@ const Segregation = () => {
                                                                 border: 'none',
                                                                 background: 'none',
                                                                 color: '#EF4444',
-                                                                fontSize: '0.82rem',
+                                                                fontSize: '0.743rem',
                                                                 fontWeight: '700',
                                                                 cursor: 'pointer',
                                                                 borderRadius: '8px',
@@ -789,27 +790,27 @@ const Segregation = () => {
                                     </div>
 
                                     {/* Description */}
-                                    <p style={{ color: '#64748B', fontSize: '0.88rem', lineHeight: 1.5, margin: '0 0 1.5rem 0', flex: 1 }}>
+                                    <p style={{ color: '#64748B', fontSize: '0.797rem', lineHeight: 1.5, margin: '0 0 1.359rem 0', flex: 1 }}>
                                         {wallet.description || 'No additional descriptions defined.'}
                                     </p>
 
                                     {/* Metrics breakdown */}
-                                    <div style={{ background: '#F8FAFC', padding: '1rem 1.25rem', borderRadius: '16px', border: '1px solid #F1F5F9', marginBottom: '1.5rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-                                            <span style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: '700' }}>Saved Allocated</span>
-                                            <span style={{ color: '#1E293B', fontSize: '0.85rem', fontWeight: '900' }}>{formatCurrency(current)}</span>
+                                    <div style={{ background: '#F8FAFC', padding: '0.906rem 1.133rem', borderRadius: '16px', border: '1px solid #F1F5F9', marginBottom: '1.359rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.363rem' }}>
+                                            <span style={{ color: '#64748B', fontSize: '0.725rem', fontWeight: '700' }}>Saved Allocated</span>
+                                            <span style={{ color: '#1E293B', fontSize: '0.77rem', fontWeight: '900' }}>{formatCurrency(current)}</span>
                                         </div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <span style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: '700' }}>Target Ceiling</span>
-                                            <span style={{ color: '#1E293B', fontSize: '0.85rem', fontWeight: '900' }}>{formatCurrency(target)}</span>
+                                            <span style={{ color: '#64748B', fontSize: '0.725rem', fontWeight: '700' }}>Target Ceiling</span>
+                                            <span style={{ color: '#1E293B', fontSize: '0.77rem', fontWeight: '900' }}>{formatCurrency(target)}</span>
                                         </div>
                                     </div>
 
                                     {/* Visual Progression */}
-                                    <div style={{ marginBottom: '2rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                            <span style={{ color: '#334155', fontSize: '0.82rem', fontWeight: '800' }}>Goal Status</span>
-                                            <span style={{ color: '#059669', fontSize: '0.88rem', fontWeight: '950' }}>{percentage}%</span>
+                                    <div style={{ marginBottom: '1.812rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.453rem' }}>
+                                            <span style={{ color: '#334155', fontSize: '0.743rem', fontWeight: '800' }}>Goal Status</span>
+                                            <span style={{ color: '#059669', fontSize: '0.797rem', fontWeight: '950' }}>{percentage}%</span>
                                         </div>
                                         <div style={{ height: '8px', borderRadius: '10px', background: '#E2E8F0', overflow: 'hidden' }}>
                                             <div style={{ 
@@ -823,26 +824,26 @@ const Segregation = () => {
                                     </div>
 
                                     {/* Interactive Controls */}
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                         <button
                                             disabled={isClaimed}
                                             onClick={() => openAddMoneyModal(wallet)}
                                             className={isClaimed ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                             style={{ 
-                                                padding: '0.85rem', 
+                                                padding: '0.77rem', 
                                                 borderRadius: '12px', 
                                                 border: '1px solid #D1FAE5', 
                                                 background: isClaimed ? '#F1F5F9' : '#ECFDF5', 
                                                 color: isClaimed ? '#94A3B8' : '#065F46', 
                                                 fontWeight: '800', 
-                                                fontSize: '0.88rem',
+                                                fontSize: '0.797rem',
                                                 cursor: isClaimed ? 'not-allowed' : 'pointer',
                                                 opacity: isClaimed ? 0.5 : 1,
                                                 pointerEvents: isClaimed ? 'none' : 'auto',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                gap: '0.4rem'
+                                                gap: '0.363rem'
                                             }}
                                         >
                                             <Plus size={16} strokeWidth={3} /> Add Cash
@@ -852,19 +853,19 @@ const Segregation = () => {
                                             disabled={!canClaim}
                                             onClick={async () => { if(await customConfirm(`Extract ${formatCurrency(current)} accumulated for "${wallet.name}" into main reserves?`)) claimMutation.mutate(wallet.id); }}
                                             style={{ 
-                                                padding: '0.85rem', 
+                                                padding: '0.77rem', 
                                                 borderRadius: '12px', 
                                                 background: canClaim 
                                                     ? 'linear-gradient(135deg, #D97706 0%, #B45309 100%)' 
                                                     : (isCompleted ? '#F1F5F9' : '#F8FAFC'), 
                                                 color: canClaim ? 'white' : '#94A3B8', 
                                                 fontWeight: '850', 
-                                                fontSize: '0.88rem',
+                                                fontSize: '0.797rem',
                                                 cursor: canClaim ? 'pointer' : 'not-allowed',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                gap: '0.4rem',
+                                                gap: '0.363rem',
                                                 boxShadow: canClaim ? '0 4px 12px rgba(217, 119, 6, 0.25)' : 'none',
                                                 border: isCompleted ? 'none' : (canClaim ? 'none' : '1px solid #E2E8F0')
                                             }}
@@ -893,7 +894,7 @@ const Segregation = () => {
             )}
 
             {/* Financial Goals Section */}
-            <div style={{ marginTop: '3rem' }}>
+            <div style={{ marginTop: '2.719rem' }}>
                 <FinancialGoals
                     goals={goalsList}
                     onCreate={data => goalCreateMutation.mutate(data)}
@@ -908,26 +909,26 @@ const Segregation = () => {
             {/* SETUP NEW WALLET MODAL */}
             {isCreateModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '28px', padding: '2.5rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h3 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>{editingWalletId ? 'Edit Target Wallet' : 'Setup Target Wallet'}</h3>
-                            <button onClick={closeCreateModal} style={{ border: 'none', background: '#F1F5F9', color: '#64748B', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer' }}><X size={20} /></button>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '18px', padding: '2.266rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem' }}>
+                            <h3 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>{editingWalletId ? 'Edit Target Wallet' : 'Setup Target Wallet'}</h3>
+                            <button onClick={closeCreateModal} style={{ border: 'none', background: '#F1F5F9', color: '#64748B', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
-                        <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <form onSubmit={handleCreateSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Purpose / Item Name</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Purpose / Item Name</label>
                                 <input 
                                     required 
                                     placeholder="e.g. Office Printer, Future Stock, Buy a Pen" 
                                     value={formData.name} 
                                     onChange={e => setFormData({...formData, name: e.target.value})}
-                                    style={{ width: '100%', padding: '0.9rem 1.1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '600', color: '#1E293B' }}
+                                    style={{ width: '100%', padding: '0.816rem 0.997rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '600', color: '#1E293B' }}
                                 />
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Target Cap Amount ({currency.code})</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Target Cap Amount ({currency.code})</label>
                                 <div style={{ position: 'relative' }}>
                                     <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: '#0F172A' }}>{currency.symbol}</span>
                                     <input 
@@ -958,18 +959,18 @@ const Segregation = () => {
                                         }}
                                         style={{ 
                                             width: '100%', 
-                                            padding: '0.9rem 1.1rem 0.9rem 2.25rem', 
+                                            padding: '0.816rem 0.997rem 0.816rem 2.039rem', 
                                             borderRadius: '14px', 
                                             border: (targetAmount !== '' && (!targetAmount || Number(targetAmount) <= 0)) ? '1px solid #EF4444' : '1px solid #E2E8F0', 
                                             outline: 'none', 
                                             fontWeight: '800', 
-                                            fontSize: '1.1rem', 
+                                            fontSize: '0.997rem', 
                                             color: '#0F172A' 
                                         }}
                                     />
                                 </div>
                                 {((targetAmount !== '' && Number(targetAmount) <= 0) || error) && (
-                                    <p style={{ color: '#EF4444', fontSize: '0.75rem', marginTop: '0.35rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                    <p style={{ color: '#EF4444', fontSize: '0.68rem', marginTop: '0.317rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                                         <AlertCircle size={12} />
                                         <span>{error || "Target amount must be greater than 0"}</span>
                                     </p>
@@ -977,13 +978,13 @@ const Segregation = () => {
                             </div>
 
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Descriptive Notes</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Descriptive Notes</label>
                                 <textarea 
                                     rows="3"
                                     placeholder="Brief rationale for this segregation..." 
                                     value={formData.description} 
                                     onChange={e => setFormData({...formData, description: e.target.value})}
-                                    style={{ width: '100%', padding: '0.9rem 1.1rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', resize: 'none', fontFamily: 'inherit', color: '#475569' }}
+                                    style={{ width: '100%', padding: '0.816rem 0.997rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', resize: 'none', fontFamily: 'inherit', color: '#475569' }}
                                 />
                             </div>
 
@@ -992,14 +993,14 @@ const Segregation = () => {
                                 disabled={isSubmitDisabled}
                                 className={isSubmitDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                 style={{ 
-                                    padding: '1.1rem', 
+                                    padding: '0.997rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
                                     background: isSubmitDisabled ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', 
                                     fontWeight: '850', 
-                                    fontSize: '1rem', 
-                                    marginTop: '0.5rem', 
+                                    fontSize: '0.906rem', 
+                                    marginTop: '0.453rem', 
                                     cursor: isSubmitDisabled ? 'not-allowed' : 'pointer',
                                     boxShadow: isSubmitDisabled ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
                                     opacity: isSubmitDisabled ? 0.5 : 1,
@@ -1016,25 +1017,25 @@ const Segregation = () => {
             {/* ALLOCATE CASH MODAL */}
             {isAddMoneyModalOpen && selectedWallet && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '28px', padding: '2.5rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Fund Segregation</h3>
-                            <button onClick={closeAddMoneyModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer' }}><X size={18} /></button>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '18px', padding: '2.266rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Fund Segregation</h3>
+                            <button onClick={closeAddMoneyModal} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer' }}><X size={18} /></button>
                         </div>
 
-                        <div style={{ padding: '0.85rem 1rem', background: '#F8FAFC', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                        <div style={{ padding: '0.77rem 0.906rem', background: '#F8FAFC', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '1.359rem' }}>
                             <div style={{ background: '#DCF2E4', color: '#059669', padding: '8px', borderRadius: '8px' }}>
                                 <Target size={18} />
                             </div>
                             <div>
-                                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '800', textTransform: 'uppercase' }}>Targeting Wallet</span>
-                                <p style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#1F2937' }}>{selectedWallet.name}</p>
+                                <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '800', textTransform: 'uppercase' }}>Targeting Wallet</span>
+                                <p style={{ margin: 0, fontSize: '0.861rem', fontWeight: '800', color: '#1F2937' }}>{selectedWallet.name}</p>
                             </div>
                         </div>
 
-                        <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Allocation Value ({currency.code})</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Allocation Value ({currency.code})</label>
                                 <div style={{ position: 'relative' }}>
                                     <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: '#0F172A' }}>{currency.symbol}</span>
                                     <input 
@@ -1047,10 +1048,10 @@ const Segregation = () => {
                                         value={addAmount} 
                                         onKeyDown={(e) => { if (e.key === '-' || e.key === 'e' || e.key === '+') e.preventDefault(); }}
                                         onChange={e => setAddAmount(e.target.value)}
-                                        style={{ width: '100%', padding: '0.9rem 1.1rem 0.9rem 2.25rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '850', fontSize: '1.2rem', color: '#0F172A' }}
+                                        style={{ width: '100%', padding: '0.816rem 0.997rem 0.816rem 2.039rem', borderRadius: '14px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '850', fontSize: '1.087rem', color: '#0F172A' }}
                                     />
                                 </div>
-                                <p style={{ color: '#64748B', fontSize: '0.75rem', margin: '0.5rem 0 0 0', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                <p style={{ color: '#64748B', fontSize: '0.68rem', margin: '0.453rem 0 0 0', display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                                     <AlertCircle size={12} /> Money is transferred from standard balances.
                                 </p>
                             </div>
@@ -1060,13 +1061,13 @@ const Segregation = () => {
                                 disabled={addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0}
                                 className={(!addAmount || Number(addAmount) <= 0) ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
                                 style={{ 
-                                    padding: '1.1rem', 
+                                    padding: '0.997rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
                                     background: (!addAmount || Number(addAmount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                     color: 'white', 
                                     fontWeight: '850', 
-                                    fontSize: '1rem', 
+                                    fontSize: '0.906rem', 
                                     cursor: (addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0) ? 'not-allowed' : 'pointer',
                                     boxShadow: (!addAmount || Number(addAmount) <= 0) ? 'none' : '0 8px 20px rgba(27, 107, 58, 0.2)',
                                     opacity: (addMoneyMutation.isLoading || !addAmount || Number(addAmount) <= 0) ? 0.5 : 1,
@@ -1074,7 +1075,7 @@ const Segregation = () => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    gap: '0.5rem'
+                                    gap: '0.453rem'
                                 }}
                             >
                                 {addMoneyMutation.isLoading ? <Loader2 className="animate-spin" /> : (
@@ -1091,39 +1092,39 @@ const Segregation = () => {
             {/* ALLOCATION HISTORY MODAL */}
             {isHistoryModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '28px', padding: '2.5rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', animation: 'modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#064E3B' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '18px', padding: '2.266rem', border: '1px solid #E2E8F0', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', animation: 'modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#064E3B' }}>
                                 <History size={20} />
-                                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', margin: 0 }}>Allocation Ledger</h3>
+                                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', margin: 0 }}>Allocation Ledger</h3>
                             </div>
-                            <button onClick={() => { setIsHistoryModalOpen(false); setHistoryWalletId(null); }} style={{ border: 'none', background: '#F1F5F9', color: '#64748B', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer' }}>
+                            <button onClick={() => { setIsHistoryModalOpen(false); setHistoryWalletId(null); }} style={{ border: 'none', background: '#F1F5F9', color: '#64748B', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer' }}>
                                 <X size={18} />
                             </button>
                         </div>
 
                         {isHistoryLoading ? (
-                            <div style={{ padding: '3rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', color: '#059669' }}>
+                            <div style={{ padding: '2.719rem 0', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem', color: '#059669' }}>
                                 <Loader2 className="animate-spin" size={32} strokeWidth={2.5} />
-                                <p style={{ fontSize: '0.85rem', fontWeight: '700' }}>Compiling transfer logs...</p>
+                                <p style={{ fontSize: '0.77rem', fontWeight: '700' }}>Compiling transfer logs...</p>
                             </div>
                         ) : (
                             <div>
-                                <div style={{ padding: '1rem 1.25rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9', marginBottom: '1.75rem' }}>
-                                    <div style={{ fontSize: '0.7rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.03em', marginBottom: '0.25rem' }}>Selected Wallet</div>
-                                    <div style={{ fontSize: '1.1rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.5rem' }}>{historyWallet.name}</div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '700' }}>Total Isolated</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '900', color: '#059669' }}>{formatCurrency(parseFloat(historyWallet.current_amount || 0))}</span>
+                                <div style={{ padding: '0.906rem 1.133rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #F1F5F9', marginBottom: '1.586rem' }}>
+                                    <div style={{ fontSize: '0.634rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.03em', marginBottom: '0.227rem' }}>Selected Wallet</div>
+                                    <div style={{ fontSize: '0.997rem', fontWeight: '850', color: '#1E293B', marginBottom: '0.453rem' }}>{historyWallet.name}</div>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid #E2E8F0', paddingTop: '0.453rem', marginTop: '0.453rem' }}>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '700' }}>Total Isolated</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '900', color: '#059669' }}>{formatCurrency(parseFloat(historyWallet.current_amount || 0))}</span>
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                    <h4 style={{ fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.25rem 0' }}>Allocation History</h4>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '280px', overflowY: 'auto', paddingRight: '4px' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem' }}>
+                                    <h4 style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.227rem 0' }}>Allocation History</h4>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', maxHeight: '280px', overflowY: 'auto', paddingRight: '4px' }}>
                                         {!historyWallet.transactions || historyWallet.transactions.length === 0 ? (
-                                            <div style={{ textAlign: 'center', padding: '2rem', color: '#94A3B8', border: '2px dashed #F1F5F9', borderRadius: '14px' }}>
-                                                <p style={{ margin: 0, fontSize: '0.85rem', fontWeight: '600' }}>No money transfers recorded yet.</p>
+                                            <div style={{ textAlign: 'center', padding: '1.812rem', color: '#94A3B8', border: '2px dashed #F1F5F9', borderRadius: '14px' }}>
+                                                <p style={{ margin: 0, fontSize: '0.77rem', fontWeight: '600' }}>No money transfers recorded yet.</p>
                                             </div>
                                         ) : (
                                             historyWallet.transactions.map((tx, idx) => (
@@ -1131,16 +1132,16 @@ const Segregation = () => {
                                                     display: 'flex', 
                                                     justifyContent: 'space-between', 
                                                     alignItems: 'center', 
-                                                    padding: '0.85rem 1rem', 
+                                                    padding: '0.77rem 0.906rem', 
                                                     background: 'white', 
                                                     border: '1px solid #E2E8F0', 
                                                     borderRadius: '12px'
                                                 }}>
-                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                                                        <div style={{ fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.03em', color: tx.type === 'debit' ? '#DC2626' : '#059669' }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.181rem' }}>
+                                                        <div style={{ fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.03em', color: tx.type === 'debit' ? '#DC2626' : '#059669' }}>
                                                             {tx.type === 'debit' ? '🔻 OUT / DEBIT' : '🔹 IN / CREDIT'}
                                                         </div>
-                                                        <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '600' }}>
+                                                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '600' }}>
                                                             {tx.created_at ? new Date(tx.created_at).toLocaleString(undefined, {
                                                                 day: '2-digit',
                                                                 month: 'short',
@@ -1151,7 +1152,7 @@ const Segregation = () => {
                                                             }) : 'Record Date missing'}
                                                         </div>
                                                     </div>
-                                                    <div style={{ fontSize: '0.95rem', fontWeight: '900', color: tx.type === 'debit' ? '#DC2626' : '#0F172A' }}>
+                                                    <div style={{ fontSize: '0.861rem', fontWeight: '900', color: tx.type === 'debit' ? '#DC2626' : '#0F172A' }}>
                                                         {tx.type === 'debit' ? '-' : '+'} {formatCurrency(parseFloat(tx.amount || 0))}
                                                     </div>
                                                 </div>
@@ -1175,15 +1176,15 @@ const Segregation = () => {
                         zIndex: 99999,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.75rem',
-                        padding: '0.85rem 1.25rem',
+                        gap: '0.68rem',
+                        padding: '0.77rem 1.133rem',
                         background: toast.type === 'error' ? '#FEF2F2' : '#0F172A',
                         color: toast.type === 'error' ? '#991B1B' : '#FFFFFF',
                         border: toast.type === 'error' ? '1px solid #FECACA' : '1px solid rgba(255,255,255,0.12)',
                         borderRadius: '14px',
                         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
                         fontWeight: 600,
-                        fontSize: '0.9rem',
+                        fontSize: '0.816rem',
                         maxWidth: '400px'
                     }}
                 >

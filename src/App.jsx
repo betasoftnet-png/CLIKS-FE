@@ -1,6 +1,8 @@
-﻿import React, { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { OnboardingProvider } from './context/OnboardingContext';
+import OnboardingManager from './components/onboarding/OnboardingManager';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { ErrorBoundary } from './components/common';
 import MainLayout from './layouts/MainLayout';
@@ -62,7 +64,6 @@ const BusinessBranches = React.lazy(() => import('./pages/BusinessBranches'));
 const PermissionManager = React.lazy(() => import('./components/PermissionManager'));
 const BusinessCustomization = React.lazy(() => import('./pages/BusinessCustomization'));
 
-
 import './App.css';
 
 // Apply persisted dark mode before first render
@@ -80,8 +81,8 @@ if (savedAccentColor) {
 
 const savedFontSize = localStorage.getItem('cliks_font_size');
 if (savedFontSize) {
-    const fontSizeMap = { small: '13.5px', medium: '14.5px', large: '16px' };
-    document.documentElement.style.fontSize = fontSizeMap[savedFontSize] || '14.5px';
+    const fontSizeMap = { small: '14px', medium: '16px', large: '18px' };
+    document.documentElement.style.fontSize = fontSizeMap[savedFontSize] || '16px';
 }
 
 const PageLoader = () => (
@@ -97,9 +98,9 @@ function AuthenticatedApp() {
     <ProtectedRoute>
       <ErrorBoundary>
         <MainLayout>
-          <div key={location.pathname} className="main-content-wrapper" style={{ height: '100%', width: '100%', minHeight: 0 }}>
-            <Suspense fallback={<PageLoader />}>
-              <Routes location={location}>
+            <div key={location.pathname} className="main-content-wrapper" style={{ height: '100%', width: '100%', minHeight: 0 }}>
+              <Suspense fallback={<PageLoader />}>
+                <Routes location={location}>
                 {/* Root Redirect */}
                 <Route path="/" element={<Navigate to="/books/dashboard" replace />} />
                 <Route path="/payments" element={<Navigate to="/payments/people" replace />} />
@@ -187,10 +188,10 @@ function AuthenticatedApp() {
                 
                 {/* Subscription Section */}
                 <Route path="/subscription" element={<Subscription />} />
-              </Routes>
-            </Suspense>
-          </div>
-        </MainLayout>
+                </Routes>
+              </Suspense>
+            </div>
+          </MainLayout>
       </ErrorBoundary>
     </ProtectedRoute>
   );
@@ -200,6 +201,7 @@ function AppContent() {
 
   return (
     <Router>
+      <OnboardingProvider>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />
@@ -234,6 +236,8 @@ function AppContent() {
         {/* Protected Routes - All routes within MainLayout require authentication */}
         <Route path="*" element={<AuthenticatedApp />} />
       </Routes>
+      <OnboardingManager />
+      </OnboardingProvider>
     </Router>
   );
 }

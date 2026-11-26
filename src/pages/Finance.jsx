@@ -360,22 +360,23 @@ const BusinessPayments = () => {
     const totalBalance = accounts.reduce((sum, a) => sum + a.current_balance, 0);
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: 'var(--bg-color, #F8FAFC)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 1.359rem', background: 'var(--bg-color, #F8FAFC)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.453rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <CreditCard size={22} />
                         </div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '1rem', fontWeight: '500', margin: 0 }}>Record and track all your money entries, income, expenses, and accounts.</p>
+                    <p style={{ color: '#475569', fontSize: '0.906rem', fontWeight: '500', margin: 0 }}>Record and track all your money entries, income, expenses, and accounts.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', gap: '0.68rem' }}>
                     <button 
+                        data-tour="finance-add-transaction"
                         onClick={() => setIsAddTransactionModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.85rem 1.4rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)', fontSize: '0.92rem', transition: 'all 0.2s' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.77rem 1.269rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)', fontSize: '0.834rem', transition: 'all 0.2s' }}
                     >
                         <Plus size={18} strokeWidth={2.5} /> Add Transaction
                     </button>
@@ -383,17 +384,17 @@ const BusinessPayments = () => {
             </div>
 
             {/* Quick Metrics Cards */}
-            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', marginBottom: '1.75rem' }}>
+            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.586rem' }}>
                 {[
                     { label: 'Total Inflow (Income)', value: formatCurrency(totalIncome), icon: ArrowDownRight, color: '#1B6B3A', bg: '#DCF2E4' },
                     { label: 'Total Outflow (Expense)', value: formatCurrency(totalExpenses), icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
                     { label: 'Available Balances', value: formatCurrency(totalBalance), icon: Wallet, color: '#3B82F6', bg: '#DBEAFE' },
                     { label: 'Net Cash Balance', value: formatCurrency(totalIncome - totalExpenses), icon: CheckCircle2, color: '#0D9488', bg: '#CCFBF1' }
                 ].map((stat, idx) => (
-                    <div key={idx} className="stat-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '1rem 1.25rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)', cursor: 'default' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-                            <p style={{ fontSize: '0.72rem', fontWeight: '800', color: '#64748B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{stat.label}</p>
-                            <h3 style={{ fontSize: '1.35rem', fontWeight: '900', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
+                    <div key={idx} className="stat-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '0.906rem 1.133rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)', cursor: 'default' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.136rem' }}>
+                            <p style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{stat.label}</p>
+                            <h3 style={{ fontSize: '1.223rem', fontWeight: '900', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
                         </div>
                         <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
                             <stat.icon size={20} />
@@ -403,8 +404,8 @@ const BusinessPayments = () => {
             </div>
 
             {/* Tabs Row & Global Search */}
-            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                <div style={{ display: 'flex', gap: '0.68rem' }}>
                     {[
                         { id: 'receivables', label: 'Income (Inflow)', icon: ArrowDownRight },
                         { id: 'payables', label: 'Expenses (Outflow)', icon: ArrowUpRight },
@@ -412,16 +413,17 @@ const BusinessPayments = () => {
                         { id: 'reminders', label: 'Overdue Reminders', icon: Clock }
                     ].map(tab => (
                         <button 
+                            data-tour={`finance-tab-${tab.id}`}
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             style={{ 
-                                padding: '0.65rem 1.25rem', borderRadius: '12px', 
+                                padding: '0.589rem 1.133rem', borderRadius: '12px', 
                                 background: activeTab === tab.id ? '#064E3B' : 'white', 
                                 color: activeTab === tab.id ? 'white' : '#475569',
                                 border: '1px solid #E2E8F0', fontWeight: '700', cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: '0.5rem',
+                                display: 'flex', alignItems: 'center', gap: '0.453rem',
                                 boxShadow: activeTab === tab.id ? '0 8px 16px rgba(6, 78, 59, 0.15)' : 'none',
-                                fontSize: '0.88rem'
+                                fontSize: '0.797rem'
                             }}
                         >
                             <tab.icon size={16} /> {tab.label}
@@ -437,7 +439,7 @@ const BusinessPayments = () => {
                         background: '#FFF', 
                         border: '1px solid #E2E8F0', 
                         borderRadius: '12px', 
-                        padding: showSearch ? '0.5rem 1rem' : '0.5rem', 
+                        padding: showSearch ? '0.453rem 0.906rem' : '0.453rem', 
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
                         width: showSearch ? '280px' : '40px', 
                         height: '40px',
@@ -459,9 +461,9 @@ const BusinessPayments = () => {
                                 border: 'none', 
                                 outline: 'none', 
                                 background: 'transparent', 
-                                marginLeft: '0.75rem', 
+                                marginLeft: '0.68rem', 
                                 width: '100%', 
-                                fontSize: '0.9rem', 
+                                fontSize: '0.816rem', 
                                 color: '#1E293B',
                                 display: showSearch ? 'block' : 'none'
                             }}
@@ -473,36 +475,38 @@ const BusinessPayments = () => {
 
             {/* Tab 1: Customer Receivables */}
             {activeTab === 'receivables' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden', marginBottom: '1.5rem' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
 
-                    <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0 }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
         { key: 'receipt_id', label: 'Receipt ID', placeholder: 'e.g. RCP-001' },
         { key: 'date', label: 'Date', placeholder: 'e.g. 2026-05' },
         { key: 'customer_name', label: 'Customer', placeholder: 'Name' },
         { key: 'invoice_linked', label: 'Invoice Linked', placeholder: 'INV-' },
-        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000' },
-        { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000' },
-        { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI' },
-        { key: 'status', label: 'Reconciliation', placeholder: 'Status' }
-    ]} onFilterChange={setColFilters} />
+        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000', align: 'right' },
+        { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000', align: 'right' },
+        { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI', align: 'center' },
+        { key: 'status', label: 'Reconciliation', placeholder: 'Status', align: 'center' }
+    ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                             <tbody>
                                 {filteredReceivables.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((r) => (
-                                    <tr key={r.payment_id} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <p style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.95rem' }}>{r.payment_number}</p>
+                                    <tr key={r.payment_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                            <span style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={r.payment_number}>{r.payment_number}</span>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B', whiteSpace: 'nowrap' }}>{formatDisplayDate(r.payment_date)}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '700', color: '#1E293B' }}>{r.customer_name}</td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '600' }}>{r.invoice_id}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '600', color: '#475569' }}>{formatCurrency(r.total_amount)}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '850', color: '#1B6B3A' }}>{formatCurrency(r.paid_amount)}</td>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <span style={{ padding: '0.25rem 0.5rem', borderRadius: '6px', background: '#F0FDF4', color: '#1B6B3A', fontWeight: '800', fontSize: '0.75rem' }}>{r.payment_mode}</span>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{formatDisplayDate(r.payment_date)}</td>
+                                        <td style={{ padding: '0.625rem 0.78rem', fontWeight: '700', color: '#1E293B', fontSize: '0.8rem', maxWidth: '180px' }} title={r.customer_name}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{r.customer_name}</div>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <span style={{ padding: '0.25rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.75rem' }}>{r.reconciliation_status.toUpperCase()}</span>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }} title={r.invoice_id}>{r.invoice_id}</td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '600', color: '#475569', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(r.total_amount)}</td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: '#1B6B3A', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(r.paid_amount)}</td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                            <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#F0FDF4', color: '#1B6B3A', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{r.payment_mode}</span>
+                                        </td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                            <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{r.reconciliation_status.toUpperCase()}</span>
                                         </td>
                                     </tr>
                                 ))}
@@ -514,35 +518,37 @@ const BusinessPayments = () => {
 
             {/* Tab 2: Supplier Payables */}
             {activeTab === 'payables' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden', marginBottom: '1.5rem' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
 
-                    <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0 }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
         { key: 'receipt_id', label: 'Receipt ID', placeholder: 'e.g. RCP-001' },
         { key: 'date', label: 'Date', placeholder: 'e.g. 2026-05' },
-        { key: 'customer_name', label: 'Customer', placeholder: 'Name' },
+        { key: 'customer_name', label: 'Supplier', placeholder: 'Name' },
         { key: 'invoice_linked', label: 'Invoice Linked', placeholder: 'INV-' },
-        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000' },
-        { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000' },
-        { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI' },
-        { key: 'status', label: 'Reconciliation', placeholder: 'Status' }
-    ]} onFilterChange={setColFilters} />
+        { key: 'total', label: 'ORIGINAL AMOUNT', placeholder: 'e.g. 5000', align: 'right' },
+        { key: 'paid_amount', label: 'Paid Amount', placeholder: 'e.g. 5000', align: 'right' },
+        { key: 'payment_mode', label: 'Mode', placeholder: 'e.g. UPI', align: 'center' },
+        { key: 'status', label: 'Reference', placeholder: 'Ref / Cheque', align: 'center' }
+    ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                             <tbody>
                                 {filteredPayables.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((p) => (
-                                    <tr key={p.payment_id} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <p style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.95rem' }}>{p.payment_number}</p>
+                                    <tr key={p.payment_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                            <span style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={p.payment_number}>{p.payment_number}</span>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B', whiteSpace: 'nowrap' }}>{formatDisplayDate(p.payment_date)}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '700', color: '#1E293B' }}>{p.supplier_name}</td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#475569', fontWeight: '600' }}>{p.purchase_id}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '600', color: '#475569' }}>{formatCurrency(p.total_amount)}</td>
-                                        <td style={{ padding: '1.5rem 2rem', fontWeight: '850', color: '#EF4444' }}>{formatCurrency(p.paid_amount)}</td>
-                                        <td style={{ padding: '1.5rem 2rem' }}>
-                                            <span style={{ padding: '0.25rem 0.5rem', borderRadius: '6px', background: '#FEF2F2', color: '#EF4444', fontWeight: '800', fontSize: '0.75rem' }}>{p.payment_mode}</span>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{formatDisplayDate(p.payment_date)}</td>
+                                        <td style={{ padding: '0.625rem 0.78rem', fontWeight: '700', color: '#1E293B', fontSize: '0.8rem', maxWidth: '180px' }} title={p.supplier_name}>
+                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{p.supplier_name}</div>
                                         </td>
-                                        <td style={{ padding: '1.5rem 2rem', color: '#64748B' }}>{p.cheque_number || 'N/A'}</td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }} title={p.purchase_id}>{p.purchase_id}</td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '600', color: '#475569', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(p.total_amount)}</td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: '#EF4444', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(p.paid_amount)}</td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                            <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#FEF2F2', color: '#EF4444', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{p.payment_mode}</span>
+                                        </td>
+                                        <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>{p.cheque_number || 'N/A'}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -553,64 +559,67 @@ const BusinessPayments = () => {
 
             {/* Tab 3: Bank registers */}
             {activeTab === 'bank' && (
-                <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', paddingBottom: '1.5rem' }}>
+                <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.359rem', paddingBottom: '1.359rem' }}>
                     {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(acc => (
-                        <div key={acc.bank_account_id} style={{ background: 'white', borderRadius: '28px', border: '1px solid #E2E8F0', padding: '2rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                <span style={{ padding: '0.3rem 0.6rem', borderRadius: '8px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.75rem' }}>{(acc.type || 'ASSET').toUpperCase()}</span>
+                        <div key={acc.bank_account_id} style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '1.812rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                                <span style={{ padding: '0.272rem 0.544rem', borderRadius: '8px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.68rem' }}>{(acc.type || 'ASSET').toUpperCase()}</span>
                             </div>
 
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B', marginBottom: '0.5rem' }}>{acc.bank_account_name}</h3>
-                            <p style={{ color: '#64748B', fontSize: '0.85rem', marginBottom: '1.5rem' }}>Account No: {acc.account_number}</p>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B', marginBottom: '0.453rem' }}>{acc.bank_account_name}</h3>
+                            <p style={{ color: '#64748B', fontSize: '0.77rem', marginBottom: '1.359rem' }}>Account No: {acc.account_number}</p>
 
-                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748B' }}>Current Balance:</span>
-                                <span style={{ fontSize: '1.5rem', fontWeight: '950', color: '#1B6B3A' }}>{formatCurrency(acc.current_balance)}</span>
+                            <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.133rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#64748B' }}>Current Balance:</span>
+                                <span style={{ fontSize: '1.359rem', fontWeight: '950', color: '#1B6B3A' }}>{formatCurrency(acc.current_balance)}</span>
                             </div>
                         </div>
                     ))}
-                    <div style={{ background: 'white', borderRadius: '28px', border: '1px dashed #DDD6FE', padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }} onClick={() => setIsTransferModalOpen(true)}>
-                        <ArrowUpRight size={32} style={{ color: '#1B6B3A', marginBottom: '0.75rem' }} />
+                    <div style={{ background: 'white', borderRadius: '18px', border: '1px dashed #DDD6FE', padding: '1.812rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }} onClick={() => setIsTransferModalOpen(true)}>
+                        <ArrowUpRight size={32} style={{ color: '#1B6B3A', marginBottom: '0.68rem' }} />
                         <h4 style={{ fontWeight: '800', color: '#064E3B' }}>Internal Transfer Funds</h4>
-                        <p style={{ fontSize: '0.8rem', color: '#64748B' }}>Move money between Cash-In-Hand and Bank accounts</p>
+                        <p style={{ fontSize: '0.725rem', color: '#64748B' }}>Move money between Cash-In-Hand and Bank accounts</p>
                     </div>
                 </div>
             )}
 
             {/* Tab 4: Overdue reminders */}
             {activeTab === 'reminders' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '32px', border: '1px solid #E2E8F0', padding: '2rem 2.5rem 2.5rem 2.5rem', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden', marginBottom: '1.5rem' }}>
-                    <h3 style={{ flexShrink: 0, fontSize: '1.25rem', fontWeight: '850', color: '#064E3B', marginBottom: '1.5rem' }}>Overdue Customer Accounts Reminders (myBillBook flow)</h3>
-                    <div style={{ flex: 1, overflowY: 'auto', overflowX: 'auto', minHeight: 0 }}>
-                        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '1.133rem 1.359rem', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
+                    <h3 style={{ flexShrink: 0, fontSize: '1.05rem', fontWeight: '850', color: '#064E3B', marginBottom: '0.906rem' }}>Overdue Customer Accounts Reminders (myBillBook flow)</h3>
+                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
                                 { key: 'customer_name', label: 'CUSTOMER NAME', placeholder: 'Name' },
                                 { key: 'invoice_id', label: 'INVOICE LINKED ID', placeholder: 'ID' },
-                                { key: 'pending_amount', label: 'OVERDUE BALANCE', placeholder: 'Balance' },
+                                { key: 'pending_amount', label: 'OVERDUE BALANCE', placeholder: 'Balance', align: 'right' },
                                 { key: 'due_date', label: 'DUE DATE', placeholder: 'Date' },
-                                { key: 'overdue_days', label: 'OVERDUE PERIOD', placeholder: 'Days' },
-                                { key: 'reminder_sent', label: 'REMINDER STATUS', placeholder: 'Status' },
+                                { key: 'overdue_days', label: 'OVERDUE PERIOD', placeholder: 'Days', align: 'center' },
+                                { key: 'reminder_sent', label: 'REMINDER STATUS', placeholder: 'Status', align: 'center' },
                                 { 
                                     key: 'actions', 
                                     label: 'ACTIONS', 
                                     placeholder: '', 
                                     noFilter: true,
+                                    align: 'right',
                                     className: 'min-w-[170px] text-right',
                                     style: { minWidth: '170px', textAlign: 'right' }
                                 }
-                            ]} onFilterChange={setColFilters} />
+                            ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                         <tbody>
                             {overdues.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((ov) => (
-                                <tr key={ov.invoice_id} style={{ borderBottom: '1px solid #F8FAFC' }}>
-                                    <td style={{ padding: '1rem', fontWeight: '800' }}>{ov.customer_name}</td>
-                                    <td style={{ padding: '1rem', color: '#475569', fontWeight: '700' }}>{ov.invoice_id}</td>
-                                    <td style={{ padding: '1rem', fontWeight: '850', color: '#EF4444' }}>{formatCurrency(ov.pending_amount)}</td>
-                                    <td style={{ padding: '1rem', color: '#64748B' }}>{ov.due_date}</td>
-                                    <td style={{ padding: '1rem' }}>
-                                        <span style={{ padding: '0.25rem 0.5rem', borderRadius: '6px', background: '#FEF2F2', color: '#EF4444', fontWeight: '800', fontSize: '0.75rem' }}>{ov.overdue_days} Days Overdue</span>
+                                <tr key={ov.invoice_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
+                                    <td style={{ padding: '0.625rem 0.78rem', fontWeight: '800', maxWidth: '180px' }} title={ov.customer_name}>
+                                        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{ov.customer_name}</div>
                                     </td>
-                                    <td style={{ padding: '1rem', color: '#64748B', fontWeight: '700' }}>{ov.reminder_sent}</td>
-                                    <td className="whitespace-nowrap text-right" style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap', minWidth: '170px' }}>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '700', whiteSpace: 'nowrap' }}>{ov.invoice_id}</td>
+                                    <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: '#EF4444', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(ov.pending_amount)}</td>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', whiteSpace: 'nowrap' }}>{ov.due_date}</td>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                        <span className="badge-nowrap" style={{ padding: '0.227rem 0.453rem', borderRadius: '6px', background: '#FEF2F2', color: '#EF4444', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{ov.overdue_days} Days Overdue</span>
+                                    </td>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontWeight: '700', textAlign: 'center', whiteSpace: 'nowrap' }}>{ov.reminder_sent}</td>
+                                    <td className="whitespace-nowrap text-right" style={{ padding: '0.906rem', textAlign: 'right', whiteSpace: 'nowrap', minWidth: '170px' }}>
                                         <button 
                                             type="button"
                                             onClick={() => sendWhatsAppReminder(ov.customer_name)}
@@ -619,14 +628,14 @@ const BusinessPayments = () => {
                                             style={{ 
                                                 display: 'inline-flex', 
                                                 alignItems: 'center', 
-                                                gap: '0.375rem', 
-                                                padding: '0.35rem 0.75rem', 
+                                                gap: '0.34rem', 
+                                                padding: '0.317rem 0.68rem', 
                                                 borderRadius: '9999px', 
                                                 background: '#F1F5F9', 
                                                 color: '#64748B', 
                                                 border: '1px solid #E2E8F0', 
                                                 fontWeight: '600', 
-                                                fontSize: '0.75rem', 
+                                                fontSize: '0.68rem', 
                                                 cursor: 'pointer',
                                                 whiteSpace: 'nowrap',
                                                 flexShrink: 0
@@ -637,7 +646,7 @@ const BusinessPayments = () => {
                                             <span 
                                                 className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-gray-200 text-gray-600 uppercase tracking-wider whitespace-nowrap"
                                                 style={{ 
-                                                    fontSize: '0.62rem', 
+                                                    fontSize: '0.562rem', 
                                                     background: '#E2E8F0', 
                                                     padding: '1px 5px', 
                                                     borderRadius: '4px', 
@@ -662,26 +671,26 @@ const BusinessPayments = () => {
 
             {/* Add Transaction Modal (Income / Expense) */}
             {isAddTransactionModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '2rem' }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '28px', padding: '2rem 2.25rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                            <h3 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Transaction</h3>
-                            <button onClick={() => setIsAddTransactionModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '18px', padding: '1.812rem 2.039rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                            <h3 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Transaction</h3>
+                            <button onClick={() => setIsAddTransactionModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                         </div>
 
                         {/* Income / Expense Switcher */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', background: '#F1F5F9', padding: '4px', borderRadius: '14px', marginBottom: '1.25rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem', background: '#F1F5F9', padding: '4px', borderRadius: '14px', marginBottom: '1.133rem' }}>
                             <button
                                 type="button"
                                 onClick={() => setTxForm({ ...txForm, type: 'income', category: '' })}
                                 style={{
-                                    padding: '0.65rem',
+                                    padding: '0.589rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     background: txForm.type === 'income' ? '#10B981' : 'transparent',
                                     color: txForm.type === 'income' ? '#FFFFFF' : '#475569',
                                     fontWeight: '800',
-                                    fontSize: '0.88rem',
+                                    fontSize: '0.797rem',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -696,13 +705,13 @@ const BusinessPayments = () => {
                                 type="button"
                                 onClick={() => setTxForm({ ...txForm, type: 'expense', category: '' })}
                                 style={{
-                                    padding: '0.65rem',
+                                    padding: '0.589rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     background: txForm.type === 'expense' ? '#EF4444' : 'transparent',
                                     color: txForm.type === 'expense' ? '#FFFFFF' : '#475569',
                                     fontWeight: '800',
-                                    fontSize: '0.88rem',
+                                    fontSize: '0.797rem',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     alignItems: 'center',
@@ -715,10 +724,10 @@ const BusinessPayments = () => {
                             </button>
                         </div>
 
-                        <form onSubmit={handleSaveTransaction} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <form onSubmit={handleSaveTransaction} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                             {/* Source / Payee / Name */}
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>
                                     {txForm.type === 'income' ? 'Received From / Description' : 'Paid To / Description'}
                                 </label>
                                 <input
@@ -727,14 +736,14 @@ const BusinessPayments = () => {
                                     placeholder={txForm.type === 'income' ? 'e.g. Acme Corp, Salary, Project Payment' : 'e.g. Office Rent, Supplier Bill, Tea'}
                                     value={txForm.title}
                                     onChange={(e) => setTxForm({ ...txForm, title: e.target.value })}
-                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                    style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.816rem', boxSizing: 'border-box' }}
                                 />
                             </div>
 
                             {/* Amount & Date in one row */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Amount ({currency.symbol})</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Amount ({currency.symbol})</label>
                                     <input
                                         required
                                         type="number"
@@ -743,29 +752,29 @@ const BusinessPayments = () => {
                                         placeholder="0.00"
                                         value={txForm.amount}
                                         onChange={(e) => setTxForm({ ...txForm, amount: e.target.value })}
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.95rem', fontWeight: '700', boxSizing: 'border-box' }}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.861rem', fontWeight: '700', boxSizing: 'border-box' }}
                                     />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Date</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Date</label>
                                     <input
                                         required
                                         type="date"
                                         value={txForm.date}
                                         onChange={(e) => setTxForm({ ...txForm, date: e.target.value })}
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.816rem', boxSizing: 'border-box' }}
                                     />
                                 </div>
                             </div>
 
                             {/* Category & Payment Mode in one row */}
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Category</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Category</label>
                                     <select
                                         value={txForm.category}
                                         onChange={(e) => setTxForm({ ...txForm, category: e.target.value })}
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.816rem', boxSizing: 'border-box' }}
                                     >
                                         <option value="">Select Category</option>
                                         {(txForm.type === 'income' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES).map(cat => (
@@ -774,11 +783,11 @@ const BusinessPayments = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Payment Mode</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Payment Mode</label>
                                     <select
                                         value={txForm.payment_mode}
                                         onChange={(e) => setTxForm({ ...txForm, payment_mode: e.target.value })}
-                                        style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', background: 'white', fontSize: '0.816rem', boxSizing: 'border-box' }}
                                     >
                                         <option value="UPI">UPI</option>
                                         <option value="Cash">Cash</option>
@@ -791,13 +800,13 @@ const BusinessPayments = () => {
 
                             {/* Notes / Ref ID */}
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.35rem' }}>Notes / Reference (Optional)</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Notes / Reference (Optional)</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Transaction ID, receipt #, or remarks"
                                     value={txForm.notes}
                                     onChange={(e) => setTxForm({ ...txForm, notes: e.target.value })}
-                                    style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', boxSizing: 'border-box' }}
+                                    style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.816rem', boxSizing: 'border-box' }}
                                 />
                             </div>
 
@@ -805,16 +814,16 @@ const BusinessPayments = () => {
                                 type="submit"
                                 style={{
                                     width: '100%',
-                                    padding: '0.85rem',
+                                    padding: '0.77rem',
                                     borderRadius: '14px',
                                     background: txForm.type === 'income' ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
                                     color: 'white',
                                     border: 'none',
                                     fontWeight: '800',
-                                    fontSize: '1rem',
+                                    fontSize: '0.906rem',
                                     cursor: 'pointer',
                                     boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
-                                    marginTop: '0.5rem'
+                                    marginTop: '0.453rem'
                                 }}
                             >
                                 {txForm.type === 'income' ? '+ Save Income Entry' : '- Save Expense Entry'}
@@ -826,17 +835,17 @@ const BusinessPayments = () => {
 
             {/* Inward Customer Payment Modal */}
             {isPaymentModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '2rem' }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Record Customer Payment</h3>
-                            <button onClick={() => setIsPaymentModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Customer Payment</h3>
+                            <button onClick={() => setIsPaymentModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
-                        <form onSubmit={handleSaveCustomerPayment} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <form onSubmit={handleSaveCustomerPayment} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Select Customer Profile</label>
-                                <select value={customerForm.customer_name} onChange={(e) => setCustomerForm({ ...customerForm, customer_name: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Select Customer Profile</label>
+                                <select value={customerForm.customer_name} onChange={(e) => setCustomerForm({ ...customerForm, customer_name: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                     {customersList.length > 0 ? (
                                         customersList.map((c, idx) => {
                                             const name = c.name || c.customer_name || c.party_name || `Customer #${idx + 1}`;
@@ -852,13 +861,13 @@ const BusinessPayments = () => {
                                     )}
                                 </select>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Invoice Linked ID</label>
-                                    <input required type="text" value={customerForm.invoice_id} onChange={(e) => setCustomerForm({ ...customerForm, invoice_id: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Invoice Linked ID</label>
+                                    <input required type="text" value={customerForm.invoice_id} onChange={(e) => setCustomerForm({ ...customerForm, invoice_id: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Original Amount ({currency.symbol})</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Original Amount ({currency.symbol})</label>
                                     <input 
                                         required 
                                         type="text" 
@@ -884,12 +893,12 @@ const BusinessPayments = () => {
                                                 };
                                             });
                                         }} 
-                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                        style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Paid amount (Receipt worth, {currency.symbol})</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Paid amount (Receipt worth, {currency.symbol})</label>
                                 <input 
                                     required 
                                     type="number" 
@@ -908,13 +917,13 @@ const BusinessPayments = () => {
                                         }
                                         setCustomerForm(prev => ({ ...prev, paid_amount: val }));
                                     }} 
-                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                    style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                 />
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Payment Mode</label>
-                                    <select value={customerForm.payment_mode} onChange={(e) => setCustomerForm({ ...customerForm, payment_mode: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Payment Mode</label>
+                                    <select value={customerForm.payment_mode} onChange={(e) => setCustomerForm({ ...customerForm, payment_mode: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                         <option>UPI</option>
                                         <option>Bank Transfer</option>
                                         <option>Cash</option>
@@ -922,12 +931,12 @@ const BusinessPayments = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Ref ID / UPI reference</label>
-                                    <input required type="text" value={customerForm.transaction_reference} onChange={(e) => setCustomerForm({ ...customerForm, transaction_reference: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Ref ID / UPI reference</label>
+                                    <input required type="text" value={customerForm.transaction_reference} onChange={(e) => setCustomerForm({ ...customerForm, transaction_reference: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Finalize Payment Collection
                             </button>
                         </form>
@@ -937,27 +946,27 @@ const BusinessPayments = () => {
 
             {/* Outward Supplier Payment Modal */}
             {isSupplierModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '2rem' }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Record Supplier Disbursement</h3>
-                            <button onClick={() => setIsSupplierModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Supplier Disbursement</h3>
+                            <button onClick={() => setIsSupplierModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
-                        <form onSubmit={handleSaveSupplierPayment} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <form onSubmit={handleSaveSupplierPayment} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Select Supplier Profile</label>
-                                <select value={supplierForm.supplier_name} onChange={(e) => setSupplierForm({ ...supplierForm, supplier_name: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Select Supplier Profile</label>
+                                <select value={supplierForm.supplier_name} onChange={(e) => setSupplierForm({ ...supplierForm, supplier_name: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                     <option>Delhi Distributors Ltd.</option>
                                 </select>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Purchase Bill Linked ID</label>
-                                    <input required type="text" value={supplierForm.purchase_id} onChange={(e) => setSupplierForm({ ...supplierForm, purchase_id: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Purchase Bill Linked ID</label>
+                                    <input required type="text" value={supplierForm.purchase_id} onChange={(e) => setSupplierForm({ ...supplierForm, purchase_id: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Original Due Amount ({currency.symbol})</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Original Due Amount ({currency.symbol})</label>
                                     <input 
                                         required 
                                         type="number" 
@@ -966,12 +975,12 @@ const BusinessPayments = () => {
                                         placeholder="0"
                                         value={supplierForm.total_amount} 
                                         onChange={(e) => setSupplierForm({ ...supplierForm, total_amount: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                        style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Paid Amount (Outflow worth, {currency.symbol})</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Paid Amount (Outflow worth, {currency.symbol})</label>
                                 <input 
                                     required 
                                     type="number" 
@@ -980,13 +989,13 @@ const BusinessPayments = () => {
                                     placeholder="0"
                                     value={supplierForm.paid_amount} 
                                     onChange={(e) => setSupplierForm({ ...supplierForm, paid_amount: e.target.value })} 
-                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                    style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                 />
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Disbursement Mode</label>
-                                    <select value={supplierForm.payment_mode} onChange={(e) => setSupplierForm({ ...supplierForm, payment_mode: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Disbursement Mode</label>
+                                    <select value={supplierForm.payment_mode} onChange={(e) => setSupplierForm({ ...supplierForm, payment_mode: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                         <option>Bank Transfer</option>
                                         <option>Cheque</option>
                                         <option>UPI</option>
@@ -994,12 +1003,12 @@ const BusinessPayments = () => {
                                     </select>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Cheque / Ref No</label>
-                                    <input required type="text" value={supplierForm.transaction_reference} onChange={(e) => setSupplierForm({ ...supplierForm, transaction_reference: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Cheque / Ref No</label>
+                                    <input required type="text" value={supplierForm.transaction_reference} onChange={(e) => setSupplierForm({ ...supplierForm, transaction_reference: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Disburse Supplier Funds
                             </button>
                         </form>
@@ -1009,24 +1018,24 @@ const BusinessPayments = () => {
 
             {/* Internal Transfers Modal */}
             {isTransferModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '2rem' }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '32px', padding: '2.5rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B' }}>Internal Vault Transfer</h3>
-                            <button onClick={() => setIsTransferModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.6rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Internal Vault Transfer</h3>
+                            <button onClick={() => setIsTransferModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
-                        <form onSubmit={handleInternalTransfer} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                        <form onSubmit={handleInternalTransfer} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>From Account</label>
-                                    <select value={transferForm.from_acc_id} onChange={(e) => setTransferForm({ ...transferForm, from_acc_id: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>From Account</label>
+                                    <select value={transferForm.from_acc_id} onChange={(e) => setTransferForm({ ...transferForm, from_acc_id: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                         {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(a => <option key={a.bank_account_id} value={a.bank_account_id}>{a.bank_account_name}</option>)}
                                     </select>
                                 </div>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>To Account</label>
-                                    <select value={transferForm.to_acc_id} onChange={(e) => setTransferForm({ ...transferForm, to_acc_id: e.target.value })} style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>To Account</label>
+                                    <select value={transferForm.to_acc_id} onChange={(e) => setTransferForm({ ...transferForm, to_acc_id: e.target.value })} style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', background: 'white' }}>
                                         {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(a => (
                                             <option 
                                                 key={a.bank_account_id} 
@@ -1040,7 +1049,7 @@ const BusinessPayments = () => {
                                 </div>
                             </div>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.4rem' }}>Transfer Amount ({currency.symbol})</label>
+                                <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Transfer Amount ({currency.symbol})</label>
                                 <input 
                                     required 
                                     type="number" 
@@ -1049,11 +1058,11 @@ const BusinessPayments = () => {
                                     placeholder="0"
                                     value={transferForm.amount} 
                                     onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })} 
-                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
+                                    style={{ width: '100%', padding: '0.725rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none' }} 
                                 />
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '1rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Settle Fund Transfer
                             </button>
                         </form>
@@ -1071,15 +1080,15 @@ const BusinessPayments = () => {
                         zIndex: 99999,
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.75rem',
-                        padding: '0.85rem 1.25rem',
+                        gap: '0.68rem',
+                        padding: '0.77rem 1.133rem',
                         background: toast.type === 'error' ? '#FEF2F2' : '#0F172A',
                         color: toast.type === 'error' ? '#991B1B' : '#FFFFFF',
                         border: toast.type === 'error' ? '1px solid #FECACA' : '1px solid rgba(255,255,255,0.12)',
                         borderRadius: '14px',
                         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2)',
                         fontWeight: 600,
-                        fontSize: '0.9rem',
+                        fontSize: '0.816rem',
                         maxWidth: '420px',
                         animation: 'fadeIn 0.2s ease-out'
                     }}

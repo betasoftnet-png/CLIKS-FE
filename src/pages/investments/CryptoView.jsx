@@ -58,8 +58,8 @@ const CryptoView = () => {
             </div>
 
             <div className="crypto-table-container">
-                <h3 className="inv-section-title" style={{ padding: '1.25rem 1.5rem 0' }}>Top Cryptocurrencies</h3>
-                <table className="crypto-table">
+                <h3 className="inv-section-title" style={{ padding: '1.133rem 1.359rem 0' }}>Top Cryptocurrencies</h3>
+                <div style={{ overflowX: "auto", width: "100%" }}><table className="crypto-table">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -99,22 +99,22 @@ const CryptoView = () => {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table></div>
             </div>
 
             <style>{`
                 .crypto-overview-grid {
-                    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem;
+                    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.133rem; margin-bottom: 1.812rem;
                 }
                 .crypto-ov-card {
-                    background: white; border-radius: 16px; padding: 1.25rem;
-                    border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem;
+                    background: white; border-radius: 16px; padding: 1.133rem;
+                    border: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.906rem;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .crypto-ov-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
                 .crypto-ov-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-                .crypto-ov-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; margin-bottom: 0.25rem; }
-                .crypto-ov-value { font-size: 1.3rem; font-weight: 700; color: var(--text-main); }
+                .crypto-ov-label { color: var(--text-muted); font-size: 0.725rem; font-weight: 500; margin-bottom: 0.227rem; }
+                .crypto-ov-value { font-size: 1.178rem; font-weight: 700; color: var(--text-main); }
 
                 .crypto-table-container {
                     background: white; border-radius: 16px; border: 1px solid var(--border-color);
@@ -123,29 +123,29 @@ const CryptoView = () => {
                 .crypto-table { width: 100%; border-collapse: collapse; }
                 .crypto-table thead tr { border-bottom: 1px solid var(--border-color); }
                 .crypto-table th {
-                    text-align: left; padding: 1rem 1.5rem; color: var(--text-muted); font-weight: 500;
-                    font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em;
+                    text-align: left; padding: 0.906rem 1.359rem; color: var(--text-muted); font-weight: 500;
+                    font-size: 0.725rem; text-transform: uppercase; letter-spacing: 0.04em;
                 }
-                .crypto-table td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-color); }
+                .crypto-table td { padding: 0.906rem 1.359rem; border-bottom: 1px solid var(--border-color); }
                 .crypto-table tr:last-child td { border-bottom: none; }
                 .crypto-table tr:hover { background: #F8FAFC; }
 
                 .crypto-rank { font-weight: 600; color: var(--text-muted); width: 40px; }
-                .crypto-name-cell { display: flex; align-items: center; gap: 0.75rem; }
+                .crypto-name-cell { display: flex; align-items: center; gap: 0.68rem; }
                 .crypto-coin-icon {
                     width: 36px; height: 36px; border-radius: 50%; color: white; font-weight: 700;
-                    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+                    display: flex; align-items: center; justify-content: center; font-size: 0.816rem;
                 }
-                .crypto-coin-name { font-weight: 600; color: var(--text-main); font-size: 0.9rem; }
-                .crypto-coin-sym { font-size: 0.75rem; color: var(--text-muted); }
+                .crypto-coin-name { font-weight: 600; color: var(--text-main); font-size: 0.816rem; }
+                .crypto-coin-sym { font-size: 0.68rem; color: var(--text-muted); }
                 .crypto-price { font-weight: 700; color: var(--text-main); font-family: 'Inter', monospace; }
-                .crypto-change { display: flex; align-items: center; gap: 0.2rem; font-weight: 600; font-size: 0.85rem; }
+                .crypto-change { display: flex; align-items: center; gap: 0.181rem; font-weight: 600; font-size: 0.77rem; }
                 .crypto-change.up { color: #16A34A; }
                 .crypto-change.down { color: #DC2626; }
                 .crypto-mcap { font-weight: 500; color: var(--text-muted); }
                 .crypto-trade-btn {
-                    padding: 0.4rem 1rem; background: var(--primary); color: white; border: none;
-                    border-radius: 8px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: background 0.2s;
+                    padding: 0.363rem 0.906rem; background: var(--primary); color: white; border: none;
+                    border-radius: 8px; font-weight: 600; font-size: 0.725rem; cursor: pointer; transition: background 0.2s;
                 }
                 .crypto-trade-btn:hover { background: var(--primary-hover); }
 

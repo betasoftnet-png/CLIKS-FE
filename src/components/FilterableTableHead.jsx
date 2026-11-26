@@ -48,30 +48,36 @@ const FilterableTableHead = ({ columns = [], onFilterChange, thStyle = {} }) => 
                             key={col.key}
                             className={col.className}
                             style={{
-                                padding: '0.55rem 1rem',
-                                fontSize: '0.7rem',
+                                padding: '0.56rem 0.78rem',
+                                fontSize: '0.652rem',
                                 fontWeight: '800',
-                                color: '#94A3B8',
+                                color: '#64748B',
                                 textTransform: 'uppercase',
                                 whiteSpace: 'nowrap',
+                                verticalAlign: 'middle',
                                 textAlign: col.align || 'left',
                                 letterSpacing: '0.03em',
+                                ...(col.width ? { width: col.width } : {}),
                                 ...(col.minWidth ? { minWidth: col.minWidth } : {}),
+                                ...(col.maxWidth ? { maxWidth: col.maxWidth } : {}),
                                 ...thStyle,
                                 ...(col.style || {})
                             }}
                         >
                             <div style={{
-                                display: 'flex',
+                                display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.3rem',
+                                gap: '0.272rem',
+                                width: '100%',
                                 justifyContent: col.align === 'right' ? 'flex-end' : col.align === 'center' ? 'center' : 'flex-start'
                             }}>
                                 <span>{col.label}</span>
                                 {!col.noFilter && (
                                     <button
+                                        type="button"
                                         onClick={() => toggleCol(col.key)}
                                         title={`Filter by ${col.label}`}
+                                        aria-label={`Filter by ${col.label}`}
                                         style={{
                                             background: isOpen || hasValue ? '#F1F5F9' : 'transparent',
                                             border: `1px solid ${isOpen || hasValue ? '#94A3B8' : '#E2E8F0'}`,
@@ -105,7 +111,7 @@ const FilterableTableHead = ({ columns = [], onFilterChange, thStyle = {} }) => 
             {hasAnyOpen && (
                 <tr style={{ borderBottom: '2px solid rgba(148, 163, 184, 0.15)', background: '#FAFAFA' }}>
                     {columns.map(col => (
-                        <th key={col.key} className={col.className} style={{ padding: '0.2rem 0.4rem', ...(col.minWidth ? { minWidth: col.minWidth } : {}), ...(col.style || {}) }}>
+                        <th key={col.key} className={col.className} style={{ padding: '0.181rem 0.363rem', ...(col.minWidth ? { minWidth: col.minWidth } : {}), ...(col.style || {}) }}>
                             {!col.noFilter && openCols[col.key] ? (
                                 <div style={{ position: 'relative' }}>
                                     <input
@@ -116,11 +122,11 @@ const FilterableTableHead = ({ columns = [], onFilterChange, thStyle = {} }) => 
                                         onChange={(e) => updateFilter(col.key, e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.28rem 1.4rem 0.28rem 0.5rem',
+                                            padding: '0.254rem 1.269rem 0.254rem 0.453rem',
                                             borderRadius: '6px',
                                             border: '1.5px solid #94A3B8',
                                             outline: 'none',
-                                            fontSize: '0.72rem',
+                                            fontSize: '0.652rem',
                                             fontWeight: '600',
                                             color: '#1E293B',
                                             background: 'white',

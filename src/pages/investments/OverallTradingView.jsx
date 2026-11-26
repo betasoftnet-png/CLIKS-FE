@@ -133,48 +133,48 @@ const OverallTradingView = () => {
             </div>
 
             <style>{`
-                .ot-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+                .ot-summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.133rem; margin-bottom: 1.812rem; }
                 .ot-summary-card {
-                    background: white; border-radius: 16px; padding: 1.25rem 1.5rem;
+                    background: white; border-radius: 16px; padding: 1.133rem 1.359rem;
                     border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .ot-summary-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
                 .ot-summary-top { display: flex; justify-content: space-between; align-items: flex-start; }
-                .ot-summary-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; }
-                .ot-summary-value { font-size: 1.35rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.3rem; }
+                .ot-summary-label { color: var(--text-muted); font-size: 0.725rem; font-weight: 500; margin-bottom: 0.363rem; }
+                .ot-summary-value { font-size: 1.223rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.272rem; }
                 .ot-summary-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-                .ot-trend { display: inline-flex; align-items: center; gap: 0.15rem; font-size: 0.78rem; font-weight: 600; padding: 0.1rem 0.4rem; border-radius: 4px; }
+                .ot-trend { display: inline-flex; align-items: center; gap: 0.136rem; font-size: 0.707rem; font-weight: 600; padding: 0.091rem 0.363rem; border-radius: 4px; }
                 .ot-trend.up { background: #DCFCE7; color: #16A34A; }
                 .ot-trend.down { background: #FEE2E2; color: #DC2626; }
 
-                .ot-two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-                .ot-panel { background: white; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--border-color); }
+                .ot-two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.133rem; }
+                .ot-panel { background: white; border-radius: 16px; padding: 1.359rem; border: 1px solid var(--border-color); }
 
-                .ot-alloc-bar { display: flex; height: 10px; border-radius: 99px; overflow: hidden; margin-bottom: 1.25rem; gap: 3px; }
+                .ot-alloc-bar { display: flex; height: 10px; border-radius: 99px; overflow: hidden; margin-bottom: 1.133rem; gap: 3px; }
                 .ot-alloc-seg { border-radius: 99px; transition: width 0.5s; }
-                .ot-alloc-list { display: flex; flex-direction: column; gap: 0.85rem; }
+                .ot-alloc-list { display: flex; flex-direction: column; gap: 0.77rem; }
                 .ot-alloc-row { display: flex; justify-content: space-between; align-items: center; }
-                .ot-alloc-left { display: flex; align-items: center; gap: 0.6rem; }
+                .ot-alloc-left { display: flex; align-items: center; gap: 0.544rem; }
                 .ot-alloc-dot { width: 8px; height: 8px; border-radius: 50%; }
                 .ot-alloc-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-                .ot-alloc-name { font-weight: 500; font-size: 0.9rem; color: var(--text-main); }
-                .ot-alloc-right { display: flex; align-items: center; gap: 1rem; }
-                .ot-alloc-pct { font-weight: 700; font-size: 0.9rem; color: var(--text-main); min-width: 40px; text-align: right; }
-                .ot-alloc-val { font-size: 0.85rem; color: var(--text-muted); min-width: 55px; text-align: right; }
+                .ot-alloc-name { font-weight: 500; font-size: 0.816rem; color: var(--text-main); }
+                .ot-alloc-right { display: flex; align-items: center; gap: 0.906rem; }
+                .ot-alloc-pct { font-weight: 700; font-size: 0.816rem; color: var(--text-main); min-width: 40px; text-align: right; }
+                .ot-alloc-val { font-size: 0.77rem; color: var(--text-muted); min-width: 55px; text-align: right; }
 
-                .ot-txn-list { display: flex; flex-direction: column; gap: 0.85rem; }
-                .ot-txn-row { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; }
-                .ot-txn-left { display: flex; align-items: center; gap: 0.75rem; }
+                .ot-txn-list { display: flex; flex-direction: column; gap: 0.77rem; }
+                .ot-txn-row { display: flex; justify-content: space-between; align-items: center; padding: 0.453rem 0; }
+                .ot-txn-left { display: flex; align-items: center; gap: 0.68rem; }
                 .ot-txn-icon {
                     width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
                 }
                 .ot-txn-icon.buy { background: #DBEAFE; color: #1B6B3A; }
                 .ot-txn-icon.sell { background: #DCFCE7; color: #16A34A; }
                 .ot-txn-icon.sip { background: #EDE9FE; color: #7C3AED; }
-                .ot-txn-name { font-weight: 500; font-size: 0.9rem; color: var(--text-main); }
-                .ot-txn-time { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.3rem; margin-top: 0.15rem; }
-                .ot-txn-amount { font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+                .ot-txn-name { font-weight: 500; font-size: 0.816rem; color: var(--text-main); }
+                .ot-txn-time { font-size: 0.68rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.272rem; margin-top: 0.136rem; }
+                .ot-txn-amount { font-weight: 600; font-size: 0.816rem; color: var(--text-main); }
                 .ot-txn-amount.green { color: #16A34A; }
 
                 @media (max-width: 1100px) { .ot-summary-grid { grid-template-columns: repeat(2, 1fr); } }

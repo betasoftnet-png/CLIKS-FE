@@ -60,44 +60,44 @@ const BillingRecords = () => {
     const grandTotalItemsSold = records.reduce((sum, r) => sum + (parseFloat(r.totalQuantity) || 0), 0);
 
     return (
-        <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
+        <div style={{ padding: '1.812rem', maxWidth: '1200px', margin: '0 auto', fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
             
             {/* Header */}
             <div style={{ 
                 display: 'flex', 
                 justifyContent: 'space-between', 
                 alignItems: 'center', 
-                marginBottom: '2rem',
+                marginBottom: '1.812rem',
                 flexWrap: 'wrap',
-                gap: '1rem'
+                gap: '0.906rem'
             }}>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1B6B3A', marginBottom: '0.25rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#1B6B3A', marginBottom: '0.227rem' }}>
                         <Receipt size={22} />
-                        <span style={{ fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Track Module</span>
+                        <span style={{ fontSize: '0.77rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Track Module</span>
                     </div>
-                    <h1 style={{ fontSize: '1.85rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                    <h1 style={{ fontSize: '1.677rem', fontWeight: 800, color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
                         Billing Records
                     </h1>
-                    <p style={{ color: '#64748B', fontSize: '0.9rem', margin: '0.25rem 0 0 0' }}>
+                    <p style={{ color: '#64748B', fontSize: '0.816rem', margin: '0.227rem 0 0 0' }}>
                         View, search, and manage all your submitted customer bills.
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.68rem', flexWrap: 'wrap' }}>
                     <button
                         onClick={() => navigate('/books/track/simple-billing')}
                         style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '0.65rem 1.25rem',
+                            gap: '0.453rem',
+                            padding: '0.589rem 1.133rem',
                             background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
                             color: '#FFFFFF',
                             border: 'none',
                             borderRadius: '12px',
                             fontWeight: 700,
-                            fontSize: '0.875rem',
+                            fontSize: '0.793rem',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
                             boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)'
@@ -114,22 +114,22 @@ const BillingRecords = () => {
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '1.25rem',
-                marginBottom: '2rem'
+                gap: '1.133rem',
+                marginBottom: '1.812rem'
             }}>
                 {/* Card 1: Total Bills */}
                 <div style={{
                     background: '#FFFFFF',
                     borderRadius: '16px',
-                    padding: '1.25rem 1.5rem',
+                    padding: '1.133rem 1.359rem',
                     border: '1px solid #E2E8F0',
                     boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748B', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748B', fontSize: '0.725rem', fontWeight: 800, textTransform: 'uppercase' }}>
                         <span>Total Bills Issued</span>
                         <Receipt size={18} style={{ color: '#1B6B3A' }} />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0F172A', marginTop: '0.5rem' }}>
+                    <div style={{ fontSize: '1.586rem', fontWeight: 900, color: '#0F172A', marginTop: '0.453rem' }}>
                         {records.length}
                     </div>
                 </div>
@@ -138,15 +138,15 @@ const BillingRecords = () => {
                 <div style={{
                     background: '#FFFFFF',
                     borderRadius: '16px',
-                    padding: '1.25rem 1.5rem',
+                    padding: '1.133rem 1.359rem',
                     border: '1px solid #E2E8F0',
                     boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748B', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#64748B', fontSize: '0.725rem', fontWeight: 800, textTransform: 'uppercase' }}>
                         <span>Total Items Sold</span>
                         <ShoppingBag size={18} style={{ color: '#0284C7' }} />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#0F172A', marginTop: '0.5rem' }}>
+                    <div style={{ fontSize: '1.586rem', fontWeight: 900, color: '#0F172A', marginTop: '0.453rem' }}>
                         {grandTotalItemsSold}
                     </div>
                 </div>
@@ -155,15 +155,15 @@ const BillingRecords = () => {
                 <div style={{
                     background: 'linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%)',
                     borderRadius: '16px',
-                    padding: '1.25rem 1.5rem',
+                    padding: '1.133rem 1.359rem',
                     border: '1px solid #BBF7D0',
                     boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#166534', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#166534', fontSize: '0.725rem', fontWeight: 800, textTransform: 'uppercase' }}>
                         <span>Total Billing Revenue</span>
                         <FileSpreadsheet size={18} style={{ color: '#1B6B3A' }} />
                     </div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#1B6B3A', marginTop: '0.5rem' }}>
+                    <div style={{ fontSize: '1.586rem', fontWeight: 900, color: '#1B6B3A', marginTop: '0.453rem' }}>
                         ₹{grandTotalRevenue.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                 </div>
@@ -174,7 +174,7 @@ const BillingRecords = () => {
                 background: '#FFFFFF',
                 borderRadius: '20px',
                 border: '1px solid #E2E8F0',
-                padding: '1.5rem',
+                padding: '1.359rem',
                 boxShadow: '0 4px 20px rgba(0, 0, 0, 0.03)'
             }}>
                 {/* Search Bar */}
@@ -182,9 +182,9 @@ const BillingRecords = () => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '1.5rem',
+                    marginBottom: '1.359rem',
                     flexWrap: 'wrap',
-                    gap: '1rem'
+                    gap: '0.906rem'
                 }}>
                     <div style={{
                         position: 'relative',
@@ -200,10 +200,10 @@ const BillingRecords = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{
                                 width: '100%',
-                                padding: '0.65rem 1rem 0.65rem 2.6rem',
+                                padding: '0.589rem 0.906rem 0.589rem 2.356rem',
                                 borderRadius: '12px',
                                 border: '1px solid #CBD5E1',
-                                fontSize: '0.9rem',
+                                fontSize: '0.816rem',
                                 fontWeight: 500,
                                 outline: 'none',
                                 background: '#F8FAFC'
@@ -218,14 +218,14 @@ const BillingRecords = () => {
                                 background: '#FEE2E2',
                                 color: '#DC2626',
                                 border: 'none',
-                                padding: '0.55rem 1rem',
+                                padding: '0.498rem 0.906rem',
                                 borderRadius: '10px',
                                 fontWeight: 700,
-                                fontSize: '0.825rem',
+                                fontSize: '0.748rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.4rem'
+                                gap: '0.363rem'
                             }}
                         >
                             <Trash2 size={15} /> Clear All Records
@@ -234,17 +234,17 @@ const BillingRecords = () => {
                 </div>
 
                 {/* Table */}
-                <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+                <div className="cliks-table-scroll">
+                    <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.8rem' }}>
                         <thead>
-                            <tr style={{ background: '#F8FAFC', color: '#64748B', fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid #E2E8F0' }}>
-                                <th style={{ padding: '0.85rem 1rem' }}>Billing Order #</th>
-                                <th style={{ padding: '0.85rem 1rem' }}>Customer Name</th>
-                                <th style={{ padding: '0.85rem 1rem' }}>Date & Time</th>
-                                <th style={{ padding: '0.85rem 1rem' }}>Products Summary</th>
-                                <th style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>Total Quantity</th>
-                                <th style={{ padding: '0.85rem 1rem', textAlign: 'right' }}>Grand Total</th>
-                                <th style={{ padding: '0.85rem 1rem', textAlign: 'center' }}>Actions</th>
+                            <tr style={{ background: '#F8FAFC', color: '#64748B', fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.04em', borderBottom: '1px solid #E2E8F0' }}>
+                                <th style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>Billing Order #</th>
+                                <th style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>Customer Name</th>
+                                <th style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>Date & Time</th>
+                                <th style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>Products Summary</th>
+                                <th style={{ padding: '0.589rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Total Qty</th>
+                                <th style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Grand Total</th>
+                                <th style={{ padding: '0.589rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -256,42 +256,42 @@ const BillingRecords = () => {
                                     onMouseOut={(e) => e.currentTarget.style.background = '#FFFFFF'}
                                 >
                                     {/* Bill ID */}
-                                    <td style={{ padding: '1rem', fontWeight: 800, color: '#1B6B3A' }}>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', fontWeight: 800, color: '#1B6B3A', whiteSpace: 'nowrap' }} title={`#${record.id}`}>
                                         #{record.id}
                                     </td>
 
                                     {/* Customer Name */}
-                                    <td style={{ padding: '1rem', fontWeight: 700, color: '#0F172A' }}>
-                                        {record.customerName}
+                                    <td style={{ padding: '0.625rem 0.78rem', fontWeight: 700, color: '#0F172A', maxWidth: '180px' }} title={record.customerName}>
+                                        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{record.customerName}</div>
                                     </td>
 
                                     {/* Date & Time */}
-                                    <td style={{ padding: '1rem', color: '#64748B', fontSize: '0.85rem' }}>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.77rem', whiteSpace: 'nowrap' }}>
                                         {record.formattedDate}
                                     </td>
 
                                     {/* Products Summary */}
-                                    <td style={{ padding: '1rem', color: '#334155' }}>
-                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                                    <td style={{ padding: '0.625rem 0.78rem', color: '#334155', minWidth: '160px' }}>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.317rem' }}>
                                             {record.products?.slice(0, 2).map((p, idx) => (
-                                                <span key={idx} style={{
+                                                <span key={idx} className="badge-nowrap" style={{
                                                     background: '#F1F5F9',
                                                     color: '#334155',
-                                                    padding: '0.2rem 0.5rem',
+                                                    padding: '0.181rem 0.453rem',
                                                     borderRadius: '6px',
-                                                    fontSize: '0.78rem',
+                                                    fontSize: '0.707rem',
                                                     fontWeight: 600
                                                 }}>
                                                     {p.name} ({p.quantity})
                                                 </span>
                                             ))}
                                             {record.products?.length > 2 && (
-                                                <span style={{
+                                                <span className="badge-nowrap" style={{
                                                     background: '#E2E8F0',
                                                     color: '#475569',
-                                                    padding: '0.2rem 0.5rem',
+                                                    padding: '0.181rem 0.453rem',
                                                     borderRadius: '6px',
-                                                    fontSize: '0.78rem',
+                                                    fontSize: '0.707rem',
                                                     fontWeight: 700
                                                 }}>
                                                     +{record.products.length - 2} more
@@ -301,32 +301,33 @@ const BillingRecords = () => {
                                     </td>
 
                                     {/* Total Quantity */}
-                                    <td style={{ padding: '1rem', textAlign: 'center', fontWeight: 700, color: '#0F172A' }}>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', fontWeight: 700, color: '#0F172A', whiteSpace: 'nowrap' }}>
                                         {record.totalQuantity}
                                     </td>
 
                                     {/* Grand Total */}
-                                    <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 900, color: '#1B6B3A', fontSize: '0.95rem' }}>
+                                    <td className="cell-num" style={{ padding: '0.625rem 0.78rem', textAlign: 'right', fontWeight: 900, color: '#1B6B3A', fontSize: '0.84rem', whiteSpace: 'nowrap' }}>
                                         ₹{parseFloat(record.grandTotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </td>
 
                                     {/* Actions */}
-                                    <td style={{ padding: '1rem', textAlign: 'center' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+                                    <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                                        <div style={{ display: 'inline-flex', justifyContent: 'center', gap: '0.453rem' }}>
                                             <button
                                                 onClick={() => setSelectedRecord(record)}
                                                 style={{
                                                     background: '#F0FDF4',
                                                     color: '#1B6B3A',
                                                     border: 'none',
-                                                    padding: '0.4rem 0.65rem',
+                                                    padding: '0.363rem 0.589rem',
                                                     borderRadius: '8px',
                                                     cursor: 'pointer',
                                                     fontWeight: 700,
-                                                    fontSize: '0.8rem',
-                                                    display: 'flex',
+                                                    fontSize: '0.725rem',
+                                                    display: 'inline-flex',
                                                     alignItems: 'center',
-                                                    gap: '0.3rem'
+                                                    gap: '0.272rem',
+                                                    whiteSpace: 'nowrap'
                                                 }}
                                                 title="View Bill Details"
                                             >
@@ -339,7 +340,7 @@ const BillingRecords = () => {
                                                     background: '#FEE2E2',
                                                     color: '#EF4444',
                                                     border: 'none',
-                                                    padding: '0.4rem 0.65rem',
+                                                    padding: '0.363rem 0.589rem',
                                                     borderRadius: '8px',
                                                     cursor: 'pointer',
                                                     transition: 'all 0.2s ease'
@@ -355,10 +356,10 @@ const BillingRecords = () => {
 
                             {filteredRecords.length === 0 && (
                                 <tr>
-                                    <td colSpan="7" style={{ padding: '3.5rem', textAlign: 'center', color: '#94A3B8' }}>
-                                        <Receipt size={36} style={{ color: '#CBD5E1', marginBottom: '0.5rem' }} />
+                                    <td colSpan="7" style={{ padding: '3.172rem', textAlign: 'center', color: '#94A3B8' }}>
+                                        <Receipt size={36} style={{ color: '#CBD5E1', marginBottom: '0.453rem' }} />
                                         <h4 style={{ margin: 0, fontWeight: 700, color: '#64748B' }}>No Billing Records Found</h4>
-                                        <p style={{ margin: '0.25rem 0 1rem 0', fontSize: '0.85rem' }}>
+                                        <p style={{ margin: '0.227rem 0 0.906rem 0', fontSize: '0.77rem' }}>
                                             {searchTerm ? 'No results matched your search query.' : 'You have not submitted any bills yet.'}
                                         </p>
                                         {!searchTerm && (
@@ -368,10 +369,10 @@ const BillingRecords = () => {
                                                     background: '#1B6B3A',
                                                     color: '#FFFFFF',
                                                     border: 'none',
-                                                    padding: '0.6rem 1.2rem',
+                                                    padding: '0.544rem 1.087rem',
                                                     borderRadius: '10px',
                                                     fontWeight: 700,
-                                                    fontSize: '0.85rem',
+                                                    fontSize: '0.77rem',
                                                     cursor: 'pointer'
                                                 }}
                                             >
@@ -400,26 +401,26 @@ const BillingRecords = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     zIndex: 1000,
-                    padding: '1rem'
+                    padding: '0.906rem'
                 }}>
                     <div style={{
                         background: '#FFFFFF',
-                        borderRadius: '24px',
+                        borderRadius: '16px',
                         maxWidth: '650px',
                         width: '100%',
-                        padding: '2rem',
+                        padding: '1.812rem',
                         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
                         position: 'relative',
                         maxHeight: '90vh',
                         overflowY: 'auto'
                     }}>
                         {/* Modal Header */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
                             <div>
-                                <span style={{ background: '#F0FDF4', color: '#1B6B3A', padding: '0.25rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 800 }}>
+                                <span style={{ background: '#F0FDF4', color: '#1B6B3A', padding: '0.227rem 0.544rem', borderRadius: '6px', fontSize: '0.68rem', fontWeight: 800 }}>
                                     #{selectedRecord.id}
                                 </span>
-                                <h2 style={{ margin: '0.4rem 0 0 0', fontSize: '1.4rem', fontWeight: 800, color: '#0F172A' }}>
+                                <h2 style={{ margin: '0.363rem 0 0 0', fontSize: '1.269rem', fontWeight: 800, color: '#0F172A' }}>
                                     Bill Details
                                 </h2>
                             </div>
@@ -432,38 +433,38 @@ const BillingRecords = () => {
                         </div>
 
                         {/* Customer & Timestamp Info */}
-                        <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '1rem 1.25rem', marginBottom: '1.5rem', border: '1px solid #E2E8F0' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                <span style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: 700 }}>Customer Name</span>
-                                <strong style={{ color: '#0F172A', fontSize: '0.95rem' }}>{selectedRecord.customerName}</strong>
+                        <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '0.906rem 1.133rem', marginBottom: '1.359rem', border: '1px solid #E2E8F0' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.453rem' }}>
+                                <span style={{ color: '#64748B', fontSize: '0.725rem', fontWeight: 700 }}>Customer Name</span>
+                                <strong style={{ color: '#0F172A', fontSize: '0.861rem' }}>{selectedRecord.customerName}</strong>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                <span style={{ color: '#64748B', fontSize: '0.8rem', fontWeight: 700 }}>Date & Time</span>
-                                <span style={{ color: '#475569', fontSize: '0.85rem' }}>{selectedRecord.formattedDate}</span>
+                                <span style={{ color: '#64748B', fontSize: '0.725rem', fontWeight: 700 }}>Date & Time</span>
+                                <span style={{ color: '#475569', fontSize: '0.77rem' }}>{selectedRecord.formattedDate}</span>
                             </div>
                         </div>
 
                         {/* Items Table */}
-                        <h4 style={{ margin: '0 0 0.75rem 0', fontSize: '0.95rem', fontWeight: 800, color: '#1E293B' }}>
+                        <h4 style={{ margin: '0 0 0.68rem 0', fontSize: '0.861rem', fontWeight: 800, color: '#1E293B' }}>
                             Products List
                         </h4>
-                        <div style={{ border: '1px solid #E2E8F0', borderRadius: '12px', overflow: 'hidden', marginBottom: '1.5rem' }}>
-                            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+                        <div className="cliks-table-scroll" style={{ border: '1px solid #E2E8F0', borderRadius: '12px', marginBottom: '1.359rem' }}>
+                            <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.77rem' }}>
                                 <thead>
                                     <tr style={{ background: '#F8FAFC', color: '#64748B', fontWeight: 800, borderBottom: '1px solid #E2E8F0' }}>
-                                        <th style={{ padding: '0.6rem 0.85rem' }}>Product</th>
-                                        <th style={{ padding: '0.6rem 0.85rem' }}>Selling Rate</th>
-                                        <th style={{ padding: '0.6rem 0.85rem', textAlign: 'center' }}>Qty</th>
-                                        <th style={{ padding: '0.6rem 0.85rem', textAlign: 'right' }}>Total</th>
+                                        <th style={{ padding: '0.544rem 0.77rem', whiteSpace: 'nowrap' }}>Product</th>
+                                        <th style={{ padding: '0.544rem 0.77rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Selling Rate</th>
+                                        <th style={{ padding: '0.544rem 0.77rem', textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
+                                        <th style={{ padding: '0.544rem 0.77rem', textAlign: 'right', whiteSpace: 'nowrap' }}>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {selectedRecord.products?.map((item, idx) => (
                                         <tr key={idx} style={{ borderBottom: '1px solid #F1F5F9' }}>
-                                            <td style={{ padding: '0.65rem 0.85rem', fontWeight: 700, color: '#0F172A' }}>{item.name}</td>
-                                            <td style={{ padding: '0.65rem 0.85rem', color: '#475569' }}>₹{parseFloat(item.rate).toFixed(2)}</td>
-                                            <td style={{ padding: '0.65rem 0.85rem', textAlign: 'center', fontWeight: 700 }}>{item.quantity}</td>
-                                            <td style={{ padding: '0.65rem 0.85rem', textAlign: 'right', fontWeight: 800, color: '#1B6B3A' }}>
+                                            <td style={{ padding: '0.544rem 0.77rem', fontWeight: 700, color: '#0F172A' }}>{item.name}</td>
+                                            <td className="cell-num" style={{ padding: '0.544rem 0.77rem', color: '#475569', textAlign: 'right', whiteSpace: 'nowrap' }}>₹{parseFloat(item.rate).toFixed(2)}</td>
+                                            <td className="cell-nowrap" style={{ padding: '0.544rem 0.77rem', textAlign: 'center', fontWeight: 700, whiteSpace: 'nowrap' }}>{item.quantity}</td>
+                                            <td className="cell-num" style={{ padding: '0.544rem 0.77rem', textAlign: 'right', fontWeight: 800, color: '#1B6B3A', whiteSpace: 'nowrap' }}>
                                                 ₹{parseFloat(item.total).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                             </td>
                                         </tr>
@@ -473,14 +474,14 @@ const BillingRecords = () => {
                         </div>
 
                         {/* Modal Footer Totals */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '2px solid #F1F5F9', paddingTop: '1rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '2px solid #F1F5F9', paddingTop: '0.906rem' }}>
                             <div>
-                                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', fontWeight: 700 }}>Total Items</span>
-                                <strong style={{ fontSize: '1.1rem', color: '#0F172A' }}>{selectedRecord.totalQuantity}</strong>
+                                <span style={{ display: 'block', fontSize: '0.68rem', color: '#64748B', fontWeight: 700 }}>Total Items</span>
+                                <strong style={{ fontSize: '0.997rem', color: '#0F172A' }}>{selectedRecord.totalQuantity}</strong>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                                <span style={{ display: 'block', fontSize: '0.75rem', color: '#64748B', fontWeight: 700 }}>Grand Total</span>
-                                <strong style={{ fontSize: '1.4rem', color: '#1B6B3A', fontWeight: 900 }}>
+                                <span style={{ display: 'block', fontSize: '0.68rem', color: '#64748B', fontWeight: 700 }}>Grand Total</span>
+                                <strong style={{ fontSize: '1.269rem', color: '#1B6B3A', fontWeight: 900 }}>
                                     ₹{parseFloat(selectedRecord.grandTotal || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                 </strong>
                             </div>

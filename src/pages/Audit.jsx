@@ -112,8 +112,8 @@ const AuditListView = ({ type }) => (
             </div>
         </div>
 
-        <div className="audit-table-card">
-            <table className="audit-table">
+        <div className="audit-table-card cliks-table-scroll">
+            <table className="audit-table cliks-table">
                 <thead className="audit-thead">
                     <tr>
                         <th className="audit-th">Audit Name</th>
@@ -126,21 +126,23 @@ const AuditListView = ({ type }) => (
                 <tbody>
                     {[1, 2, 3, 4].map(i => (
                         <tr key={i} className="audit-tr">
-                            <td className="audit-td audit-td-name">
-                                <div className="audit-file-icon">
-                                    <FileText size={16} />
-                                </div>
-                                Sample Audit Q{i}
-                            </td>
-                            <td className="audit-td audit-td-date">Oct {20 + i}, 2026</td>
                             <td className="audit-td">
-                                <span className={`audit-status-badge ${i === 1 ? 'audit-status-pending' : 'audit-status-completed'}`}>
+                                <div className="audit-td-name">
+                                    <div className="audit-file-icon">
+                                        <FileText size={16} />
+                                    </div>
+                                    <span>Sample Audit Q{i}</span>
+                                </div>
+                            </td>
+                            <td className="audit-td audit-td-date cell-nowrap">Oct {20 + i}, 2026</td>
+                            <td className="audit-td cell-nowrap">
+                                <span className={`audit-status-badge badge-nowrap ${i === 1 ? 'audit-status-pending' : 'audit-status-completed'}`}>
                                     {i === 1 ? 'In Progress' : 'Completed'}
                                 </span>
                             </td>
-                            <td className="audit-td audit-td-findings">{i * 2 + 1} Issues Found</td>
-                            <td className="audit-td right">
-                                <button className="audit-action-link">View Report</button>
+                            <td className="audit-td audit-td-findings cell-nowrap">{i * 2 + 1} Issues Found</td>
+                            <td className="audit-td right cell-actions">
+                                <button className="audit-action-link" style={{ whiteSpace: 'nowrap' }}>View Report</button>
                             </td>
                         </tr>
                     ))}

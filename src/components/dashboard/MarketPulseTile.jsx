@@ -35,13 +35,13 @@ const MarketPulseTile = ({ totalValue, totalInvested, data: externalData }) => {
     const currentData = displayData[period] || displayData['1W'];
 
     return (
-        <div style={{ padding: '1.5rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
+        <div style={{ padding: '1.359rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
                 <div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>MARKET PULSE</div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
-                        <div style={{ fontSize: '2rem', fontWeight: 800, color: '#0F172A' }}>{currentData.value}</div>
-                        <div style={{ fontSize: '1rem', fontWeight: 600, color: isPositive ? '#10B981' : '#EF4444' }}>{currentData.change}</div>
+                    <div style={{ fontSize: '0.68rem', fontWeight: 700, color: '#64748B', letterSpacing: '0.05em', marginBottom: '0.227rem' }}>MARKET PULSE</div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.68rem' }}>
+                        <div style={{ fontSize: '1.812rem', fontWeight: 800, color: '#0F172A' }}>{currentData.value}</div>
+                        <div style={{ fontSize: '0.906rem', fontWeight: 600, color: isPositive ? '#10B981' : '#EF4444' }}>{currentData.change}</div>
                     </div>
                 </div>
                 <div style={{ display: 'flex', background: '#F0FDF4', borderRadius: '8px', padding: '4px' }}>
@@ -55,7 +55,7 @@ const MarketPulseTile = ({ totalValue, totalInvested, data: externalData }) => {
                                 color: period === p ? 'white' : '#64748B',
                                 padding: '4px 12px',
                                 borderRadius: '6px',
-                                fontSize: '0.75rem',
+                                fontSize: '0.68rem',
                                 fontWeight: 600,
                                 cursor: 'pointer',
                                 transition: 'all 0.2s',
@@ -92,7 +92,7 @@ const MarketPulseTile = ({ totalValue, totalInvested, data: externalData }) => {
                 </svg>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', color: '#94A3B8', fontSize: '0.75rem', fontWeight: 600 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.906rem', color: '#94A3B8', fontSize: '0.68rem', fontWeight: 600 }}>
                 {currentData.labels.map((label, index) => (
                     <span key={index}>{label}</span>
                 ))}

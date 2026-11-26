@@ -27,6 +27,12 @@ const MainLayout = ({ children }) => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    useEffect(() => {
+        const handleEnsureSidebarOpen = () => setIsSidebarOpen(true);
+        window.addEventListener('cliks:ensure-sidebar-open', handleEnsureSidebarOpen);
+        return () => window.removeEventListener('cliks:ensure-sidebar-open', handleEnsureSidebarOpen);
+    }, []);
     const [isAuditOpen,   setIsAuditOpen]   = useState(false);
     const [isReferralOpen, setIsReferralOpen] = useState(false);
     const [isToolbarOpen, setIsToolbarOpen] = useState(false);

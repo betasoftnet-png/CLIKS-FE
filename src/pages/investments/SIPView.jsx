@@ -96,46 +96,46 @@ const SIPView = () => {
             </div>
 
             <style>{`
-                .inv-view-header { margin-bottom: 1.5rem; }
-                .inv-view-title { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .inv-view-subtitle { color: var(--text-muted); font-size: 0.9rem; }
-                .inv-section-title { font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin-bottom: 1rem; }
+                .inv-view-header { margin-bottom: 1.359rem; }
+                .inv-view-title { font-size: 1.359rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .inv-view-subtitle { color: var(--text-muted); font-size: 0.816rem; }
+                .inv-section-title { font-size: 1.042rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.906rem; }
 
                 .sip-summary-grid {
-                    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2rem;
+                    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.133rem; margin-bottom: 1.812rem;
                 }
                 .sip-summary-card {
-                    background: white; border-radius: 16px; padding: 1.25rem 1.5rem;
+                    background: white; border-radius: 16px; padding: 1.133rem 1.359rem;
                     border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .sip-summary-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
                 .sip-summary-top { display: flex; justify-content: space-between; align-items: flex-start; }
-                .sip-summary-label { color: var(--text-muted); font-size: 0.8rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .sip-summary-value { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
+                .sip-summary-label { color: var(--text-muted); font-size: 0.725rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .sip-summary-value { font-size: 1.269rem; font-weight: 700; color: var(--text-main); }
                 .sip-summary-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
-                .sip-plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+                .sip-plans-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.133rem; }
                 .sip-plan-card {
-                    background: white; border-radius: 16px; padding: 1.5rem;
+                    background: white; border-radius: 16px; padding: 1.359rem;
                     border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .sip-plan-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
                 .sip-plan-icon-wrap {
                     width: 48px; height: 48px; border-radius: 14px; background: #F0FDF4; color: var(--primary);
-                    display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+                    display: flex; align-items: center; justify-content: center; margin-bottom: 0.906rem;
                 }
-                .sip-plan-name { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-bottom: 1rem; }
-                .sip-plan-details { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.25rem; }
+                .sip-plan-name { font-size: 0.997rem; font-weight: 600; color: var(--text-main); margin-bottom: 0.906rem; }
+                .sip-plan-details { display: flex; flex-direction: column; gap: 0.68rem; margin-bottom: 1.133rem; }
                 .sip-plan-row { display: flex; justify-content: space-between; align-items: center; }
-                .sip-plan-label { color: var(--text-muted); font-size: 0.85rem; }
-                .sip-plan-val { font-weight: 600; font-size: 0.85rem; color: var(--text-main); }
-                .sip-plan-risk { padding: 0.15rem 0.6rem; border-radius: 99px; font-size: 0.75rem; font-weight: 600; }
+                .sip-plan-label { color: var(--text-muted); font-size: 0.77rem; }
+                .sip-plan-val { font-weight: 600; font-size: 0.77rem; color: var(--text-main); }
+                .sip-plan-risk { padding: 0.136rem 0.544rem; border-radius: 99px; font-size: 0.68rem; font-weight: 600; }
                 .sip-explore-btn {
-                    width: 100%; padding: 0.65rem; background: var(--primary); color: white;
-                    border: none; border-radius: 10px; font-weight: 600; font-size: 0.85rem;
-                    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+                    width: 100%; padding: 0.589rem; background: var(--primary); color: white;
+                    border: none; border-radius: 10px; font-weight: 600; font-size: 0.77rem;
+                    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.363rem;
                     transition: background 0.2s;
                 }
                 .sip-explore-btn:hover { background: var(--primary-hover); }

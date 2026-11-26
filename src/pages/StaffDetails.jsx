@@ -345,11 +345,11 @@ export const StaffDetails = () => {
     }, [notification]);
 
     return (
-        <div className="content-wrapper" style={{ padding: '1.75rem', maxWidth: '1440px', margin: '0 auto' }}>
+        <div className="content-wrapper" style={{ padding: '1.586rem', maxWidth: '1440px', margin: '0 auto' }}>
             {/* Page Header */}
-            <div style={{ marginBottom: '1.75rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+            <div style={{ marginBottom: '1.586rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.906rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.77rem' }}>
                         <div style={{
                             width: '46px',
                             height: '46px',
@@ -364,14 +364,14 @@ export const StaffDetails = () => {
                             <UserCheck size={26} />
                         </div>
                         <div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                <h1 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
+                                <h1 style={{ fontSize: '1.586rem', fontWeight: '800', color: '#0F172A', margin: 0, letterSpacing: '-0.02em' }}>
                                     Staff Details
                                 </h1>
                                 <span style={{
-                                    fontSize: '0.72rem',
+                                    fontSize: '0.652rem',
                                     fontWeight: '700',
-                                    padding: '0.2rem 0.65rem',
+                                    padding: '0.181rem 0.589rem',
                                     borderRadius: '50px',
                                     background: invitationStatus === 'accepted' ? '#ECFDF5' : '#FEF3C7',
                                     color: invitationStatus === 'accepted' ? '#047857' : '#B45309',
@@ -380,7 +380,7 @@ export const StaffDetails = () => {
                                     {invitationStatus === 'accepted' ? 'INTEGRATION ACTIVE' : 'PENDING INVITATION'}
                                 </span>
                             </div>
-                            <p style={{ color: '#64748B', margin: '0.2rem 0 0 0', fontSize: '0.9rem' }}>
+                            <p style={{ color: '#64748B', margin: '0.181rem 0 0 0', fontSize: '0.816rem' }}>
                                 Workforce integrations, organization linkage & salary structure.
                             </p>
                         </div>
@@ -390,12 +390,12 @@ export const StaffDetails = () => {
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem',
-                        padding: '0.5rem 0.85rem',
+                        gap: '0.453rem',
+                        padding: '0.453rem 0.77rem',
                         borderRadius: '12px',
                         background: '#FFFFFF',
                         border: '1px solid #E2E8F0',
-                        fontSize: '0.82rem',
+                        fontSize: '0.743rem',
                         color: '#475569'
                     }}>
                         <Mail size={15} style={{ color: '#2563EB' }} />
@@ -407,20 +407,20 @@ export const StaffDetails = () => {
             {/* Notification Toast */}
             {notification && (
                 <div style={{
-                    marginBottom: '1.5rem',
-                    padding: '0.85rem 1.25rem',
+                    marginBottom: '1.359rem',
+                    padding: '0.77rem 1.133rem',
                     borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    gap: '0.75rem',
+                    gap: '0.68rem',
                     background: notification.type === 'success' ? '#F0FDF4' : '#FEF2F2',
                     border: `1px solid ${notification.type === 'success' ? '#BBF7D0' : '#FECACA'}`,
                     color: notification.type === 'success' ? '#166534' : '#991B1B'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
                         {notification.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
-                        <span style={{ fontSize: '0.875rem', fontWeight: '600' }}>{notification.message}</span>
+                        <span style={{ fontSize: '0.793rem', fontWeight: '600' }}>{notification.message}</span>
                     </div>
                     <button
                         onClick={() => setNotification(null)}
@@ -448,14 +448,14 @@ export const StaffDetails = () => {
                 }}>
                     {/* Card Header */}
                     <div style={{
-                        padding: '1.25rem 1.5rem',
+                        padding: '1.133rem 1.359rem',
                         borderBottom: '1px solid #F1F5F9',
                         background: '#FAFBFD',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
                             <div style={{
                                 width: '34px',
                                 height: '34px',
@@ -469,19 +469,19 @@ export const StaffDetails = () => {
                                 <Building2 size={18} />
                             </div>
                             <div>
-                                <h2 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
+                                <h2 style={{ fontSize: '0.952rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
                                     Active Integrations
                                 </h2>
-                                <p style={{ fontSize: '0.75rem', color: '#64748B', margin: '0.1rem 0 0 0' }}>
+                                <p style={{ fontSize: '0.68rem', color: '#64748B', margin: '0.091rem 0 0 0' }}>
                                     Incoming organization & HR linkages
                                 </p>
                             </div>
                         </div>
 
                         <span style={{
-                            fontSize: '0.72rem',
+                            fontSize: '0.652rem',
                             fontWeight: '700',
-                            padding: '0.2rem 0.55rem',
+                            padding: '0.181rem 0.498rem',
                             borderRadius: '50px',
                             background: '#F1F5F9',
                             color: '#475569'
@@ -491,20 +491,20 @@ export const StaffDetails = () => {
                     </div>
 
                     {/* Card Body */}
-                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         
                         {/* Invitation Item Box */}
                         <div style={{
                             borderRadius: '16px',
                             border: `1.5px solid ${invitationStatus === 'accepted' ? '#A7F3D0' : invitationStatus === 'rejected' ? '#FECACA' : '#E2E8F0'}`,
                             background: invitationStatus === 'accepted' ? '#F0FDF4' : invitationStatus === 'rejected' ? '#FEF2F2' : '#FFFFFF',
-                            padding: '1.25rem',
+                            padding: '1.133rem',
                             boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
                             transition: 'all 0.25s ease'
                         }}>
                             {/* Inviter Header */}
-                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', marginBottom: '0.85rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.68rem', marginBottom: '0.77rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                     <div style={{
                                         width: '44px',
                                         height: '44px',
@@ -515,20 +515,20 @@ export const StaffDetails = () => {
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                         fontWeight: '800',
-                                        fontSize: '1rem',
+                                        fontSize: '0.906rem',
                                         boxShadow: '0 2px 6px rgba(27, 107, 58, 0.25)'
                                     }}>
                                         SH
                                     </div>
                                     <div>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
-                                            <span style={{ fontSize: '0.95rem', fontWeight: '800', color: '#0F172A' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem', flexWrap: 'wrap' }}>
+                                            <span style={{ fontSize: '0.861rem', fontWeight: '800', color: '#0F172A' }}>
                                                 {currentStaff?.inviterName || 'santhoshhhhhh(HR)'}
                                             </span>
                                             <span style={{
-                                                fontSize: '0.68rem',
+                                                fontSize: '0.616rem',
                                                 fontWeight: '700',
-                                                padding: '0.15rem 0.5rem',
+                                                padding: '0.136rem 0.453rem',
                                                 borderRadius: '4px',
                                                 background: '#DBEAFE',
                                                 color: '#1E40AF'
@@ -536,7 +536,7 @@ export const StaffDetails = () => {
                                                 Cliks Business
                                             </span>
                                         </div>
-                                        <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '0.15rem' }}>
+                                        <div style={{ fontSize: '0.68rem', color: '#64748B', marginTop: '0.136rem' }}>
                                             Organization: <strong>{businessName || 'Welton Consignor'}</strong>
                                         </div>
                                     </div>
@@ -548,12 +548,12 @@ export const StaffDetails = () => {
                                         <span style={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '0.35rem',
-                                            padding: '0.25rem 0.65rem',
+                                            gap: '0.317rem',
+                                            padding: '0.227rem 0.589rem',
                                             borderRadius: '50px',
                                             background: '#FEF3C7',
                                             color: '#B45309',
-                                            fontSize: '0.72rem',
+                                            fontSize: '0.652rem',
                                             fontWeight: '700'
                                         }}>
                                             <Clock size={12} />
@@ -564,12 +564,12 @@ export const StaffDetails = () => {
                                         <span style={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '0.35rem',
-                                            padding: '0.25rem 0.65rem',
+                                            gap: '0.317rem',
+                                            padding: '0.227rem 0.589rem',
                                             borderRadius: '50px',
                                             background: '#DCFCE7',
                                             color: '#15803D',
-                                            fontSize: '0.72rem',
+                                            fontSize: '0.652rem',
                                             fontWeight: '700'
                                         }}>
                                             <Check size={12} />
@@ -580,12 +580,12 @@ export const StaffDetails = () => {
                                         <span style={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '0.35rem',
-                                            padding: '0.25rem 0.65rem',
+                                            gap: '0.317rem',
+                                            padding: '0.227rem 0.589rem',
                                             borderRadius: '50px',
                                             background: '#FEE2E2',
                                             color: '#B91C1C',
-                                            fontSize: '0.72rem',
+                                            fontSize: '0.652rem',
                                             fontWeight: '700'
                                         }}>
                                             <X size={12} />
@@ -599,22 +599,22 @@ export const StaffDetails = () => {
                             <div style={{
                                 background: invitationStatus === 'accepted' ? '#FFFFFF' : '#F8FAFC',
                                 borderRadius: '12px',
-                                padding: '0.85rem',
-                                marginBottom: '1rem',
+                                padding: '0.77rem',
+                                marginBottom: '0.906rem',
                                 border: '1px solid #E2E8F0'
                             }}>
-                                <div style={{ fontSize: '0.82rem', color: '#334155', lineHeight: '1.45' }}>
+                                <div style={{ fontSize: '0.743rem', color: '#334155', lineHeight: '1.45' }}>
                                     You have been added to the organization payroll & HR roster for target email:
                                 </div>
                                 <div style={{
                                     display: 'inline-block',
-                                    fontSize: '0.82rem',
+                                    fontSize: '0.743rem',
                                     fontWeight: '700',
                                     color: '#2563EB',
                                     background: '#EFF6FF',
-                                    padding: '0.2rem 0.55rem',
+                                    padding: '0.181rem 0.498rem',
                                     borderRadius: '6px',
-                                    marginTop: '0.4rem'
+                                    marginTop: '0.363rem'
                                 }}>
                                     {loggedInEmail}
                                 </div>
@@ -622,20 +622,20 @@ export const StaffDetails = () => {
                                 <div style={{
                                     display: 'grid',
                                     gridTemplateColumns: '1fr 1fr',
-                                    gap: '0.65rem',
-                                    marginTop: '0.85rem',
-                                    paddingTop: '0.75rem',
+                                    gap: '0.589rem',
+                                    marginTop: '0.77rem',
+                                    paddingTop: '0.68rem',
                                     borderTop: '1px dashed #E2E8F0'
                                 }}>
                                     <div>
-                                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Position</div>
-                                        <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
+                                        <div style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Position</div>
+                                        <div style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', marginTop: '0.091rem' }}>
                                             {currentStaff?.designation || 'Sales Executive'}
                                         </div>
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Department</div>
-                                        <div style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
+                                        <div style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase' }}>Department</div>
+                                        <div style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', marginTop: '0.091rem' }}>
                                             {currentStaff?.department || 'Operations'}
                                         </div>
                                     </div>
@@ -644,7 +644,7 @@ export const StaffDetails = () => {
 
                             {/* Actions Buttons (Accept / Reject) */}
                             {invitationStatus === 'pending' && (
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <button
                                         onClick={() => updateStatus('accepted')}
                                         disabled={isActionLoading}
@@ -652,14 +652,14 @@ export const StaffDetails = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            padding: '0.7rem 1rem',
+                                            gap: '0.453rem',
+                                            padding: '0.634rem 0.906rem',
                                             background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
                                             color: '#FFFFFF',
                                             border: 'none',
                                             borderRadius: '10px',
                                             fontWeight: '700',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             boxShadow: '0 3px 10px rgba(27, 107, 58, 0.25)',
                                             transition: 'all 0.2s ease'
@@ -676,14 +676,14 @@ export const StaffDetails = () => {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'center',
-                                            gap: '0.5rem',
-                                            padding: '0.7rem 1rem',
+                                            gap: '0.453rem',
+                                            padding: '0.634rem 0.906rem',
                                             background: '#FFFFFF',
                                             color: '#DC2626',
                                             border: '1.5px solid #FCA5A5',
                                             borderRadius: '10px',
                                             fontWeight: '700',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             transition: 'all 0.2s ease'
                                         }}
@@ -696,8 +696,8 @@ export const StaffDetails = () => {
 
                             {/* Accepted View */}
                             {invitationStatus === 'accepted' && (
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#15803D', fontSize: '0.82rem', fontWeight: '700' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.68rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#15803D', fontSize: '0.743rem', fontWeight: '700' }}>
                                         <CheckCircle2 size={16} />
                                         <span>Integration active & verified</span>
                                     </div>
@@ -706,11 +706,11 @@ export const StaffDetails = () => {
                                         style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '0.4rem',
+                                            gap: '0.363rem',
                                             background: 'none',
                                             border: 'none',
                                             color: '#64748B',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '600',
                                             cursor: 'pointer',
                                             textDecoration: 'underline'
@@ -724,8 +724,8 @@ export const StaffDetails = () => {
 
                             {/* Rejected View */}
                             {invitationStatus === 'rejected' && (
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#B91C1C', fontSize: '0.82rem', fontWeight: '600' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.68rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#B91C1C', fontSize: '0.743rem', fontWeight: '600' }}>
                                         <XCircle size={16} />
                                         <span>Invitation declined</span>
                                     </div>
@@ -734,13 +734,13 @@ export const StaffDetails = () => {
                                         style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '0.4rem',
+                                            gap: '0.363rem',
                                             background: '#FFFFFF',
                                             border: '1px solid #CBD5E1',
                                             borderRadius: '8px',
-                                            padding: '0.4rem 0.75rem',
+                                            padding: '0.363rem 0.68rem',
                                             color: '#1E293B',
-                                            fontSize: '0.75rem',
+                                            fontSize: '0.68rem',
                                             fontWeight: '700',
                                             cursor: 'pointer'
                                         }}
@@ -756,18 +756,18 @@ export const StaffDetails = () => {
                         <div style={{
                             background: '#F8FAFC',
                             borderRadius: '14px',
-                            padding: '1rem',
+                            padding: '0.906rem',
                             border: '1px solid #E2E8F0',
                             display: 'flex',
-                            gap: '0.75rem',
+                            gap: '0.68rem',
                             alignItems: 'flex-start'
                         }}>
                             <ShieldCheck size={20} style={{ color: '#1B6B3A', flexShrink: 0, marginTop: '2px' }} />
                             <div>
-                                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#0F172A' }}>
+                                <div style={{ fontSize: '0.725rem', fontWeight: '700', color: '#0F172A' }}>
                                     Direct HR Sync Protection
                                 </div>
-                                <div style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '0.2rem', lineHeight: '1.4' }}>
+                                <div style={{ fontSize: '0.68rem', color: '#64748B', marginTop: '0.181rem', lineHeight: '1.4' }}>
                                     Your salary slips, tax deductions, and EPF records are securely synced directly from Cliks Business. Sensitive bank records remain read-only for security.
                                 </div>
                             </div>
@@ -790,14 +790,14 @@ export const StaffDetails = () => {
                 }}>
                     {/* Card Header */}
                     <div style={{
-                        padding: '1.25rem 1.5rem',
+                        padding: '1.133rem 1.359rem',
                         borderBottom: '1px solid #F1F5F9',
                         background: '#FAFBFD',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
                             <div style={{
                                 width: '34px',
                                 height: '34px',
@@ -811,10 +811,10 @@ export const StaffDetails = () => {
                                 {invitationStatus === 'accepted' ? <Unlock size={18} /> : <Lock size={18} />}
                             </div>
                             <div>
-                                <h2 style={{ fontSize: '1.05rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
+                                <h2 style={{ fontSize: '0.952rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
                                     YOUR SALARY History & Details
                                 </h2>
-                                <p style={{ fontSize: '0.75rem', color: '#64748B', margin: '0.1rem 0 0 0' }}>
+                                <p style={{ fontSize: '0.68rem', color: '#64748B', margin: '0.091rem 0 0 0' }}>
                                     Official payroll structure, compensations & tax documents
                                 </p>
                             </div>
@@ -824,10 +824,10 @@ export const StaffDetails = () => {
                             <span style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
-                                gap: '0.35rem',
-                                fontSize: '0.72rem',
+                                gap: '0.317rem',
+                                fontSize: '0.652rem',
                                 fontWeight: '700',
-                                padding: '0.2rem 0.65rem',
+                                padding: '0.181rem 0.589rem',
                                 borderRadius: '50px',
                                 background: '#ECFDF5',
                                 color: '#059669',
@@ -840,7 +840,7 @@ export const StaffDetails = () => {
                     </div>
 
                     {/* Card Body */}
-                    <div style={{ padding: '1.5rem' }}>
+                    <div style={{ padding: '1.359rem' }}>
                         
                         {/* ─────── STATE A: PENDING / REJECTED (LOCKED PLACEHOLDER) ─────── */}
                         {invitationStatus !== 'accepted' && (
@@ -849,7 +849,7 @@ export const StaffDetails = () => {
                                 flexDirection: 'column',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                padding: '2.5rem 1.5rem',
+                                padding: '2.266rem 1.359rem',
                                 textAlign: 'center'
                             }}>
                                 <div style={{
@@ -861,16 +861,16 @@ export const StaffDetails = () => {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    marginBottom: '1.25rem',
+                                    marginBottom: '1.133rem',
                                     boxShadow: '0 4px 14px rgba(217, 119, 6, 0.15)'
                                 }}>
                                     <Lock size={32} strokeWidth={2.2} />
                                 </div>
 
-                                <h3 style={{ fontSize: '1.2rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
+                                <h3 style={{ fontSize: '1.087rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>
                                     Employment & Salary Details Locked
                                 </h3>
-                                <p style={{ color: '#64748B', fontSize: '0.875rem', maxWidth: '440px', margin: '0.5rem 0 1.5rem 0', lineHeight: '1.5' }}>
+                                <p style={{ color: '#64748B', fontSize: '0.793rem', maxWidth: '440px', margin: '0.453rem 0 1.359rem 0', lineHeight: '1.5' }}>
                                     Your compensation structure, bank disbursement account, PAN, and PF/UAN are protected.
                                     Accept the incoming invitation from <strong style={{ color: '#0F172A' }}>{currentStaff?.inviterName || 'santhoshhhhhh(HR)'}</strong> to unlock and view your records.
                                 </p>
@@ -881,32 +881,32 @@ export const StaffDetails = () => {
                                     maxWidth: '460px',
                                     background: '#F8FAFC',
                                     borderRadius: '16px',
-                                    padding: '1.25rem',
+                                    padding: '1.133rem',
                                     border: '1px solid #E2E8F0',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '0.75rem',
-                                    marginBottom: '1.75rem'
+                                    gap: '0.68rem',
+                                    marginBottom: '1.586rem'
                                 }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>EMPLOYEE NAME</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '600' }}>EMPLOYEE NAME</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>BASIC MONTHLY SALARY</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>₹ ••••••••</span>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '600' }}>BASIC MONTHLY SALARY</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>₹ ••••••••</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>DISBURSEMENT BANK</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '600' }}>DISBURSEMENT BANK</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>PAN & PF INFO</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••</span>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '600' }}>PAN & PF INFO</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••</span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <span style={{ fontSize: '0.8rem', color: '#64748B', fontWeight: '600' }}>ADDRESS & EMERGENCY</span>
-                                        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
+                                        <span style={{ fontSize: '0.725rem', color: '#64748B', fontWeight: '600' }}>ADDRESS & EMERGENCY</span>
+                                        <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#94A3B8', letterSpacing: '2px' }}>••••••••••••</span>
                                     </div>
                                 </div>
 
@@ -915,14 +915,14 @@ export const StaffDetails = () => {
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '0.5rem',
-                                        padding: '0.75rem 1.75rem',
+                                        gap: '0.453rem',
+                                        padding: '0.68rem 1.586rem',
                                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
                                         color: '#FFFFFF',
                                         border: 'none',
                                         borderRadius: '12px',
                                         fontWeight: '700',
-                                        fontSize: '0.88rem',
+                                        fontSize: '0.797rem',
                                         cursor: 'pointer',
                                         boxShadow: '0 3px 12px rgba(27, 107, 58, 0.28)',
                                         transition: 'all 0.2s'
@@ -936,21 +936,21 @@ export const StaffDetails = () => {
 
                         {/* ─────── STATE B: ACCEPTED (FULL SALARY & PROFILE REVEALED) ─────── */}
                         {invitationStatus === 'accepted' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 
                                 {/* 1. Employee Profile Header: Dynamic Name and Employee Code */}
                                 <div style={{
                                     background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
                                     borderRadius: '16px',
-                                    padding: '1.5rem',
+                                    padding: '1.359rem',
                                     color: '#FFFFFF',
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
                                     flexWrap: 'wrap',
-                                    gap: '1rem'
+                                    gap: '0.906rem'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                                         <div style={{
                                             width: '54px',
                                             height: '54px',
@@ -961,42 +961,42 @@ export const StaffDetails = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             fontWeight: '800',
-                                            fontSize: '1.3rem',
+                                            fontSize: '1.178rem',
                                             boxShadow: '0 4px 12px rgba(29, 78, 216, 0.3)'
                                         }}>
                                             {initials}
                                         </div>
                                         <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#FFFFFF', margin: 0 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                                                <h3 style={{ fontSize: '1.178rem', fontWeight: '800', color: '#FFFFFF', margin: 0 }}>
                                                     {fullName}
                                                 </h3>
                                                 <BadgeCheck size={18} style={{ color: '#10B981' }} />
                                             </div>
-                                            <div style={{ fontSize: '0.85rem', color: '#94A3B8', marginTop: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.77rem', color: '#94A3B8', marginTop: '0.181rem' }}>
                                                 {currentStaff?.department || 'Operations'} • <strong style={{ color: '#F1F5F9' }}>{currentStaff?.designation || 'Sales Executive'}</strong>
                                             </div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', marginTop: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', marginTop: '0.181rem' }}>
                                                 Employee Code: <span style={{ color: '#CBD5E1', fontWeight: '600' }}>{employeeCode}</span> • Joining: {currentStaff?.joiningDate || '01 Mar 2026'}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div style={{ textAlign: 'right' }}>
-                                        <div style={{ fontSize: '0.7rem', color: '#94A3B8', textTransform: 'uppercase', fontWeight: '700' }}>
+                                        <div style={{ fontSize: '0.634rem', color: '#94A3B8', textTransform: 'uppercase', fontWeight: '700' }}>
                                             Employment Status
                                         </div>
                                         <div style={{
                                             display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '0.35rem',
+                                            gap: '0.317rem',
                                             background: 'rgba(16, 185, 129, 0.18)',
                                             color: '#34D399',
-                                            padding: '0.3rem 0.75rem',
+                                            padding: '0.272rem 0.68rem',
                                             borderRadius: '50px',
-                                            fontSize: '0.78rem',
+                                            fontSize: '0.707rem',
                                             fontWeight: '700',
-                                            marginTop: '0.25rem'
+                                            marginTop: '0.227rem'
                                         }}>
                                             <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#34D399' }} />
                                             {currentStaff?.employmentType || 'FULL TIME ACTIVE'}
@@ -1009,16 +1009,16 @@ export const StaffDetails = () => {
                                     background: '#F8FAFC',
                                     borderRadius: '16px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.25rem'
+                                    padding: '1.133rem'
                                 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem', flexWrap: 'wrap', gap: '0.453rem' }}>
                                         <div>
-                                            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>
+                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>
                                                 Basic Monthly Salary
                                             </span>
-                                            <div style={{ fontSize: '1.85rem', fontWeight: '900', color: '#1B6B3A', marginTop: '0.1rem' }}>
+                                            <div style={{ fontSize: '1.677rem', fontWeight: '900', color: '#1B6B3A', marginTop: '0.091rem' }}>
                                                 ₹{basicSalary.toLocaleString('en-IN')}
-                                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748B', marginLeft: '0.35rem' }}>
+                                                <span style={{ fontSize: '0.77rem', fontWeight: '600', color: '#64748B', marginLeft: '0.317rem' }}>
                                                     / month
                                                 </span>
                                             </div>
@@ -1027,14 +1027,14 @@ export const StaffDetails = () => {
                                         <div style={{
                                             background: '#ECFDF5',
                                             border: '1px solid #A7F3D0',
-                                            padding: '0.4rem 0.85rem',
+                                            padding: '0.363rem 0.77rem',
                                             borderRadius: '10px',
                                             textAlign: 'right'
                                         }}>
-                                            <div style={{ fontSize: '0.68rem', color: '#047857', fontWeight: '700', textTransform: 'uppercase' }}>
+                                            <div style={{ fontSize: '0.616rem', color: '#047857', fontWeight: '700', textTransform: 'uppercase' }}>
                                                 Annual CTC
                                             </div>
-                                            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#065F46' }}>
+                                            <div style={{ fontSize: '0.997rem', fontWeight: '800', color: '#065F46' }}>
                                                 ₹{annualCTC.toLocaleString('en-IN')}
                                             </div>
                                         </div>
@@ -1044,33 +1044,33 @@ export const StaffDetails = () => {
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                                        gap: '0.75rem',
+                                        gap: '0.68rem',
                                         background: '#FFFFFF',
-                                        padding: '0.85rem',
+                                        padding: '0.77rem',
                                         borderRadius: '12px',
                                         border: '1px solid #E2E8F0'
                                     }}>
                                         <div>
-                                            <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>BASIC PAY (70%)</div>
-                                            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
+                                            <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600' }}>BASIC PAY (70%)</div>
+                                            <div style={{ fontSize: '0.816rem', fontWeight: '700', color: '#0F172A', marginTop: '0.091rem' }}>
                                                 ₹{basicPay.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>HRA (20%)</div>
-                                            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
+                                            <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600' }}>HRA (20%)</div>
+                                            <div style={{ fontSize: '0.816rem', fontWeight: '700', color: '#0F172A', marginTop: '0.091rem' }}>
                                                 ₹{hra.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>SPECIAL ALLOWANCE</div>
-                                            <div style={{ fontSize: '0.9rem', fontWeight: '700', color: '#0F172A', marginTop: '0.1rem' }}>
+                                            <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600' }}>SPECIAL ALLOWANCE</div>
+                                            <div style={{ fontSize: '0.816rem', fontWeight: '700', color: '#0F172A', marginTop: '0.091rem' }}>
                                                 ₹{specialAllowance.toLocaleString('en-IN')}
                                             </div>
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: '0.7rem', color: '#64748B', fontWeight: '600' }}>EST. IN-HAND TAKEHOME</div>
-                                            <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1B6B3A', marginTop: '0.1rem' }}>
+                                            <div style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: '600' }}>EST. IN-HAND TAKEHOME</div>
+                                            <div style={{ fontSize: '0.816rem', fontWeight: '800', color: '#1B6B3A', marginTop: '0.091rem' }}>
                                                 ₹{estInHand.toLocaleString('en-IN')}
                                             </div>
                                         </div>
@@ -1082,11 +1082,11 @@ export const StaffDetails = () => {
                                     background: '#FFFFFF',
                                     borderRadius: '16px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.25rem'
+                                    padding: '1.133rem'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', marginBottom: '0.77rem' }}>
                                         <CreditCard size={17} style={{ color: '#2563EB' }} />
-                                        <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
+                                        <span style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
                                             Bank Disbursement Details
                                         </span>
                                     </div>
@@ -1094,32 +1094,32 @@ export const StaffDetails = () => {
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                                        gap: '1rem'
+                                        gap: '0.906rem'
                                     }}>
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>BANK NAME</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>BANK NAME</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A', marginTop: '0.136rem' }}>
                                                 {currentStaff?.bankName || 'HDFC Bank'}
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>ACCOUNT NUMBER</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>ACCOUNT NUMBER</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A', marginTop: '0.136rem' }}>
                                                 {currentStaff?.accountNumber || '•••• •••• 5678'}
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>IFSC CODE</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>IFSC CODE</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A', marginTop: '0.136rem' }}>
                                                 {currentStaff?.ifsc || 'HDFC0001234'}
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>DISBURSEMENT MODE</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#10B981', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>DISBURSEMENT MODE</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#10B981', marginTop: '0.136rem' }}>
                                                 Auto Direct Credit (NEFT)
                                             </div>
                                         </div>
@@ -1131,11 +1131,11 @@ export const StaffDetails = () => {
                                     background: '#FFFFFF',
                                     borderRadius: '16px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.25rem'
+                                    padding: '1.133rem'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', marginBottom: '0.77rem' }}>
                                         <ShieldCheck size={17} style={{ color: '#1B6B3A' }} />
-                                        <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
+                                        <span style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
                                             PAN, PF & Compliance Records
                                         </span>
                                     </div>
@@ -1143,30 +1143,30 @@ export const StaffDetails = () => {
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                                        gap: '1rem'
+                                        gap: '0.906rem'
                                     }}>
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>PAN NUMBER</div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.15rem' }}>
-                                                <span style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>PAN NUMBER</div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem', marginTop: '0.136rem' }}>
+                                                <span style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A' }}>
                                                     {currentStaff?.pan || 'ABCDE1234F'}
                                                 </span>
-                                                <span style={{ fontSize: '0.65rem', background: '#DCFCE7', color: '#15803D', padding: '0.1rem 0.4rem', borderRadius: '4px', fontWeight: '700' }}>
+                                                <span style={{ fontSize: '0.589rem', background: '#DCFCE7', color: '#15803D', padding: '0.091rem 0.363rem', borderRadius: '4px', fontWeight: '700' }}>
                                                     VERIFIED
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>PF / UAN NUMBER</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>PF / UAN NUMBER</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A', marginTop: '0.136rem' }}>
                                                 {currentStaff?.pfUan || '101234567890'}
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '600' }}>ESI ACCOUNT NUMBER</div>
-                                            <div style={{ fontSize: '0.92rem', fontWeight: '700', color: '#0F172A', marginTop: '0.15rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '600' }}>ESI ACCOUNT NUMBER</div>
+                                            <div style={{ fontSize: '0.834rem', fontWeight: '700', color: '#0F172A', marginTop: '0.136rem' }}>
                                                 {currentStaff?.esiNumber || '31009876540001'}
                                             </div>
                                         </div>
@@ -1178,16 +1178,16 @@ export const StaffDetails = () => {
                                     background: '#FFFFFF',
                                     borderRadius: '16px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.25rem'
+                                    padding: '1.133rem'
                                 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.77rem', flexWrap: 'wrap', gap: '0.453rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                             <MapPin size={17} style={{ color: '#2563EB' }} />
-                                            <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
+                                            <span style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
                                                 Residential Address & Emergency Contacts
                                             </span>
                                         </div>
-                                        <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#1E40AF', background: '#DBEAFE', padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
+                                        <span style={{ fontSize: '0.616rem', fontWeight: '700', color: '#1E40AF', background: '#DBEAFE', padding: '0.136rem 0.453rem', borderRadius: '4px' }}>
                                             HR SUBMITTED RECORD
                                         </span>
                                     </div>
@@ -1195,15 +1195,15 @@ export const StaffDetails = () => {
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                                        gap: '1rem'
+                                        gap: '0.906rem'
                                     }}>
                                         {/* RESIDENTIAL ADDRESS */}
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.181rem' }}>
                                                 RESIDENTIAL ADDRESS
                                             </div>
-                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem' }}>
-                                                <span style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A', lineHeight: '1.4' }}>
+                                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.363rem' }}>
+                                                <span style={{ fontSize: '0.797rem', fontWeight: '600', color: '#0F172A', lineHeight: '1.4' }}>
                                                     {currentStaff?.residentialAddress || 'Plot No. 12, Anna Nagar, Chennai, Tamil Nadu (600040)'}
                                                 </span>
                                             </div>
@@ -1211,11 +1211,11 @@ export const StaffDetails = () => {
 
                                         {/* EMERGENCY PERSON */}
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.181rem' }}>
                                                 EMERGENCY PERSON
                                             </div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                                <span style={{ fontSize: '0.88rem', fontWeight: '700', color: '#0F172A' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem' }}>
+                                                <span style={{ fontSize: '0.797rem', fontWeight: '700', color: '#0F172A' }}>
                                                     {currentStaff?.emergencyPerson || 'Vijay Kumar (Father) - +91 98765 99911'}
                                                 </span>
                                             </div>
@@ -1223,20 +1223,20 @@ export const StaffDetails = () => {
 
                                         {/* PERSONAL INFO */}
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.181rem' }}>
                                                 PERSONAL INFO
                                             </div>
-                                            <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
+                                            <div style={{ fontSize: '0.797rem', fontWeight: '600', color: '#0F172A' }}>
                                                 {currentStaff?.personalInfo || '2026-09-29 (Male) • Blood group: O+'}
                                             </div>
                                         </div>
 
                                         {/* CONTACT INFO */}
                                         <div>
-                                            <div style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+                                            <div style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.181rem' }}>
                                                 CONTACT INFO
                                             </div>
-                                            <div style={{ fontSize: '0.88rem', fontWeight: '600', color: '#0F172A' }}>
+                                            <div style={{ fontSize: '0.797rem', fontWeight: '600', color: '#0F172A' }}>
                                                 {currentStaff?.contactPhone || '+91 98765 43210'} • <span style={{ color: '#2563EB', fontWeight: '700' }}>{loggedInEmail}</span>
                                             </div>
                                         </div>
@@ -1248,21 +1248,21 @@ export const StaffDetails = () => {
                                     background: '#F8FAFC',
                                     borderRadius: '16px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.25rem'
+                                    padding: '1.133rem'
                                 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.68rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                             <FileText size={17} style={{ color: '#2563EB' }} />
-                                            <span style={{ fontSize: '0.82rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
+                                            <span style={{ fontSize: '0.743rem', fontWeight: '700', color: '#0F172A', textTransform: 'uppercase' }}>
                                                 Disbursed Payslips
                                             </span>
                                         </div>
-                                        <span style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                                        <span style={{ fontSize: '0.652rem', color: '#64748B' }}>
                                             Generated by {currentStaff?.inviterName || 'santhoshhhhhh(HR)'}
                                         </span>
                                     </div>
 
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
                                         {[
                                             { month: 'August 2026', date: '31 Aug 2026', amount: `₹${basicSalary.toLocaleString('en-IN')}`, status: 'Disbursed' },
                                             { month: 'July 2026', date: '31 Jul 2026', amount: `₹${basicSalary.toLocaleString('en-IN')}`, status: 'Disbursed' }
@@ -1272,15 +1272,15 @@ export const StaffDetails = () => {
                                                 alignItems: 'center',
                                                 justifyContent: 'space-between',
                                                 background: '#FFFFFF',
-                                                padding: '0.75rem 1rem',
+                                                padding: '0.68rem 0.906rem',
                                                 borderRadius: '10px',
                                                 border: '1px solid #E2E8F0'
                                             }}>
                                                 <div>
-                                                    <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#0F172A' }}>
+                                                    <div style={{ fontSize: '0.77rem', fontWeight: '700', color: '#0F172A' }}>
                                                         {slip.month} Payslip
                                                     </div>
-                                                    <div style={{ fontSize: '0.72rem', color: '#64748B' }}>
+                                                    <div style={{ fontSize: '0.652rem', color: '#64748B' }}>
                                                         Credited on {slip.date} • {slip.amount}
                                                     </div>
                                                 </div>
@@ -1290,12 +1290,12 @@ export const StaffDetails = () => {
                                                     style={{
                                                         display: 'flex',
                                                         alignItems: 'center',
-                                                        gap: '0.35rem',
-                                                        padding: '0.4rem 0.75rem',
+                                                        gap: '0.317rem',
+                                                        padding: '0.363rem 0.68rem',
                                                         background: '#F1F5F9',
                                                         border: '1px solid #CBD5E1',
                                                         borderRadius: '8px',
-                                                        fontSize: '0.75rem',
+                                                        fontSize: '0.68rem',
                                                         fontWeight: '600',
                                                         color: '#334155',
                                                         cursor: 'pointer'

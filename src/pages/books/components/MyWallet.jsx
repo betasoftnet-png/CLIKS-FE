@@ -23,51 +23,51 @@ const MyWallet = ({ wallets = [], onUpdateBalance, currencySymbol = '₹' }) => 
         <div style={{
             background: 'white',
             borderRadius: '16px',
-            padding: '1.5rem',
+            padding: '1.359rem',
             boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
             border: '1px solid #E2E8F0',
-            marginBottom: '1.5rem'
+            marginBottom: '1.359rem'
         }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h3 style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', marginBottom: '0.906rem', display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                 <Wallet size={20} style={{ color: '#7C3AED' }} /> My Wallet
             </h3>
             
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '1rem'
+                gap: '0.906rem'
             }}>
                 {wallets.map((wallet) => (
                     <div key={wallet.id} style={{
                         border: '1px solid #F1F5F9',
                         borderRadius: '12px',
-                        padding: '1rem',
+                        padding: '0.906rem',
                         background: '#F8FAFC',
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        gap: '0.5rem',
+                        gap: '0.453rem',
                         position: 'relative'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                             {walletIcons[wallet.type] || <Wallet size={18} />}
-                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#475569' }}>{wallet.name}</span>
+                            <span style={{ fontSize: '0.77rem', fontWeight: 700, color: '#475569' }}>{wallet.name}</span>
                         </div>
                         
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.25rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.227rem' }}>
                             {editingId === wallet.id ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', width: '100%' }}>
-                                    <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B' }}>{currencySymbol}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.227rem', width: '100%' }}>
+                                    <span style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B' }}>{currencySymbol}</span>
                                     <input 
                                         type="number"
                                         value={editBalance}
                                         onChange={e => setEditBalance(e.target.value)}
                                         style={{
                                             width: '80px',
-                                            padding: '0.25rem 0.5rem',
+                                            padding: '0.227rem 0.453rem',
                                             borderRadius: '6px',
                                             border: '1px solid #CBD5E1',
-                                            fontSize: '0.9rem',
+                                            fontSize: '0.816rem',
                                             fontWeight: 700,
                                             outline: 'none'
                                         }}
@@ -75,20 +75,20 @@ const MyWallet = ({ wallets = [], onUpdateBalance, currencySymbol = '₹' }) => 
                                     />
                                     <button 
                                         onClick={() => handleSaveBalance(wallet.id)}
-                                        style={{ border: 'none', background: '#10B981', color: 'white', borderRadius: '4px', padding: '0.25rem', cursor: 'pointer', display: 'flex' }}
+                                        style={{ border: 'none', background: '#10B981', color: 'white', borderRadius: '4px', padding: '0.227rem', cursor: 'pointer', display: 'flex' }}
                                     >
                                         <Check size={14} />
                                     </button>
                                     <button 
                                         onClick={() => setEditingId(null)}
-                                        style={{ border: 'none', background: '#EF4444', color: 'white', borderRadius: '4px', padding: '0.25rem', cursor: 'pointer', display: 'flex' }}
+                                        style={{ border: 'none', background: '#EF4444', color: 'white', borderRadius: '4px', padding: '0.227rem', cursor: 'pointer', display: 'flex' }}
                                     >
                                         <X size={14} />
                                     </button>
                                 </div>
                             ) : (
                                 <>
-                                    <span style={{ fontSize: '1.25rem', fontWeight: 850, color: wallet.balance < 0 ? '#EF4444' : '#0F172A' }}>
+                                    <span style={{ fontSize: '1.133rem', fontWeight: 850, color: wallet.balance < 0 ? '#EF4444' : '#0F172A' }}>
                                         {currencySymbol}{wallet.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </span>
                                     <button 

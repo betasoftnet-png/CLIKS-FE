@@ -3,11 +3,11 @@
    ========================================================================== */
 
 .transactions-page {
-    padding: 1.5rem;
+    padding: 1.359rem;
     max-width: 1600px;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
-    background-color: #ffffff;
+    background-color: var(--bg-color, #ffffff);
     min-height: calc(100vh - 64px);
     box-sizing: border-box;
 }
@@ -17,8 +17,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
+    margin-bottom: 1.359rem;
+    gap: 0.906rem;
 }
 
 @media (max-width: 768px) {
@@ -29,16 +29,16 @@
 }
 
 .page-title {
-    font-size: 1.85rem;
+    font-size: 1.677rem;
     font-weight: 800;
     color: var(--text-main);
     letter-spacing: -0.025em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.227rem;
 }
 
 .page-subtitle {
     color: var(--text-muted);
-    font-size: 1rem;
+    font-size: 0.906rem;
     font-weight: 500;
 }
 
@@ -51,13 +51,13 @@
 .btn-primary {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.68rem;
     background: var(--primary);
     color: white;
-    padding: 0.75rem 1.25rem;
+    padding: 0.68rem 1.133rem;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.816rem;
     transition: all 0.2s ease;
     border: none;
     cursor: pointer;
@@ -116,8 +116,8 @@
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
+    gap: 0.906rem;
+    padding: 0.906rem 1.133rem;
     border: none;
     background: white;
     text-align: left;
@@ -142,11 +142,11 @@
 .item-title {
     font-weight: 600;
     color: #334155;
-    font-size: 0.95rem;
+    font-size: 0.861rem;
 }
 
 .item-desc {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     color: #94a3b8;
     margin-top: 2px;
 }
@@ -179,13 +179,13 @@
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: 0.906rem;
+    margin-bottom: 1.359rem;
 }
 
 .stat-card {
     background: white;
-    padding: 1.25rem;
+    padding: 1.133rem;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -205,25 +205,25 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.68rem;
 }
 
 .stat-label {
     color: #64748b;
-    font-size: 0.875rem;
+    font-size: 0.793rem;
     font-weight: 500;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.227rem;
 }
 
 .stat-value {
-    font-size: 1.75rem;
+    font-size: 1.586rem;
     font-weight: 700;
     color: #1e293b;
     margin: 0;
 }
 
 .stat-footer {
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     color: #94a3b8;
     font-weight: 500;
 }
@@ -248,13 +248,13 @@
     background: transparent;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.906rem;
 }
 
 /* Toolbar */
 .toolbar-section {
     background: white;
-    padding: 1rem 1.25rem;
+    padding: 0.906rem 1.133rem;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
@@ -262,7 +262,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.906rem;
 }
 
 .search-box {
@@ -273,11 +273,11 @@
 
 .search-input {
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    padding: 0.68rem 0.906rem 0.68rem 2.492rem;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     background: #f8fafc;
-    font-size: 0.95rem;
+    font-size: 0.861rem;
     color: #334155;
     outline: none;
     transition: all 0.2s;
@@ -299,20 +299,20 @@
 
 .filter-actions {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.68rem;
 }
 
 .btn-secondary {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1rem;
+    gap: 0.453rem;
+    padding: 0.544rem 0.906rem;
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     color: #475569;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.816rem;
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -327,14 +327,14 @@
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 1.5rem;
+    gap: 1.359rem;
 }
 
 .transaction-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 14px;
     border: 1px solid #f1f5f9;
-    padding: 1.5rem;
+    padding: 1.359rem;
     position: relative;
     overflow: hidden;
     transition: all 0.25s ease;
@@ -352,7 +352,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.133rem;
 }
 
 .card-icon {
@@ -385,7 +385,7 @@
 
 .card-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.453rem;
     opacity: 0;
     transform: translateX(10px);
     transition: all 0.2s ease;
@@ -425,7 +425,7 @@
 .card-main {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.453rem;
 }
 
 .card-row {
@@ -435,14 +435,14 @@
 }
 
 .trans-source {
-    font-size: 1.15rem;
+    font-size: 1.042rem;
     font-weight: 700;
     color: #1e293b;
     margin: 0;
 }
 
 .trans-amount {
-    font-size: 1.15rem;
+    font-size: 1.042rem;
     font-weight: 700;
     font-feature-settings: "tnum";
 }
@@ -456,8 +456,8 @@
 }
 
 .category-tag {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.75rem;
+    font-size: 0.725rem;
+    padding: 0.227rem 0.68rem;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
@@ -466,7 +466,7 @@
 }
 
 .trans-date {
-    font-size: 0.85rem;
+    font-size: 0.77rem;
     color: #94a3b8;
     font-weight: 500;
 }
@@ -490,13 +490,13 @@
 .add-new-card {
     background: transparent;
     border: 2px dashed #e2e8f0;
-    border-radius: 20px;
+    border-radius: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    min-height: 200px;
+    gap: 0.75rem;
+    min-height: 160px;
     /* Match approximate height of other cards */
     width: 100%;
     cursor: pointer;
@@ -529,7 +529,7 @@
 
 .add-text {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.861rem;
 }
 
 /* --- Pagination --- */
@@ -537,28 +537,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 0.5rem;
-    margin-top: 1rem;
+    padding: 0 0.453rem;
+    margin-top: 0.906rem;
 }
 
 .page-info {
-    font-size: 0.85rem;
+    font-size: 0.77rem;
     color: #64748b;
     font-weight: 500;
 }
 
 .page-controls {
     display: flex;
-    gap: 0.75rem;
+    gap: 0.68rem;
 }
 
 .btn-page {
-    padding: 0.5rem 1.25rem;
+    padding: 0.453rem 1.133rem;
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     color: #475569;
-    font-size: 0.85rem;
+    font-size: 0.77rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
@@ -596,7 +596,7 @@
 .transactions-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.68rem;
 }
 
 .horizontal-tile {
@@ -604,7 +604,7 @@
     justify-content: space-between;
     align-items: center;
     background: white;
-    padding: 1rem 1.5rem;
+    padding: 0.906rem 1.359rem;
     border-radius: 16px;
     border: 1px solid #f1f5f9;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
@@ -620,7 +620,7 @@
 .tile-left {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.906rem;
 }
 
 .tile-icon {
@@ -639,14 +639,14 @@
 }
 
 .tile-title {
-    font-size: 1rem;
+    font-size: 0.906rem;
     font-weight: 700;
     color: #1e293b;
     margin: 0;
 }
 
 .tile-subtitle {
-    font-size: 0.8rem;
+    font-size: 0.725rem;
     color: #94a3b8;
     margin-top: 2px;
 }
@@ -654,18 +654,18 @@
 .tile-right {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.359rem;
 }
 
 .tile-amount {
-    font-size: 1rem;
+    font-size: 0.906rem;
     font-weight: 700;
     font-feature-settings: "tnum";
 }
 
 .tile-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.453rem;
     opacity: 0;
     transition: opacity 0.2s ease;
 }
@@ -707,7 +707,7 @@
     .horizontal-tile {
         flex-direction: column;
         align-items: flex-start;
-        gap: 1rem;
+        gap: 0.906rem;
     }
 
     .tile-right {
@@ -721,10 +721,11 @@
 /* --- New Table Layout (Matches Reference) --- */
 .transactions-table-container {
     background: white;
-    border-radius: 16px;
+    border-radius: 14px;
+    overflow-x: auto;
     border: 1px solid #e2e8f0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    padding: 1.5rem;
+    padding: 1.359rem;
     overflow-x: auto;
 }
 
@@ -732,20 +733,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.359rem;
 }
 
 .table-title {
-    font-size: 1.1rem;
+    font-size: 0.997rem;
     font-weight: 700;
     color: #1e293b;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.68rem;
 }
 
 .see-all-link {
-    font-size: 0.85rem;
+    font-size: 0.77rem;
     color: #4F46E5;
     font-weight: 600;
     cursor: pointer;
@@ -759,7 +760,7 @@
 .transactions-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 0.75rem;
+    border-spacing: 0 0.68rem;
     /* Space between rows effectively */
     min-width: 600px;
 }
@@ -767,15 +768,15 @@
 .transactions-table th {
     text-align: left;
     color: #94a3b8;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    padding: 0 1rem 0.5rem 1rem;
+    padding: 0 0.906rem 0.453rem 0.906rem;
 }
 
 .transactions-table td {
-    padding: 1rem;
+    padding: 0.906rem;
     vertical-align: middle;
     background: transparent;
 }
@@ -827,18 +828,19 @@
 }
 
 .app-col {
-    width: 30%;
+    width: 28%;
 }
 
 .app-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    min-width: 0;
 }
 
 .app-icon-box {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
     background: #f1f5f9;
     display: flex;
@@ -851,24 +853,28 @@
 .app-name {
     font-weight: 600;
     color: #1e293b;
-    font-size: 0.95rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .type-col {
-    width: 20%;
+    width: 18%;
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .rate-col {
-    width: 25%;
+    width: 22%;
 }
 
 .rate-wrapper {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .progress-track {
@@ -887,16 +893,125 @@
 }
 
 .rate-text {
-    font-size: 0.85rem;
-    color: #64748b;
+    font-size: 0.77rem;
+    color: #64748B;
     font-weight: 500;
     min-width: 32px;
+    white-space: nowrap;
 }
 
 .profit-col {
-    width: 20%;
+    width: 16%;
     text-align: right;
     font-weight: 600;
     color: #1e293b;
-    font-size: 0.95rem;
+    font-size: 0.84rem;
+    white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE OVERRIDES — Transactions Page
+   ══════════════════════════════════════════════════════════════ */
+[data-theme='dark'] .transactions-page {
+    background-color: var(--dm-bg) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .stat-card,
+[data-theme='dark'] .toolbar-section,
+[data-theme='dark'] .transaction-card,
+[data-theme='dark'] .transactions-table-container,
+[data-theme='dark'] .horizontal-tile,
+[data-theme='dark'] .dropdown-menu,
+[data-theme='dark'] .dropdown-item {
+    background: var(--dm-surface) !important;
+    background-color: var(--dm-surface) !important;
+    border-color: var(--dm-border) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .btn-secondary {
+    background: var(--dm-surface-2) !important;
+    border-color: var(--dm-border) !important;
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .btn-secondary:hover {
+    background: var(--dm-surface-3) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .search-input {
+    background: var(--dm-surface-2) !important;
+    border-color: var(--dm-border) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .search-input:focus {
+    background: var(--dm-surface-3) !important;
+}
+
+[data-theme='dark'] .dropdown-item:hover {
+    background: var(--dm-surface-2) !important;
+}
+
+[data-theme='dark'] .page-title,
+[data-theme='dark'] .table-title,
+[data-theme='dark'] .trans-source,
+[data-theme='dark'] .tile-title,
+[data-theme='dark'] .item-title,
+[data-theme='dark'] .stat-value {
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .page-subtitle,
+[data-theme='dark'] .tile-subtitle,
+[data-theme='dark'] .stat-label,
+[data-theme='dark'] .stat-footer,
+[data-theme='dark'] .item-desc,
+[data-theme='dark'] .trans-date,
+[data-theme='dark'] .category-tag {
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .transactions-table th {
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .transactions-table td {
+    background: transparent !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .table-row-card td {
+    border-color: var(--dm-border) !important;
+}
+
+[data-theme='dark'] .btn-page {
+    background: var(--dm-surface) !important;
+    border-color: var(--dm-border) !important;
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .btn-page:not(:disabled):hover {
+    background: var(--dm-surface-2) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .icon-btn {
+    color: var(--dm-text-muted) !important;
+}
+
+[data-theme='dark'] .icon-btn:hover {
+    background: var(--dm-surface-2) !important;
+    color: var(--dm-text) !important;
+}
+
+[data-theme='dark'] .horizontal-tile:hover {
+    border-color: var(--dm-border) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme='dark'] .transaction-card:hover {
+    border-color: var(--dm-border) !important;
 }

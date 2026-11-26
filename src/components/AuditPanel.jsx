@@ -109,7 +109,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                                         {/* Intentionally clean */}
                                     </div>
                                 )) : (
-                                    <div style={{ padding: '2rem 0', textAlign: 'center', color: '#94A3B8', fontSize: '0.9rem' }}>
+                                    <div style={{ padding: '1.812rem 0', textAlign: 'center', color: '#94A3B8', fontSize: '0.816rem' }}>
                                         No historic automated audits have concluded yet.
                                     </div>
                                 )}
@@ -135,7 +135,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                                 {[].length > 0 ? [].map(() => (
                                     <div></div>
                                 )) : (
-                                    <div style={{ padding: '1rem', background: '#F0FDF4', color: '#166534', borderRadius: '8px', fontSize: '0.85rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div style={{ padding: '0.906rem', background: '#F0FDF4', color: '#166534', borderRadius: '8px', fontSize: '0.77rem', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
                                         <CheckCircle2 size={16} /> Perfect scan state: Zero compliance gaps detected.
                                     </div>
                                 )}
@@ -234,7 +234,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                         border: none;
                         border-radius: 100px;
                         color: #475569;
-                        font-size: 0.85rem;
+                        font-size: 0.77rem;
                         font-weight: 600;
                         cursor: pointer;
                         transition: all 0.2s;
@@ -264,7 +264,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                         max-width: 80%;
                         padding: 12px 16px;
                         border-radius: 16px;
-                        font-size: 0.95rem;
+                        font-size: 0.861rem;
                         line-height: 1.5;
                     }
 
@@ -301,7 +301,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                         background: transparent;
                         border: none;
                         outline: none;
-                        font-size: 0.95rem;
+                        font-size: 0.861rem;
                         color: #1e293b;
                     }
 
@@ -332,7 +332,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                     }
 
                     .view-title {
-                        font-size: 1.5rem;
+                        font-size: 1.359rem;
                         font-weight: 800;
                         color: #1e293b;
                         margin-bottom: 32px;
@@ -348,7 +348,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
 
                     .row-title {
                         font-weight: 700;
-                        font-size: 1rem;
+                        font-size: 0.906rem;
                         color: #1e293b;
                         margin-bottom: 4px;
                     }
@@ -356,7 +356,7 @@ const AuditPanel = ({ isOpen, onClose }) => {
                     .row-meta { display: flex; align-items: center; gap: 12px; }
 
                     .status-tag {
-                        font-size: 0.7rem;
+                        font-size: 0.634rem;
                         font-weight: 800;
                         letter-spacing: 0.05em;
                     }
@@ -364,18 +364,18 @@ const AuditPanel = ({ isOpen, onClose }) => {
                     .status-tag.in-progress { color: #d97706; }
                     .status-tag.done { color: #64748b; }
 
-                    .findings-count { font-size: 0.75rem; color: #94a3b8; font-weight: 500; }
-                    .row-date { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+                    .findings-count { font-size: 0.68rem; color: #94a3b8; font-weight: 500; }
+                    .row-date { font-size: 0.77rem; color: #64748b; font-weight: 600; }
 
                     .stats-header { display: flex; gap: 48px; margin-bottom: 40px; }
-                    .val { font-size: 2rem; font-weight: 800; color: #1e293b; line-height: 1; }
-                    .lab { font-size: 0.95rem; font-weight: 700; color: #64748b; margin-top: 4px; }
+                    .val { font-size: 1.812rem; font-weight: 800; color: #1e293b; line-height: 1; }
+                    .lab { font-size: 0.861rem; font-weight: 700; color: #64748b; margin-top: 4px; }
 
-                    .sub-title { font-size: 1rem; font-weight: 800; color: #1e293b; margin-bottom: 20px; }
+                    .sub-title { font-size: 0.906rem; font-weight: 800; color: #1e293b; margin-bottom: 20px; }
                     .issues-stack { display: flex; flex-direction: column; gap: 24px; }
                     .issue-row { display: flex; gap: 16px; align-items: flex-start; }
-                    .issue-head { font-weight: 700; font-size: 1rem; color: #1e293b; margin-bottom: 2px; }
-                    .issue-sub { font-size: 0.85rem; color: #64748b; line-height: 1.4; }
+                    .issue-head { font-weight: 700; font-size: 0.906rem; color: #1e293b; margin-bottom: 2px; }
+                    .issue-sub { font-size: 0.77rem; color: #64748b; line-height: 1.4; }
                 `}</style>
             </div>
         </>

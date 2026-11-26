@@ -22,9 +22,9 @@ const BudgetItem = (props) => {
     const percentage = Math.min((current / total) * 100, 100);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.227rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                     <div style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -33,9 +33,9 @@ const BudgetItem = (props) => {
                     }}>
                         <Icon size={20} />
                     </div>
-                    <span style={{ fontWeight: 600, color: '#1E293B', fontSize: '0.9rem' }}>{label}</span>
+                    <span style={{ fontWeight: 600, color: '#1E293B', fontSize: '0.816rem' }}>{label}</span>
                 </div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600 }}>
+                <div style={{ fontSize: '0.77rem', fontWeight: 600 }}>
                     <span style={{ color: '#1E293B' }}>${current}</span>
                     <span style={{ color: '#94A3B8' }}> / ${total}</span>
                 </div>
@@ -66,15 +66,15 @@ const BudgetMixTile = () => {
         queryFn: budgetsService.getBudgets
     });
 
-    if (isLoading) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>Loading budgets...</div>;
-    if (budgets.length === 0) return <div style={{ color: '#64748B', fontSize: '0.9rem' }}>No budgets set. Create one to see overview.</div>;
+    if (isLoading) return <div style={{ color: '#64748B', fontSize: '0.816rem' }}>Loading budgets...</div>;
+    if (budgets.length === 0) return <div style={{ color: '#64748B', fontSize: '0.816rem' }}>No budgets set. Create one to see overview.</div>;
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '0.906rem' }}>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '1.25rem'
+                gap: '1.133rem'
             }}>
                 {budgets.slice(0, 4).map((b, i) => (
                     <BudgetItem
@@ -88,8 +88,8 @@ const BudgetMixTile = () => {
                 ))}
             </div>
 
-            <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', paddingTop: '0.5rem' }}>
-                <a href="#view-all" style={{ fontSize: '0.85rem', color: '#1B6B3A', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+            <div style={{ marginTop: 'auto', display: 'flex', justifyContent: 'center', paddingTop: '0.453rem' }}>
+                <a href="#view-all" style={{ fontSize: '0.77rem', color: '#1B6B3A', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                     View All Categories
                 </a>
             </div>

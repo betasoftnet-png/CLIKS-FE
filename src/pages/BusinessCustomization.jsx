@@ -858,7 +858,7 @@ const BusinessCustomization = () => {
         const isGstinValid = isGstinTyped && GSTIN_REGEX.test(config.gstinRef.trim());
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                 {/* Hidden File Inputs for Native Document & Image Picking */}
                 <input 
                     type="file" 
@@ -875,9 +875,9 @@ const BusinessCustomization = () => {
                     onChange={handleSigFileSelect} 
                 />
 
-                <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '2rem', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', marginBottom: '2.5rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}>
+                <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '1.812rem', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.812rem', marginBottom: '2.266rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.363rem' }}>
                             <div style={{ position: 'relative', cursor: 'pointer' }} onClick={handleLogoClick} title="Click to upload company logo from your device">
                                 {config.logoUrl ? (
                                     <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '2.5px solid #1B6B3A', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
@@ -886,7 +886,7 @@ const BusinessCustomization = () => {
                                 ) : (
                                     <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '2.5px dashed #CBD5E1', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: '#64748B' }}>
                                         <Camera size={26} />
-                                        <span style={{ fontSize: '0.7rem', fontWeight: '750', marginTop: '4px', color: '#1B6B3A' }}>Add Logo</span>
+                                        <span style={{ fontSize: '0.634rem', fontWeight: '750', marginTop: '4px', color: '#1B6B3A' }}>Add Logo</span>
                                     </div>
                                 )}
                                 <div style={{ position: 'absolute', bottom: 0, right: 0, width: '28px', height: '28px', background: '#1B6B3A', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', border: '2px solid white' }}>
@@ -897,22 +897,22 @@ const BusinessCustomization = () => {
                                 <button 
                                     type="button" 
                                     onClick={handleRemoveLogo}
-                                    style={{ border: 'none', background: '#FEF2F2', color: '#EF4444', fontSize: '0.7rem', fontWeight: '750', padding: '0.2rem 0.5rem', borderRadius: '6px', cursor: 'pointer' }}
+                                    style={{ border: 'none', background: '#FEF2F2', color: '#EF4444', fontSize: '0.634rem', fontWeight: '750', padding: '0.181rem 0.453rem', borderRadius: '6px', cursor: 'pointer' }}
                                 >
                                     Remove Logo
                                 </button>
                             )}
                         </div>
                         <div>
-                            <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '850', color: '#0F172A' }}>Company Branding</h2>
-                            <p style={{ margin: '0.25rem 0 0 0', color: '#64748B', fontSize: '0.85rem' }}>Upload your official company logo and signature for automatic inclusion on billing documents, invoices, and reports.</p>
+                            <h2 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '850', color: '#0F172A' }}>Company Branding</h2>
+                            <p style={{ margin: '0.227rem 0 0 0', color: '#64748B', fontSize: '0.77rem' }}>Upload your official company logo and signature for automatic inclusion on billing documents, invoices, and reports.</p>
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2.266rem' }}>
                         {/* Column 1: Core Details */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.5rem' }}>Business Details</h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.816rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.453rem' }}>Business Details</h3>
                             <ProfileInputField 
                                 label="Business Name *" 
                                 icon={Building2} 
@@ -936,11 +936,11 @@ const BusinessCustomization = () => {
                                 onChange={(e) => handleTextChange('gstinRef', e.target.value)} 
                                 helper={
                                     !isGstinTyped ? (
-                                        <span style={{ fontSize: '0.7rem', color: '#64748B' }}>Format: 15-character GSTIN (e.g. 05AAAPG7885R002 or 27AAAAA0000A1Z5)</span>
+                                        <span style={{ fontSize: '0.634rem', color: '#64748B' }}>Format: 15-character GSTIN (e.g. 05AAAPG7885R002 or 27AAAAA0000A1Z5)</span>
                                     ) : isGstinValid ? (
-                                        <span style={{ fontSize: '0.7rem', color: '#10B981', fontWeight: '800' }}>✓ Valid 15-digit GSTIN</span>
+                                        <span style={{ fontSize: '0.634rem', color: '#10B981', fontWeight: '800' }}>✓ Valid 15-digit GSTIN</span>
                                     ) : (
-                                        <span style={{ fontSize: '0.7rem', color: '#EF4444', fontWeight: '750' }}>⚠️ Invalid GSTIN ({config.gstinRef.length}/15 chars). Example: 05AAAPG7885R002</span>
+                                        <span style={{ fontSize: '0.634rem', color: '#EF4444', fontWeight: '750' }}>⚠️ Invalid GSTIN ({config.gstinRef.length}/15 chars). Example: 05AAAPG7885R002</span>
                                     )
                                 }
                             />
@@ -961,10 +961,10 @@ const BusinessCustomization = () => {
                         </div>
 
                         {/* Column 2: Extra Detail */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.5rem' }}>Localization</h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>Business Vertical Type</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.816rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.453rem' }}>Localization</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.363rem' }}>
+                                <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>Business Vertical Type</label>
                                 <select 
                                     style={selectStyle} 
                                     value={config.businessVerticalType} 
@@ -975,8 +975,8 @@ const BusinessCustomization = () => {
                                     <option>Service Provider</option>
                                 </select>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>Business Category</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.363rem' }}>
+                                <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>Business Category</label>
                                 <select 
                                     style={selectStyle} 
                                     value={config.businessCategory} 
@@ -989,8 +989,8 @@ const BusinessCustomization = () => {
                                     <option>Pharmaceutical</option>
                                 </select>
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>State Registered</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.363rem' }}>
+                                <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>State Registered</label>
                                 <select 
                                     style={selectStyle} 
                                     value={
@@ -1019,36 +1019,36 @@ const BusinessCustomization = () => {
                         </div>
 
                         {/* Column 3: Signature & Address */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.5rem' }}>Physical Presence</h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                                <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>Full Registered Address</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '0.816rem', fontWeight: '800', color: '#1E293B', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.453rem' }}>Physical Presence</h3>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.363rem' }}>
+                                <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>Full Registered Address</label>
                                 <textarea 
                                     rows="3" 
-                                    style={{ padding: '0.6rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.85rem', resize: 'none' }} 
+                                    style={{ padding: '0.544rem', borderRadius: '8px', border: '1px solid #E2E8F0', fontSize: '0.77rem', resize: 'none' }} 
                                     placeholder="Enter detailed operating address..."
                                     value={config.registeredAddress}
                                     onChange={(e) => handleTextChange('registeredAddress', e.target.value)}
                                 />
                             </div>
                             
-                            <div style={{ marginTop: '0.5rem' }}>
-                                <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569', display: 'block', marginBottom: '0.5rem' }}>Authorized E-Signature</label>
+                            <div style={{ marginTop: '0.453rem' }}>
+                                <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569', display: 'block', marginBottom: '0.453rem' }}>Authorized E-Signature</label>
                                 <div 
                                     onClick={handleSigClick}
-                                    style={{ height: '110px', border: config.signatureUrl ? '2px solid #10B981' : '2px dashed #CBD5E1', borderRadius: '10px', background: config.signatureUrl ? '#ECFDF5' : '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', cursor: 'pointer', padding: '0.5rem', position: 'relative' }}
+                                    style={{ height: '110px', border: config.signatureUrl ? '2px solid #10B981' : '2px dashed #CBD5E1', borderRadius: '10px', background: config.signatureUrl ? '#ECFDF5' : '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', cursor: 'pointer', padding: '0.453rem', position: 'relative' }}
                                     title="Click to upload electronic signature image from your device"
                                 >
                                     {config.signatureUrl ? (
                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
                                             <img src={config.signatureUrl} alt="Authorized Signature" style={{ maxHeight: '70px', maxWidth: '90%', objectFit: 'contain' }} onError={(e) => { e.target.style.display = 'none'; }} />
-                                            <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#065F46', marginTop: '4px' }}>✓ Signature Attached (Click to Change)</span>
+                                            <span style={{ fontSize: '0.634rem', fontWeight: '800', color: '#065F46', marginTop: '4px' }}>✓ Signature Attached (Click to Change)</span>
                                         </div>
                                     ) : (
                                         <>
                                             <UploadCloud size={24} color="#94A3B8" />
-                                            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1B6B3A', marginTop: '4px' }}>Upload Signature PNG</span>
-                                            <span style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: '2px' }}>Pick signature file from your device</span>
+                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#1B6B3A', marginTop: '4px' }}>Upload Signature PNG</span>
+                                            <span style={{ fontSize: '0.589rem', color: '#94A3B8', marginTop: '2px' }}>Pick signature file from your device</span>
                                         </>
                                     )}
                                 </div>
@@ -1056,7 +1056,7 @@ const BusinessCustomization = () => {
                                     <button 
                                         type="button"
                                         onClick={handleRemoveSignature}
-                                        style={{ border: 'none', background: '#FEF2F2', color: '#EF4444', fontSize: '0.7rem', fontWeight: '750', padding: '0.2rem 0.5rem', borderRadius: '6px', cursor: 'pointer', marginTop: '0.4rem' }}
+                                        style={{ border: 'none', background: '#FEF2F2', color: '#EF4444', fontSize: '0.634rem', fontWeight: '750', padding: '0.181rem 0.453rem', borderRadius: '6px', cursor: 'pointer', marginTop: '0.363rem' }}
                                     >
                                         Remove Signature
                                     </button>
@@ -1070,9 +1070,9 @@ const BusinessCustomization = () => {
     };
 
     const renderAccounting = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '600px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem', maxWidth: '600px' }}>
             <CustomizationCard title="Double Entry Accounting" icon={Calculator}>
-                <p style={{ fontSize: '0.85rem', color: '#64748B', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                <p style={{ fontSize: '0.77rem', color: '#64748B', lineHeight: '1.5', marginBottom: '1.359rem' }}>
                     Enabling the accounting engine activates journal vouchers, ledger mapping, auto-balancing trial sheets, and real-time P&L generated directly from system debits and credits.
                 </p>
                 <PremiumToggleItem 
@@ -1086,10 +1086,10 @@ const BusinessCustomization = () => {
     );
 
     const renderPayment = () => (
-        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.5rem' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.359rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                 <CustomizationCard title="Payment Integration Rules" icon={Coins}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         <PremiumToggleItem 
                             label="Instant UPI Dynamic QR Generation" 
                             desc="Embed auto-generated dynamic UPI QR codes on all invoices for instant customer scans." 
@@ -1115,30 +1115,30 @@ const BusinessCustomization = () => {
             </div>
             
             <div style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-                <div style={{ padding: '1rem', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '800', color: '#1E293B' }}>
+                <div style={{ padding: '0.906rem', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '0.453rem', fontWeight: '800', color: '#1E293B' }}>
                     <Eye size={16} color="#3B82F6" /> REALTIME PAYMENT PREVIEW
                 </div>
-                <div style={{ padding: '2rem', minHeight: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
+                <div style={{ padding: '1.812rem', minHeight: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
                     <div style={{ width: '85%', background: 'white', borderRadius: '12px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
                         {/* Header */}
-                        <div style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)', padding: '1rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div style={{ background: 'linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%)', padding: '0.906rem', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                                <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', opacity: 0.8, fontWeight: '700' }}>Merchant Account</div>
-                                <div style={{ fontWeight: '850', fontSize: '0.9rem' }}>{config.companyName || 'My Primary Firm'}</div>
+                                <div style={{ fontSize: '0.589rem', textTransform: 'uppercase', opacity: 0.8, fontWeight: '700' }}>Merchant Account</div>
+                                <div style={{ fontWeight: '850', fontSize: '0.816rem' }}>{config.companyName || 'My Primary Firm'}</div>
                             </div>
                             <Coins size={20} />
                         </div>
                         
                         {/* Body */}
-                        <div style={{ padding: '1.25rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ padding: '1.133rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem' }}>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#64748B', fontWeight: '750', textTransform: 'uppercase' }}>Amount Due</div>
-                                <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#0F172A' }}>{currency.symbol} 5,249.00</div>
+                                <div style={{ fontSize: '0.589rem', color: '#64748B', fontWeight: '750', textTransform: 'uppercase' }}>Amount Due</div>
+                                <div style={{ fontSize: '1.359rem', fontWeight: '900', color: '#0F172A' }}>{currency.symbol} 5,249.00</div>
                             </div>
                             
                             {/* UPI QR Display */}
                             {config.paymentUpi ? (
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1.5px solid #E2E8F0', borderRadius: '8px', background: '#FAFBFC' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem', padding: '0.68rem', border: '1.5px solid #E2E8F0', borderRadius: '8px', background: '#FAFBFC' }}>
                                     {/* Mock QR SVG */}
                                     <svg width="120" height="120" viewBox="0 0 100 100" style={{ shapeRendering: 'crispEdges' }}>
                                         {/* Corners */}
@@ -1164,20 +1164,20 @@ const BusinessCustomization = () => {
                                         <rect x="35" y="80" width="15" height="10" fill="#3B82F6" />
                                         <rect x="65" y="85" width="15" height="5" fill="#0F172A" />
                                     </svg>
-                                    <div style={{ fontSize: '0.6rem', color: '#1B6B3A', fontWeight: '800', background: '#ECFDF5', padding: '0.2rem 0.5rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                    <div style={{ fontSize: '0.544rem', color: '#1B6B3A', fontWeight: '800', background: '#ECFDF5', padding: '0.181rem 0.453rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
                                         <ShieldCheck size={10} /> BHIM UPI SECURED
                                     </div>
                                 </div>
                             ) : (
-                                <div style={{ width: '120px', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1.5px dashed #CBD5E1', borderRadius: '8px', background: '#F8FAFC', color: '#94A3B8', padding: '0.5rem', textAlign: 'center' }}>
+                                <div style={{ width: '120px', height: '120px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', border: '1.5px dashed #CBD5E1', borderRadius: '8px', background: '#F8FAFC', color: '#94A3B8', padding: '0.453rem', textAlign: 'center' }}>
                                     <Coins size={24} style={{ marginBottom: '4px' }} />
-                                    <span style={{ fontSize: '0.65rem', fontWeight: '700' }}>UPI Disabled</span>
-                                    <span style={{ fontSize: '0.5rem', marginTop: '2px' }}>Enable dynamic QR generation to display code</span>
+                                    <span style={{ fontSize: '0.589rem', fontWeight: '700' }}>UPI Disabled</span>
+                                    <span style={{ fontSize: '0.453rem', marginTop: '2px' }}>Enable dynamic QR generation to display code</span>
                                 </div>
                             )}
                             
                             {/* Settlement methods */}
-                            <div style={{ width: '100%', borderTop: '1px solid #F1F5F9', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-around', fontSize: '0.65rem', fontWeight: '700', color: '#64748B' }}>
+                            <div style={{ width: '100%', borderTop: '1px solid #F1F5F9', paddingTop: '0.68rem', display: 'flex', justifyContent: 'space-around', fontSize: '0.589rem', fontWeight: '700', color: '#64748B' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: config.paymentCard ? '#10B981' : '#94A3B8' }}>
                                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: config.paymentCard ? '#10B981' : '#94A3B8' }} /> VISA/MC Card
                                 </div>
@@ -1193,17 +1193,17 @@ const BusinessCustomization = () => {
     );
 
     const renderFinPro = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.586rem' }}>
             {/* ── 1. ICAI Credential Verification Gate ── */}
             <div style={{
                 borderRadius: '16px',
-                padding: '1.75rem',
+                padding: '1.586rem',
                 border: caVerificationStatus === 'VERIFIED' ? '1.5px solid #10B981' : (caVerificationStatus === 'PENDING_REVIEW' ? '1.5px solid #F59E0B' : (caVerificationStatus === 'REJECTED' ? '1.5px solid #EF4444' : '1.5px solid #3B82F6')),
                 background: caVerificationStatus === 'VERIFIED' ? 'linear-gradient(135deg, #ECFDF5 0%, #F0FDF4 100%)' : (caVerificationStatus === 'PENDING_REVIEW' ? 'linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%)' : (caVerificationStatus === 'REJECTED' ? 'linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%)' : 'linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%)')),
                 boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
             }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.906rem' }}>
+                    <div style={{ display: 'flex', gap: '0.906rem', alignItems: 'flex-start' }}>
                         <div style={{
                             width: '46px',
                             height: '46px',
@@ -1220,7 +1220,7 @@ const BusinessCustomization = () => {
                         <div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                 <span style={{
-                                    fontSize: '0.7rem',
+                                    fontSize: '0.634rem',
                                     fontWeight: '800',
                                     textTransform: 'uppercase',
                                     letterSpacing: '0.05em',
@@ -1232,12 +1232,12 @@ const BusinessCustomization = () => {
                                     {caVerificationStatus === 'VERIFIED' ? 'ICAI Verified & Approved' : (caVerificationStatus === 'PENDING_REVIEW' ? 'Verification Pending Approval' : (caVerificationStatus === 'REJECTED' ? 'Verification Rejected' : 'Verification Required'))}
                                 </span>
                                 {caVerificationStatus === 'VERIFIED' && (
-                                    <span style={{ fontSize: '0.75rem', fontWeight: '750', color: '#047857' }}>
+                                    <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#047857' }}>
                                         ICAI #{icaiVerification.membershipNo}
                                     </span>
                                 )}
                             </div>
-                            <h3 style={{ margin: '0.35rem 0 0.2rem 0', fontSize: '1.25rem', fontWeight: '850', color: '#0F172A' }}>
+                            <h3 style={{ margin: '0.317rem 0 0.181rem 0', fontSize: '1.133rem', fontWeight: '850', color: '#0F172A' }}>
                                 {caVerificationStatus === 'VERIFIED' 
                                     ? `Verified Chartered Accountant — ${icaiVerification.fullName || 'Member'}` 
                                     : (caVerificationStatus === 'PENDING_REVIEW' 
@@ -1246,7 +1246,7 @@ const BusinessCustomization = () => {
                                             ? `ICAI Verification Rejected` 
                                             : `Chartered Accountant (ICAI) Credential Gate`))}
                             </h3>
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#475569', maxWidth: '650px', lineHeight: '1.45' }}>
+                            <p style={{ margin: 0, fontSize: '0.77rem', color: '#475569', maxWidth: '650px', lineHeight: '1.45' }}>
                                 {caVerificationStatus === 'VERIFIED'
                                     ? `Your ICAI credentials have been officially authenticated by the administrator. Full access to FIN-PRO advisory modules and practice tools is unlocked.`
                                     : (caVerificationStatus === 'PENDING_REVIEW'
@@ -1259,7 +1259,7 @@ const BusinessCustomization = () => {
                     </div>
 
                     {/* Action buttons based on status */}
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         {caVerificationStatus === 'UNVERIFIED' && (
                             <button
                                 type="button"
@@ -1267,13 +1267,13 @@ const BusinessCustomization = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.75rem 1.5rem',
+                                    gap: '0.453rem',
+                                    padding: '0.68rem 1.359rem',
                                     borderRadius: '10px',
                                     background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)',
                                     color: 'white',
                                     border: 'none',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     fontWeight: '800',
                                     cursor: 'pointer',
                                     boxShadow: '0 4px 14px rgba(37, 99, 235, 0.3)',
@@ -1290,12 +1290,12 @@ const BusinessCustomization = () => {
                                     type="button"
                                     onClick={() => { setIsEditMode(true); setShowIcaiModal(true); }}
                                     style={{
-                                        padding: '0.65rem 1.1rem',
+                                        padding: '0.589rem 0.997rem',
                                         borderRadius: '8px',
                                         background: 'white',
                                         border: '1.5px solid #CBD5E1',
                                         color: '#334155',
-                                        fontSize: '0.85rem',
+                                        fontSize: '0.77rem',
                                         fontWeight: '750',
                                         cursor: 'pointer'
                                     }}
@@ -1310,12 +1310,12 @@ const BusinessCustomization = () => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         gap: '5px',
-                                        padding: '0.65rem 1.1rem',
+                                        padding: '0.589rem 0.997rem',
                                         borderRadius: '8px',
                                         background: '#10B981',
                                         border: 'none',
                                         color: 'white',
-                                        fontSize: '0.85rem',
+                                        fontSize: '0.77rem',
                                         fontWeight: '800',
                                         cursor: 'pointer',
                                         boxShadow: '0 4px 10px rgba(16, 185, 129, 0.2)'
@@ -1333,13 +1333,13 @@ const BusinessCustomization = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.75rem 1.35rem',
+                                    gap: '0.453rem',
+                                    padding: '0.68rem 1.223rem',
                                     borderRadius: '10px',
                                     background: '#DC2626',
                                     color: 'white',
                                     border: 'none',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     fontWeight: '800',
                                     cursor: 'pointer'
                                 }}
@@ -1354,12 +1354,12 @@ const BusinessCustomization = () => {
                                     type="button"
                                     onClick={() => { setIsEditMode(false); setShowIcaiModal(true); }}
                                     style={{
-                                        padding: '0.6rem 1rem',
+                                        padding: '0.544rem 0.906rem',
                                         borderRadius: '8px',
                                         background: 'white',
                                         border: '1px solid #A7F3D0',
                                         color: '#065F46',
-                                        fontSize: '0.82rem',
+                                        fontSize: '0.743rem',
                                         fontWeight: '750',
                                         cursor: 'pointer'
                                     }}
@@ -1379,21 +1379,21 @@ const BusinessCustomization = () => {
                     background: '#FFFFFF',
                     border: '1.5px dashed #CBD5E1',
                     borderRadius: '16px',
-                    padding: '3rem 2rem',
+                    padding: '2.719rem 1.812rem',
                     textAlign: 'center',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '1rem'
+                    gap: '0.906rem'
                 }}>
                     <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
                         <Lock size={28} />
                     </div>
                     <div style={{ maxWidth: '480px' }}>
-                        <h4 style={{ fontSize: '1.2rem', fontWeight: '850', color: '#1E293B', margin: '0 0 0.35rem 0' }}>
+                        <h4 style={{ fontSize: '1.087rem', fontWeight: '850', color: '#1E293B', margin: '0 0 0.317rem 0' }}>
                             FIN-PRO Dashboard & Subscription Locked
                         </h4>
-                        <p style={{ fontSize: '0.88rem', color: '#64748B', lineHeight: '1.5', margin: 0 }}>
+                        <p style={{ fontSize: '0.797rem', color: '#64748B', lineHeight: '1.5', margin: 0 }}>
                             {caVerificationStatus === 'PENDING_REVIEW'
                                 ? 'Your credentials have been submitted and are awaiting administrator verification. The FIN-PRO subscription plans and auditor dashboard will automatically unlock once approved.'
                                 : 'To access FIN-PRO subscriptions and open the auditor dashboard, you must first verify your ICAI registration credentials above.'}
@@ -1404,14 +1404,14 @@ const BusinessCustomization = () => {
                             type="button"
                             onClick={() => { setIsEditMode(false); setShowIcaiModal(true); }}
                             style={{
-                                marginTop: '0.5rem',
-                                padding: '0.65rem 1.25rem',
+                                marginTop: '0.453rem',
+                                padding: '0.589rem 1.133rem',
                                 borderRadius: '8px',
                                 background: '#1B6B3A',
                                 color: 'white',
                                 border: 'none',
                                 fontWeight: '750',
-                                fontSize: '0.85rem',
+                                fontSize: '0.77rem',
                                 cursor: 'pointer'
                             }}
                         >
@@ -1423,27 +1423,27 @@ const BusinessCustomization = () => {
                 /* Verified by Admin: Check subscription status */
                 !isFinProSubscribed ? (
                     /* Show Subscription Plans */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                         <div style={{
                             background: '#FFFFFF',
                             borderRadius: '16px',
                             border: '1px solid #E2E8F0',
-                            padding: '1.75rem',
+                            padding: '1.586rem',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             flexWrap: 'wrap',
-                            gap: '1rem',
+                            gap: '0.906rem',
                             boxShadow: '0 4px 6px -1px rgba(0,0,0,0.03)'
                         }}>
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <Crown size={20} color="#F59E0B" />
-                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '850', color: '#0F172A' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '850', color: '#0F172A' }}>
                                         ICAI Verified ✓ Choose Your FIN-PRO Subscription
                                     </h3>
                                 </div>
-                                <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.88rem', color: '#64748B' }}>
+                                <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.797rem', color: '#64748B' }}>
                                     Your professional credentials have been validated! Select a FIN-PRO plan below to activate your auditor workspace and unlock the dashboard.
                                 </p>
                             </div>
@@ -1452,7 +1452,7 @@ const BusinessCustomization = () => {
                                 borderRadius: '999px',
                                 background: '#FEF3C7',
                                 color: '#B45309',
-                                fontSize: '0.78rem',
+                                fontSize: '0.707rem',
                                 fontWeight: '800'
                             }}>
                                 Subscription Required for Dashboard
@@ -1460,13 +1460,13 @@ const BusinessCustomization = () => {
                         </div>
 
                         {/* Subscription Tier Cards Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.359rem' }}>
                             {/* Plan 1: Fin-Pro Solo */}
                             <div style={{
                                 background: 'white',
                                 borderRadius: '16px',
                                 border: '1.5px solid #E2E8F0',
-                                padding: '2rem',
+                                padding: '1.812rem',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'space-between',
@@ -1475,16 +1475,16 @@ const BusinessCustomization = () => {
                                 transition: 'all 0.2s'
                             }}>
                                 <div>
-                                    <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Individual Practice</span>
-                                    <h3 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#0F172A', margin: '0.25rem 0 0.5rem 0' }}>Fin-Pro Solo</h3>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '1rem' }}>
-                                        <span style={{ fontSize: '1.75rem', fontWeight: '900', color: '#0F172A' }}>₹999</span>
-                                        <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '600' }}>/ year</span>
+                                    <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Individual Practice</span>
+                                    <h3 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#0F172A', margin: '0.227rem 0 0.453rem 0' }}>Fin-Pro Solo</h3>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '0.906rem' }}>
+                                        <span style={{ fontSize: '1.586rem', fontWeight: '900', color: '#0F172A' }}>₹999</span>
+                                        <span style={{ fontSize: '0.77rem', color: '#64748B', fontWeight: '600' }}>/ year</span>
                                     </div>
-                                    <p style={{ fontSize: '0.82rem', color: '#475569', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                                    <p style={{ fontSize: '0.743rem', color: '#475569', lineHeight: '1.5', marginBottom: '1.133rem' }}>
                                         Designed for sole practitioner Chartered Accountants managing SME tax filings and audit compliance.
                                     </p>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.5rem', fontSize: '0.83rem', color: '#334155' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.589rem', marginBottom: '1.359rem', fontSize: '0.752rem', color: '#334155' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> 50 Connected SME Clients</div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Automated CARO 2020 Working Papers</div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Real-Time GST & TDS Audit Scanners</div>
@@ -1496,13 +1496,13 @@ const BusinessCustomization = () => {
                                     onClick={() => handleSubscribeFinPro('Fin-Pro Solo')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
+                                        padding: '0.68rem',
                                         borderRadius: '10px',
                                         background: 'white',
                                         border: '2px solid #2563EB',
                                         color: '#2563EB',
                                         fontWeight: '800',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         cursor: 'pointer',
                                         transition: 'all 0.2s'
                                     }}
@@ -1518,7 +1518,7 @@ const BusinessCustomization = () => {
                                 background: '#0F172A',
                                 borderRadius: '16px',
                                 border: '2px solid #F59E0B',
-                                padding: '2rem',
+                                padding: '1.812rem',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 justifyContent: 'space-between',
@@ -1534,23 +1534,23 @@ const BusinessCustomization = () => {
                                     color: 'white',
                                     padding: '3px 10px',
                                     borderRadius: '999px',
-                                    fontSize: '0.7rem',
+                                    fontSize: '0.634rem',
                                     fontWeight: '800',
                                     textTransform: 'uppercase'
                                 }}>
                                     RECOMMENDED
                                 </span>
                                 <div>
-                                    <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full CA Practice</span>
-                                    <h3 style={{ fontSize: '1.35rem', fontWeight: '850', color: '#FFFFFF', margin: '0.25rem 0 0.5rem 0' }}>Fin-Pro Firm</h3>
-                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '1rem' }}>
-                                        <span style={{ fontSize: '1.75rem', fontWeight: '900', color: '#FFFFFF' }}>₹1,499</span>
-                                        <span style={{ fontSize: '0.85rem', color: '#94A3B8', fontWeight: '600' }}>/ year</span>
+                                    <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Full CA Practice</span>
+                                    <h3 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#FFFFFF', margin: '0.227rem 0 0.453rem 0' }}>Fin-Pro Firm</h3>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '0.906rem' }}>
+                                        <span style={{ fontSize: '1.586rem', fontWeight: '900', color: '#FFFFFF' }}>₹1,499</span>
+                                        <span style={{ fontSize: '0.77rem', color: '#94A3B8', fontWeight: '600' }}>/ year</span>
                                     </div>
-                                    <p style={{ fontSize: '0.82rem', color: '#94A3B8', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                                    <p style={{ fontSize: '0.743rem', color: '#94A3B8', lineHeight: '1.5', marginBottom: '1.133rem' }}>
                                         Multi-partner chartered practice with unlimited clients, article clerk teams, and AI forensic auditing.
                                     </p>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.5rem', fontSize: '0.83rem', color: '#E2E8F0' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.589rem', marginBottom: '1.359rem', fontSize: '0.752rem', color: '#E2E8F0' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Unlimited Client Ledgers & Portals</div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Multi-Partner Team Permission Matrix</div>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> AI Forensic Anomaly & Fraud Detection</div>
@@ -1562,13 +1562,13 @@ const BusinessCustomization = () => {
                                     onClick={() => handleSubscribeFinPro('Fin-Pro Firm')}
                                     style={{
                                         width: '100%',
-                                        padding: '0.75rem',
+                                        padding: '0.68rem',
                                         borderRadius: '10px',
                                         background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
                                         border: 'none',
                                         color: 'white',
                                         fontWeight: '800',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         cursor: 'pointer',
                                         boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)',
                                         transition: 'all 0.2s'
@@ -1581,31 +1581,31 @@ const BusinessCustomization = () => {
                     </div>
                 ) : (
                     /* Subscribed & Verified: Display Open Dashboard button and full configuration */
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                         {/* Status & Dashboard Launch Bar */}
                         <div style={{
                             background: 'white',
                             borderRadius: '16px',
                             border: '1.5px solid #10B981',
-                            padding: '1.5rem 1.75rem',
+                            padding: '1.359rem 1.586rem',
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             flexWrap: 'wrap',
-                            gap: '1rem',
+                            gap: '0.906rem',
                             boxShadow: '0 4px 16px rgba(16, 185, 129, 0.08)'
                         }}>
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <CheckCircle2 size={22} color="#10B981" />
-                                    <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '850', color: '#0F172A' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '850', color: '#0F172A' }}>
                                         FIN-PRO Advisory Suite Unlocked & Active
                                     </h3>
-                                    <span style={{ fontSize: '0.75rem', background: '#ECFDF5', color: '#065F46', padding: '2px 8px', borderRadius: '999px', fontWeight: '800', border: '1px solid #A7F3D0' }}>
+                                    <span style={{ fontSize: '0.68rem', background: '#ECFDF5', color: '#065F46', padding: '2px 8px', borderRadius: '999px', fontWeight: '800', border: '1px solid #A7F3D0' }}>
                                         {icaiVerification.subscription?.plan_name || 'Fin-Pro Solo'} Plan
                                     </span>
                                 </div>
-                                <p style={{ margin: '0.35rem 0 0 0', fontSize: '0.85rem', color: '#64748B' }}>
+                                <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.77rem', color: '#64748B' }}>
                                     ICAI credentials authenticated and subscription confirmed. You have full access to the FIN-PRO Command Centre.
                                 </p>
                             </div>
@@ -1616,13 +1616,13 @@ const BusinessCustomization = () => {
                                     style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '0.5rem',
-                                        padding: '0.75rem 1.5rem',
+                                        gap: '0.453rem',
+                                        padding: '0.68rem 1.359rem',
                                         borderRadius: '10px',
                                         background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                                         color: 'white',
                                         border: 'none',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         fontWeight: '800',
                                         cursor: 'pointer',
                                         boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'
@@ -1634,10 +1634,10 @@ const BusinessCustomization = () => {
                         </div>
 
                         {/* Existing Advanced Ledgers & Analytics Settings */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.5rem' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.359rem' }}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                                 <CustomizationCard title="Professional Ledger & AI Analytics" icon={Zap}>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                         <PremiumToggleItem 
                                             label="Multi-Currency Ledgers" 
                                             desc="Enable cross-border entries with real-time currency conversions and daily forex adjustments." 
@@ -1663,29 +1663,29 @@ const BusinessCustomization = () => {
                             </div>
                             
                             <div style={{ background: '#0F172A', border: '1px solid #1E293B', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.3)', position: 'relative' }}>
-                                <div style={{ padding: '1rem', background: '#1E293B', borderBottom: '1px solid #334155', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '800', color: '#F8FAFC' }}>
+                                <div style={{ padding: '0.906rem', background: '#1E293B', borderBottom: '1px solid #334155', display: 'flex', alignItems: 'center', gap: '0.453rem', fontWeight: '800', color: '#F8FAFC' }}>
                                     <Crown size={16} color="#F59E0B" /> FIN-PRO PLATINUM SUITE
                                 </div>
-                                <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div style={{ padding: '1.812rem', display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
-                                            <span style={{ fontSize: '0.65rem', color: '#94A3B8', fontWeight: '800', textTransform: 'uppercase' }}>Auditor License</span>
-                                            <h3 style={{ margin: '0.1rem 0 0 0', fontSize: '1.1rem', fontWeight: '900', color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                                FIN-PRO <span style={{ fontSize: '0.65rem', background: 'linear-gradient(90deg, #10B981 0%, #059669 100%)', color: 'white', padding: '1px 6px', borderRadius: '100px', fontWeight: '800' }}>ACTIVE</span>
+                                            <span style={{ fontSize: '0.589rem', color: '#94A3B8', fontWeight: '800', textTransform: 'uppercase' }}>Auditor License</span>
+                                            <h3 style={{ margin: '0.091rem 0 0 0', fontSize: '0.997rem', fontWeight: '900', color: '#FFFFFF', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                                FIN-PRO <span style={{ fontSize: '0.589rem', background: 'linear-gradient(90deg, #10B981 0%, #059669 100%)', color: 'white', padding: '1px 6px', borderRadius: '100px', fontWeight: '800' }}>ACTIVE</span>
                                             </h3>
                                         </div>
                                         <Zap size={24} color="#F59E0B" />
                                     </div>
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem' }}>
                                             <span style={{ color: '#94A3B8' }}>ICAI Reg Number</span>
                                             <span style={{ fontWeight: '750', color: '#10B981' }}>#{icaiVerification.membershipNo}</span>
                                         </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem' }}>
                                             <span style={{ color: '#94A3B8' }}>Active Tier</span>
                                             <span style={{ fontWeight: '750', color: '#FFFFFF' }}>{icaiVerification.subscription?.plan_name || 'Fin-Pro Solo'}</span>
                                         </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem' }}>
                                             <span style={{ color: '#94A3B8' }}>COP Status</span>
                                             <span style={{ fontWeight: '750', color: '#10B981' }}>{icaiVerification.copStatus || 'ACTIVE'}</span>
                                         </div>
@@ -1695,13 +1695,13 @@ const BusinessCustomization = () => {
                                         onClick={() => navigate('/ca')}
                                         style={{
                                             width: '100%',
-                                            padding: '0.75rem',
+                                            padding: '0.68rem',
                                             borderRadius: '8px',
                                             background: '#10B981',
                                             border: 'none',
                                             color: 'white',
                                             fontWeight: '800',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -1720,34 +1720,34 @@ const BusinessCustomization = () => {
         </div>
     );
     const renderGeneral = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
             {/* Core & Features Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.5rem' }}>
-                <div style={{ gridColumn: 'span 8', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '1.359rem' }}>
+                <div style={{ gridColumn: 'span 8', display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                     <CustomizationCard title={t('applicationCore', 'Application Core')} icon={Sliders}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                             <PremiumToggleItem label={t('securityPasscode', 'Security Passcode')} desc={t('securityPasscodeDesc', 'Validate auth tokens before destructive operations.')} active={config.passcode} onToggle={() => handleToggle('passcode')} />
                             {config.passcode && (
-                                <div style={{ marginLeft: '2.75rem', padding: '0.75rem 1rem', background: '#F8FAFC', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                    <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>Security PIN:</label>
+                                <div style={{ marginLeft: '2.492rem', padding: '0.68rem 0.906rem', background: '#F8FAFC', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
+                                    <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>Security PIN:</label>
                                     <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
                                         <input 
                                             type={showPin ? 'text' : 'password'} 
                                             maxLength={6} 
                                             value={config.passcodePin || '1234'} 
                                             onChange={(e) => handleTextChange('passcodePin', e.target.value)} 
-                                            style={{ width: '95px', padding: '0.35rem 1.7rem 0.35rem 0.5rem', borderRadius: '6px', border: '1px solid #CBD5E1', textAlign: 'center', fontWeight: '800', letterSpacing: '2px', fontSize: '0.9rem' }} 
+                                            style={{ width: '95px', padding: '0.317rem 1.541rem 0.317rem 0.453rem', borderRadius: '6px', border: '1px solid #CBD5E1', textAlign: 'center', fontWeight: '800', letterSpacing: '2px', fontSize: '0.816rem' }} 
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPin(prev => !prev)}
-                                            style={{ position: 'absolute', right: '0.4rem', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}
+                                            style={{ position: 'absolute', right: '0.363rem', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}
                                             title={showPin ? 'Hide PIN' : 'Show PIN'}
                                         >
                                             {showPin ? <EyeOff size={14} /> : <Eye size={14} />}
                                         </button>
                                     </div>
-                                    <span style={{ fontSize: '0.7rem', color: '#64748B' }}>Default: 1234</span>
+                                    <span style={{ fontSize: '0.634rem', color: '#64748B' }}>Default: 1234</span>
                                 </div>
                             )}
                             <Divider />
@@ -1757,11 +1757,11 @@ const BusinessCustomization = () => {
                         </div>
                     </CustomizationCard>
                     <CustomizationCard title={t('operationalFeatures', 'Operational Features')} icon={Truck}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                             <PremiumToggleItem label={t('activateDeliveryChallans', 'Activate Delivery Challans')} active={config.deliveryChallan} onToggle={() => handleToggle('deliveryChallan')} />
                             {config.deliveryChallan && (
-                                <div style={{ marginLeft: '2.75rem', padding: '1rem', background: '#F8FAFC', borderRadius: '8px', display: 'flex', gap: '1rem' }}>
-                                    <label style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', fontWeight: '600', color: '#475569', cursor: 'pointer' }}>
+                                <div style={{ marginLeft: '2.492rem', padding: '0.906rem', background: '#F8FAFC', borderRadius: '8px', display: 'flex', gap: '0.906rem' }}>
+                                    <label style={{ display: 'flex', gap: '0.453rem', fontSize: '0.725rem', fontWeight: '600', color: '#475569', cursor: 'pointer' }}>
                                         <input 
                                             type="checkbox" 
                                             checked={config.reverseGoodsLogic} 
@@ -1769,7 +1769,7 @@ const BusinessCustomization = () => {
                                             style={{ accentColor: '#1B6B3A' }} 
                                         /> {t('reverseGoodsLogic', 'Reverse Goods Logic')}
                                     </label>
-                                    <label style={{ display: 'flex', gap: '0.5rem', fontSize: '0.8rem', fontWeight: '600', color: '#475569', cursor: 'pointer' }}>
+                                    <label style={{ display: 'flex', gap: '0.453rem', fontSize: '0.725rem', fontWeight: '600', color: '#475569', cursor: 'pointer' }}>
                                         <input 
                                             type="checkbox" 
                                             checked={config.displayAmountChallan} 
@@ -1782,12 +1782,12 @@ const BusinessCustomization = () => {
                         </div>
                     </CustomizationCard>
                 </div>
-                <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ gridColumn: 'span 4', display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                     <CustomizationCard title={t('warehousing', 'Warehousing')} icon={ArrowRightLeft}>
                         <PremiumToggleItem label={t('godownLinks', 'Godown Links')} active={config.godown} onToggle={() => handleToggle('godown')} />
                     </CustomizationCard>
                     <CustomizationCard title={t('integrity', 'Integrity & Security')} icon={Database}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                             <PremiumToggleItem label={t('autoBackup', 'Auto Backup')} active={config.autoBackup} onToggle={() => handleToggle('autoBackup')} />
                             <PremiumToggleItem label={t('auditTrail', 'Audit Trail')} active={config.auditTrail} onToggle={() => handleToggle('auditTrail')} />
                         </div>
@@ -1796,9 +1796,9 @@ const BusinessCustomization = () => {
             </div>
 
             {/* System Preferences & Settings Row */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.359rem' }}>
                 <CustomizationCard title={t('preferences', 'Preferences')} icon={Globe}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         <PremiumToggleItem 
                             label={t('darkMode', 'Dark Mode')} 
                             desc={t('darkModeDesc', 'Use a dark theme for the application interface.')} 
@@ -1808,13 +1808,13 @@ const BusinessCustomization = () => {
                         <Divider />
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
-                                <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '750', color: '#334155' }}>{t('language', 'Language')}</h4>
-                                <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B', marginTop: '0.2rem' }}>{t('systemLanguageDesc', 'System localization language')}</p>
+                                <h4 style={{ margin: 0, fontSize: '0.77rem', fontWeight: '750', color: '#334155' }}>{t('language', 'Language')}</h4>
+                                <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B', marginTop: '0.181rem' }}>{t('systemLanguageDesc', 'System localization language')}</p>
                             </div>
                             <select 
                                 value={config.language || 'EN-US'} 
                                 onChange={(e) => handleTextChange('language', e.target.value)}
-                                style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', background: '#F1F5F9', border: '1px solid #CBD5E1', borderRadius: '6px', fontWeight: '750', color: '#1E293B', cursor: 'pointer', outline: 'none' }}
+                                style={{ fontSize: '0.68rem', padding: '0.317rem 0.544rem', background: '#F1F5F9', border: '1px solid #CBD5E1', borderRadius: '6px', fontWeight: '750', color: '#1E293B', cursor: 'pointer', outline: 'none' }}
                             >
                                 <option value="EN-US">EN-US (English)</option>
                                 <option value="HI-IN">HI-IN (Hindi)</option>
@@ -1828,7 +1828,7 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title={t('notifications', 'Notifications')} icon={Bell}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         <PremiumToggleItem 
                             label={t('pushNotifications', 'Push Notifications')} 
                             desc="Receive real-time alerts for updates and activities." 
@@ -1846,7 +1846,7 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title={t('privacySecurity', 'Privacy & Security')} icon={Shield}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         <PremiumToggleItem 
                             label={t('publicProfile', 'Public Profile')} 
                             desc="Allow other users on the platform to find you." 
@@ -1874,11 +1874,11 @@ const BusinessCustomization = () => {
     );
 
     const renderTransaction = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.812rem' }}>
             {/* Top Row: Header, Items, and Totals */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.359rem' }}>
                 <CustomizationCard title="Transaction Header" icon={LayoutGrid}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                         <CheckboxWithLabel label="Invoice/Bill No." checked={config.invoiceBillNo} onChange={() => handleToggle('invoiceBillNo')} />
                         <CheckboxWithLabel label="Add Time on Transactions" checked={config.addTime} onChange={() => handleToggle('addTime')} />
                         <CheckboxWithLabel label="Cash Sale by default" checked={config.cashSale} onChange={() => handleToggle('cashSale')} />
@@ -1888,7 +1888,7 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title="Items Table" icon={Sliders}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                         <CheckboxWithLabel label="Inclusive/Exclusive Tax on Rate(Price/Unit)" checked={config.inclusiveTax} onChange={() => handleToggle('inclusiveTax')} />
                         <CheckboxWithLabel label="Display Purchase Price of Items" checked={config.displayPurchase} onChange={() => handleToggle('displayPurchase')} />
                         <CheckboxWithLabel label="Show last 5 Sale Price of Items" checked={config.showLast5Sale} onChange={() => handleToggle('showLast5Sale')} />
@@ -1899,7 +1899,7 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title="Taxes, Discount & Totals" icon={Calculator}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                         <CheckboxWithLabel label="Transaction wise Tax" checked={config.txnTax} onChange={() => handleToggle('txnTax')} />
                         <CheckboxWithLabel label="Transaction wise Discount" checked={config.txnDiscount} onChange={() => handleToggle('txnDiscount')} />
                         <CheckboxWithLabel label="Round Off Total" checked={config.roundOff} onChange={() => handleToggle('roundOff')} />
@@ -1908,9 +1908,9 @@ const BusinessCustomization = () => {
             </div>
 
             {/* Bottom Row: More Features, Prefixes, and Billing Type */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.359rem' }}>
                 <CustomizationCard title="More Transaction Features" icon={Sliders}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.77rem' }}>
                         <CheckboxWithLabel label="E-way bill no" checked={config.ewayBill} onChange={() => handleToggle('ewayBill')} />
                         <CheckboxWithLabel label="Quick Entry" checked={config.quickEntry} onChange={() => handleToggle('quickEntry')} />
                         <CheckboxWithLabel label="Do not Show Invoice Preview" checked={config.noInvoicePreview} onChange={() => handleToggle('noInvoicePreview')} />
@@ -1923,75 +1923,75 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title="Transaction Prefixes" icon={Edit}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Sale</label>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Sale</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixSale || ''}
                                 onChange={(e) => handleTextChange('prefixSale', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Credit Note</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Credit Note</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixCredit || ''}
                                 onChange={(e) => handleTextChange('prefixCredit', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Sale Order</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Sale Order</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixSaleOrder || ''}
                                 onChange={(e) => handleTextChange('prefixSaleOrder', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Purchase Order</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Purchase Order</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixPurchase || ''}
                                 onChange={(e) => handleTextChange('prefixPurchase', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Estimate</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Estimate</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixEstimate || ''}
                                 onChange={(e) => handleTextChange('prefixEstimate', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Proforma Invoice</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Proforma Invoice</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixProforma || ''}
                                 onChange={(e) => handleTextChange('prefixProforma', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Delivery Challan</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Delivery Challan</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixChallan || ''}
                                 onChange={(e) => handleTextChange('prefixChallan', e.target.value)}
                             />
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                            <label style={{ fontSize: '0.75rem', fontWeight: '700', color: '#475569' }}>Payment In</label>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                            <label style={{ fontSize: '0.68rem', fontWeight: '700', color: '#475569' }}>Payment In</label>
                             <input 
                                 type="text" 
-                                style={{ padding: '0.5rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.8rem' }} 
+                                style={{ padding: '0.453rem', borderRadius: '6px', border: '1px solid #E2E8F0', background: '#F8FAFC', fontSize: '0.725rem' }} 
                                 value={config.prefixPaymentIn || ''}
                                 onChange={(e) => handleTextChange('prefixPaymentIn', e.target.value)}
                             />
@@ -2000,8 +2000,8 @@ const BusinessCustomization = () => {
                 </CustomizationCard>
 
                 <CustomizationCard title="Billing Type" icon={Sliders}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', cursor: 'pointer' }}>
                             <input 
                                 type="radio" 
                                 name="billingType" 
@@ -2009,9 +2009,9 @@ const BusinessCustomization = () => {
                                 onChange={() => handleTextChange('billingType', 'lite')} 
                                 style={{ accentColor: '#1B6B3A' }}
                             />
-                            <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#475569' }}>Lite Sale</span>
+                            <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#475569' }}>Lite Sale</span>
                         </label>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', cursor: 'pointer' }}>
                             <input 
                                 type="radio" 
                                 name="billingType" 
@@ -2019,7 +2019,7 @@ const BusinessCustomization = () => {
                                 onChange={() => handleTextChange('billingType', 'full')} 
                                 style={{ accentColor: '#1B6B3A' }}
                             />
-                            <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#475569' }}>Full Sale</span>
+                            <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#475569' }}>Full Sale</span>
                         </label>
                     </div>
                 </CustomizationCard>
@@ -2031,10 +2031,10 @@ const BusinessCustomization = () => {
         const isThermal = config.printerType === 'thermal' || (config.paperSize && config.paperSize.includes('Thermal'));
 
         return (
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.5rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '1.359rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                     <CustomizationCard title="Printer Mechanism" icon={Printer}>
-                        <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.906rem', marginBottom: '0.906rem' }}>
                             <button 
                                 type="button"
                                 onClick={() => {
@@ -2048,7 +2048,7 @@ const BusinessCustomization = () => {
                                 }} 
                                 style={{ 
                                     flex: 1, 
-                                    padding: '0.75rem', 
+                                    padding: '0.68rem', 
                                     borderRadius: '10px', 
                                     border: config.printerType === 'regular' ? '2px solid #8B5CF6' : '1px solid #CBD5E1', 
                                     background: config.printerType === 'regular' ? '#8B5CF6' : '#FFFFFF', 
@@ -2074,7 +2074,7 @@ const BusinessCustomization = () => {
                                 }} 
                                 style={{ 
                                     flex: 1, 
-                                    padding: '0.75rem', 
+                                    padding: '0.68rem', 
                                     borderRadius: '10px', 
                                     border: config.printerType === 'thermal' ? '2px solid #8B5CF6' : '1px solid #CBD5E1', 
                                     background: config.printerType === 'thermal' ? '#8B5CF6' : '#FFFFFF', 
@@ -2093,20 +2093,20 @@ const BusinessCustomization = () => {
                             type="button"
                             onClick={handleTestPrint}
                             style={{
-                                marginTop: '1.25rem',
+                                marginTop: '1.133rem',
                                 width: '100%',
-                                padding: '0.7rem 1rem',
+                                padding: '0.634rem 0.906rem',
                                 borderRadius: '10px',
                                 background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
                                 color: '#FFFFFF',
                                 border: 'none',
                                 fontWeight: '800',
-                                fontSize: '0.85rem',
+                                fontSize: '0.77rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.5rem',
+                                gap: '0.453rem',
                                 boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)',
                                 transition: 'all 0.2s'
                             }}
@@ -2115,15 +2115,15 @@ const BusinessCustomization = () => {
                         </button>
                     </CustomizationCard>
                     <CustomizationCard title="Info Overrides" icon={Edit}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                             <ProfileInputField 
                                 label="Display Title for Print" 
                                 icon={Briefcase} 
                                 value={config.displayTitlePrint} 
                                 onChange={(e) => handleTextChange('displayTitlePrint', e.target.value)} 
                             />
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#475569' }}>Page Dim:</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
+                                <span style={{ fontSize: '0.77rem', fontWeight: '600', color: '#475569' }}>Page Dim:</span>
                                 <select 
                                     style={selectStyle} 
                                     value={config.paperSize} 
@@ -2150,48 +2150,48 @@ const BusinessCustomization = () => {
                     </CustomizationCard>
                 </div>
                 <div style={{ background: 'white', border: '1px solid #E2E8F0', borderRadius: '16px', overflow: 'hidden' }}>
-                    <div style={{ padding: '1rem', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '800' }}>
+                    <div style={{ padding: '0.906rem', background: '#F8FAFC', borderBottom: '1px solid #E2E8F0', display: 'flex', alignItems: 'center', gap: '0.453rem', fontWeight: '800' }}>
                         <Eye size={16} color="#8B5CF6" /> VIEWPORT PREVIEW ({isThermal ? 'THERMAL RECEIPT' : 'REGULAR SHEET'})
                     </div>
-                    <div style={{ padding: '2rem', minHeight: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
+                    <div style={{ padding: '1.812rem', minHeight: '320px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
                         {isThermal ? (
-                            <div style={{ width: '220px', background: 'white', border: '1px dashed #CBD5E1', borderRadius: '4px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.4rem', fontFamily: 'monospace' }}>
-                                <div style={{ textTransform: 'uppercase', textAlign: 'center', fontWeight: '900', fontSize: '0.8rem', color: '#0F172A' }}>
+                            <div style={{ width: '220px', background: 'white', border: '1px dashed #CBD5E1', borderRadius: '4px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '0.906rem', display: 'flex', flexDirection: 'column', gap: '0.363rem', fontFamily: 'monospace' }}>
+                                <div style={{ textTransform: 'uppercase', textAlign: 'center', fontWeight: '900', fontSize: '0.725rem', color: '#0F172A' }}>
                                     {config.displayTitlePrint || 'MY BUSINESS'}
                                 </div>
-                                <div style={{ textAlign: 'center', fontSize: '0.6rem', color: '#64748B', borderBottom: '1px dashed #CBD5E1', paddingBottom: '0.4rem' }}>
+                                <div style={{ textAlign: 'center', fontSize: '0.544rem', color: '#64748B', borderBottom: '1px dashed #CBD5E1', paddingBottom: '0.363rem' }}>
                                     RECEIPT #{config.prefixSale || 'INV-'}001
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.62rem', color: '#334155', marginTop: '0.2rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.562rem', color: '#334155', marginTop: '0.181rem' }}>
                                     <span>Item Sample x1</span>
                                     <span>₹500.00</span>
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.62rem', color: '#334155' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.562rem', color: '#334155' }}>
                                     <span>Item Sample x2</span>
                                     <span>₹500.00</span>
                                 </div>
-                                <div style={{ borderTop: '1px dashed #0F172A', paddingTop: '0.4rem', marginTop: '0.2rem', display: 'flex', justifyContent: 'space-between', fontWeight: '900', fontSize: '0.75rem', color: '#0F172A' }}>
+                                <div style={{ borderTop: '1px dashed #0F172A', paddingTop: '0.363rem', marginTop: '0.181rem', display: 'flex', justifyContent: 'space-between', fontWeight: '900', fontSize: '0.68rem', color: '#0F172A' }}>
                                     <span>TOTAL:</span>
                                     <span>₹1,000.00</span>
                                 </div>
-                                <div style={{ textAlign: 'center', fontSize: '0.55rem', color: '#94A3B8', marginTop: '0.4rem', borderTop: '1px dashed #E2E8F0', paddingTop: '0.3rem' }}>
+                                <div style={{ textAlign: 'center', fontSize: '0.498rem', color: '#94A3B8', marginTop: '0.363rem', borderTop: '1px dashed #E2E8F0', paddingTop: '0.272rem' }}>
                                     *** THANK YOU ***
                                 </div>
                             </div>
                         ) : (
-                            <div style={{ width: '80%', background: 'white', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <div style={{ borderBottom: '2px solid #E2E8F0', paddingBottom: '0.5rem', display: 'flex', justifyContent: 'space-between' }}>
-                                    <div style={{ fontWeight: '900', color: '#0F172A', fontSize: '0.85rem' }}>{config.displayTitlePrint || 'MY BUSINESS'}</div>
-                                    <div style={{ fontSize: '0.65rem', color: '#64748B', fontWeight: '700' }}>{config.prefixSale || 'INV-'}001</div>
+                            <div style={{ width: '80%', background: 'white', borderRadius: '8px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '1.133rem', display: 'flex', flexDirection: 'column', gap: '0.453rem' }}>
+                                <div style={{ borderBottom: '2px solid #E2E8F0', paddingBottom: '0.453rem', display: 'flex', justifyContent: 'space-between' }}>
+                                    <div style={{ fontWeight: '900', color: '#0F172A', fontSize: '0.77rem' }}>{config.displayTitlePrint || 'MY BUSINESS'}</div>
+                                    <div style={{ fontSize: '0.589rem', color: '#64748B', fontWeight: '700' }}>{config.prefixSale || 'INV-'}001</div>
                                 </div>
                                 <div style={{ height: '8px', background: '#F1F5F9', width: '100%', borderRadius: '4px' }}></div>
                                 <div style={{ height: '8px', background: '#F1F5F9', width: '80%', borderRadius: '4px' }}></div>
-                                <div style={{ borderTop: '1px solid #F1F5F9', marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
-                                    {config.signatureUrl && <div style={{ fontSize: '0.5rem', color: '#10B981', fontStyle: 'italic', border: '1px dashed #10B981', padding: '2px 4px', transform: 'rotate(-5deg)', fontWeight: '800' }}>SIGNED</div>}
+                                <div style={{ borderTop: '1px solid #F1F5F9', marginTop: '0.906rem', display: 'flex', justifyContent: 'flex-end' }}>
+                                    {config.signatureUrl && <div style={{ fontSize: '0.453rem', color: '#10B981', fontStyle: 'italic', border: '1px dashed #10B981', padding: '2px 4px', transform: 'rotate(-5deg)', fontWeight: '800' }}>SIGNED</div>}
                                 </div>
                             </div>
                         )}
-                        <div style={{ fontSize: '0.65rem', color: '#94A3B8', marginTop: '1rem', fontWeight: '750', textTransform: 'uppercase' }}>
+                        <div style={{ fontSize: '0.589rem', color: '#94A3B8', marginTop: '0.906rem', fontWeight: '750', textTransform: 'uppercase' }}>
                             Active Dimension: {config.paperSize || (isThermal ? '3 Inch (Thermal)' : 'A4 Size')}
                         </div>
                     </div>
@@ -2202,12 +2202,12 @@ const BusinessCustomization = () => {
 
     const renderGst = () => (
         <CustomizationCard title="GST Matrix" icon={ShieldCheck}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.812rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                     <PremiumToggleItem label="Enable GST Mode" active={config.enableGst} onToggle={() => handleToggle('enableGst')} />
                     <PremiumToggleItem label="Force HSN Mandatory" active={config.hsnCode} onToggle={() => handleToggle('hsnCode')} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                     <CheckboxWithLabel label="Apply Reverse Charge" checked={config.reverseCharge} onChange={() => handleToggle('reverseCharge')} />
                     <CheckboxWithLabel label="Show Place of Supply" checked={config.placeSupply} onChange={() => handleToggle('placeSupply')} />
                 </div>
@@ -2227,28 +2227,28 @@ const BusinessCustomization = () => {
     };
 
     const renderBetaClub = () => (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', padding: '2rem 0' }}>
-            <div style={{ width: '100%', background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)', borderRadius: '16px', padding: '3.5rem', textAlign: 'center', color: 'white', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.812rem', padding: '1.812rem 0' }}>
+            <div style={{ width: '100%', background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)', borderRadius: '16px', padding: '3.172rem', textAlign: 'center', color: 'white', position: 'relative', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)' }}>
                 <div style={{ position: 'absolute', right: '-50px', top: '-50px', width: '300px', height: '300px', background: 'rgba(245, 158, 11, 0.05)', borderRadius: '50%', pointerEvents: 'none' }} />
                 <div style={{ position: 'absolute', left: '-50px', bottom: '-50px', width: '200px', height: '200px', background: 'rgba(245, 158, 11, 0.05)', borderRadius: '50%', pointerEvents: 'none' }} />
                 
-                <Crown size={64} color="#F59E0B" style={{ marginBottom: '1.5rem', filter: 'drop-shadow(0 0 15px rgba(245,158,11,0.5))' }} />
-                <h2 style={{ margin: 0, fontSize: '2.5rem', fontWeight: '900', color: '#FCD34D', letterSpacing: '-0.02em' }}>Join the Beta Club</h2>
-                <p style={{ margin: '1.5rem auto', fontSize: '1.1rem', color: '#94A3B8', maxWidth: '650px', lineHeight: '1.7', fontWeight: '500' }}>
+                <Crown size={64} color="#F59E0B" style={{ marginBottom: '1.359rem', filter: 'drop-shadow(0 0 15px rgba(245,158,11,0.5))' }} />
+                <h2 style={{ margin: 0, fontSize: '2.266rem', fontWeight: '900', color: '#FCD34D', letterSpacing: '-0.02em' }}>Join the Beta Club</h2>
+                <p style={{ margin: '1.359rem auto', fontSize: '0.997rem', color: '#94A3B8', maxWidth: '650px', lineHeight: '1.7', fontWeight: '500' }}>
                     Gain exclusive early access to experimental features, AI-powered insights, and advanced integrations before they roll out to the public.
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginTop: '2.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.906rem', marginTop: '2.266rem' }}>
                     <button 
                         onClick={handleApplyBeta} 
                         style={{ 
                             background: config.betaClubApplied ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)' : 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', 
-                            color: '#FFFFFF', border: 'none', padding: '1rem 2.5rem', borderRadius: '12px', fontWeight: '800', fontSize: '1rem', cursor: 'pointer', boxShadow: '0 10px 25px rgba(245, 158, 11, 0.3)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '0.5rem' 
+                            color: '#FFFFFF', border: 'none', padding: '0.906rem 2.266rem', borderRadius: '12px', fontWeight: '800', fontSize: '0.906rem', cursor: 'pointer', boxShadow: '0 10px 25px rgba(245, 158, 11, 0.3)', transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: '0.453rem' 
                         }}
                     >
                         <Crown size={18} /> {config.betaClubApplied ? '✓ APPLICATION UNDER BOARD REVIEW' : 'APPLY FOR ACCESS'}
                     </button>
                     {config.betaClubApplied && (
-                        <div style={{ fontSize: '0.8rem', color: '#10B981', fontWeight: '750', background: 'rgba(16, 185, 129, 0.1)', padding: '0.4rem 1rem', borderRadius: '100px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                        <div style={{ fontSize: '0.725rem', color: '#10B981', fontWeight: '750', background: 'rgba(16, 185, 129, 0.1)', padding: '0.363rem 0.906rem', borderRadius: '100px', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                             Status: Priority Queue Assigned — Board Review Pending
                         </div>
                     )}
@@ -2259,12 +2259,12 @@ const BusinessCustomization = () => {
 
     const renderParty = () => (
         <CustomizationCard title="CRM Features" icon={Users}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.812rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                     <PremiumToggleItem label="Contact Group Clustering" active={config.partyGroup} onToggle={() => handleToggle('partyGroup')} />
                     <PremiumToggleItem label="Active Status Badging" active={config.partyStatus} onToggle={() => handleToggle('partyStatus')} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                     <PremiumToggleItem label="Loyalty Contribution" active={config.loyalty} onToggle={() => handleToggle('loyalty')} />
                     <PremiumToggleItem label="Auto Reminders" active={config.payReminder} onToggle={() => handleToggle('payReminder')} />
                 </div>
@@ -2274,25 +2274,25 @@ const BusinessCustomization = () => {
 
 
     return (
-        <div className="premium-container" style={{ paddingBottom: '4rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.5rem' }}>
+        <div className="premium-container" style={{ paddingBottom: '3.625rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
                 <div>
-                    <button onClick={() => navigate(-1)} style={{ background: 'transparent', border: 'none', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', marginBottom: '0.5rem', padding: 0 }}>
+                    <button onClick={() => navigate(-1)} style={{ background: 'transparent', border: 'none', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.453rem', fontWeight: '700', fontSize: '0.77rem', cursor: 'pointer', marginBottom: '0.453rem', padding: 0 }}>
                         <ArrowLeft size={16} /> {t('back', 'BACK')}
                     </button>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: '850', color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>{t('advancedEngineConfig', 'Advanced Engine Configuration')}</h1>
-                    <p style={{ color: '#64748B', fontSize: '0.85rem', marginTop: '0.2rem' }}>Manage dynamic deployment switches and high-level metadata configuration.</p>
+                    <h1 style={{ fontSize: '1.586rem', fontWeight: '850', color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>{t('advancedEngineConfig', 'Advanced Engine Configuration')}</h1>
+                    <p style={{ color: '#64748B', fontSize: '0.77rem', marginTop: '0.181rem' }}>Manage dynamic deployment switches and high-level metadata configuration.</p>
                 </div>
-                <button onClick={handleSave} disabled={isSaving} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.65rem 1.25rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)', opacity: isSaving ? 0.7 : 1, fontSize: '0.85rem' }}>
+                <button onClick={handleSave} disabled={isSaving} style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', padding: '0.589rem 1.133rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)', color: 'white', border: 'none', borderRadius: '8px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 12px rgba(27, 107, 58, 0.2)', opacity: isSaving ? 0.7 : 1, fontSize: '0.77rem' }}>
                     <Save size={18} /> {isSaving ? 'Saving...' : t('deployConfig', 'DEPLOY CONFIG')}
                 </button>
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '2rem', background: 'white', padding: '0.5rem', borderRadius: '12px', border: '1px solid #E2E8F0', overflowX: 'auto', scrollbarWidth: 'none' }}>
+            <div style={{ display: 'flex', gap: '0.68rem', marginBottom: '1.812rem', background: 'white', padding: '0.453rem', borderRadius: '12px', border: '1px solid #E2E8F0', overflowX: 'auto', scrollbarWidth: 'none' }}>
                 {tabs.map(tab => {
                     const isActive = activeTab === tab.id;
                     return (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1rem', borderRadius: '8px', border: 'none', background: isActive ? tab.gradient : 'transparent', color: isActive ? 'white' : '#64748B', fontWeight: '800', fontSize: '0.8rem', cursor: 'pointer', transition: 'all 0.2s', boxShadow: isActive ? `0 4px 12px ${tab.shadow}` : 'none', whiteSpace: 'nowrap' }}>
+                        <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '8px', border: 'none', background: isActive ? tab.gradient : 'transparent', color: isActive ? 'white' : '#64748B', fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', transition: 'all 0.2s', boxShadow: isActive ? `0 4px 12px ${tab.shadow}` : 'none', whiteSpace: 'nowrap' }}>
                             <tab.icon size={16} /> {tab.label}
                         </button>
                     );
@@ -2345,10 +2345,10 @@ const BusinessCustomization = () => {
                                     <Award size={22} color="#F59E0B" />
                                 </div>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: '800', color: '#FFFFFF' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.042rem', fontWeight: '800', color: '#FFFFFF' }}>
                                         ICAI Credential Audit & Verification
                                     </h3>
-                                    <p style={{ margin: '2px 0 0 0', fontSize: '0.78rem', color: '#94A3B8' }}>
+                                    <p style={{ margin: '2px 0 0 0', fontSize: '0.707rem', color: '#94A3B8' }}>
                                         Statutory Chartered Accountant registration validation for FIN-PRO Suite
                                     </p>
                                 </div>
@@ -2377,10 +2377,10 @@ const BusinessCustomization = () => {
                                     }}>
                                         {caVerificationStatus === 'VERIFIED' ? <ShieldCheck size={22} color="#059669" /> : (caVerificationStatus === 'PENDING_REVIEW' ? <Clock size={22} color="#D97706" /> : <AlertTriangle size={22} color="#DC2626" />)}
                                         <div>
-                                            <div style={{ fontSize: '0.95rem', fontWeight: '800', color: caVerificationStatus === 'VERIFIED' ? '#065F46' : (caVerificationStatus === 'PENDING_REVIEW' ? '#92400E' : '#991B1B') }}>
+                                            <div style={{ fontSize: '0.861rem', fontWeight: '800', color: caVerificationStatus === 'VERIFIED' ? '#065F46' : (caVerificationStatus === 'PENDING_REVIEW' ? '#92400E' : '#991B1B') }}>
                                                 {caVerificationStatus === 'VERIFIED' ? 'ICAI Member Officially Verified & Active' : (caVerificationStatus === 'PENDING_REVIEW' ? 'Pending Administrator Institutional Review' : 'Verification Unsuccessful')}
                                             </div>
-                                            <div style={{ fontSize: '0.8rem', color: caVerificationStatus === 'VERIFIED' ? '#047857' : (caVerificationStatus === 'PENDING_REVIEW' ? '#B45309' : '#B91C1C'), marginTop: '2px', lineHeight: '1.4' }}>
+                                            <div style={{ fontSize: '0.725rem', color: caVerificationStatus === 'VERIFIED' ? '#047857' : (caVerificationStatus === 'PENDING_REVIEW' ? '#B45309' : '#B91C1C'), marginTop: '2px', lineHeight: '1.4' }}>
                                                 {caVerificationStatus === 'VERIFIED'
                                                     ? 'Your professional credentials are authenticated. You are authorized to activate FIN-PRO subscriptions and launch the auditor dashboard.'
                                                     : (caVerificationStatus === 'PENDING_REVIEW'
@@ -2615,58 +2615,58 @@ const BusinessCustomization = () => {
 
 // eslint-disable-next-line no-unused-vars
 const ProfileInputField = ({ label, icon: Icon, error, helper, style, ...props }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-        <label style={{ fontSize: '0.75rem', fontWeight: '750', color: '#475569' }}>{label}</label>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.363rem' }}>
+        <label style={{ fontSize: '0.68rem', fontWeight: '750', color: '#475569' }}>{label}</label>
         <div style={{ position: 'relative' }}>
             <Icon size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: error ? '#EF4444' : '#94A3B8' }} />
             <input 
                 {...props} 
                 style={{ 
                     width: '100%', 
-                    padding: '0.6rem 0.6rem 0.6rem 2.5rem', 
+                    padding: '0.544rem 0.544rem 0.544rem 2.266rem', 
                     borderRadius: '8px', 
                     border: error ? '1.5px solid #EF4444' : (props.value && String(props.value).length === 15 ? '1.5px solid #10B981' : '1px solid #E2E8F0'), 
                     background: 'white', 
                     outline: 'none', 
-                    fontSize: '0.85rem', 
+                    fontSize: '0.77rem', 
                     boxSizing: 'border-box',
                     ...style 
                 }} 
             />
         </div>
-        {helper && <div style={{ marginTop: '0.1rem' }}>{helper}</div>}
+        {helper && <div style={{ marginTop: '0.091rem' }}>{helper}</div>}
     </div>
 );
 
 // eslint-disable-next-line no-unused-vars
 const CustomizationCard = ({ title, icon: Icon, children }) => (
     <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 1px 3px rgba(0,0,0,0.02)', overflow: 'hidden' }}>
-        <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: '0.75rem', background: '#FAFBFC' }}>
+        <div style={{ padding: '0.906rem 1.133rem', borderBottom: '1px solid #F1F5F9', display: 'flex', alignItems: 'center', gap: '0.68rem', background: '#FAFBFC' }}>
             <Icon size={18} color="#1B6B3A" />
-            <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: '800', color: '#1E293B' }}>{title}</h3>
+            <h3 style={{ margin: 0, fontSize: '0.861rem', fontWeight: '800', color: '#1E293B' }}>{title}</h3>
         </div>
-        <div style={{ padding: '1.5rem' }}>{children}</div>
+        <div style={{ padding: '1.359rem' }}>{children}</div>
     </div>
 );
 
 const PremiumToggleItem = ({ label, desc, active, onToggle }) => (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1.5rem' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1.359rem' }}>
         <div style={{ flex: 1 }}>
-            <h4 style={{ margin: 0, fontSize: '0.85rem', fontWeight: '750', color: '#334155' }}>{label}</h4>
-            {desc && <p style={{ margin: 0, fontSize: '0.75rem', color: '#64748B', marginTop: '0.2rem', lineHeight: '1.4' }}>{desc}</p>}
+            <h4 style={{ margin: 0, fontSize: '0.77rem', fontWeight: '750', color: '#334155' }}>{label}</h4>
+            {desc && <p style={{ margin: 0, fontSize: '0.68rem', color: '#64748B', marginTop: '0.181rem', lineHeight: '1.4' }}>{desc}</p>}
         </div>
         <Toggle checked={active} onChange={onToggle} size="md" />
     </div>
 );
 
 const CheckboxWithLabel = ({ label, checked, onChange }) => (
-    <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer' }}>
+    <label style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', cursor: 'pointer' }}>
         <input type="checkbox" checked={checked} onChange={onChange} style={{ width: '16px', height: '16px', accentColor: '#1B6B3A' }} />
-        <span style={{ fontSize: '0.8rem', fontWeight: '600', color: '#475569' }}>{label}</span>
+        <span style={{ fontSize: '0.725rem', fontWeight: '600', color: '#475569' }}>{label}</span>
     </label>
 );
 
-const selectStyle = { width: '100%', padding: '0.6rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.85rem', cursor: 'pointer', outline: 'none' };
+const selectStyle = { width: '100%', padding: '0.544rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', cursor: 'pointer', outline: 'none' };
 const Divider = () => <div style={{ height: '1px', background: '#F1F5F9' }} />;
 
 export default BusinessCustomization;

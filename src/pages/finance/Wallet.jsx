@@ -214,11 +214,11 @@ const Wallet = () => {
     });
 
     return (
-        <div style={{ padding: '1.25rem 2.5rem', background: '#F0F9F4', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div style={{ padding: '1.133rem 2.266rem', background: '#F0F9F4', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             
             {/* Simple Header Block */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.266rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     <div style={{ 
                         width: '46px', 
                         height: '46px', 
@@ -233,8 +233,8 @@ const Wallet = () => {
                         <WalletIcon size={22} />
                     </div>
                     <div>
-                        <h1 style={{ fontSize: '2rem', fontWeight: '850', color: '#064E3B', margin: 0, letterSpacing: '-0.02em' }}>Beta Wallet</h1>
-                        <p style={{ color: '#475569', fontSize: '0.95rem', margin: '0.25rem 0 0 0', fontWeight: '500' }}>Manage stored value balances and load funds securely.</p>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: '#064E3B', margin: 0, letterSpacing: '-0.02em' }}>Beta Wallet</h1>
+                        <p style={{ color: '#475569', fontSize: '0.861rem', margin: '0.227rem 0 0 0', fontWeight: '500' }}>Manage stored value balances and load funds securely.</p>
                     </div>
                 </div>
             </div>
@@ -243,20 +243,20 @@ const Wallet = () => {
             <div style={{ 
                 flexShrink: 0,
                 background: 'white', 
-                borderRadius: '24px', 
-                padding: '2.5rem', 
+                borderRadius: '16px', 
+                padding: '2.266rem', 
                 border: '1px solid #E2E8F0', 
                 boxShadow: '0 4px 20px -2px rgba(0,0,0,0.03)', 
-                marginBottom: '2.5rem',
+                marginBottom: '2.266rem',
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center'
             }}>
                 <div>
-                    <span style={{ fontSize: '0.85rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Current Stored Balance</span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.5rem' }}>
-                        <span style={{ fontSize: '1.75rem', fontWeight: '850', color: '#064E3B', marginRight: '2px' }}>{currency.symbol}</span>
-                        <h2 style={{ fontSize: '2.25rem', fontWeight: '850', color: '#064E3B', margin: 0, letterSpacing: '-0.01em' }}>
+                    <span style={{ fontSize: '0.77rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '1px' }}>Current Stored Balance</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.227rem', marginTop: '0.453rem' }}>
+                        <span style={{ fontSize: '1.586rem', fontWeight: '850', color: '#064E3B', marginRight: '2px' }}>{currency.symbol}</span>
+                        <h2 style={{ fontSize: '2.039rem', fontWeight: '850', color: '#064E3B', margin: 0, letterSpacing: '-0.01em' }}>
                             {balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                         </h2>
                     </div>
@@ -267,14 +267,14 @@ const Wallet = () => {
                     style={{ 
                         display: 'flex', 
                         alignItems: 'center', 
-                        gap: '0.6rem', 
-                        padding: '1rem 2rem', 
+                        gap: '0.544rem', 
+                        padding: '0.906rem 1.812rem', 
                         borderRadius: '14px', 
                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                         color: 'white', 
                         border: 'none', 
                         fontWeight: '800', 
-                        fontSize: '1rem',
+                        fontSize: '0.906rem',
                         cursor: 'pointer', 
                         boxShadow: '0 10px 20px rgba(27, 107, 58, 0.2)',
                         transition: 'transform 0.2s'
@@ -287,11 +287,11 @@ const Wallet = () => {
             </div>
 
             {/* Action Table Container */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '24px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)', overflow: 'hidden', marginBottom: '1.5rem' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)', overflow: 'hidden', marginBottom: '1.359rem' }}>
                 
                 {/* Table Toolbar header */}
-                <div style={{ padding: '1.5rem 2rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC', flexShrink: 0 }}>
-                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: '850', color: '#0F172A' }}>Wallet History</h3>
+                <div style={{ padding: '1.359rem 1.812rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC', flexShrink: 0 }}>
+                    <h3 style={{ margin: 0, fontSize: '0.997rem', fontWeight: '850', color: '#0F172A' }}>Wallet History</h3>
                     
                     <div style={{ position: 'relative', width: '320px' }}>
                         <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
@@ -302,11 +302,11 @@ const Wallet = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                             style={{ 
                                 width: '100%', 
-                                padding: '0.65rem 1rem 0.65rem 2.5rem', 
+                                padding: '0.589rem 0.906rem 0.589rem 2.266rem', 
                                 borderRadius: '12px', 
                                 border: '1px solid #E2E8F0', 
                                 outline: 'none',
-                                fontSize: '0.85rem'
+                                fontSize: '0.77rem'
                             }}
                         />
                     </div>
@@ -325,7 +325,7 @@ const Wallet = () => {
                         <tbody>
                             {filteredHistory.length === 0 ? (
                                 <tr>
-                                    <td colSpan="5" style={{ padding: '3rem 2rem', textAlign: 'center', color: '#94A3B8', fontWeight: '600', fontSize: '0.9rem' }}>
+                                    <td colSpan="5" style={{ padding: '2.719rem 1.812rem', textAlign: 'center', color: '#94A3B8', fontWeight: '600', fontSize: '0.816rem' }}>
                                         No transaction matching records found.
                                     </td>
                                 </tr>
@@ -334,28 +334,28 @@ const Wallet = () => {
                                     const isCredit = tx.type === 'CREDIT';
                                     return (
                                         <tr key={tx.id} style={{ borderBottom: '1px solid #F8FAFC', transition: 'background 0.2s' }}>
-                                            <td style={{ padding: '1.25rem 2rem' }}>
-                                                <span style={{ fontFamily: 'monospace', fontWeight: '750', color: '#64748B', fontSize: '0.85rem' }}>{tx.id}</span>
+                                            <td style={{ padding: '1.133rem 1.812rem' }}>
+                                                <span style={{ fontFamily: 'monospace', fontWeight: '750', color: '#64748B', fontSize: '0.77rem' }}>{tx.id}</span>
                                             </td>
-                                            <td style={{ padding: '1.25rem 2rem', color: '#475569', fontWeight: '600', fontSize: '0.85rem' }}>{tx.date}</td>
-                                            <td style={{ padding: '1.25rem 2rem', fontWeight: '750', color: '#1E293B', fontSize: '0.9rem' }}>{tx.description || '-'}</td>
-                                            <td style={{ padding: '1.25rem 2rem' }}>
+                                            <td style={{ padding: '1.133rem 1.812rem', color: '#475569', fontWeight: '600', fontSize: '0.77rem' }}>{tx.date}</td>
+                                            <td style={{ padding: '1.133rem 1.812rem', fontWeight: '750', color: '#1E293B', fontSize: '0.816rem' }}>{tx.description || '-'}</td>
+                                            <td style={{ padding: '1.133rem 1.812rem' }}>
                                                 <div style={{ 
                                                     display: 'inline-flex', 
                                                     alignItems: 'center', 
-                                                    gap: '0.35rem', 
-                                                    padding: '0.35rem 0.65rem', 
+                                                    gap: '0.317rem', 
+                                                    padding: '0.317rem 0.589rem', 
                                                     borderRadius: '8px', 
                                                     background: isCredit ? '#ECFDF5' : '#FEF2F2', 
                                                     color: isCredit ? '#059669' : '#DC2626',
                                                     fontWeight: '800',
-                                                    fontSize: '0.75rem'
+                                                    fontSize: '0.68rem'
                                                 }}>
                                                     {isCredit ? <ArrowDownLeft size={13} strokeWidth={3} /> : <ArrowUpRight size={13} strokeWidth={3} />}
                                                     {isCredit ? 'IN' : 'OUT'}
                                                 </div>
                                             </td>
-                                            <td style={{ padding: '1.25rem 2rem', textAlign: 'right', fontWeight: '900', color: isCredit ? '#059669' : '#DC2626', fontSize: '0.95rem' }}>
+                                            <td style={{ padding: '1.133rem 1.812rem', textAlign: 'right', fontWeight: '900', color: isCredit ? '#059669' : '#DC2626', fontSize: '0.861rem' }}>
                                                 {isCredit ? '+' : '-'} {formatCurrency(tx.amount)}
                                             </td>
                                         </tr>
@@ -369,33 +369,33 @@ const Wallet = () => {
 
             {/* Simplistic Beautiful Modal for Add Money */}
             {isModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1rem' }}>
-                    <div style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '24px', padding: '2rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.2)', border: '1px solid #E2E8F0' }}>
+                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '0.906rem' }}>
+                    <div style={{ background: 'white', width: '100%', maxWidth: '400px', borderRadius: '16px', padding: '1.812rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.2)', border: '1px solid #E2E8F0' }}>
                         
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Money to Wallet</h3>
-                            <button onClick={() => setIsModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '10px', cursor: 'pointer', color: '#64748B' }}><X size={18} /></button>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Money to Wallet</h3>
+                            <button onClick={() => setIsModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '10px', cursor: 'pointer', color: '#64748B' }}><X size={18} /></button>
                         </div>
 
                         {/* Elegant Tab Switcher */}
                         <div style={{ 
                             display: 'flex', 
                             background: '#F1F5F9', 
-                            padding: '0.25rem', 
+                            padding: '0.227rem', 
                             borderRadius: '12px', 
-                            marginBottom: '1.5rem',
-                            gap: '0.25rem'
+                            marginBottom: '1.359rem',
+                            gap: '0.227rem'
                         }}>
                             <button
                                 type="button"
                                 onClick={() => setActiveTab('gateway')}
                                 style={{
                                     flex: 1,
-                                    padding: '0.6rem 0.5rem',
+                                    padding: '0.544rem 0.453rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     cursor: 'pointer',
                                     background: activeTab === 'gateway' ? 'white' : 'transparent',
                                     color: activeTab === 'gateway' ? '#064E3B' : '#64748B',
@@ -410,11 +410,11 @@ const Wallet = () => {
                                 onClick={() => setActiveTab('points')}
                                 style={{
                                     flex: 1,
-                                    padding: '0.6rem 0.5rem',
+                                    padding: '0.544rem 0.453rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     cursor: 'pointer',
                                     background: activeTab === 'points' ? 'white' : 'transparent',
                                     color: activeTab === 'points' ? '#064E3B' : '#64748B',
@@ -427,11 +427,11 @@ const Wallet = () => {
                         </div>
 
                         {activeTab === 'gateway' ? (
-                            <form onSubmit={handleAddMoney} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleAddMoney} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Load Amount ({currency.code})</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Load Amount ({currency.code})</label>
                                     <div style={{ position: 'relative' }}>
-                                        <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.1rem', fontWeight: '800', color: '#0F172A' }}>{currency.symbol}</span>
+                                        <span style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', fontSize: '0.997rem', fontWeight: '800', color: '#0F172A' }}>{currency.symbol}</span>
                                         <input 
                                             required 
                                             autoFocus
@@ -441,19 +441,19 @@ const Wallet = () => {
                                             placeholder="500.00"
                                             value={addForm.amount} 
                                             onChange={(e) => setAddForm({ ...addForm, amount: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 2.2rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1.1rem', fontWeight: '750', color: '#0F172A' }} 
+                                            style={{ width: '100%', padding: '0.77rem 0.906rem 0.77rem 1.994rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.997rem', fontWeight: '750', color: '#0F172A' }} 
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Brief Note / Description</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Brief Note / Description</label>
                                     <input 
                                         type="text" 
                                         placeholder="e.g. UPI Top-up, Bank Load"
                                         value={addForm.description} 
                                         onChange={(e) => setAddForm({ ...addForm, description: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.9rem', fontWeight: '600', color: '#1E293B' }} 
+                                        style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem', fontWeight: '600', color: '#1E293B' }} 
                                     />
                                 </div>
 
@@ -462,20 +462,20 @@ const Wallet = () => {
                                     disabled={isProcessing}
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.9rem', 
+                                        padding: '0.816rem', 
                                         borderRadius: '12px', 
                                         background: isProcessing ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                         color: 'white', 
                                         border: 'none', 
                                         fontWeight: '850', 
-                                        fontSize: '1rem', 
+                                        fontSize: '0.906rem', 
                                         cursor: isProcessing ? 'not-allowed' : 'pointer', 
                                         boxShadow: isProcessing ? 'none' : '0 8px 16px rgba(27, 107, 58, 0.25)',
-                                        marginTop: '0.5rem',
+                                        marginTop: '0.453rem',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '0.5rem'
+                                        gap: '0.453rem'
                                     }}
                                 >
                                     {isProcessing ? (
@@ -488,23 +488,23 @@ const Wallet = () => {
                                 </button>
                             </form>
                         ) : (
-                            <form onSubmit={handleConvertPoints} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <form onSubmit={handleConvertPoints} style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                                 {/* Points Balance Indicator */}
                                 <div style={{ 
                                     background: '#F0FDF4', 
                                     border: '1px solid #DCFCE7', 
                                     borderRadius: '12px', 
-                                    padding: '0.85rem 1rem', 
+                                    padding: '0.77rem 0.906rem', 
                                     display: 'flex', 
                                     justifyContent: 'space-between', 
                                     alignItems: 'center' 
                                 }}>
-                                    <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#15803D' }}>Current Reward Points:</span>
-                                    <span style={{ fontSize: '1.05rem', fontWeight: '900', color: '#15803D' }}>{rewardPoints.toLocaleString()} Pts</span>
+                                    <span style={{ fontSize: '0.725rem', fontWeight: '800', color: '#15803D' }}>Current Reward Points:</span>
+                                    <span style={{ fontSize: '0.952rem', fontWeight: '900', color: '#15803D' }}>{rewardPoints.toLocaleString()} Pts</span>
                                 </div>
 
                                 <div>
-                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748B', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Points to Convert</label>
+                                    <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.453rem', textTransform: 'uppercase' }}>Points to Convert</label>
                                     <div style={{ position: 'relative' }}>
                                         <input 
                                             required 
@@ -515,10 +515,10 @@ const Wallet = () => {
                                             placeholder="Enter points (e.g. 500)"
                                             value={pointsToConvert} 
                                             onChange={(e) => setPointsToConvert(e.target.value)} 
-                                            style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '1.1rem', fontWeight: '750', color: '#0F172A' }} 
+                                            style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.997rem', fontWeight: '750', color: '#0F172A' }} 
                                         />
                                     </div>
-                                    <div style={{ marginTop: '0.5rem', fontSize: '0.75rem', color: '#64748B', fontWeight: '600', display: 'flex', justifyContext: 'space-between', justifyContent: 'space-between' }}>
+                                    <div style={{ marginTop: '0.453rem', fontSize: '0.68rem', color: '#64748B', fontWeight: '600', display: 'flex', justifyContext: 'space-between', justifyContent: 'space-between' }}>
                                         <span>Rate: 100 Pts = {currency.symbol}1.00</span>
                                         {pointsToConvert && !isNaN(parseInt(pointsToConvert)) && (
                                             <span style={{ color: '#059669', fontWeight: '800' }}>
@@ -532,16 +532,16 @@ const Wallet = () => {
                                     type="submit" 
                                     style={{ 
                                         width: '100%', 
-                                        padding: '0.9rem', 
+                                        padding: '0.816rem', 
                                         borderRadius: '12px', 
                                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                                         color: 'white', 
                                         border: 'none', 
                                         fontWeight: '850', 
-                                        fontSize: '1rem', 
+                                        fontSize: '0.906rem', 
                                         cursor: 'pointer', 
                                         boxShadow: '0 8px 16px rgba(27, 107, 58, 0.25)',
-                                        marginTop: '0.5rem',
+                                        marginTop: '0.453rem',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center'

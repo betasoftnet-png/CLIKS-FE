@@ -350,7 +350,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             if (paragraph.startsWith('> ')) {
                 const cleaned = paragraph.replace('> ', '');
                 return (
-                    <div key={index} style={{ padding: '1.25rem 1.5rem', borderLeft: '5px solid #EF4444', background: '#FEF2F2', borderRadius: '0 16px 16px 0', color: '#B91C1C', fontSize: '0.95rem', margin: '1.75rem 0', boxShadow: '0 4px 12px rgba(239, 68, 68, 0.03)' }}>
+                    <div key={index} style={{ padding: '1.133rem 1.359rem', borderLeft: '5px solid #EF4444', background: '#FEF2F2', borderRadius: '0 16px 16px 0', color: '#B91C1C', fontSize: '0.861rem', margin: '1.586rem 0', boxShadow: '0 4px 12px rgba(239, 68, 68, 0.03)' }}>
                         {renderInlineMarkdown(cleaned)}
                     </div>
                 );
@@ -359,7 +359,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             if (paragraph.trim().startsWith('### ')) {
                 const cleaned = paragraph.replace('### ', '');
                 return (
-                    <h3 key={index} style={{ fontSize: '1.25rem', fontWeight: '900', color: '#0F172A', marginTop: '2.25rem', marginBottom: '1rem', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.5rem' }}>
+                    <h3 key={index} style={{ fontSize: '1.133rem', fontWeight: '900', color: '#0F172A', marginTop: '2.039rem', marginBottom: '0.906rem', borderBottom: '1px solid #F1F5F9', paddingBottom: '0.453rem' }}>
                         {renderInlineMarkdown(cleaned)}
                     </h3>
                 );
@@ -367,11 +367,11 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             // List builders
             if (paragraph.trim().startsWith('* ') || paragraph.trim().startsWith('1. ') || paragraph.trim().startsWith('2. ') || paragraph.trim().startsWith('3. ') || paragraph.trim().startsWith('4. ')) {
                 return (
-                    <ul key={index} style={{ paddingLeft: '1.5rem', margin: '1.25rem 0', display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyleType: paragraph.trim().startsWith('*') ? 'disc' : 'decimal' }}>
+                    <ul key={index} style={{ paddingLeft: '1.359rem', margin: '1.133rem 0', display: 'flex', flexDirection: 'column', gap: '0.68rem', listStyleType: paragraph.trim().startsWith('*') ? 'disc' : 'decimal' }}>
                         {paragraph.split('\n').map((li, liIdx) => {
                             const bulletCleaned = li.replace(/^\s*(\*|\d+\.)\s+/, '');
                             return (
-                                <li key={liIdx} style={{ color: '#334155', lineHeight: '1.75', fontSize: '0.96rem', paddingLeft: '0.25rem' }}>
+                                <li key={liIdx} style={{ color: '#334155', lineHeight: '1.75', fontSize: '0.87rem', paddingLeft: '0.227rem' }}>
                                     {renderInlineMarkdown(bulletCleaned)}
                                 </li>
                             );
@@ -381,7 +381,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             }
             // Paragraphs
             return (
-                <p key={index} style={{ color: '#334155', lineHeight: '1.8', fontSize: '1rem', marginBottom: '1.25rem' }}>
+                <p key={index} style={{ color: '#334155', lineHeight: '1.8', fontSize: '0.906rem', marginBottom: '1.133rem' }}>
                     {renderInlineMarkdown(paragraph)}
                 </p>
             );
@@ -409,31 +409,31 @@ Embracing these hardened financial laws converts wealth creation from an emotion
     // Rendering the Campus Hub selection screen if no track is selected
     if (!selectedTrack) {
         return (
-            <div style={{ padding: '1.25rem 2rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", color: '#1E293B' }}>
-                <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '2rem' }}>
+            <div style={{ padding: '1.133rem 1.812rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", color: '#1E293B' }}>
+                <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
                 
                 {/* Campus Hub Top Banner */}
                 <div style={{ 
                     background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 100%)', 
-                    borderRadius: '20px', padding: '2rem 2.5rem', color: 'white', 
-                    marginBottom: '1.75rem', boxShadow: '0 12px 32px -8px rgba(49, 46, 129, 0.15)',
+                    borderRadius: '20px', padding: '1.812rem 2.266rem', color: 'white', 
+                    marginBottom: '1.586rem', boxShadow: '0 12px 32px -8px rgba(49, 46, 129, 0.15)',
                     position: 'relative', overflow: 'hidden'
                 }}>
                     <div style={{ position: 'absolute', right: '-40px', top: '-40px', width: '200px', height: '200px', background: 'rgba(255,255,255,0.03)', borderRadius: '50%' }} />
                     <div style={{ position: 'absolute', right: '40px', bottom: '-60px', width: '140px', height: '140px', background: 'rgba(255,255,255,0.02)', borderRadius: '50%' }} />
                     
                     <div style={{ maxWidth: '700px', position: 'relative', zIndex: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(255,255,255,0.1)', width: 'fit-content', padding: '0.35rem 0.85rem', borderRadius: '99px', marginBottom: '1rem', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', background: 'rgba(255,255,255,0.1)', width: 'fit-content', padding: '0.317rem 0.77rem', borderRadius: '99px', marginBottom: '0.906rem', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                             <Award size={14} style={{ color: '#FBBF24' }} />
-                            <span style={{ fontSize: '0.68rem', fontWeight: '900', letterSpacing: '0.05em', textTransform: 'uppercase', color: '#FBBF24' }}>Integrated Wealth Campus</span>
+                            <span style={{ fontSize: '0.616rem', fontWeight: '900', letterSpacing: '0.05em', textTransform: 'uppercase', color: '#FBBF24' }}>Integrated Wealth Campus</span>
                         </div>
-                        <h1 style={{ fontSize: '2.25rem', fontWeight: '950', letterSpacing: '-0.03em', margin: '0 0 0.75rem 0', lineHeight: 1.15 }}>Social Trading & Finance Academies</h1>
-                        <p style={{ opacity: 0.85, fontSize: '0.98rem', lineHeight: '1.6', fontWeight: '500', margin: 0 }}>Start your financial learning journey today. Select a course below to master stock trading, automated investments, mutual funds, or safe gold bonds with simple, step-by-step lessons.</p>
+                        <h1 style={{ fontSize: '2.039rem', fontWeight: '950', letterSpacing: '-0.03em', margin: '0 0 0.68rem 0', lineHeight: 1.15 }}>Social Trading & Finance Academies</h1>
+                        <p style={{ opacity: 0.85, fontSize: '0.888rem', lineHeight: '1.6', fontWeight: '500', margin: 0 }}>Start your financial learning journey today. Select a course below to master stock trading, automated investments, mutual funds, or safe gold bonds with simple, step-by-step lessons.</p>
                     </div>
                 </div>
 
                 {/* Dynamic Academy Choice Grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.133rem' }}>
                     {Object.keys(ACADEMIES).map((key) => {
                         const academy = ACADEMIES[key];
                         const AcademyIcon = academy.icon;
@@ -445,7 +445,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                     background: 'white',
                                     borderRadius: '20px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '1.75rem',
+                                    padding: '1.586rem',
                                     cursor: 'pointer',
                                     transition: 'all 0.25s ease',
                                     boxShadow: '0 2px 12px rgba(0,0,0,0.01)',
@@ -466,7 +466,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                 }}
                             >
                                 {/* Card Heading Elements */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.359rem' }}>
                                     <div style={{ 
                                         width: '52px', height: '52px', borderRadius: '14px', 
                                         background: academy.gradient, display: 'flex', 
@@ -476,7 +476,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                         <AcademyIcon size={24} />
                                     </div>
                                     <span style={{ 
-                                        fontSize: '0.65rem', fontWeight: '900', textTransform: 'uppercase', 
+                                        fontSize: '0.589rem', fontWeight: '900', textTransform: 'uppercase', 
                                         letterSpacing: '0.05em', background: '#F1F5F9', color: '#475569', 
                                         padding: '5px 10px', borderRadius: '6px' 
                                     }}>
@@ -485,17 +485,17 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                 </div>
 
                                 {/* Title & Summary */}
-                                <h2 style={{ fontSize: '1.45rem', fontWeight: '900', color: '#0F172A', margin: '0 0 0.5rem 0', letterSpacing: '-0.02em' }}>
+                                <h2 style={{ fontSize: '1.314rem', fontWeight: '900', color: '#0F172A', margin: '0 0 0.453rem 0', letterSpacing: '-0.02em' }}>
                                     {academy.title}
                                 </h2>
-                                <p style={{ color: '#64748B', fontSize: '0.9rem', lineHeight: '1.6', margin: '0 0 1.75rem 0', flex: 1 }}>
+                                <p style={{ color: '#64748B', fontSize: '0.816rem', lineHeight: '1.6', margin: '0 0 1.586rem 0', flex: 1 }}>
                                     {academy.desc}
                                 </p>
 
                                 {/* Launch Indicator */}
                                 <div style={{ 
-                                    display: 'flex', alignItems: 'center', gap: '0.4rem', 
-                                    fontSize: '0.85rem', fontWeight: '900', color: '#1E293B'
+                                    display: 'flex', alignItems: 'center', gap: '0.363rem', 
+                                    fontSize: '0.77rem', fontWeight: '900', color: '#1E293B'
                                 }}>
                                     <span>Launch Learning Track</span>
                                     <ArrowRight size={15} />
@@ -513,25 +513,25 @@ Embracing these hardened financial laws converts wealth creation from an emotion
     const AcademyIcon = activeAcademy.icon;
 
     return (
-        <div style={{ padding: '1.25rem 2rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", color: '#1E293B' }}>
+        <div style={{ padding: '1.133rem 1.812rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif", color: '#1E293B' }}>
             
             {/* Main Header Banner for Active Academy */}
             <div style={{ 
                 display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', 
                 background: activeAcademy.gradient, 
-                borderRadius: '20px', padding: '1.5rem 2rem', color: 'white', 
-                marginBottom: '1.5rem', boxShadow: `0 12px 32px -8px ${activeAcademy.shadow}`,
+                borderRadius: '20px', padding: '1.359rem 1.812rem', color: 'white', 
+                marginBottom: '1.359rem', boxShadow: `0 12px 32px -8px ${activeAcademy.shadow}`,
                 position: 'relative'
             }}>
                 <div style={{ maxWidth: '75%' }}>
                     <button 
                         onClick={handleBackToCampus}
                         style={{ 
-                            display: 'flex', alignItems: 'center', gap: '0.4rem', 
+                            display: 'flex', alignItems: 'center', gap: '0.363rem', 
                             background: 'rgba(255,255,255,0.15)', color: 'white', 
-                            border: 'none', padding: '0.45rem 0.9rem', borderRadius: '8px', 
-                            fontSize: '0.72rem', fontWeight: '900', cursor: 'pointer', 
-                            marginBottom: '1rem', backdropFilter: 'blur(4px)',
+                            border: 'none', padding: '0.408rem 0.816rem', borderRadius: '8px', 
+                            fontSize: '0.652rem', fontWeight: '900', cursor: 'pointer', 
+                            marginBottom: '0.906rem', backdropFilter: 'blur(4px)',
                             transition: 'background 0.2s'
                         }}
                         onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
@@ -539,8 +539,8 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                     >
                         ← Back to Academy Hub
                     </button>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: '950', letterSpacing: '-0.02em', margin: '0 0 0.4rem 0' }}>{activeAcademy.title}</h1>
-                    <p style={{ opacity: 0.85, fontSize: '0.92rem', lineHeight: '1.5', fontWeight: '500', margin: 0 }}>{activeAcademy.subtitle}</p>
+                    <h1 style={{ fontSize: '1.586rem', fontWeight: '950', letterSpacing: '-0.02em', margin: '0 0 0.363rem 0' }}>{activeAcademy.title}</h1>
+                    <p style={{ opacity: 0.85, fontSize: '0.834rem', lineHeight: '1.5', fontWeight: '500', margin: 0 }}>{activeAcademy.subtitle}</p>
                 </div>
                 <div style={{ width: '110px', height: '110px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <AcademyIcon size={52} style={{ color: 'white', opacity: 0.35 }} />
@@ -548,35 +548,35 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             </div>
 
             {/* Scrollable Content Wrapper */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '2rem' }}>
+            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
 
             {/* Content Layout Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2.4fr', gap: '1.25rem', alignItems: 'flex-start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2.4fr', gap: '1.133rem', alignItems: 'flex-start' }}>
                 
                 {/* Left Floating Curriculum Accordion View */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'sticky', top: '1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem', position: 'sticky', top: '1.359rem' }}>
                     
                     {/* Dynamic Search Filter */}
-                    <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '0.85rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '0.77rem 1.359rem', display: 'flex', alignItems: 'center', gap: '0.68rem', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
                         <Search size={19} style={{ color: '#94A3B8' }} />
                         <input 
                             type="text" 
                             placeholder="Search modules or phases..." 
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
-                            style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.95rem', fontWeight: '500', color: '#1E293B' }}
+                            style={{ border: 'none', outline: 'none', width: '100%', fontSize: '0.861rem', fontWeight: '500', color: '#1E293B' }}
                         />
                     </div>
 
                     {/* Major Course Accordion Stack */}
                     <div style={{ 
-                        background: 'white', borderRadius: '24px', border: '1px solid #E2E8F0', 
+                        background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', 
                         overflow: 'hidden', boxShadow: '0 4px 20px -4px rgba(0,0,0,0.03)', 
                         maxHeight: '70vh', display: 'flex', flexDirection: 'column' 
                     }}>
-                        <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span style={{ fontSize: '0.78rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748B' }}>Course Syllabus</span>
-                            <span style={{ fontSize: '0.7rem', fontWeight: '850', color: '#1B6B3A', background: '#DCF2E4', padding: '3px 8px', borderRadius: '6px' }}>{trackModulesFlat.length} Modules</span>
+                        <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #E2E8F0', background: '#F8FAFC', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span style={{ fontSize: '0.707rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#64748B' }}>Course Syllabus</span>
+                            <span style={{ fontSize: '0.634rem', fontWeight: '850', color: '#1B6B3A', background: '#DCF2E4', padding: '3px 8px', borderRadius: '6px' }}>{trackModulesFlat.length} Modules</span>
                         </div>
 
                         <div style={{ overflowY: 'auto', flex: 1 }}>
@@ -589,16 +589,16 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                         <div 
                                             onClick={() => togglePhase(phaseIdx)}
                                             style={{ 
-                                                padding: '1.1rem 1.25rem', background: '#FAFAFA', cursor: 'pointer', 
+                                                padding: '0.997rem 1.133rem', background: '#FAFAFA', cursor: 'pointer', 
                                                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                                                 borderBottom: isOpen ? '1px solid #F1F5F9' : 'none'
                                             }}
                                         >
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
                                                 <div style={{ color: '#1B6B3A' }}>
                                                     <PhaseIcon size={16} />
                                                 </div>
-                                                <span style={{ fontSize: '0.78rem', fontWeight: '900', color: '#1E293B' }}>{phase.name}</span>
+                                                <span style={{ fontSize: '0.707rem', fontWeight: '900', color: '#1E293B' }}>{phase.name}</span>
                                             </div>
                                             <ChevronRight size={16} style={{ color: '#94A3B8', transform: isOpen ? 'rotate(90deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
                                         </div>
@@ -614,7 +614,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                                             key={module.id}
                                                             onClick={() => handleModuleSelect(module)}
                                                             style={{ 
-                                                                padding: '1rem 1.25rem', 
+                                                                padding: '0.906rem 1.133rem', 
                                                                 cursor: 'pointer',
                                                                 borderLeft: isActive ? '4px solid #1B6B3A' : '4px solid transparent',
                                                                 background: isActive ? '#F0FDF4' : 'transparent',
@@ -622,19 +622,19 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                                                 transition: 'background 0.15s'
                                                             }}
                                                         >
-                                                            <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'flex-start' }}>
+                                                            <div style={{ display: 'flex', gap: '0.77rem', alignItems: 'flex-start' }}>
                                                                 <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: isActive ? '#DCF2E4' : '#F1F5F9', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isActive ? '#1B6B3A' : '#64748B', flexShrink: 0 }}>
                                                                     <Icon size={15} />
                                                                 </div>
                                                                 <div style={{ flex: 1 }}>
                                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-                                                                        <span style={{ fontSize: '0.62rem', fontWeight: '800', textTransform: 'uppercase', color: isActive ? '#1B6B3A' : '#64748B' }}>{module.level}</span>
+                                                                        <span style={{ fontSize: '0.562rem', fontWeight: '800', textTransform: 'uppercase', color: isActive ? '#1B6B3A' : '#64748B' }}>{module.level}</span>
                                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#94A3B8' }}>
                                                                             <Clock size={9} />
-                                                                            <span style={{ fontSize: '0.6rem', fontWeight: '600' }}>{module.duration}</span>
+                                                                            <span style={{ fontSize: '0.544rem', fontWeight: '600' }}>{module.duration}</span>
                                                                         </div>
                                                                     </div>
-                                                                    <h4 style={{ fontSize: '0.88rem', fontWeight: '800', color: isActive ? '#064E3B' : '#334155', margin: 0, lineHeight: '1.35' }}>{module.title}</h4>
+                                                                    <h4 style={{ fontSize: '0.797rem', fontWeight: '800', color: isActive ? '#064E3B' : '#334155', margin: 0, lineHeight: '1.35' }}>{module.title}</h4>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -646,7 +646,7 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                 );
                             })}
                             {filteredPhases.length === 0 && (
-                                <div style={{ padding: '2rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.9rem' }}>No matching modules found in this curriculum.</div>
+                                <div style={{ padding: '1.812rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.816rem' }}>No matching modules found in this curriculum.</div>
                             )}
                         </div>
                     </div>
@@ -656,18 +656,18 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                 <div style={{ background: 'white', borderRadius: '20px', border: '1px solid #E2E8F0', boxShadow: '0 6px 20px -8px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
                     
                     {/* Top Topic Controller & Bookmark Header */}
-                    <div style={{ padding: '1rem 1.75rem', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <div style={{ padding: '0.906rem 1.586rem', borderBottom: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
+                        <div style={{ display: 'flex', gap: '0.453rem' }}>
                             {activeModule && activeModule.topics.map((topic, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => setActiveTopicIdx(idx)}
                                     style={{ 
-                                        padding: '0.5rem 1rem', borderRadius: '8px', 
+                                        padding: '0.453rem 0.906rem', borderRadius: '8px', 
                                         border: activeTopicIdx === idx ? 'none' : '1px solid #E2E8F0', 
                                         background: activeTopicIdx === idx ? '#1B6B3A' : 'white', 
                                         color: activeTopicIdx === idx ? 'white' : '#475569', 
-                                        fontWeight: '800', fontSize: '0.78rem', cursor: 'pointer',
+                                        fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer',
                                         boxShadow: activeTopicIdx === idx ? '0 4px 12px rgba(27, 107, 58, 0.12)' : 'none'
                                     }}
                                 >
@@ -679,30 +679,30 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                         {currentTopic && (
                             <button 
                                 onClick={() => toggleBookmark(currentTopic.title)}
-                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: bookmarkList.includes(currentTopic.title) ? '#F59E0B' : '#94A3B8', display: 'flex', alignItems: 'center', gap: '0.3rem' }}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: bookmarkList.includes(currentTopic.title) ? '#F59E0B' : '#94A3B8', display: 'flex', alignItems: 'center', gap: '0.272rem' }}
                             >
                                 <Bookmark size={16} fill={bookmarkList.includes(currentTopic.title) ? '#F59E0B' : 'none'} />
-                                <span style={{ fontSize: '0.75rem', fontWeight: '850', color: '#64748B' }}>{bookmarkList.includes(currentTopic.title) ? 'Bookmarked' : 'Save'}</span>
+                                <span style={{ fontSize: '0.68rem', fontWeight: '850', color: '#64748B' }}>{bookmarkList.includes(currentTopic.title) ? 'Bookmarked' : 'Save'}</span>
                             </button>
                         )}
                     </div>
 
                     {/* Content Presentation Panel */}
-                    <div style={{ padding: '2rem 2.5rem' }} className="animate-in fade-in duration-300">
+                    <div style={{ padding: '1.812rem 2.266rem' }} className="animate-in fade-in duration-300">
                         
                         {activeModule && (
                             <>
                                 {/* Header Metadata Info */}
-                                <div style={{ marginBottom: '1.5rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#1B6B3A', fontSize: '0.75rem', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                                <div style={{ marginBottom: '1.359rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.363rem', color: '#1B6B3A', fontSize: '0.68rem', fontWeight: '850', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.453rem' }}>
                                         <span>{activePhaseName}</span>
                                         <ChevronRight size={12} />
                                         <span>Module Selection</span>
                                     </div>
-                                    <h1 style={{ fontSize: '1.75rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: '1.25', margin: '0 0 1rem 0' }}>
+                                    <h1 style={{ fontSize: '1.586rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', lineHeight: '1.25', margin: '0 0 0.906rem 0' }}>
                                         {activeModule.title}
                                     </h1>
-                                    <div style={{ display: 'flex', gap: '1.25rem', color: '#64748B', fontSize: '0.78rem', borderBottom: '1px solid #F1F5F9', paddingBottom: '1.25rem' }}>
+                                    <div style={{ display: 'flex', gap: '1.133rem', color: '#64748B', fontSize: '0.707rem', borderBottom: '1px solid #F1F5F9', paddingBottom: '1.133rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                                             <Clock size={14} />
                                             <span style={{ fontWeight: '650' }}>System Estimation: ~15 mins</span>
@@ -715,25 +715,25 @@ Embracing these hardened financial laws converts wealth creation from an emotion
                                 </div>
 
                                 {/* Dynamic Content Rich Text Rendering */}
-                                <article style={{ fontSize: '1.02rem', color: '#334155' }}>
+                                <article style={{ fontSize: '0.924rem', color: '#334155' }}>
                                     {currentTopic && formatContent(enrichTopicContent(selectedTrack, activeModule.title, currentTopic.title, currentTopic.content))}
                                 </article>
 
                                 {/* Footer Navigation Guide */}
-                                <div style={{ marginTop: '4.5rem', borderTop: '1px solid #E2E8F0', paddingTop: '2.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div style={{ marginTop: '4.078rem', borderTop: '1px solid #E2E8F0', paddingTop: '2.266rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <div>
-                                        <p style={{ fontSize: '0.75rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.35rem 0' }}>Module Completion State</p>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <p style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.317rem 0' }}>Module Completion State</p>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                             <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981' }} />
-                                            <span style={{ fontSize: '0.88rem', fontWeight: '850', color: '#0F172A' }}>Finished this section! Ready to unlock next chapter?</span>
+                                            <span style={{ fontSize: '0.797rem', fontWeight: '850', color: '#0F172A' }}>Finished this section! Ready to unlock next chapter?</span>
                                         </div>
                                     </div>
 
                                     <button 
                                         onClick={handleNextModuleStep}
                                         style={{ 
-                                            display: 'flex', alignItems: 'center', gap: '0.6rem', background: activeAcademy.gradient, 
-                                            color: 'white', border: 'none', padding: '0.9rem 2rem', borderRadius: '14px', fontWeight: '900', fontSize: '0.95rem', cursor: 'pointer',
+                                            display: 'flex', alignItems: 'center', gap: '0.544rem', background: activeAcademy.gradient, 
+                                            color: 'white', border: 'none', padding: '0.816rem 1.812rem', borderRadius: '14px', fontWeight: '900', fontSize: '0.861rem', cursor: 'pointer',
                                             boxShadow: `0 8px 25px ${activeAcademy.shadow}`, transition: 'transform 0.2s'
                                         }}
                                         onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
@@ -749,29 +749,29 @@ Embracing these hardened financial laws converts wealth creation from an emotion
             </div>
 
             {/* Global Institutional Warnings */}
-            <div style={{ marginTop: '4rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.75rem' }}>
-                <div style={{ background: 'white', padding: '1.75rem', borderRadius: '24px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#1B6B3A', marginBottom: '0.85rem' }}>
+            <div style={{ marginTop: '3.625rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.586rem' }}>
+                <div style={{ background: 'white', padding: '1.586rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', color: '#1B6B3A', marginBottom: '0.77rem' }}>
                         <Zap size={20} />
-                        <h4 style={{ fontWeight: '900', fontSize: '1rem', margin: 0 }}>Principle of Capital</h4>
+                        <h4 style={{ fontWeight: '900', fontSize: '0.906rem', margin: 0 }}>Principle of Capital</h4>
                     </div>
-                    <p style={{ color: '#64748B', fontSize: '0.85rem', lineHeight: '1.6', margin: 0 }}>Wealth is built by maximizing compounding asymmetry. Restrict speculative risks on individual setups to survive macro market volatility cycles mathematically.</p>
+                    <p style={{ color: '#64748B', fontSize: '0.77rem', lineHeight: '1.6', margin: 0 }}>Wealth is built by maximizing compounding asymmetry. Restrict speculative risks on individual setups to survive macro market volatility cycles mathematically.</p>
                 </div>
 
-                <div style={{ background: 'white', padding: '1.75rem', borderRadius: '24px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#3B82F6', marginBottom: '0.85rem' }}>
+                <div style={{ background: 'white', padding: '1.586rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', color: '#3B82F6', marginBottom: '0.77rem' }}>
                         <HelpCircle size={20} />
-                        <h4 style={{ fontWeight: '900', fontSize: '1rem', margin: 0 }}>Practice Environments</h4>
+                        <h4 style={{ fontWeight: '900', fontSize: '0.906rem', margin: 0 }}>Practice Environments</h4>
                     </div>
-                    <p style={{ color: '#64748B', fontSize: '0.85rem', lineHeight: '1.6', margin: 0 }}>Pair this academic theoretical data with interactive simulators. Inspect 10-year rolling CAGR performance parameters across asset buckets before deploying live capital.</p>
+                    <p style={{ color: '#64748B', fontSize: '0.77rem', lineHeight: '1.6', margin: 0 }}>Pair this academic theoretical data with interactive simulators. Inspect 10-year rolling CAGR performance parameters across asset buckets before deploying live capital.</p>
                 </div>
 
-                <div style={{ background: 'white', padding: '1.75rem', borderRadius: '24px', border: '1px solid #E2E8F0' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: '#EF4444', marginBottom: '0.85rem' }}>
+                <div style={{ background: 'white', padding: '1.586rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', color: '#EF4444', marginBottom: '0.77rem' }}>
                         <ShieldAlert size={20} />
-                        <h4 style={{ fontWeight: '900', fontSize: '1rem', margin: 0 }}>Legal Risk Advisory</h4>
+                        <h4 style={{ fontWeight: '900', fontSize: '0.906rem', margin: 0 }}>Legal Risk Advisory</h4>
                     </div>
-                    <p style={{ color: '#64748B', fontSize: '0.85rem', lineHeight: '1.6', margin: 0 }}>This integrated campus is strictly informational. Markets are subject to investment risks. Always evaluate detailed statutory scheme offer documents before deploying capital.</p>
+                    <p style={{ color: '#64748B', fontSize: '0.77rem', lineHeight: '1.6', margin: 0 }}>This integrated campus is strictly informational. Markets are subject to investment risks. Always evaluate detailed statutory scheme offer documents before deploying capital.</p>
                 </div>
             </div>
             </div>

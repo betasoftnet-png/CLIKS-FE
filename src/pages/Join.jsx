@@ -100,6 +100,11 @@ const Join = () => {
                         localStorage.setItem('user', JSON.stringify(res.data.user || res.data.data.user));
                     }
                 }
+                try {
+                    sessionStorage.setItem('cliks_just_registered_email', email.trim().toLowerCase());
+                } catch {
+                    // ignore sessionStorage issues
+                }
                 setSuccessMsg('Account created successfully! Welcome to Cliks.');
                 setTimeout(() => {
                     navigate('/books/dashboard', { replace: true });
@@ -137,7 +142,7 @@ const Join = () => {
             alignItems: 'center',
             justifyContent: 'center',
             background: 'linear-gradient(135deg, #064E3B 0%, #065F46 50%, #047857 100%)',
-            padding: '2rem 1.5rem',
+            padding: '1.812rem 1.359rem',
             fontFamily: "'Inter', sans-serif",
             position: 'relative',
             overflow: 'hidden'
@@ -159,14 +164,14 @@ const Join = () => {
                 background: '#FFFFFF',
                 width: '100%',
                 maxWidth: '520px',
-                borderRadius: '32px',
-                padding: '2.5rem 2.25rem',
+                borderRadius: '20px',
+                padding: '2.266rem 2.039rem',
                 boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.4)',
                 position: 'relative',
                 zIndex: 10
             }}>
                 {/* Header branding */}
-                <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+                <div style={{ textAlign: 'center', marginBottom: '1.586rem' }}>
                     <div style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -175,15 +180,15 @@ const Join = () => {
                         height: '60px',
                         background: '#ECFDF5',
                         borderRadius: '20px',
-                        marginBottom: '1rem',
+                        marginBottom: '0.906rem',
                         boxShadow: '0 10px 20px rgba(16,185,129,0.15)'
                     }}>
                         <img src={logoPng} alt="Cliks Logo" style={{ width: '38px', height: '38px' }} />
                     </div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: '900', color: '#0F172A', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em' }}>
+                    <h1 style={{ fontSize: '1.586rem', fontWeight: '900', color: '#0F172A', margin: '0 0 0.363rem 0', letterSpacing: '-0.02em' }}>
                         Join Cliks
                     </h1>
-                    <p style={{ color: '#64748B', fontSize: '0.9rem', margin: 0, fontWeight: '500' }}>
+                    <p style={{ color: '#64748B', fontSize: '0.816rem', margin: 0, fontWeight: '500' }}>
                         Smart finance management, automated ledger, and compliance suite.
                     </p>
                 </div>
@@ -194,11 +199,11 @@ const Join = () => {
                         background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)',
                         border: '1px solid #A7F3D0',
                         borderRadius: '16px',
-                        padding: '0.85rem 1.1rem',
-                        marginBottom: '1.5rem',
+                        padding: '0.77rem 0.997rem',
+                        marginBottom: '1.359rem',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.75rem',
+                        gap: '0.68rem',
                         boxShadow: '0 4px 12px rgba(16,185,129,0.1)'
                     }}>
                         <div style={{
@@ -215,10 +220,10 @@ const Join = () => {
                             <Gift size={20} />
                         </div>
                         <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: '0.78rem', fontWeight: '850', color: '#065F46', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <div style={{ fontSize: '0.707rem', fontWeight: '850', color: '#065F46', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                 Referral Invite Applied
                             </div>
-                            <div style={{ fontSize: '0.875rem', fontWeight: '700', color: '#047857' }}>
+                            <div style={{ fontSize: '0.793rem', fontWeight: '700', color: '#047857' }}>
                                 Code: <strong>{referralCode}</strong> • +200 Welcome Bonus Points
                             </div>
                         </div>
@@ -231,14 +236,14 @@ const Join = () => {
                         background: '#FEF2F2',
                         border: '1px solid #FECACA',
                         color: '#991B1B',
-                        padding: '0.75rem 1rem',
+                        padding: '0.68rem 0.906rem',
                         borderRadius: '12px',
-                        fontSize: '0.85rem',
+                        fontSize: '0.77rem',
                         fontWeight: '600',
-                        marginBottom: '1.25rem',
+                        marginBottom: '1.133rem',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem'
+                        gap: '0.453rem'
                     }}>
                         <AlertCircle size={16} style={{ flexShrink: 0 }} />
                         <span>{errorMsg}</span>
@@ -251,14 +256,14 @@ const Join = () => {
                         background: '#ECFDF5',
                         border: '1px solid #A7F3D0',
                         color: '#065F46',
-                        padding: '0.75rem 1rem',
+                        padding: '0.68rem 0.906rem',
                         borderRadius: '12px',
-                        fontSize: '0.85rem',
+                        fontSize: '0.77rem',
                         fontWeight: '700',
-                        marginBottom: '1.25rem',
+                        marginBottom: '1.133rem',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '0.5rem'
+                        gap: '0.453rem'
                     }}>
                         <CheckCircle2 size={16} style={{ flexShrink: 0 }} />
                         <span>{successMsg}</span>
@@ -266,13 +271,13 @@ const Join = () => {
                 )}
 
                 {/* Registration Form */}
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '750', color: '#334155', marginBottom: '0.4rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.725rem', fontWeight: '750', color: '#334155', marginBottom: '0.363rem' }}>
                             Full Name *
                         </label>
                         <div style={{ position: 'relative' }}>
-                            <User size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                            <User size={18} style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input 
                                 type="text"
                                 required
@@ -281,10 +286,10 @@ const Join = () => {
                                 onChange={(e) => setFullName(e.target.value)}
                                 style={{
                                     width: '100%',
-                                    padding: '0.8rem 1rem 0.8rem 2.75rem',
+                                    padding: '0.725rem 0.906rem 0.725rem 2.492rem',
                                     borderRadius: '14px',
                                     border: '1.5px solid #E2E8F0',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     outline: 'none',
                                     boxSizing: 'border-box'
                                 }}
@@ -293,11 +298,11 @@ const Join = () => {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '750', color: '#334155', marginBottom: '0.4rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.725rem', fontWeight: '750', color: '#334155', marginBottom: '0.363rem' }}>
                             Work Email *
                         </label>
                         <div style={{ position: 'relative' }}>
-                            <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                            <Mail size={18} style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input 
                                 type="email"
                                 required
@@ -306,10 +311,10 @@ const Join = () => {
                                 onChange={(e) => setEmail(e.target.value)}
                                 style={{
                                     width: '100%',
-                                    padding: '0.8rem 1rem 0.8rem 2.75rem',
+                                    padding: '0.725rem 0.906rem 0.725rem 2.492rem',
                                     borderRadius: '14px',
                                     border: '1.5px solid #E2E8F0',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     outline: 'none',
                                     boxSizing: 'border-box'
                                 }}
@@ -318,11 +323,11 @@ const Join = () => {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '750', color: '#334155', marginBottom: '0.4rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.725rem', fontWeight: '750', color: '#334155', marginBottom: '0.363rem' }}>
                             Password *
                         </label>
                         <div style={{ position: 'relative' }}>
-                            <Lock size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
+                            <Lock size={18} style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input 
                                 type={showPassword ? 'text' : 'password'}
                                 required
@@ -331,10 +336,10 @@ const Join = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 style={{
                                     width: '100%',
-                                    padding: '0.8rem 2.75rem 0.8rem 2.75rem',
+                                    padding: '0.725rem 2.492rem 0.725rem 2.492rem',
                                     borderRadius: '14px',
                                     border: '1.5px solid #E2E8F0',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     outline: 'none',
                                     boxSizing: 'border-box'
                                 }}
@@ -344,7 +349,7 @@ const Join = () => {
                                 onClick={() => setShowPassword(!showPassword)}
                                 style={{
                                     position: 'absolute',
-                                    right: '1rem',
+                                    right: '0.906rem',
                                     top: '50%',
                                     transform: 'translateY(-50%)',
                                     background: 'none',
@@ -359,16 +364,16 @@ const Join = () => {
                     </div>
 
                     <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
-                            <label style={{ fontSize: '0.8rem', fontWeight: '750', color: '#334155' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.363rem' }}>
+                            <label style={{ fontSize: '0.725rem', fontWeight: '750', color: '#334155' }}>
                                 Referral Code
                             </label>
-                            <span style={{ fontSize: '0.72rem', fontWeight: '800', color: '#059669', background: '#ECFDF5', padding: '0.15rem 0.5rem', borderRadius: '6px' }}>
+                            <span style={{ fontSize: '0.652rem', fontWeight: '800', color: '#059669', background: '#ECFDF5', padding: '0.136rem 0.453rem', borderRadius: '6px' }}>
                                 +200 Welcome Pts
                             </span>
                         </div>
                         <div style={{ position: 'relative' }}>
-                            <Gift size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: referralCode ? '#059669' : '#94A3B8' }} />
+                            <Gift size={18} style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', color: referralCode ? '#059669' : '#94A3B8' }} />
                             <input 
                                 type="text"
                                 placeholder="CLIKS-BIZ-XXXXX"
@@ -380,13 +385,13 @@ const Join = () => {
                                 }}
                                 style={{
                                     width: '100%',
-                                    padding: '0.8rem 1rem 0.8rem 2.75rem',
+                                    padding: '0.725rem 0.906rem 0.725rem 2.492rem',
                                     borderRadius: '14px',
                                     border: referralCode ? '1.5px solid #10B981' : '1.5px solid #E2E8F0',
                                     background: referralCode ? '#F0FDF4' : '#FFFFFF',
                                     fontWeight: '800',
                                     color: referralCode ? '#065F46' : '#1E293B',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.816rem',
                                     outline: 'none',
                                     boxSizing: 'border-box'
                                 }}
@@ -398,19 +403,19 @@ const Join = () => {
                         type="submit"
                         disabled={isSubmitting}
                         style={{
-                            marginTop: '0.5rem',
-                            padding: '0.95rem 1.5rem',
+                            marginTop: '0.453rem',
+                            padding: '0.861rem 1.359rem',
                             borderRadius: '14px',
                             border: 'none',
                             background: 'linear-gradient(135deg, #064E3B 0%, #1B6B3A 100%)',
                             color: '#FFFFFF',
                             fontWeight: '800',
-                            fontSize: '0.95rem',
+                            fontSize: '0.861rem',
                             cursor: isSubmitting ? 'not-allowed' : 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.5rem',
+                            gap: '0.453rem',
                             boxShadow: '0 10px 25px -5px rgba(6, 78, 59, 0.3)',
                             opacity: isSubmitting ? 0.7 : 1
                         }}
@@ -424,10 +429,10 @@ const Join = () => {
                 </form>
 
                 {/* SSO Alternative */}
-                <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '1rem 0' }}>
+                <div style={{ marginTop: '1.359rem', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', margin: '0.906rem 0' }}>
                         <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
-                        <span style={{ fontSize: '0.75rem', fontWeight: '750', color: '#94A3B8', textTransform: 'uppercase' }}>OR</span>
+                        <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#94A3B8', textTransform: 'uppercase' }}>OR</span>
                         <div style={{ flex: 1, height: '1px', background: '#E2E8F0' }} />
                     </div>
 
@@ -436,25 +441,25 @@ const Join = () => {
                         onClick={handleSsoSignup}
                         style={{
                             width: '100%',
-                            padding: '0.85rem 1.25rem',
+                            padding: '0.77rem 1.133rem',
                             borderRadius: '14px',
                             border: '1px solid #CBD5E1',
                             background: '#FFFFFF',
                             color: '#334155',
                             fontWeight: '750',
-                            fontSize: '0.9rem',
+                            fontSize: '0.816rem',
                             cursor: 'pointer',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.6rem'
+                            gap: '0.544rem'
                         }}
                     >
                         <ShieldCheck size={18} color="#1B6B3A" /> Continue with BNX Single Sign-On
                     </button>
                 </div>
 
-                <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.85rem', color: '#64748B', fontWeight: '600' }}>
+                <div style={{ marginTop: '1.586rem', textAlign: 'center', fontSize: '0.77rem', color: '#64748B', fontWeight: '600' }}>
                     Already have an account?{' '}
                     <Link to="/" style={{ color: '#1B6B3A', fontWeight: '800', textDecoration: 'none' }}>
                         Sign In

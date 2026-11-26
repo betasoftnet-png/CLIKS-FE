@@ -27,6 +27,9 @@
     --dm-text-muted: #88a7a3;
     --dm-primary:    #22c55e;
 
+    --tour-spotlight-border: rgba(255, 255, 255, 0.92);
+    --tour-scrim-bg:         rgba(15, 23, 42, 0.54);
+
     font-family: var(--font-main, 'Inter', system-ui, -apple-system, sans-serif);
     line-height: 1.5;
     font-weight: 400;
@@ -44,6 +47,8 @@
     --border-color: var(--dm-border);
     --primary:      var(--dm-primary);
     --primary-hover: #86efac;
+    --tour-spotlight-border: rgba(255, 255, 255, 0.18);
+    --tour-scrim-bg:         rgba(2, 8, 12, 0.68);
     color-scheme: dark;
 }
 
@@ -540,5 +545,5 @@
 }
 
 html {
-    font-size: 14.5px;
+    font-size: 16px;
 }

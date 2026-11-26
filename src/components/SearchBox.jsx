@@ -211,7 +211,7 @@ const SearchBox = ({ onOpenCalculator }) => {
     useEffect(() => () => clearTimeout(debounceRef.current), []);
 
     return (
-        <div ref={wrapperRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <div ref={wrapperRef} data-tour="topbar-search" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
             {!isExpanded && (
                 <button
                     onClick={expand}
@@ -328,7 +328,7 @@ const SearchBox = ({ onOpenCalculator }) => {
 
                     <div style={{ overflowY: 'auto', flex: 1, padding: '4px 0' }}>
                         {results.length === 0 ? (
-                            <div style={{ padding: '1.5rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.85rem', fontWeight: 600 }}>
+                            <div style={{ padding: '1.359rem', textAlign: 'center', color: '#94A3B8', fontSize: '0.77rem', fontWeight: 600 }}>
                                 No matching features found for "{query}"
                             </div>
                         ) : (
@@ -374,11 +374,11 @@ const SearchBox = ({ onOpenCalculator }) => {
                                                             </span>
                                                         )}
                                                     </span>
-                                                    <span style={{ display: 'block', fontSize: '0.84rem', fontWeight: 750, color: isActive ? '#15803D' : '#1E293B', lineHeight: 1.3 }}>
+                                                    <span style={{ display: 'block', fontSize: '0.761rem', fontWeight: 750, color: isActive ? '#15803D' : '#1E293B', lineHeight: 1.3 }}>
                                                         {item.label}
                                                     </span>
                                                     {item.desc && (
-                                                        <span style={{ display: 'block', fontSize: '0.72rem', color: '#64748B', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
+                                                        <span style={{ display: 'block', fontSize: '0.652rem', color: '#64748B', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
                                                             {item.desc}
                                                         </span>
                                                     )}

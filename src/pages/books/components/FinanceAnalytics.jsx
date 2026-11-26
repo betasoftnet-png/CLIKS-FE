@@ -69,28 +69,28 @@ const FinanceAnalytics = ({ transactions = [], currencySymbol = '₹' }) => {
         <div style={{
             background: 'white',
             borderRadius: '16px',
-            padding: '1.5rem',
+            padding: '1.359rem',
             boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
             border: '1px solid #E2E8F0',
-            marginBottom: '1.5rem'
+            marginBottom: '1.359rem'
         }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h3 data-tour="books-interactive-analytics" style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', marginBottom: '1.359rem', display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
                 <TrendingUp size={20} style={{ color: '#7C3AED' }} /> Interactive Analytics
             </h3>
 
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '1.5rem'
+                gap: '1.359rem'
             }}>
                 {/* 1. Income vs Expense Bar Chart */}
-                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '1rem', background: '#F8FAFC' }}>
-                    <h4 style={{ fontSize: '0.85rem', fontWeight: 750, color: '#475569', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '0.906rem', background: '#F8FAFC' }}>
+                    <h4 style={{ fontSize: '0.77rem', fontWeight: 750, color: '#475569', margin: '0 0 0.906rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <BarChart2 size={15} /> Income vs Expense
                     </h4>
                     
                     <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'flex-end', height: '160px', padding: '10px 0', borderBottom: '2px solid #E2E8F0' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem' }}>
                             <div style={{ 
                                 width: '40px', 
                                 height: `${incomeTotal * scaleY}px`, 
@@ -98,11 +98,11 @@ const FinanceAnalytics = ({ transactions = [], currencySymbol = '₹' }) => {
                                 borderRadius: '6px 6px 0 0',
                                 transition: 'height 0.3s ease'
                             }} />
-                            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>Income</span>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0F172A' }}>{currencySymbol}{incomeTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                            <span style={{ fontSize: '0.652rem', fontWeight: 700, color: '#64748B' }}>Income</span>
+                            <span style={{ fontSize: '0.725rem', fontWeight: 800, color: '#0F172A' }}>{currencySymbol}{incomeTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem' }}>
                             <div style={{ 
                                 width: '40px', 
                                 height: `${expenseTotal * scaleY}px`, 
@@ -110,28 +110,28 @@ const FinanceAnalytics = ({ transactions = [], currencySymbol = '₹' }) => {
                                 borderRadius: '6px 6px 0 0',
                                 transition: 'height 0.3s ease'
                             }} />
-                            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748B' }}>Expense</span>
-                            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#0F172A' }}>{currencySymbol}{expenseTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
+                            <span style={{ fontSize: '0.652rem', fontWeight: 700, color: '#64748B' }}>Expense</span>
+                            <span style={{ fontSize: '0.725rem', fontWeight: 800, color: '#0F172A' }}>{currencySymbol}{expenseTotal.toLocaleString('en-IN', { maximumFractionDigits: 0 })}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* 2. Category-wise Expense Breakdown */}
-                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '1rem', background: '#F8FAFC' }}>
-                    <h4 style={{ fontSize: '0.85rem', fontWeight: 750, color: '#475569', margin: '0 0 1rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '0.906rem', background: '#F8FAFC' }}>
+                    <h4 style={{ fontSize: '0.77rem', fontWeight: 750, color: '#475569', margin: '0 0 0.906rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <PieChart size={15} /> Category Breakdown
                     </h4>
 
                     {categoryData.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '3rem 0', color: '#94A3B8', fontSize: '0.8rem' }}>No expense records available</div>
+                        <div style={{ textAlign: 'center', padding: '2.719rem 0', color: '#94A3B8', fontSize: '0.725rem' }}>No expense records available</div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxHeight: '150px', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', maxHeight: '150px', overflowY: 'auto' }}>
                             {categoryData.slice(0, 5).map((item, idx) => {
                                 const pct = expenseTotal > 0 ? Math.round((item.value / expenseTotal) * 100) : 0;
                                 const colors = ['#7C3AED', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'];
                                 return (
-                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
+                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', gap: '0.227rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', fontWeight: 700, color: '#475569' }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: colors[idx % colors.length] }} />
                                                 {item.name}
@@ -149,15 +149,15 @@ const FinanceAnalytics = ({ transactions = [], currencySymbol = '₹' }) => {
                 </div>
 
                 {/* 3. Monthly Savings Trend Line */}
-                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '1rem', background: '#F8FAFC', gridColumn: 'span 2' }}>
-                    <h4 style={{ fontSize: '0.85rem', fontWeight: 750, color: '#475569', margin: '0 0 1.25rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <div style={{ border: '1px solid #F1F5F9', borderRadius: '12px', padding: '0.906rem', background: '#F8FAFC', gridColumn: 'span 2' }}>
+                    <h4 style={{ fontSize: '0.77rem', fontWeight: 750, color: '#475569', margin: '0 0 1.133rem 0', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <Activity size={15} /> Monthly Savings Growth
                     </h4>
 
                     {monthlyData.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '3rem 0', color: '#94A3B8', fontSize: '0.8rem' }}>No historical trend data found</div>
+                        <div style={{ textAlign: 'center', padding: '2.719rem 0', color: '#94A3B8', fontSize: '0.725rem' }}>No historical trend data found</div>
                     ) : (
-                        <div style={{ display: 'flex', gap: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '1.359rem', overflowX: 'auto', paddingBottom: '0.453rem' }}>
                             {monthlyData.map((d, i) => (
                                 <div key={i} style={{
                                     flex: '1',
@@ -165,14 +165,14 @@ const FinanceAnalytics = ({ transactions = [], currencySymbol = '₹' }) => {
                                     background: 'white',
                                     borderRadius: '8px',
                                     border: '1px solid #E2E8F0',
-                                    padding: '0.55rem',
+                                    padding: '0.498rem',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
-                                    gap: '0.25rem'
+                                    gap: '0.227rem'
                                 }}>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>{d.month}</span>
-                                    <span style={{ fontSize: '0.85rem', fontWeight: 800, color: d.savings < 0 ? '#EF4444' : '#10B981' }}>
+                                    <span style={{ fontSize: '0.634rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>{d.month}</span>
+                                    <span style={{ fontSize: '0.77rem', fontWeight: 800, color: d.savings < 0 ? '#EF4444' : '#10B981' }}>
                                         {d.savings >= 0 ? '+' : ''}{currencySymbol}{d.savings.toLocaleString('en-IN')}
                                     </span>
                                 </div>

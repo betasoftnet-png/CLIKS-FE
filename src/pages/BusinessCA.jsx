@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import {
     Briefcase, ShieldAlert, FileText, CheckCircle2, AlertTriangle,
@@ -103,6 +103,7 @@ export default function BusinessCA({ mode }) {
     })();
 
     // ── ICAI Professional Verification & FIN-PRO Subscription State (Backend Driven) ──
+    const queryClient = useQueryClient();
     const { data: icaiData, refetch: refetchIcai } = useQuery({
         queryKey: ['icaiVerificationStatus'],
         queryFn: () => caService.getIcaiVerification(),
@@ -147,6 +148,7 @@ export default function BusinessCA({ mode }) {
         mutationFn: () => caService.simulateVerifyIcai(),
         onSuccess: () => {
             refetchIcai();
+            queryClient.invalidateQueries({ queryKey: ['icaiVerification'] });
             alert('ICAI Credentials Officially Verified! Subscriptions unlocked.');
         },
         onError: (err) => {
@@ -204,6 +206,7 @@ export default function BusinessCA({ mode }) {
         mutationFn: (data) => caService.submitIcaiVerification(data),
         onSuccess: () => {
             refetchIcai();
+            queryClient.invalidateQueries({ queryKey: ['icaiVerification'] });
             setIsEditMode(false);
             setIsIcaiModalOpen(false);
             alert('Your ICAI membership credentials have been submitted for institutional verification.');
@@ -1534,17 +1537,17 @@ export default function BusinessCA({ mode }) {
                 /* ── Gate 1: ICAI Credential Verification Required ── */
                 <div style={{
                     maxWidth: '800px',
-                    margin: '3rem auto',
+                    margin: '2.719rem auto',
                     background: '#FFFFFF',
-                    borderRadius: '24px',
+                    borderRadius: '16px',
                     border: '1px solid #E2E8F0',
                     boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05)',
-                    padding: '3rem 2.5rem',
+                    padding: '2.719rem 2.266rem',
                     textAlign: 'center',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
-                    gap: '1.5rem'
+                    gap: '1.359rem'
                 }}>
                     <div style={{
                         width: '72px',
@@ -1561,7 +1564,7 @@ export default function BusinessCA({ mode }) {
 
                     <div>
                         <span style={{
-                            fontSize: '0.75rem',
+                            fontSize: '0.68rem',
                             fontWeight: '800',
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em',
@@ -1572,14 +1575,14 @@ export default function BusinessCA({ mode }) {
                         }}>
                             {icaiVerification.status === 'PENDING_REVIEW' ? 'Verification In Progress' : (icaiVerification.status === 'REJECTED' ? 'Verification Rejected' : 'ICAI Verification Required')}
                         </span>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: '850', color: '#0F172A', margin: '0.75rem 0 0.5rem 0' }}>
+                        <h2 style={{ fontSize: '1.586rem', fontWeight: '850', color: '#0F172A', margin: '0.68rem 0 0.453rem 0' }}>
                             {icaiVerification.status === 'PENDING_REVIEW'
                                 ? 'ICAI Verification Pending Administrator Approval'
                                 : (icaiVerification.status === 'REJECTED'
                                     ? 'ICAI Credential Verification Unsuccessful'
                                     : 'Chartered Accountant (ICAI) Credential Gate')}
                         </h2>
-                        <p style={{ fontSize: '0.95rem', color: '#64748B', lineHeight: '1.6', maxWidth: '580px', margin: '0 auto' }}>
+                        <p style={{ fontSize: '0.861rem', color: '#64748B', lineHeight: '1.6', maxWidth: '580px', margin: '0 auto' }}>
                             {icaiVerification.status === 'PENDING_REVIEW'
                                 ? `Your credentials for ${icaiVerification.fullName || 'Member'} (ICAI #${icaiVerification.membershipNo}) have been submitted and are undergoing review by the administrator. The FIN-PRO dashboard will be unlocked once approved.`
                                 : (icaiVerification.status === 'REJECTED'
@@ -1588,20 +1591,20 @@ export default function BusinessCA({ mode }) {
                         </p>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.5rem' }}>
+                    <div style={{ display: 'flex', gap: '0.906rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '0.453rem' }}>
                         <button
                             type="button"
                             onClick={() => navigate('/customization?tab=finPro')}
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.5rem',
-                                padding: '0.85rem 1.75rem',
+                                gap: '0.453rem',
+                                padding: '0.77rem 1.586rem',
                                 borderRadius: '12px',
                                 background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
                                 color: 'white',
                                 border: 'none',
-                                fontSize: '0.95rem',
+                                fontSize: '0.861rem',
                                 fontWeight: '800',
                                 cursor: 'pointer',
                                 boxShadow: '0 4px 12px rgba(27, 107, 58, 0.25)'
@@ -1616,13 +1619,13 @@ export default function BusinessCA({ mode }) {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.85rem 1.5rem',
+                                    gap: '0.453rem',
+                                    padding: '0.77rem 1.359rem',
                                     borderRadius: '12px',
                                     background: '#10B981',
                                     color: 'white',
                                     border: 'none',
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.861rem',
                                     fontWeight: '800',
                                     cursor: 'pointer'
                                 }}
@@ -1635,12 +1638,12 @@ export default function BusinessCA({ mode }) {
                                 type="button"
                                 onClick={() => setIsIcaiModalOpen(true)}
                                 style={{
-                                    padding: '0.85rem 1.5rem',
+                                    padding: '0.77rem 1.359rem',
                                     borderRadius: '12px',
                                     background: '#F1F5F9',
                                     color: '#334155',
                                     border: '1px solid #CBD5E1',
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.861rem',
                                     fontWeight: '750',
                                     cursor: 'pointer'
                                 }}
@@ -1654,53 +1657,53 @@ export default function BusinessCA({ mode }) {
                 /* ── Gate 2: Subscription Required ── */
                 <div style={{
                     maxWidth: '900px',
-                    margin: '2rem auto',
+                    margin: '1.812rem auto',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '2rem'
+                    gap: '1.812rem'
                 }}>
                     <div style={{
                         background: '#FFFFFF',
                         borderRadius: '20px',
                         border: '1px solid #E2E8F0',
-                        padding: '2rem 2.5rem',
+                        padding: '1.812rem 2.266rem',
                         textAlign: 'center',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
                     }}>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '4px 14px', borderRadius: '999px', color: '#065F46', fontSize: '0.8rem', fontWeight: '800', marginBottom: '0.75rem' }}>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#ECFDF5', border: '1px solid #A7F3D0', padding: '4px 14px', borderRadius: '999px', color: '#065F46', fontSize: '0.725rem', fontWeight: '800', marginBottom: '0.68rem' }}>
                             <CheckCircle2 size={16} color="#059669" /> ICAI Credentials Verified — #{icaiVerification.membershipNo} ({icaiVerification.fullName || 'Member'})
                         </div>
-                        <h2 style={{ fontSize: '1.85rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.5rem 0' }}>
+                        <h2 style={{ fontSize: '1.677rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.453rem 0' }}>
                             Activate Your FIN-PRO Subscription
                         </h2>
-                        <p style={{ fontSize: '0.95rem', color: '#64748B', maxWidth: '600px', margin: '0 auto', lineHeight: '1.5' }}>
+                        <p style={{ fontSize: '0.861rem', color: '#64748B', maxWidth: '600px', margin: '0 auto', lineHeight: '1.5' }}>
                             Your institutional ICAI credentials have been validated! Choose your subscription tier below to activate your auditor workspace and display the FIN-PRO dashboard.
                         </p>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.359rem' }}>
                         {/* Fin-Pro Solo */}
                         <div style={{
                             background: '#FFFFFF',
                             borderRadius: '20px',
                             border: '1.5px solid #E2E8F0',
-                            padding: '2rem',
+                            padding: '1.812rem',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'space-between',
                             boxShadow: '0 4px 12px rgba(0,0,0,0.04)'
                         }}>
                             <div>
-                                <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#2563EB', textTransform: 'uppercase' }}>Individual Practice</span>
-                                <h3 style={{ fontSize: '1.4rem', fontWeight: '850', color: '#0F172A', margin: '0.35rem 0' }}>Fin-Pro Solo</h3>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '1rem' }}>
-                                    <span style={{ fontSize: '2rem', fontWeight: '900', color: '#0F172A' }}>₹999</span>
-                                    <span style={{ fontSize: '0.85rem', color: '#64748B', fontWeight: '600' }}>/ year</span>
+                                <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#2563EB', textTransform: 'uppercase' }}>Individual Practice</span>
+                                <h3 style={{ fontSize: '1.269rem', fontWeight: '850', color: '#0F172A', margin: '0.317rem 0' }}>Fin-Pro Solo</h3>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '0.906rem' }}>
+                                    <span style={{ fontSize: '1.812rem', fontWeight: '900', color: '#0F172A' }}>₹999</span>
+                                    <span style={{ fontSize: '0.77rem', color: '#64748B', fontWeight: '600' }}>/ year</span>
                                 </div>
-                                <p style={{ fontSize: '0.85rem', color: '#475569', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                                <p style={{ fontSize: '0.77rem', color: '#475569', lineHeight: '1.5', marginBottom: '1.359rem' }}>
                                     Ideal for independent chartered accountants managing SME client portfolios, tax returns, and statutory audits.
                                 </p>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.85rem', color: '#334155' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', marginBottom: '1.359rem', fontSize: '0.77rem', color: '#334155' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> 50 Connected SME Clients</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Automated CARO 2020 Working Papers</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Real-Time GST & TDS Audit Scanners</div>
@@ -1712,12 +1715,12 @@ export default function BusinessCA({ mode }) {
                                 onClick={() => handleActivateSubscription('Fin-Pro Solo')}
                                 style={{
                                     width: '100%',
-                                    padding: '0.85rem',
+                                    padding: '0.77rem',
                                     borderRadius: '12px',
                                     background: 'white',
                                     border: '2px solid #2563EB',
                                     color: '#2563EB',
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.861rem',
                                     fontWeight: '800',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s'
@@ -1734,7 +1737,7 @@ export default function BusinessCA({ mode }) {
                             background: '#0F172A',
                             borderRadius: '20px',
                             border: '2px solid #F59E0B',
-                            padding: '2rem',
+                            padding: '1.812rem',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'space-between',
@@ -1750,23 +1753,23 @@ export default function BusinessCA({ mode }) {
                                 color: 'white',
                                 padding: '4px 12px',
                                 borderRadius: '999px',
-                                fontSize: '0.72rem',
+                                fontSize: '0.652rem',
                                 fontWeight: '800',
                                 textTransform: 'uppercase'
                             }}>
                                 RECOMMENDED
                             </span>
                             <div>
-                                <span style={{ fontSize: '0.75rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase' }}>Full Practice</span>
-                                <h3 style={{ fontSize: '1.4rem', fontWeight: '850', color: 'white', margin: '0.35rem 0' }}>Fin-Pro Firm</h3>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '1rem' }}>
-                                    <span style={{ fontSize: '2rem', fontWeight: '900', color: 'white' }}>₹1,499</span>
-                                    <span style={{ fontSize: '0.85rem', color: '#94A3B8', fontWeight: '600' }}>/ year</span>
+                                <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#F59E0B', textTransform: 'uppercase' }}>Full Practice</span>
+                                <h3 style={{ fontSize: '1.269rem', fontWeight: '850', color: 'white', margin: '0.317rem 0' }}>Fin-Pro Firm</h3>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px', marginBottom: '0.906rem' }}>
+                                    <span style={{ fontSize: '1.812rem', fontWeight: '900', color: 'white' }}>₹1,499</span>
+                                    <span style={{ fontSize: '0.77rem', color: '#94A3B8', fontWeight: '600' }}>/ year</span>
                                 </div>
-                                <p style={{ fontSize: '0.85rem', color: '#94A3B8', lineHeight: '1.5', marginBottom: '1.5rem' }}>
+                                <p style={{ fontSize: '0.77rem', color: '#94A3B8', lineHeight: '1.5', marginBottom: '1.359rem' }}>
                                     Designed for multi-partner audit firms, team collaboration, and AI forensic fraud detection.
                                 </p>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.5rem', fontSize: '0.85rem', color: '#E2E8F0' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', marginBottom: '1.359rem', fontSize: '0.77rem', color: '#E2E8F0' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Unlimited SME Client Portals</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> Multi-Partner & Article Clerk Team Hub</div>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={16} color="#10B981" /> AI Forensic Anomaly & Fraud Detection</div>
@@ -1778,12 +1781,12 @@ export default function BusinessCA({ mode }) {
                                 onClick={() => handleActivateSubscription('Fin-Pro Firm')}
                                 style={{
                                     width: '100%',
-                                    padding: '0.85rem',
+                                    padding: '0.77rem',
                                     borderRadius: '12px',
                                     background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
                                     border: 'none',
                                     color: 'white',
-                                    fontSize: '0.95rem',
+                                    fontSize: '0.861rem',
                                     fontWeight: '800',
                                     cursor: 'pointer',
                                     boxShadow: '0 4px 14px rgba(245, 158, 11, 0.4)'
@@ -2813,6 +2816,7 @@ export default function BusinessCA({ mode }) {
                     <div className="w-fit bg-white/80 backdrop-blur-md rounded-2xl border border-gray-200/90 shadow-sm p-1.5 flex items-center gap-2 overflow-x-auto">
                         <button
                           type="button"
+                          data-tour="ca-role-statutory"
                           onClick={() => handleSelectRole('statutory')}
                           className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-[13.5px] tracking-tight font-extrabold transition-all duration-200 ${
                             selectedAuditorRole === 'statutory'
@@ -2826,6 +2830,7 @@ export default function BusinessCA({ mode }) {
 
                         <button
                           type="button"
+                          data-tour="ca-role-tax"
                           onClick={() => handleSelectRole('tax')}
                           className={`flex items-center gap-2.5 px-5 py-2.5 rounded-xl text-[13.5px] tracking-tight font-extrabold transition-all duration-200 ${
                             selectedAuditorRole === 'tax'
@@ -4463,7 +4468,7 @@ export default function BusinessCA({ mode }) {
                                         return (
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', width: '100%', alignItems: 'start' }}>
                                                 {/* LEFT COLUMN: Business Owner Details */}
-                                                <div style={{ background: '#FFFFFF', padding: '28px', borderRadius: '24px', border: '1px solid #E2E8F0', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                                <div style={{ background: '#FFFFFF', padding: '28px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                         <span style={{ color: '#0284C7', fontSize: '18px' }}>👤</span>
                                                         <h2 style={{ fontSize: '18px', fontWeight: '900', color: '#0F172A', margin: 0 }}>Business Owner Details</h2>
@@ -4550,7 +4555,7 @@ export default function BusinessCA({ mode }) {
                                                 </div>
 
                                                 {/* RIGHT COLUMN: Audit Session Timer */}
-                                                <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '24px', border: '1px solid #E2E8F0', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)', display: 'flex', flexDirection: 'column', gap: '24px', textAlign: 'center' }}>
+                                                <div style={{ background: '#FFFFFF', padding: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05)', display: 'flex', flexDirection: 'column', gap: '24px', textAlign: 'center' }}>
                                                     <div>
                                                         <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#0F172A', margin: 0 }}>⏱️ Audit Session Timer</h2>
                                                         <p style={{ fontSize: '14px', color: '#64748B', marginTop: '4px' }}>Track your professional audit hours for billing.</p>

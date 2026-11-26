@@ -102,11 +102,11 @@ const MutualFundsView = () => {
 
             <style>{`
                 .mf-filters {
-                    display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;
+                    display: flex; gap: 0.453rem; margin-bottom: 1.359rem; flex-wrap: wrap;
                 }
                 .mf-filter-tab {
-                    padding: 0.45rem 1rem; border-radius: 99px; border: 1px solid var(--border-color);
-                    background: white; font-size: 0.85rem; font-weight: 500; color: var(--text-muted);
+                    padding: 0.408rem 0.906rem; border-radius: 99px; border: 1px solid var(--border-color);
+                    background: white; font-size: 0.77rem; font-weight: 500; color: var(--text-muted);
                     cursor: pointer; transition: all 0.2s;
                 }
                 .mf-filter-tab:hover { border-color: var(--primary); color: var(--primary); }
@@ -114,51 +114,51 @@ const MutualFundsView = () => {
                     background: var(--primary); color: white; border-color: var(--primary);
                 }
                 .mf-section-header {
-                    display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+                    display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.906rem;
                 }
                 .mf-filter-btn {
-                    display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.75rem;
+                    display: flex; align-items: center; gap: 0.363rem; padding: 0.363rem 0.68rem;
                     border-radius: 8px; border: 1px solid var(--border-color); background: white;
-                    font-size: 0.8rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+                    font-size: 0.725rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
                 }
                 .mf-filter-btn:hover { border-color: var(--primary); color: var(--primary); }
 
-                .mf-list { display: flex; flex-direction: column; gap: 0.75rem; }
+                .mf-list { display: flex; flex-direction: column; gap: 0.68rem; }
                 .mf-card {
                     display: flex; align-items: center; justify-content: space-between;
-                    background: white; border-radius: 14px; padding: 1.25rem 1.5rem;
+                    background: white; border-radius: 14px; padding: 1.133rem 1.359rem;
                     border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.03);
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
                 .mf-card:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-                .mf-card-left { display: flex; align-items: center; gap: 1rem; flex: 1; min-width: 0; }
+                .mf-card-left { display: flex; align-items: center; gap: 0.906rem; flex: 1; min-width: 0; }
                 .mf-card-icon {
                     width: 44px; height: 44px; border-radius: 12px; background: #F0FDF4; color: var(--primary);
                     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
                 }
                 .mf-card-info { min-width: 0; }
-                .mf-fund-name { font-weight: 600; font-size: 0.9rem; color: var(--text-main); margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
-                .mf-fund-meta { display: flex; align-items: center; gap: 0.75rem; }
-                .mf-fund-cat { font-size: 0.75rem; color: var(--text-muted); background: #F0FDF4; padding: 0.1rem 0.5rem; border-radius: 4px; }
+                .mf-fund-name { font-weight: 600; font-size: 0.816rem; color: var(--text-main); margin-bottom: 0.272rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+                .mf-fund-meta { display: flex; align-items: center; gap: 0.68rem; }
+                .mf-fund-cat { font-size: 0.68rem; color: var(--text-muted); background: #F0FDF4; padding: 0.091rem 0.453rem; border-radius: 4px; }
                 .mf-stars { display: flex; gap: 1px; }
 
-                .mf-card-middle { display: flex; gap: 2rem; align-items: center; margin: 0 1.5rem; }
+                .mf-card-middle { display: flex; gap: 1.812rem; align-items: center; margin: 0 1.359rem; }
                 .mf-perf { display: flex; flex-direction: column; align-items: center; }
-                .mf-perf-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.15rem; }
-                .mf-perf-value { font-weight: 700; font-size: 0.9rem; color: var(--text-main); }
+                .mf-perf-label { font-size: 0.634rem; color: var(--text-muted); font-weight: 500; margin-bottom: 0.136rem; }
+                .mf-perf-value { font-weight: 700; font-size: 0.816rem; color: var(--text-main); }
                 .mf-perf-value.green { color: #16A34A; }
-                .mf-perf-value.nav { color: var(--text-muted); font-weight: 500; font-size: 0.85rem; }
+                .mf-perf-value.nav { color: var(--text-muted); font-weight: 500; font-size: 0.77rem; }
 
                 .mf-invest-btn {
-                    padding: 0.55rem 1.15rem; background: var(--primary); color: white; border: none;
-                    border-radius: 10px; font-weight: 600; font-size: 0.8rem; cursor: pointer;
-                    display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; transition: background 0.2s;
+                    padding: 0.498rem 1.042rem; background: var(--primary); color: white; border: none;
+                    border-radius: 10px; font-weight: 600; font-size: 0.725rem; cursor: pointer;
+                    display: flex; align-items: center; gap: 0.317rem; white-space: nowrap; transition: background 0.2s;
                 }
                 .mf-invest-btn:hover { background: var(--primary-hover); }
 
                 @media (max-width: 900px) {
-                    .mf-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
-                    .mf-card-middle { margin: 0; gap: 1.5rem; }
+                    .mf-card { flex-direction: column; align-items: flex-start; gap: 0.906rem; }
+                    .mf-card-middle { margin: 0; gap: 1.359rem; }
                     .mf-invest-btn { width: 100%; justify-content: center; }
                 }
             `}</style>

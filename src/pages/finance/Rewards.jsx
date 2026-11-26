@@ -89,8 +89,8 @@ const Rewards = () => {
         <div style={{ height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
             
             {/* Sleek Title Banner */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                     <div style={{ 
                         width: '38px', 
                         height: '38px', 
@@ -105,27 +105,27 @@ const Rewards = () => {
                         <Gift size={20} />
                     </div>
                     <div>
-                        <h1 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{t('rewardsOffers', 'Rewards & Offers')}</h1>
-                        <p style={{ color: '#64748B', fontSize: '0.825rem', fontWeight: '500', margin: '0.1rem 0 0 0' }}>{t('rewardsSubtitle', 'Unlock special platform deals, discounts, and premium tier unlocks.')}</p>
+                        <h1 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{t('rewardsOffers', 'Rewards & Offers')}</h1>
+                        <p style={{ color: '#64748B', fontSize: '0.748rem', fontWeight: '500', margin: '0.091rem 0 0 0' }}>{t('rewardsSubtitle', 'Unlock special platform deals, discounts, and premium tier unlocks.')}</p>
                     </div>
                 </div>
             </div>
 
             {/* Scrollable View */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.5rem' }}>
+            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.359rem' }}>
                 
                 {/* Banner Balance Section */}
                 <div style={{ 
                     background: 'linear-gradient(135deg, #064E3B 0%, #1B6B3A 100%)', 
-                    borderRadius: '24px', 
-                    padding: '2rem', 
+                    borderRadius: '16px', 
+                    padding: '1.812rem', 
                     color: 'white', 
                     position: 'relative',
                     overflow: 'hidden',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    marginBottom: '1.75rem',
+                    marginBottom: '1.586rem',
                     boxShadow: '0 12px 30px rgba(6, 78, 59, 0.12)'
                 }}>
                     {/* Glow background design elements */}
@@ -133,12 +133,12 @@ const Rewards = () => {
                     <div style={{ position: 'absolute', bottom: '-30px', left: '-30px', width: '140px', height: '140px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
                     <div style={{ maxWidth: '65%', zIndex: 1 }}>
-                        <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '0.4rem 0.75rem', borderRadius: '99px', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                        <div style={{ background: 'rgba(255, 255, 255, 0.1)', padding: '0.363rem 0.68rem', borderRadius: '99px', display: 'inline-flex', alignItems: 'center', gap: '0.363rem', marginBottom: '0.68rem', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.1)' }}>
                             <Sparkles size={14} color="#FCD34D" />
-                            <span style={{ fontSize: '0.7rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#A7F3D0' }}>{t('activeRewardsPlan', 'Active Rewards Plan')}</span>
+                            <span style={{ fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#A7F3D0' }}>{t('activeRewardsPlan', 'Active Rewards Plan')}</span>
                         </div>
-                        <h2 style={{ fontSize: '1.75rem', fontWeight: '850', margin: '0 0 0.5rem 0', letterSpacing: '-0.02em' }}>{t('growBusinessPerks', 'Grow Your Business, Collect Premium Perks')}</h2>
-                        <p style={{ opacity: 0.85, fontSize: '0.9rem', lineHeight: 1.4, margin: 0, color: '#ECFDF5' }}>
+                        <h2 style={{ fontSize: '1.586rem', fontWeight: '850', margin: '0 0 0.453rem 0', letterSpacing: '-0.02em' }}>{t('growBusinessPerks', 'Grow Your Business, Collect Premium Perks')}</h2>
+                        <p style={{ opacity: 0.85, fontSize: '0.816rem', lineHeight: 1.4, margin: 0, color: '#ECFDF5' }}>
                             {t('rewardsDescription', 'Complete milestones, scale your active ledger, and transact consistently to stack loyalty points and unlock deep discounts across your workspace subscriptions.')}
                         </p>
                     </div>
@@ -149,7 +149,7 @@ const Rewards = () => {
                         backdropFilter: 'blur(12px)', 
                         border: '1px solid rgba(255, 255, 255, 0.15)', 
                         borderRadius: '20px', 
-                        padding: '1.5rem',
+                        padding: '1.359rem',
                         textAlign: 'center',
                         minWidth: '180px',
                         zIndex: 1,
@@ -164,22 +164,22 @@ const Rewards = () => {
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center', 
-                            margin: '0 auto 0.75rem auto', 
+                            margin: '0 auto 0.68rem auto', 
                             boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)' 
                         }}>
                             <Coins size={22} />
                         </div>
-                        <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: '800', color: '#A7F3D0', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.15rem' }}>{t('totalWalletPoints', 'Total Wallet Points')}</span>
-                        <h3 style={{ fontSize: '2.25rem', fontWeight: '900', margin: 0, color: '#FFFFFF', lineHeight: 1 }}>{rewardPoints.toLocaleString()}</h3>
-                        <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: '700', color: '#A7F3D0', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+                        <span style={{ display: 'block', fontSize: '0.589rem', fontWeight: '800', color: '#A7F3D0', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.136rem' }}>{t('totalWalletPoints', 'Total Wallet Points')}</span>
+                        <h3 style={{ fontSize: '2.039rem', fontWeight: '900', margin: 0, color: '#FFFFFF', lineHeight: 1 }}>{rewardPoints.toLocaleString()}</h3>
+                        <span style={{ display: 'block', fontSize: '0.68rem', fontWeight: '700', color: '#A7F3D0', marginTop: '0.227rem', marginBottom: '0.453rem' }}>
                             ≈ ₹{(rewardPoints / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Value
                         </span>
                         <div style={{ 
-                            marginTop: '0.65rem', 
-                            padding: '0.25rem 0.5rem', 
+                            marginTop: '0.589rem', 
+                            padding: '0.227rem 0.453rem', 
                             borderRadius: '8px', 
                             background: 'rgba(255, 255, 255, 0.1)', 
-                            fontSize: '0.7rem', 
+                            fontSize: '0.634rem', 
                             fontWeight: '700', 
                             color: '#D1FAE5', 
                             display: 'inline-block' 
@@ -191,20 +191,20 @@ const Rewards = () => {
                             onClick={handleConvertPoints}
                             disabled={rewardPoints <= 0}
                             style={{
-                                marginTop: '1rem',
-                                padding: '0.6rem 1rem',
+                                marginTop: '0.906rem',
+                                padding: '0.544rem 0.906rem',
                                 borderRadius: '10px',
                                 border: 'none',
                                 background: rewardPoints > 0 ? 'linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%)' : 'rgba(255, 255, 255, 0.1)',
                                 color: rewardPoints > 0 ? '#78350F' : '#94A3B8',
                                 fontWeight: '850',
-                                fontSize: '0.75rem',
+                                fontSize: '0.68rem',
                                 cursor: rewardPoints > 0 ? 'pointer' : 'not-allowed',
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                gap: '0.4rem',
+                                gap: '0.363rem',
                                 transition: 'all 0.2s',
                                 boxShadow: rewardPoints > 0 ? '0 4px 12px rgba(245, 158, 11, 0.3)' : 'none'
                             }}
@@ -222,18 +222,18 @@ const Rewards = () => {
                 </div>
 
                 {/* Content Layout */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                     
                     {/* Exclusive Offers & Boosters */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <h3 style={{ fontSize: '1.1rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>{t('exclusiveOffersBoosters', 'Exclusive Offers & Boosters')}</h3>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: '#10B981', fontWeight: '700' }}>
+                            <h3 style={{ fontSize: '0.997rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>{t('exclusiveOffersBoosters', 'Exclusive Offers & Boosters')}</h3>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.227rem', fontSize: '0.68rem', color: '#10B981', fontWeight: '700' }}>
                                 <Clock size={13} /> {t('updatedHourly', 'Updated Hourly')}
                             </div>
                         </div>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '1.25rem' }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(380px, 1fr))', gap: '1.133rem' }}>
                             {premiumOffers.map((offer) => (
                                 <div 
                                     key={offer.id}
@@ -241,9 +241,9 @@ const Rewards = () => {
                                         background: '#FFFFFF',
                                         borderRadius: '18px',
                                         border: '1px solid #E2E8F0',
-                                        padding: '1.25rem',
+                                        padding: '1.133rem',
                                         display: 'flex',
-                                        gap: '1.25rem',
+                                        gap: '1.133rem',
                                         transition: 'all 0.2s',
                                         position: 'relative',
                                         boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
@@ -274,14 +274,14 @@ const Rewards = () => {
                                     </div>
 
                                     <div style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
-                                            <h4 style={{ fontSize: '1rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>{offer.title}</h4>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.317rem' }}>
+                                            <h4 style={{ fontSize: '0.906rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>{offer.title}</h4>
                                             <span style={{ 
-                                                padding: '0.25rem 0.5rem', 
+                                                padding: '0.227rem 0.453rem', 
                                                 borderRadius: '6px', 
                                                 background: offer.badgeColor, 
                                                 color: offer.textColor, 
-                                                fontSize: '0.65rem', 
+                                                fontSize: '0.589rem', 
                                                 fontWeight: '850', 
                                                 textTransform: 'uppercase', 
                                                 letterSpacing: '0.02em' 
@@ -289,7 +289,7 @@ const Rewards = () => {
                                                 {offer.shortLabel}
                                             </span>
                                         </div>
-                                        <p style={{ fontSize: '0.85rem', lineHeight: 1.4, color: '#64748B', margin: '0 0 1rem 0' }}>
+                                        <p style={{ fontSize: '0.77rem', lineHeight: 1.4, color: '#64748B', margin: '0 0 0.906rem 0' }}>
                                             {offer.description}
                                         </p>
                                         
@@ -298,8 +298,8 @@ const Rewards = () => {
                                             style={{
                                                 display: 'inline-flex',
                                                 alignItems: 'center',
-                                                gap: '0.35rem',
-                                                fontSize: '0.8rem',
+                                                gap: '0.317rem',
+                                                fontSize: '0.725rem',
                                                 fontWeight: '800',
                                                 color: offer.accentColor,
                                                 textDecoration: 'none'

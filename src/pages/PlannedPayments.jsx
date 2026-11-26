@@ -332,18 +332,18 @@ const PlannedPayments = () => {
                 .payment-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .payment-stat-card {
-                    background: white; padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);
+                    background: white; padding: 1.359rem; border-radius: 16px; border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; font-weight: 500; color: var(--text-muted); }
                 
                 .stat-icon-wrapper { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
                 .icon-blue { background: #DBEAFE; color: #1B6B3A; }
@@ -351,48 +351,48 @@ const PlannedPayments = () => {
                 .icon-red { background: #FEE2E2; color: #EF4444; }
 
                 .card-container {
-                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;
+                    background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.359rem;
                 }
-                .section-title { font-size: 1.1rem; font-weight: 600; color: var(--text-main); margin-bottom: 1.5rem; }
+                .section-title { font-size: 0.997rem; font-weight: 600; color: var(--text-main); margin-bottom: 1.359rem; }
 
-                .payments-list { display: flex; flex-direction: column; gap: 1rem; }
+                .payments-list { display: flex; flex-direction: column; gap: 0.906rem; }
                 .payment-row {
                     display: flex; align-items: center; justify-content: space-between;
-                    padding: 1rem; border: 1px solid var(--border-color); border-radius: 12px;
+                    padding: 0.906rem; border: 1px solid var(--border-color); border-radius: 12px;
                     transition: all 0.2s;
                 }
                 .payment-row:hover { background: #F8FAFC; border-color: #CBD5E1; }
 
-                .payment-left { display: flex; align-items: center; gap: 1rem; flex: 1.5; }
+                .payment-left { display: flex; align-items: center; gap: 0.906rem; flex: 1.5; }
                 .payment-icon-box { width: 40px; height: 40px; background: #F0FDF4; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
-                .payment-name { font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
-                .payment-meta { font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; }
-                .dot { font-size: 1.2rem; line-height: 0; }
+                .payment-name { font-weight: 600; color: var(--text-main); font-size: 0.861rem; }
+                .payment-meta { font-size: 0.725rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.453rem; }
+                .dot { font-size: 1.087rem; line-height: 0; }
 
-                .payment-center { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
-                .status-badge { font-size: 0.75rem; padding: 0.25rem 0.6rem; border-radius: 99px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+                .payment-center { flex: 1; display: flex; flex-direction: column; align-items: flex-start; gap: 0.227rem; }
+                .status-badge { font-size: 0.68rem; padding: 0.227rem 0.544rem; border-radius: 99px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
                 .status-overdue { background: #FEE2E2; color: #DC2626; }
                 .status-due-soon { background: #FFEDD5; color: #C2410C; }
                 .status-upcoming { background: #F0FDF4; color: #1B6B3A; }
-                .date-text { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+                .date-text { font-size: 0.725rem; color: var(--text-muted); font-weight: 500; }
                 .text-red { color: #DC2626; }
 
-                .payment-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 2rem; }
-                .amount-text { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
-                .actions-group { display: flex; align-items: center; gap: 0.75rem; }
+                .payment-right { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 1.812rem; }
+                .amount-text { font-size: 0.997rem; font-weight: 700; color: var(--text-main); }
+                .actions-group { display: flex; align-items: center; gap: 0.68rem; }
                 
                 .btn-icon-soft { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--text-muted); transition: all 0.2s; }
                 .btn-icon-soft:hover { background: #FEE2E2; color: #DC2626; }
                 
                 .btn-pay { 
-                    padding: 0.4rem 1rem; background: var(--primary); color: white; 
-                    border-radius: 8px; font-size: 0.85rem; font-weight: 600; 
+                    padding: 0.363rem 0.906rem; background: var(--primary); color: white; 
+                    border-radius: 8px; font-size: 0.77rem; font-weight: 600; 
                     transition: background 0.2s; 
                 }
                 .btn-pay:hover { background: var(--primary-hover); }
 
                 @media (max-width: 768px) {
-                    .payment-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
+                    .payment-row { flex-direction: column; align-items: flex-start; gap: 0.906rem; }
                     .payment-right { width: 100%; justify-content: space-between; }
                     .payment-center { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; }
                 }

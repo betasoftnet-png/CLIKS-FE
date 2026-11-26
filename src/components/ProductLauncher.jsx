@@ -343,7 +343,7 @@ const ProductLauncher = ({ onClose }) => {
                 </div>
 
                 {/* Main Product Grid showing only large app icons */}
-                <div className="launcher-section" style={{ gap: '1rem' }}>
+                <div className="launcher-section" style={{ gap: '0.906rem' }}>
                     <div className="launcher-main-grid">
                         {(activeTab === 'BASE' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p => p.category.toUpperCase() === activeTab)).map(prod => {
                             const IconComponent = prod.icon;
@@ -366,7 +366,10 @@ const ProductLauncher = ({ onClose }) => {
                                         }
                                     }}
                                 >
-                                    <div className="launcher-all-icon-wrapper">
+                                    <div
+                                        className="launcher-all-icon-wrapper"
+                                        data-tour={prod.name === 'Bit-Tool' ? 'product-bit-tool-icon' : undefined}
+                                    >
                                         {typeof IconComponent === 'string' ? (
                                             <img 
                                                 src={IconComponent} 
@@ -377,7 +380,12 @@ const ProductLauncher = ({ onClose }) => {
                                             <IconComponent size={24} strokeWidth={2.2} />
                                         )}
                                     </div>
-                                    <span className="launcher-all-name">{prod.name}</span>
+                                    <span
+                                        className="launcher-all-name"
+                                        data-tour={prod.name === 'Bit-Tool' ? 'product-bit-tool' : undefined}
+                                    >
+                                        {prod.name}
+                                    </span>
 
                                     {/* Star Toggle shown in Edit Mode */}
                                     {isEditMode && (
@@ -461,7 +469,7 @@ const ProductLauncher = ({ onClose }) => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 0.75rem 1rem;
+                    padding: 0.68rem 0.906rem;
                     border-bottom: 1px solid #f1f5f9;
                     width: 100%;
                     flex-wrap: nowrap;
@@ -485,7 +493,7 @@ const ProductLauncher = ({ onClose }) => {
                     align-items: center;
                 }
                 .launcher-title {
-                    font-size: 1.2rem;
+                    font-size: 1.087rem;
                     font-weight: 850;
                     color: #0f172a;
                     margin: 0;
@@ -494,16 +502,16 @@ const ProductLauncher = ({ onClose }) => {
                 .launcher-actions {
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                     flex-shrink: 0;
                 }
                 .launcher-edit-btn {
                     border: 1px solid #e2e8f0;
                     background: #ffffff;
                     color: #475569;
-                    padding: 0.4rem 0.75rem;
+                    padding: 0.363rem 0.68rem;
                     border-radius: 8px;
-                    font-size: 0.75rem;
+                    font-size: 0.68rem;
                     font-weight: 700;
                     cursor: pointer;
                     display: flex;
@@ -542,13 +550,13 @@ const ProductLauncher = ({ onClose }) => {
                 }
 
                 .launcher-scrollable {
-                    padding: 0.65rem 1rem;
+                    padding: 0.589rem 0.906rem;
                     overflow-y: auto;
                     overflow-x: hidden;
                     flex: 1;
                     display: flex;
                     flex-direction: column;
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                     width: 100%;
                 }
                 
@@ -571,11 +579,11 @@ const ProductLauncher = ({ onClose }) => {
                 .launcher-section {
                     display: flex;
                     flex-direction: column;
-                    gap: 0.75rem;
+                    gap: 0.68rem;
                     width: 100%;
                 }
                 .launcher-section-title {
-                    font-size: 0.8rem;
+                    font-size: 0.725rem;
                     font-weight: 800;
                     color: #475569;
                     text-transform: uppercase;
@@ -593,16 +601,16 @@ const ProductLauncher = ({ onClose }) => {
                     background: #f8fafc;
                     border: 1px solid #e2e8f0;
                     border-radius: 16px;
-                    padding: 0.45rem;
+                    padding: 0.408rem;
                     width: 100%;
-                    gap: 0.45rem;
+                    gap: 0.408rem;
                     align-items: stretch;
                 }
                 .launcher-toggle-header {
                     display: flex;
                     align-items: center;
                     border-bottom: 1px solid #e2e8f0;
-                    padding-bottom: 0.25rem;
+                    padding-bottom: 0.227rem;
                     width: 100%;
                 }
                 .launcher-toggle-half {
@@ -617,13 +625,13 @@ const ProductLauncher = ({ onClose }) => {
                     justify-content: center;
                 }
                 .launcher-toggle-tab {
-                    font-size: 0.72rem;
+                    font-size: 0.652rem;
                     font-weight: 850;
                     color: #94a3b8;
                     border: none;
                     background: transparent;
                     cursor: pointer;
-                    padding: 0.2rem 0;
+                    padding: 0.181rem 0;
                     transition: all 0.2s ease;
                     border-bottom: 2px solid transparent;
                     text-transform: uppercase;
@@ -639,7 +647,7 @@ const ProductLauncher = ({ onClose }) => {
                 }
                 .launcher-toggle-divider {
                     color: #cbd5e1;
-                    font-size: 0.7rem;
+                    font-size: 0.634rem;
                     user-select: none;
                 }
                 .launcher-toggle-pane {
@@ -653,17 +661,17 @@ const ProductLauncher = ({ onClose }) => {
                     min-height: 48px;
                     border: 1px dashed #cbd5e1;
                     border-radius: 10px;
-                    font-size: 0.68rem;
+                    font-size: 0.616rem;
                     color: #94a3b8;
                     font-weight: 600;
-                    padding: 1rem;
+                    padding: 0.906rem;
                     text-align: center;
                     width: 100%;
                 }
                 .launcher-split-grid {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 0.5rem;
+                    gap: 0.453rem;
                 }
                 .launcher-mini-item-wrapper {
                     display: flex;
@@ -698,7 +706,7 @@ const ProductLauncher = ({ onClose }) => {
                     animation: launcher-shake 0.3s ease-in-out infinite alternate;
                 }
                 .launcher-mini-name {
-                    font-size: 0.72rem;
+                    font-size: 0.652rem;
                     font-weight: 850;
                     color: #000000 !important;
                     text-align: center;
@@ -743,10 +751,10 @@ const ProductLauncher = ({ onClose }) => {
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
-                    padding-top: 0.1rem;
+                    padding-top: 0.091rem;
                 }
                 .launcher-base-title {
-                    font-size: 0.8rem;
+                    font-size: 0.725rem;
                     font-weight: 850;
                     color: #475569;
                     letter-spacing: 0.75px;
@@ -767,7 +775,7 @@ const ProductLauncher = ({ onClose }) => {
                     border: none;
                     background: transparent;
                     padding: 2px 4px;
-                    font-size: 0.72rem;
+                    font-size: 0.652rem;
                     font-weight: 800;
                     color: #94a3b8;
                     cursor: pointer;
@@ -784,7 +792,7 @@ const ProductLauncher = ({ onClose }) => {
                 }
                 .launcher-nav-divider {
                     color: #cbd5e1;
-                    font-size: 0.7rem;
+                    font-size: 0.634rem;
                     user-select: none;
                 }
 
@@ -792,7 +800,7 @@ const ProductLauncher = ({ onClose }) => {
                 .launcher-main-grid {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 0.45rem 0.4rem;
+                    gap: 0.408rem 0.363rem;
                     width: 100%;
                     justify-items: center;
                     align-items: center;
@@ -820,10 +828,10 @@ const ProductLauncher = ({ onClose }) => {
                     user-select: none;
                     box-shadow: 0 2px 6px rgba(0,0,0,0.03);
                     border: 1px solid #f1f5f9;
-                    padding: 0.5rem 0.25rem;
+                    padding: 0.453rem 0.227rem;
                 }
                 .launcher-all-name {
-                    font-size: 0.72rem;
+                    font-size: 0.652rem;
                     font-weight: 850;
                     color: #000000 !important;
                     text-align: center;
@@ -903,12 +911,12 @@ const ProductLauncher = ({ onClose }) => {
                     align-items: center;
                     justify-content: center;
                     text-align: center;
-                    padding: 1.4rem 1rem 1.1rem 1rem;
+                    padding: 1.269rem 0.906rem 0.997rem 0.906rem;
                     background: #ffffff;
                     border: 1px solid #e2e8f0;
                     border-radius: 20px;
                     width: 100%;
-                    margin-top: 1.1rem;
+                    margin-top: 0.997rem;
                     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
                 }
                 .launcher-labs-icon-wrapper {
@@ -939,29 +947,29 @@ const ProductLauncher = ({ onClose }) => {
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
-                    padding: 0.22rem 0.85rem;
+                    padding: 0.199rem 0.77rem;
                     background: #f3e8ff;
                     border-radius: 9999px;
-                    font-size: 0.65rem;
+                    font-size: 0.589rem;
                     font-weight: 850;
                     color: #6d28d9;
                     letter-spacing: 0.75px;
                     text-transform: uppercase;
                 }
                 .launcher-labs-title {
-                    font-size: 1.05rem;
+                    font-size: 0.952rem;
                     font-weight: 900;
                     color: #9333ea;
                     letter-spacing: 0.75px;
-                    margin: 0.4rem 0 0 0;
+                    margin: 0.363rem 0 0 0;
                     text-transform: uppercase;
                 }
                 .launcher-labs-description {
-                    font-size: 0.76rem;
+                    font-size: 0.689rem;
                     font-weight: 600;
                     color: #475569;
                     line-height: 1.35;
-                    margin: 0.3rem 0 0 0;
+                    margin: 0.272rem 0 0 0;
                     text-align: center;
                     max-width: 240px;
                 }
@@ -978,9 +986,9 @@ const ProductLauncher = ({ onClose }) => {
                     transform: translateX(-50%) scale(0.95);
                     background: #0f172a;
                     color: #ffffff;
-                    padding: 0.35rem 0.6rem;
+                    padding: 0.317rem 0.544rem;
                     border-radius: 6px;
-                    font-size: 0.7rem;
+                    font-size: 0.634rem;
                     font-weight: 600;
                     white-space: nowrap;
                     opacity: 0;
@@ -1005,7 +1013,7 @@ const ProductLauncher = ({ onClose }) => {
 
                 /* Footer */
                 .launcher-footer {
-                    padding: 0.65rem 1rem;
+                    padding: 0.589rem 0.906rem;
                     background: #f8fafc;
                     border-top: 1px solid #f1f5f9;
                     display: flex !important;
@@ -1013,7 +1021,7 @@ const ProductLauncher = ({ onClose }) => {
                     align-items: center !important;
                     text-align: center !important;
                     gap: 6px;
-                    font-size: 0.68rem;
+                    font-size: 0.616rem;
                     color: #94a3b8;
                     font-weight: 700;
                     text-transform: uppercase;

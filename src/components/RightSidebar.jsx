@@ -29,7 +29,7 @@ const DockedPanelWrapper = ({ title, onClose, children }) => {
             {/* Header */}
             <div style={{
                 height: '52px',
-                padding: '0 1rem',
+                padding: '0 0.906rem',
                 borderBottom: '1px solid #99DBC3',
                 display: 'flex',
                 alignItems: 'center',
@@ -37,7 +37,7 @@ const DockedPanelWrapper = ({ title, onClose, children }) => {
                 backgroundColor: '#F8FAFC',
                 flexShrink: 0
             }}>
-                <span style={{ fontWeight: '750', fontSize: '0.85rem', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <span style={{ fontWeight: '750', fontSize: '0.77rem', color: '#1E293B', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     {title}
                 </span>
                 <button
@@ -249,6 +249,7 @@ const RightSidebar = ({
 
                                 {/* Blue B Logo Button */}
                                 <button
+                                    data-tour="toolbar-beta-products"
                                     onClick={() => handleToolClick('Beta Products')}
                                     title="Beta Products Launcher"
                                     style={{
@@ -523,20 +524,20 @@ const RightSidebar = ({
                             )}
                             {activePanel === 'Keyboard' && (
                                 <DockedPanelWrapper title="Keyboard Shortcuts" onClose={closeAllPanels}>
-                                    <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1B6B3A', fontWeight: '800', fontSize: '0.95rem' }}>
+                                    <div style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', color: '#1B6B3A', fontWeight: '800', fontSize: '0.861rem' }}>
                                             <Command size={18} /> Quick Navigation Shortcuts
                                         </div>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.85rem' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', fontSize: '0.77rem' }}>
                                             {[
                                                 { key: 'Esc', desc: 'Close any open drawer or popover' },
                                                 { key: 'Enter', desc: 'Confirm modal or dialog action' },
                                                 { key: 'Tab', desc: 'Cycle through inputs and buttons' },
                                                 { key: 'Ctrl / Cmd + K', desc: 'Open global search focus' }
                                             ].map((sc, i) => (
-                                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: '#F8FAFC', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.589rem 0.77rem', backgroundColor: '#F8FAFC', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
                                                     <span style={{ color: '#475569', fontWeight: '500' }}>{sc.desc}</span>
-                                                    <kbd style={{ backgroundColor: '#FFFFFF', border: '1px solid #CBD5E1', padding: '2px 8px', borderRadius: '6px', fontWeight: '800', fontSize: '0.75rem', color: '#1E293B', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>{sc.key}</kbd>
+                                                    <kbd style={{ backgroundColor: '#FFFFFF', border: '1px solid #CBD5E1', padding: '2px 8px', borderRadius: '6px', fontWeight: '800', fontSize: '0.68rem', color: '#1E293B', boxShadow: '0 1px 2px rgba(0,0,0,0.05)' }}>{sc.key}</kbd>
                                                 </div>
                                             ))}
                                         </div>

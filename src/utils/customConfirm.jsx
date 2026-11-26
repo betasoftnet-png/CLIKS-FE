@@ -14,49 +14,49 @@ const ConfirmDialog = ({ message, onConfirm, onCancel }) => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            padding: '2rem'
+            padding: '1.812rem'
         }}>
             <div 
                 style={{
                     background: 'white',
                     width: '100%',
                     maxWidth: '420px',
-                    borderRadius: '24px',
-                    padding: '2rem',
+                    borderRadius: '18px',
+                    padding: '1.359rem',
                     boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
                     border: '1px solid #E2E8F0',
                     animation: 'fadeInUp 0.2s ease-out'
                 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.359rem' }}>
                     <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#FEF2F2', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444' }}>
                         <AlertTriangle size={24} />
                     </div>
                     <button 
                         onClick={onCancel}
-                        style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer', color: '#64748B' }}
+                        style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer', color: '#64748B' }}
                     >
                         <X size={16} />
                     </button>
                 </div>
                 
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.75rem', lineHeight: 1.3 }}>
+                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.68rem', lineHeight: 1.3 }}>
                     Please Confirm
                 </h3>
-                <p style={{ fontSize: '0.95rem', color: '#475569', marginBottom: '2rem', lineHeight: 1.5, fontWeight: '500', whiteSpace: 'pre-wrap' }}>
+                <p style={{ fontSize: '0.861rem', color: '#475569', marginBottom: '1.812rem', lineHeight: 1.5, fontWeight: '500', whiteSpace: 'pre-wrap' }}>
                     {message}
                 </p>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '0.906rem' }}>
                     <button 
                         onClick={onCancel}
-                        style={{ flex: 1, padding: '0.85rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '750', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '0.77rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '750', cursor: 'pointer' }}
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={onConfirm}
-                        style={{ flex: 1, padding: '0.85rem', borderRadius: '14px', border: 'none', background: '#EF4444', color: 'white', fontWeight: '750', cursor: 'pointer', boxShadow: '0 4px 12px rgba(239, 68, 68, 0.25)' }}
+                        style={{ flex: 1, padding: '0.77rem', borderRadius: '14px', border: 'none', background: '#EF4444', color: 'white', fontWeight: '750', cursor: 'pointer', boxShadow: '0 4px 12px rgba(239, 68, 68, 0.25)' }}
                     >
                         Confirm
                     </button>
@@ -120,36 +120,36 @@ const PromptDialog = ({ message, defaultValue, onConfirm, onCancel }) => {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 9999,
-            padding: '2rem'
+            padding: '1.812rem'
         }}>
             <div 
                 style={{
                     background: 'white',
                     width: '100%',
                     maxWidth: '420px',
-                    borderRadius: '24px',
-                    padding: '2rem',
+                    borderRadius: '18px',
+                    padding: '1.359rem',
                     boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)',
                     border: '1px solid #E2E8F0',
                     animation: 'fadeInUp 0.2s ease-out'
                 }}
             >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.359rem' }}>
                     <div style={{ width: '48px', height: '48px', borderRadius: '16px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#16A34A' }}>
                         <Edit3 size={24} />
                     </div>
                     <button 
                         onClick={onCancel}
-                        style={{ border: 'none', background: '#F1F5F9', padding: '0.5rem', borderRadius: '12px', cursor: 'pointer', color: '#64748B' }}
+                        style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer', color: '#64748B' }}
                     >
                         <X size={16} />
                     </button>
                 </div>
                 
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.75rem', lineHeight: 1.3 }}>
+                <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.68rem', lineHeight: 1.3 }}>
                     Input Required
                 </h3>
-                <p style={{ fontSize: '0.95rem', color: '#475569', marginBottom: '1.5rem', lineHeight: 1.5, fontWeight: '500', whiteSpace: 'pre-wrap' }}>
+                <p style={{ fontSize: '0.861rem', color: '#475569', marginBottom: '1.359rem', lineHeight: 1.5, fontWeight: '500', whiteSpace: 'pre-wrap' }}>
                     {message}
                 </p>
 
@@ -159,21 +159,21 @@ const PromptDialog = ({ message, defaultValue, onConfirm, onCancel }) => {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') onConfirm(inputValue); }}
-                    style={{ width: '100%', padding: '0.85rem 1rem', boxSizing: 'border-box', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '1rem', outline: 'none', marginBottom: '2rem', fontWeight: '500', color: '#1E293B', transition: 'border-color 0.2s' }}
+                    style={{ width: '100%', padding: '0.77rem 0.906rem', boxSizing: 'border-box', borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '0.906rem', outline: 'none', marginBottom: '1.812rem', fontWeight: '500', color: '#1E293B', transition: 'border-color 0.2s' }}
                     onFocus={(e) => e.target.style.borderColor = '#16A34A'}
                     onBlur={(e) => e.target.style.borderColor = '#E2E8F0'}
                 />
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '0.906rem' }}>
                     <button 
                         onClick={onCancel}
-                        style={{ flex: 1, padding: '0.85rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '750', cursor: 'pointer' }}
+                        style={{ flex: 1, padding: '0.77rem', borderRadius: '14px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontWeight: '750', cursor: 'pointer' }}
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={() => onConfirm(inputValue)}
-                        style={{ flex: 1, padding: '0.85rem', borderRadius: '14px', border: 'none', background: '#16A34A', color: 'white', fontWeight: '750', cursor: 'pointer', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)' }}
+                        style={{ flex: 1, padding: '0.77rem', borderRadius: '14px', border: 'none', background: '#16A34A', color: 'white', fontWeight: '750', cursor: 'pointer', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)' }}
                     >
                         Confirm
                     </button>

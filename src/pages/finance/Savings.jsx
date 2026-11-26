@@ -24,7 +24,7 @@ const FinanceSavings = () => {
             </div>
 
             <div className="content-wrapper">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.359rem' }}>
                     {features.map((item, index) => (
                         <div
                             key={index}
@@ -32,11 +32,11 @@ const FinanceSavings = () => {
                             onClick={() => item.path && navigate(item.path)}
                             style={{
                                 cursor: 'pointer',
-                                padding: '1.5rem',
+                                padding: '1.359rem',
                                 transition: 'all 0.2s',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '1.5rem'
+                                gap: '1.359rem'
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.transform = 'translateY(-4px)';
@@ -61,8 +61,8 @@ const FinanceSavings = () => {
                                 <item.icon size={28} />
                             </div>
                             <div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.25rem' }}>{item.label}</h3>
-                                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{item.description}</p>
+                                <h3 style={{ fontSize: '0.997rem', fontWeight: '600', color: 'var(--text-main)', marginBottom: '0.227rem' }}>{item.label}</h3>
+                                <p style={{ fontSize: '0.77rem', color: 'var(--text-muted)' }}>{item.description}</p>
                             </div>
                         </div>
                     ))}

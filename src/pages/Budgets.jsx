@@ -1,3 +1,5 @@
+
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { budgetsService } from '../services';
 import '../App.css';
@@ -313,21 +315,21 @@ const Budgets = () => {
                 .budget-stats-grid {
                     display: grid;
                     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.359rem;
+                    margin-bottom: 1.812rem;
                 }
 
                 .budget-stat-card {
                     background: white;
-                    padding: 1.5rem;
+                    padding: 1.359rem;
                     border-radius: 16px;
                     border: 1px solid var(--border-color);
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
                 }
 
-                .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; }
-                .stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.25rem; }
-                .stat-subtext { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); }
+                .stat-label { color: var(--text-muted); font-size: 0.793rem; font-weight: 500; margin-bottom: 0.453rem; }
+                .stat-value { font-size: 1.586rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.227rem; }
+                .stat-subtext { font-size: 0.725rem; font-weight: 500; color: var(--text-muted); }
                 .text-green { color: #16A34A; }
                 .text-red { color: #DC2626; }
 
@@ -340,20 +342,20 @@ const Budgets = () => {
                 .budget-cards-container {
                     display: grid;
                     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-                    gap: 1.5rem;
+                    gap: 1.359rem;
                 }
 
                 .budget-card {
                     background: white;
                     border: 1px solid var(--border-color);
                     border-radius: 16px;
-                    padding: 1.5rem;
+                    padding: 1.359rem;
                     transition: transform 0.2s, box-shadow 0.2s;
                 }
 
                 .budget-card:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
-                .budget-card-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+                .budget-card-header { display: flex; justify-content: space-between; margin-bottom: 1.359rem; }
                 
                 .category-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
                 .bg-orange { background: #F97316; }
@@ -363,13 +365,13 @@ const Budgets = () => {
                 .bg-red { background: #EF4444; }
                 .bg-indigo { background: #6366F1; }
 
-                .icon-btn-ghost { color: var(--text-muted); padding: 0.5rem; border-radius: 6px; transition: background 0.2s; }
+                .icon-btn-ghost { color: var(--text-muted); padding: 0.453rem; border-radius: 6px; transition: background 0.2s; }
                 .icon-btn-ghost:hover { background: #F0FDF4; color: var(--text-main); }
 
-                .budget-values { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.75rem; }
+                .budget-values { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.68rem; }
                 .text-percentage { font-weight: 700; color: var(--text-main); }
                 
-                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 1rem; }
+                .progress-bar-bg { width: 100%; height: 8px; background: #F0FDF4; border-radius: 99px; overflow: hidden; margin-bottom: 0.906rem; }
                 .progress-bar-fill { height: 100%; border-radius: 99px; transition: width 0.5s ease-out; }
 
                 .budget-footer { display: flex; justify-content: flex-end; font-weight: 500; }

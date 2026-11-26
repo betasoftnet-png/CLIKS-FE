@@ -281,15 +281,15 @@ const LoyaltyRewards = () => {
             <div style={{ 
                 background: '#FFFFFF', 
                 borderBottom: '1px solid #E2E8F0', 
-                padding: '1.25rem 2rem', 
+                padding: '1.133rem 1.812rem', 
                 flexShrink: 0,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                gap: '1rem',
+                gap: '0.906rem',
                 flexWrap: 'wrap'
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     <div style={{ 
                         width: '46px', 
                         height: '46px', 
@@ -304,41 +304,41 @@ const LoyaltyRewards = () => {
                         <Coins size={24} />
                     </div>
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                            <h1 style={{ fontSize: '1.5rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem' }}>
+                            <h1 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>
                                 Customer Loyalty & Store Points
                             </h1>
                             <span style={{ 
                                 background: '#ECFDF5', 
                                 color: '#059669', 
                                 border: '1px solid #A7F3D0',
-                                padding: '0.2rem 0.6rem', 
+                                padding: '0.181rem 0.544rem', 
                                 borderRadius: '99px', 
-                                fontSize: '0.72rem', 
+                                fontSize: '0.652rem', 
                                 fontWeight: '800' 
                             }}>
                                 CLIKS Multi-Store Network
                             </span>
                         </div>
-                        <p style={{ color: '#64748B', fontSize: '0.85rem', fontWeight: '500', margin: '0.2rem 0 0 0' }}>
+                        <p style={{ color: '#64748B', fontSize: '0.77rem', fontWeight: '500', margin: '0.181rem 0 0 0' }}>
                             Track available points in every shop you purchase from, monitor complete bill history, and inspect point ledger.
                         </p>
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                     <button
                         onClick={() => setShowCalculatorModal(true)}
                         style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.4rem',
-                            padding: '0.55rem 0.95rem',
+                            gap: '0.363rem',
+                            padding: '0.498rem 0.861rem',
                             borderRadius: '10px',
                             border: '1px solid #E2E8F0',
                             background: '#FFFFFF',
                             color: '#334155',
-                            fontSize: '0.8rem',
+                            fontSize: '0.725rem',
                             fontWeight: '750',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease'
@@ -355,13 +355,13 @@ const LoyaltyRewards = () => {
                         style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '0.4rem',
-                            padding: '0.55rem 0.95rem',
+                            gap: '0.363rem',
+                            padding: '0.498rem 0.861rem',
                             borderRadius: '10px',
                             border: '1px solid #1B6B3A',
                             background: '#1B6B3A',
                             color: '#FFFFFF',
-                            fontSize: '0.8rem',
+                            fontSize: '0.725rem',
                             fontWeight: '750',
                             cursor: isRefreshing ? 'not-allowed' : 'pointer',
                             boxShadow: '0 2px 8px rgba(27, 107, 58, 0.25)',
@@ -375,20 +375,20 @@ const LoyaltyRewards = () => {
             </div>
 
             {/* Scrollable Container */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '1.75rem 2rem 3rem 2rem' }}>
-                <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '1.586rem 1.812rem 2.719rem 1.812rem' }}>
+                <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.586rem' }}>
                     
                     {/* Top KPI Banner Cards */}
                     <div style={{ 
                         display: 'grid', 
                         gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', 
-                        gap: '1.25rem' 
+                        gap: '1.133rem' 
                     }}>
                         {/* 1. Total Points Balance */}
                         <div style={{
                             background: 'linear-gradient(135deg, #064E3B 0%, #135029 100%)',
                             borderRadius: '20px',
-                            padding: '1.5rem',
+                            padding: '1.359rem',
                             color: '#FFFFFF',
                             position: 'relative',
                             overflow: 'hidden',
@@ -396,13 +396,13 @@ const LoyaltyRewards = () => {
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <span style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#A7F3D0' }}>
+                                    <span style={{ fontSize: '0.652rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#A7F3D0' }}>
                                         TOTAL POINTS BALANCE
                                     </span>
-                                    <div style={{ fontSize: '2.25rem', fontWeight: '900', margin: '0.25rem 0 0.15rem 0', lineHeight: 1.1 }}>
-                                        {totalPointsBalance.toLocaleString()} <span style={{ fontSize: '1rem', fontWeight: '750' }}>pts</span>
+                                    <div style={{ fontSize: '2.039rem', fontWeight: '900', margin: '0.227rem 0 0.136rem 0', lineHeight: 1.1 }}>
+                                        {totalPointsBalance.toLocaleString()} <span style={{ fontSize: '0.906rem', fontWeight: '750' }}>pts</span>
                                     </div>
-                                    <div style={{ fontSize: '0.825rem', color: '#D1FAE5', fontWeight: '700', marginTop: '0.35rem' }}>
+                                    <div style={{ fontSize: '0.748rem', color: '#D1FAE5', fontWeight: '700', marginTop: '0.317rem' }}>
                                         ≈ {formatCurrency(totalCashValue)} Net Store Credit
                                     </div>
                                 </div>
@@ -420,7 +420,7 @@ const LoyaltyRewards = () => {
                                     <Star size={24} fill="#FCD34D" />
                                 </div>
                             </div>
-                            <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: '0.75rem', color: '#ECFDF5', display: 'flex', justifyContent: 'space-between' }}>
+                            <div style={{ marginTop: '0.906rem', paddingTop: '0.68rem', borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: '0.68rem', color: '#ECFDF5', display: 'flex', justifyContent: 'space-between' }}>
                                 <span>Ratio: 10 pts = ₹1.00</span>
                                 <span style={{ fontWeight: '800', color: '#FCD34D' }}>Active in all shops</span>
                             </div>
@@ -430,19 +430,19 @@ const LoyaltyRewards = () => {
                         <div style={{
                             background: '#FFFFFF',
                             borderRadius: '20px',
-                            padding: '1.5rem',
+                            padding: '1.359rem',
                             border: '1px solid #E2E8F0',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <span style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
+                                    <span style={{ fontSize: '0.652rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
                                         CONNECTED STORES
                                     </span>
-                                    <div style={{ fontSize: '2.25rem', fontWeight: '900', color: '#0F172A', margin: '0.25rem 0 0.15rem 0', lineHeight: 1.1 }}>
-                                        {merchants.length} <span style={{ fontSize: '1rem', fontWeight: '750', color: '#64748B' }}>shops</span>
+                                    <div style={{ fontSize: '2.039rem', fontWeight: '900', color: '#0F172A', margin: '0.227rem 0 0.136rem 0', lineHeight: 1.1 }}>
+                                        {merchants.length} <span style={{ fontSize: '0.906rem', fontWeight: '750', color: '#64748B' }}>shops</span>
                                     </div>
-                                    <div style={{ fontSize: '0.825rem', color: '#059669', fontWeight: '700', marginTop: '0.35rem' }}>
+                                    <div style={{ fontSize: '0.748rem', color: '#059669', fontWeight: '700', marginTop: '0.317rem' }}>
                                         {totalOrdersCount} Total Purchases Recorded
                                     </div>
                                 </div>
@@ -459,7 +459,7 @@ const LoyaltyRewards = () => {
                                     <Store size={22} />
                                 </div>
                             </div>
-                            <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #F1F5F9', fontSize: '0.75rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
+                            <div style={{ marginTop: '0.906rem', paddingTop: '0.68rem', borderTop: '1px solid #F1F5F9', fontSize: '0.68rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
                                 <span>Multi-shop network</span>
                                 <span style={{ fontWeight: '700', color: '#1B6B3A' }}>Auto-synced</span>
                             </div>
@@ -469,19 +469,19 @@ const LoyaltyRewards = () => {
                         <div style={{
                             background: '#FFFFFF',
                             borderRadius: '20px',
-                            padding: '1.5rem',
+                            padding: '1.359rem',
                             border: '1px solid #E2E8F0',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <span style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
+                                    <span style={{ fontSize: '0.652rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
                                         LIFETIME STORE SPEND
                                     </span>
-                                    <div style={{ fontSize: '2rem', fontWeight: '900', color: '#0F172A', margin: '0.25rem 0 0.15rem 0', lineHeight: 1.1 }}>
+                                    <div style={{ fontSize: '1.812rem', fontWeight: '900', color: '#0F172A', margin: '0.227rem 0 0.136rem 0', lineHeight: 1.1 }}>
                                         {formatCurrency(totalSpentAcrossShops)}
                                     </div>
-                                    <div style={{ fontSize: '0.825rem', color: '#64748B', fontWeight: '600', marginTop: '0.35rem' }}>
+                                    <div style={{ fontSize: '0.748rem', color: '#64748B', fontWeight: '600', marginTop: '0.317rem' }}>
                                         Across all billing invoices
                                     </div>
                                 </div>
@@ -498,7 +498,7 @@ const LoyaltyRewards = () => {
                                     <ShoppingBag size={22} />
                                 </div>
                             </div>
-                            <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #F1F5F9', fontSize: '0.75rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
+                            <div style={{ marginTop: '0.906rem', paddingTop: '0.68rem', borderTop: '1px solid #F1F5F9', fontSize: '0.68rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
                                 <span>Earn Rate: ₹100 = 1 pt</span>
                                 <span style={{ fontWeight: '750', color: '#2563EB' }}>1% Return</span>
                             </div>
@@ -508,31 +508,31 @@ const LoyaltyRewards = () => {
                         <div style={{
                             background: '#FFFFFF',
                             borderRadius: '20px',
-                            padding: '1.5rem',
+                            padding: '1.359rem',
                             border: '1px solid #E2E8F0',
                             boxShadow: '0 2px 8px rgba(0,0,0,0.02)'
                         }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                 <div>
-                                    <span style={{ fontSize: '0.72rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
+                                    <span style={{ fontSize: '0.652rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.06em', color: '#64748B' }}>
                                         POINTS ACTIVITY
                                     </span>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '0.4rem 0 0.2rem 0' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', margin: '0.363rem 0 0.181rem 0' }}>
                                         <div>
-                                            <div style={{ fontSize: '1.25rem', fontWeight: '850', color: '#059669' }}>
+                                            <div style={{ fontSize: '1.133rem', fontWeight: '850', color: '#059669' }}>
                                                 +{(wallet.total_earned || 0).toLocaleString()}
                                             </div>
-                                            <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#64748B' }}>Earned</span>
+                                            <span style={{ fontSize: '0.616rem', fontWeight: '750', color: '#64748B' }}>Earned</span>
                                         </div>
                                         <div style={{ height: '24px', width: '1px', background: '#E2E8F0' }} />
                                         <div>
-                                            <div style={{ fontSize: '1.25rem', fontWeight: '850', color: '#DC2626' }}>
+                                            <div style={{ fontSize: '1.133rem', fontWeight: '850', color: '#DC2626' }}>
                                                 -{(wallet.total_redeemed || 0).toLocaleString()}
                                             </div>
-                                            <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#64748B' }}>Redeemed</span>
+                                            <span style={{ fontSize: '0.616rem', fontWeight: '750', color: '#64748B' }}>Redeemed</span>
                                         </div>
                                     </div>
-                                    <div style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '600' }}>
+                                    <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '600' }}>
                                         {transactions.length} total ledger records
                                     </div>
                                 </div>
@@ -549,7 +549,7 @@ const LoyaltyRewards = () => {
                                     <History size={22} />
                                 </div>
                             </div>
-                            <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid #F1F5F9', fontSize: '0.75rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
+                            <div style={{ marginTop: '0.906rem', paddingTop: '0.68rem', borderTop: '1px solid #F1F5F9', fontSize: '0.68rem', color: '#64748B', display: 'flex', justifyContent: 'space-between' }}>
                                 <span>Ledger Audit</span>
                                 <span style={{ fontWeight: '750', color: '#D97706' }}>Verified</span>
                             </div>
@@ -560,28 +560,28 @@ const LoyaltyRewards = () => {
                     <div style={{
                         background: '#FFFFFF',
                         borderRadius: '18px',
-                        padding: '0.85rem 1.25rem',
+                        padding: '0.77rem 1.133rem',
                         border: '1px solid #E2E8F0',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
                         flexWrap: 'wrap',
-                        gap: '1rem'
+                        gap: '0.906rem'
                     }}>
                         {/* Tabs */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', flexWrap: 'wrap' }}>
                             <button
                                 onClick={() => { setActiveTab('shops'); setSearchParams({ tab: 'shops' }); }}
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.55rem 1rem',
+                                    gap: '0.453rem',
+                                    padding: '0.498rem 0.906rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     background: activeTab === 'shops' ? '#1B6B3A' : '#F1F5F9',
                                     color: activeTab === 'shops' ? '#FFFFFF' : '#475569',
                                     transition: 'all 0.2s ease',
@@ -597,13 +597,13 @@ const LoyaltyRewards = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.55rem 1rem',
+                                    gap: '0.453rem',
+                                    padding: '0.498rem 0.906rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     background: activeTab === 'points' ? '#1B6B3A' : '#F1F5F9',
                                     color: activeTab === 'points' ? '#FFFFFF' : '#475569',
                                     transition: 'all 0.2s ease',
@@ -619,13 +619,13 @@ const LoyaltyRewards = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.55rem 1rem',
+                                    gap: '0.453rem',
+                                    padding: '0.498rem 0.906rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     background: activeTab === 'purchases' ? '#1B6B3A' : '#F1F5F9',
                                     color: activeTab === 'purchases' ? '#FFFFFF' : '#475569',
                                     transition: 'all 0.2s ease',
@@ -641,13 +641,13 @@ const LoyaltyRewards = () => {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '0.5rem',
-                                    padding: '0.55rem 1rem',
+                                    gap: '0.453rem',
+                                    padding: '0.498rem 0.906rem',
                                     borderRadius: '10px',
                                     border: 'none',
                                     cursor: 'pointer',
                                     fontWeight: '800',
-                                    fontSize: '0.85rem',
+                                    fontSize: '0.77rem',
                                     background: activeTab === 'offers' ? '#1B6B3A' : '#F1F5F9',
                                     color: activeTab === 'offers' ? '#FFFFFF' : '#475569',
                                     transition: 'all 0.2s ease',
@@ -660,19 +660,19 @@ const LoyaltyRewards = () => {
                         </div>
 
                         {/* Search and Dropdown Filter controls */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexWrap: 'wrap' }}>
                             {/* Shop Selector Dropdown (for points and purchases tabs) */}
                             {(activeTab === 'points' || activeTab === 'purchases') && (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.317rem' }}>
                                     <Store size={15} color="#64748B" />
                                     <select
                                         value={selectedShopFilter}
                                         onChange={(e) => setSelectedShopFilter(e.target.value)}
                                         style={{
-                                            padding: '0.45rem 0.75rem',
+                                            padding: '0.408rem 0.68rem',
                                             borderRadius: '8px',
                                             border: '1px solid #CBD5E1',
-                                            fontSize: '0.8rem',
+                                            fontSize: '0.725rem',
                                             fontWeight: '700',
                                             color: '#1E293B',
                                             background: '#F8FAFC',
@@ -694,10 +694,10 @@ const LoyaltyRewards = () => {
                                     value={txTypeFilter}
                                     onChange={(e) => setTxTypeFilter(e.target.value)}
                                     style={{
-                                        padding: '0.45rem 0.75rem',
+                                        padding: '0.408rem 0.68rem',
                                         borderRadius: '8px',
                                         border: '1px solid #CBD5E1',
-                                        fontSize: '0.8rem',
+                                        fontSize: '0.725rem',
                                         fontWeight: '700',
                                         color: '#1E293B',
                                         background: '#F8FAFC',
@@ -728,10 +728,10 @@ const LoyaltyRewards = () => {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     style={{
-                                        padding: '0.45rem 0.75rem 0.45rem 2rem',
+                                        padding: '0.408rem 0.68rem 0.408rem 1.812rem',
                                         borderRadius: '8px',
                                         border: '1px solid #CBD5E1',
-                                        fontSize: '0.8rem',
+                                        fontSize: '0.725rem',
                                         color: '#0F172A',
                                         background: '#FFFFFF',
                                         outline: 'none',
@@ -754,38 +754,38 @@ const LoyaltyRewards = () => {
                     {activeTab === 'shops' && (
                         <div>
                             {isMerchantsLoading ? (
-                                <div style={{ background: '#fff', borderRadius: '18px', padding: '3rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
-                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 1rem auto', color: '#1B6B3A' }} />
-                                    <p style={{ fontWeight: '700', fontSize: '0.95rem' }}>Loading your multi-store loyalty balances...</p>
+                                <div style={{ background: '#fff', borderRadius: '18px', padding: '2.719rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
+                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 0.906rem auto', color: '#1B6B3A' }} />
+                                    <p style={{ fontWeight: '700', fontSize: '0.861rem' }}>Loading your multi-store loyalty balances...</p>
                                 </div>
                             ) : filteredMerchants.length === 0 ? (
                                 <div style={{ 
                                     background: '#FFFFFF', 
-                                    borderRadius: '24px', 
-                                    padding: '3.5rem 2rem', 
+                                    borderRadius: '16px', 
+                                    padding: '3.172rem 1.812rem', 
                                     textAlign: 'center', 
                                     border: '1px solid #E2E8F0',
                                     boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
                                 }}>
-                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem auto' }}>
+                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.133rem auto' }}>
                                         <Store size={32} />
                                     </div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.5rem 0' }}>
+                                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.453rem 0' }}>
                                         {searchQuery ? 'No shops match your search' : 'No Store Points Yet'}
                                     </h3>
-                                    <p style={{ color: '#64748B', fontSize: '0.9rem', maxWidth: '480px', margin: '0 auto 1.5rem auto', lineHeight: 1.5 }}>
+                                    <p style={{ color: '#64748B', fontSize: '0.816rem', maxWidth: '480px', margin: '0 auto 1.359rem auto', lineHeight: 1.5 }}>
                                         Whenever you buy from any merchant or shop using CLIKS Business POS and provide your phone or email, your loyalty points and purchase invoices automatically appear here!
                                     </p>
                                     <button
                                         onClick={() => { setSearchQuery(''); handleRefreshAll(); }}
                                         style={{
-                                            padding: '0.65rem 1.25rem',
+                                            padding: '0.589rem 1.133rem',
                                             borderRadius: '10px',
                                             border: 'none',
                                             background: '#1B6B3A',
                                             color: '#fff',
                                             fontWeight: '800',
-                                            fontSize: '0.85rem',
+                                            fontSize: '0.77rem',
                                             cursor: 'pointer'
                                         }}
                                     >
@@ -796,7 +796,7 @@ const LoyaltyRewards = () => {
                                 <div style={{ 
                                     display: 'grid', 
                                     gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', 
-                                    gap: '1.25rem' 
+                                    gap: '1.133rem' 
                                 }}>
                                     {filteredMerchants.map((merchant) => {
                                         const netPoints = parseInt(merchant.net_points) || 0;
@@ -815,7 +815,7 @@ const LoyaltyRewards = () => {
                                                     background: '#FFFFFF',
                                                     borderRadius: '20px',
                                                     border: '1px solid #E2E8F0',
-                                                    padding: '1.5rem',
+                                                    padding: '1.359rem',
                                                     display: 'flex',
                                                     flexDirection: 'column',
                                                     justifyContent: 'space-between',
@@ -824,8 +824,8 @@ const LoyaltyRewards = () => {
                                             >
                                                 <div>
                                                     {/* Card Header: Avatar & Shop Name */}
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.133rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.77rem' }}>
                                                             <div style={{
                                                                 width: '46px',
                                                                 height: '46px',
@@ -835,27 +835,27 @@ const LoyaltyRewards = () => {
                                                                 display: 'flex',
                                                                 alignItems: 'center',
                                                                 justifyContent: 'center',
-                                                                fontSize: '1.2rem',
+                                                                fontSize: '1.087rem',
                                                                 fontWeight: '850',
                                                                 boxShadow: '0 4px 10px rgba(16, 185, 129, 0.2)'
                                                             }}>
                                                                 {initial}
                                                             </div>
                                                             <div>
-                                                                <h4 style={{ fontSize: '1.1rem', fontWeight: '850', color: '#0F172A', margin: 0, lineHeight: 1.2 }}>
+                                                                <h4 style={{ fontSize: '0.997rem', fontWeight: '850', color: '#0F172A', margin: 0, lineHeight: 1.2 }}>
                                                                     {merchant.merchant_name}
                                                                 </h4>
-                                                                <span style={{ fontSize: '0.72rem', color: '#64748B', fontWeight: '500' }}>
+                                                                <span style={{ fontSize: '0.652rem', color: '#64748B', fontWeight: '500' }}>
                                                                     {merchant.merchant_email || 'Verified CLIKS Partner'}
                                                                 </span>
                                                             </div>
                                                         </div>
 
                                                         <span style={{
-                                                            fontSize: '0.65rem',
+                                                            fontSize: '0.589rem',
                                                             fontWeight: '800',
                                                             textTransform: 'uppercase',
-                                                            padding: '0.2rem 0.5rem',
+                                                            padding: '0.181rem 0.453rem',
                                                             borderRadius: '6px',
                                                             background: '#ECFDF5',
                                                             color: '#065F46',
@@ -869,19 +869,19 @@ const LoyaltyRewards = () => {
                                                     <div style={{
                                                         background: '#F0FDF4',
                                                         borderRadius: '16px',
-                                                        padding: '1.1rem 1.25rem',
+                                                        padding: '0.997rem 1.133rem',
                                                         border: '1px solid #BBF7D0',
-                                                        marginBottom: '1.25rem'
+                                                        marginBottom: '1.133rem'
                                                     }}>
                                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                             <div>
-                                                                <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                                                <span style={{ fontSize: '0.616rem', fontWeight: '800', color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                                                                     AVAILABLE IN THIS SHOP
                                                                 </span>
-                                                                <div style={{ fontSize: '1.85rem', fontWeight: '900', color: '#1B6B3A', margin: '2px 0', lineHeight: 1 }}>
-                                                                    {netPoints.toLocaleString()} <span style={{ fontSize: '0.85rem', fontWeight: '800' }}>pts</span>
+                                                                <div style={{ fontSize: '1.677rem', fontWeight: '900', color: '#1B6B3A', margin: '2px 0', lineHeight: 1 }}>
+                                                                    {netPoints.toLocaleString()} <span style={{ fontSize: '0.77rem', fontWeight: '800' }}>pts</span>
                                                                 </div>
-                                                                <div style={{ fontSize: '0.8rem', fontWeight: '750', color: '#15803D' }}>
+                                                                <div style={{ fontSize: '0.725rem', fontWeight: '750', color: '#15803D' }}>
                                                                     ≈ {formatCurrency(cashVal)} Store Value
                                                                 </div>
                                                             </div>
@@ -905,34 +905,34 @@ const LoyaltyRewards = () => {
                                                     <div style={{ 
                                                         display: 'grid', 
                                                         gridTemplateColumns: '1fr 1fr', 
-                                                        gap: '0.75rem',
-                                                        padding: '0.85rem',
+                                                        gap: '0.68rem',
+                                                        padding: '0.77rem',
                                                         background: '#F8FAFC',
                                                         borderRadius: '12px',
                                                         border: '1px solid #E2E8F0',
-                                                        marginBottom: '1.25rem'
+                                                        marginBottom: '1.133rem'
                                                     }}>
                                                         <div>
-                                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Total Purchases</span>
-                                                            <span style={{ fontSize: '0.95rem', fontWeight: '850', color: '#0F172A' }}>
+                                                            <span style={{ fontSize: '0.616rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Total Purchases</span>
+                                                            <span style={{ fontSize: '0.861rem', fontWeight: '850', color: '#0F172A' }}>
                                                                 {merchant.purchases_count || 1} Orders
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Total Spend</span>
-                                                            <span style={{ fontSize: '0.95rem', fontWeight: '850', color: '#0F172A' }}>
+                                                            <span style={{ fontSize: '0.616rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Total Spend</span>
+                                                            <span style={{ fontSize: '0.861rem', fontWeight: '850', color: '#0F172A' }}>
                                                                 {formatCurrency(totalSpent)}
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Earned / Redeemed</span>
-                                                            <span style={{ fontSize: '0.8rem', fontWeight: '800', color: '#059669' }}>
+                                                            <span style={{ fontSize: '0.616rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Earned / Redeemed</span>
+                                                            <span style={{ fontSize: '0.725rem', fontWeight: '800', color: '#059669' }}>
                                                                 +{earned} <span style={{ color: '#DC2626' }}>/-{redeemed}</span>
                                                             </span>
                                                         </div>
                                                         <div>
-                                                            <span style={{ fontSize: '0.68rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Last Visited</span>
-                                                            <span style={{ fontSize: '0.8rem', fontWeight: '700', color: '#334155' }}>
+                                                            <span style={{ fontSize: '0.616rem', fontWeight: '700', color: '#64748B', display: 'block' }}>Last Visited</span>
+                                                            <span style={{ fontSize: '0.725rem', fontWeight: '700', color: '#334155' }}>
                                                                 {formatDate(merchant.last_purchase_date)}
                                                             </span>
                                                         </div>
@@ -944,18 +944,18 @@ const LoyaltyRewards = () => {
                                                     onClick={() => handleFilterByShop(merchant.merchant_name)}
                                                     style={{
                                                         width: '100%',
-                                                        padding: '0.65rem 1rem',
+                                                        padding: '0.589rem 0.906rem',
                                                         borderRadius: '10px',
                                                         border: '1px solid #E2E8F0',
                                                         background: '#FFFFFF',
                                                         color: '#1B6B3A',
                                                         fontWeight: '800',
-                                                        fontSize: '0.825rem',
+                                                        fontSize: '0.748rem',
                                                         cursor: 'pointer',
                                                         display: 'flex',
                                                         alignItems: 'center',
                                                         justifyContent: 'center',
-                                                        gap: '0.4rem',
+                                                        gap: '0.363rem',
                                                         transition: 'all 0.2s ease'
                                                     }}
                                                     onMouseOver={(e) => {
@@ -983,25 +983,25 @@ const LoyaltyRewards = () => {
                     {activeTab === 'points' && (
                         <div>
                             {isWalletLoading ? (
-                                <div style={{ background: '#fff', borderRadius: '18px', padding: '3rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
-                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 1rem auto', color: '#1B6B3A' }} />
-                                    <p style={{ fontWeight: '700', fontSize: '0.95rem' }}>Loading point transaction ledger...</p>
+                                <div style={{ background: '#fff', borderRadius: '18px', padding: '2.719rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
+                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 0.906rem auto', color: '#1B6B3A' }} />
+                                    <p style={{ fontWeight: '700', fontSize: '0.861rem' }}>Loading point transaction ledger...</p>
                                 </div>
                             ) : filteredTransactions.length === 0 ? (
                                 <div style={{ 
                                     background: '#FFFFFF', 
-                                    borderRadius: '24px', 
-                                    padding: '3.5rem 2rem', 
+                                    borderRadius: '16px', 
+                                    padding: '3.172rem 1.812rem', 
                                     textAlign: 'center', 
                                     border: '1px solid #E2E8F0' 
                                 }}>
-                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem auto' }}>
+                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#FEF3C7', color: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.133rem auto' }}>
                                         <History size={32} />
                                     </div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.5rem 0' }}>
+                                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.453rem 0' }}>
                                         No Point Transactions Found
                                     </h3>
-                                    <p style={{ color: '#64748B', fontSize: '0.9rem', maxWidth: '440px', margin: '0 auto' }}>
+                                    <p style={{ color: '#64748B', fontSize: '0.816rem', maxWidth: '440px', margin: '0 auto' }}>
                                         {selectedShopFilter !== 'ALL' ? `No loyalty points activity recorded at "${selectedShopFilter}".` : 'No point credits or debits recorded yet.'}
                                     </p>
                                 </div>
@@ -1017,10 +1017,10 @@ const LoyaltyRewards = () => {
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: '160px 1.2fr 2fr 130px 130px',
-                                        padding: '0.9rem 1.5rem',
+                                        padding: '0.816rem 1.359rem',
                                         background: '#F8FAFC',
                                         borderBottom: '1px solid #E2E8F0',
-                                        fontSize: '0.72rem',
+                                        fontSize: '0.652rem',
                                         fontWeight: '850',
                                         color: '#64748B',
                                         textTransform: 'uppercase',
@@ -1047,22 +1047,22 @@ const LoyaltyRewards = () => {
                                                     style={{
                                                         display: 'grid',
                                                         gridTemplateColumns: '160px 1.2fr 2fr 130px 130px',
-                                                        padding: '1rem 1.5rem',
+                                                        padding: '0.906rem 1.359rem',
                                                         alignItems: 'center',
                                                         borderBottom: idx === filteredTransactions.length - 1 ? 'none' : '1px solid #F1F5F9',
-                                                        fontSize: '0.85rem',
+                                                        fontSize: '0.77rem',
                                                         transition: 'background 0.15s ease'
                                                     }}
                                                     onMouseOver={(e) => e.currentTarget.style.background = '#F8FAFC'}
                                                     onMouseOut={(e) => e.currentTarget.style.background = '#FFFFFF'}
                                                 >
                                                     {/* Date & Time */}
-                                                    <div style={{ color: '#475569', fontWeight: '600', fontSize: '0.8rem' }}>
+                                                    <div style={{ color: '#475569', fontWeight: '600', fontSize: '0.725rem' }}>
                                                         {formatDateTime(tx.created_at)}
                                                     </div>
 
                                                     {/* Shop Name */}
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                                         <div style={{ 
                                                             width: '26px', 
                                                             height: '26px', 
@@ -1072,7 +1072,7 @@ const LoyaltyRewards = () => {
                                                             display: 'flex', 
                                                             alignItems: 'center', 
                                                             justifyContent: 'center',
-                                                            fontSize: '0.72rem',
+                                                            fontSize: '0.652rem',
                                                             fontWeight: '800'
                                                         }}>
                                                             <Store size={14} />
@@ -1095,13 +1095,13 @@ const LoyaltyRewards = () => {
                                                                 style={{
                                                                     display: 'inline-flex',
                                                                     alignItems: 'center',
-                                                                    gap: '0.3rem',
-                                                                    padding: '0.25rem 0.6rem',
+                                                                    gap: '0.272rem',
+                                                                    padding: '0.227rem 0.544rem',
                                                                     borderRadius: '6px',
                                                                     border: '1px solid #CBD5E1',
                                                                     background: '#FFFFFF',
                                                                     color: '#1D4ED8',
-                                                                    fontSize: '0.75rem',
+                                                                    fontSize: '0.68rem',
                                                                     fontWeight: '800',
                                                                     cursor: 'pointer'
                                                                 }}
@@ -1110,7 +1110,7 @@ const LoyaltyRewards = () => {
                                                                 #{tx.invoice_number}
                                                             </button>
                                                         ) : (
-                                                            <span style={{ color: '#94A3B8', fontSize: '0.75rem' }}>Direct Bonus</span>
+                                                            <span style={{ color: '#94A3B8', fontSize: '0.68rem' }}>Direct Bonus</span>
                                                         )}
                                                     </div>
 
@@ -1119,11 +1119,11 @@ const LoyaltyRewards = () => {
                                                         <span style={{
                                                             display: 'inline-flex',
                                                             alignItems: 'center',
-                                                            gap: '0.2rem',
-                                                            padding: '0.25rem 0.6rem',
+                                                            gap: '0.181rem',
+                                                            padding: '0.227rem 0.544rem',
                                                             borderRadius: '8px',
                                                             fontWeight: '850',
-                                                            fontSize: '0.825rem',
+                                                            fontSize: '0.748rem',
                                                             background: isCredit ? '#ECFDF5' : '#FEF2F2',
                                                             color: isCredit ? '#059669' : '#DC2626',
                                                             border: `1px solid ${isCredit ? '#A7F3D0' : '#FECACA'}`
@@ -1145,30 +1145,30 @@ const LoyaltyRewards = () => {
                     {activeTab === 'purchases' && (
                         <div>
                             {isPurchasesLoading ? (
-                                <div style={{ background: '#fff', borderRadius: '18px', padding: '3rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
-                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 1rem auto', color: '#1B6B3A' }} />
-                                    <p style={{ fontWeight: '700', fontSize: '0.95rem' }}>Loading all store purchase bills...</p>
+                                <div style={{ background: '#fff', borderRadius: '18px', padding: '2.719rem', textAlign: 'center', border: '1px solid #E2E8F0', color: '#64748B' }}>
+                                    <RefreshCw size={28} className="spin" style={{ margin: '0 auto 0.906rem auto', color: '#1B6B3A' }} />
+                                    <p style={{ fontWeight: '700', fontSize: '0.861rem' }}>Loading all store purchase bills...</p>
                                 </div>
                             ) : filteredPurchases.length === 0 ? (
                                 <div style={{ 
                                     background: '#FFFFFF', 
-                                    borderRadius: '24px', 
-                                    padding: '3.5rem 2rem', 
+                                    borderRadius: '16px', 
+                                    padding: '3.172rem 1.812rem', 
                                     textAlign: 'center', 
                                     border: '1px solid #E2E8F0' 
                                 }}>
-                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem auto' }}>
+                                    <div style={{ width: '64px', height: '64px', borderRadius: '20px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.133rem auto' }}>
                                         <Receipt size={32} />
                                     </div>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.5rem 0' }}>
+                                    <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#0F172A', margin: '0 0 0.453rem 0' }}>
                                         No Purchase Invoices Found
                                     </h3>
-                                    <p style={{ color: '#64748B', fontSize: '0.9rem', maxWidth: '440px', margin: '0 auto' }}>
+                                    <p style={{ color: '#64748B', fontSize: '0.816rem', maxWidth: '440px', margin: '0 auto' }}>
                                         {selectedShopFilter !== 'ALL' ? `No purchase bills recorded for store "${selectedShopFilter}".` : 'No purchases found matching your criteria.'}
                                     </p>
                                 </div>
                             ) : (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                     {filteredPurchases.map((purchase) => {
                                         const pId = purchase.invoice_id || purchase.id;
                                         const isExpanded = expandedPurchaseIds.includes(pId);
@@ -1191,17 +1191,17 @@ const LoyaltyRewards = () => {
                                             >
                                                 {/* Bill Header Row */}
                                                 <div style={{
-                                                    padding: '1.25rem 1.5rem',
+                                                    padding: '1.133rem 1.359rem',
                                                     display: 'flex',
                                                     justifyContent: 'space-between',
                                                     alignItems: 'center',
                                                     flexWrap: 'wrap',
-                                                    gap: '1rem',
+                                                    gap: '0.906rem',
                                                     background: isExpanded ? '#F8FAFC' : '#FFFFFF',
                                                     borderBottom: isExpanded ? '1px solid #E2E8F0' : 'none'
                                                 }}>
                                                     {/* Left: Invoice Number, Store Name, Date */}
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                                                         <div style={{
                                                             width: '42px',
                                                             height: '42px',
@@ -1216,23 +1216,23 @@ const LoyaltyRewards = () => {
                                                             <Receipt size={20} />
                                                         </div>
                                                         <div>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
-                                                                <span style={{ fontSize: '1rem', fontWeight: '850', color: '#0F172A' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', flexWrap: 'wrap' }}>
+                                                                <span style={{ fontSize: '0.906rem', fontWeight: '850', color: '#0F172A' }}>
                                                                     #{purchase.invoice_number || `INV-${purchase.id}`}
                                                                 </span>
                                                                 <span style={{ 
                                                                     background: '#ECFDF5', 
                                                                     color: '#059669', 
-                                                                    padding: '0.15rem 0.5rem', 
+                                                                    padding: '0.136rem 0.453rem', 
                                                                     borderRadius: '6px', 
-                                                                    fontSize: '0.7rem', 
+                                                                    fontSize: '0.634rem', 
                                                                     fontWeight: '800' 
                                                                 }}>
                                                                     PAID
                                                                 </span>
                                                             </div>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.2rem', fontSize: '0.8rem', color: '#64748B' }}>
-                                                                <span style={{ fontWeight: '750', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginTop: '0.181rem', fontSize: '0.725rem', color: '#64748B' }}>
+                                                                <span style={{ fontWeight: '750', color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.227rem' }}>
                                                                     <Store size={13} color="#1B6B3A" /> {purchase.merchant_name || 'CLIKS Merchant'}
                                                                 </span>
                                                                 <span>•</span>
@@ -1248,20 +1248,20 @@ const LoyaltyRewards = () => {
                                                     </div>
 
                                                     {/* Right: Points Delta, Bill Total, Actions */}
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
                                                         {/* Points earned/redeemed badges */}
-                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.25rem' }}>
+                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.227rem' }}>
                                                             {earnedPts > 0 && (
                                                                 <span style={{ 
                                                                     display: 'inline-flex', 
                                                                     alignItems: 'center', 
-                                                                    gap: '0.25rem', 
-                                                                    fontSize: '0.78rem', 
+                                                                    gap: '0.227rem', 
+                                                                    fontSize: '0.707rem', 
                                                                     fontWeight: '850', 
                                                                     color: '#059669', 
                                                                     background: '#ECFDF5', 
                                                                     border: '1px solid #A7F3D0',
-                                                                    padding: '0.2rem 0.5rem', 
+                                                                    padding: '0.181rem 0.453rem', 
                                                                     borderRadius: '6px' 
                                                                 }}>
                                                                     <Star size={11} fill="#059669" /> +{earnedPts} pts earned
@@ -1271,13 +1271,13 @@ const LoyaltyRewards = () => {
                                                                 <span style={{ 
                                                                     display: 'inline-flex', 
                                                                     alignItems: 'center', 
-                                                                    gap: '0.25rem', 
-                                                                    fontSize: '0.78rem', 
+                                                                    gap: '0.227rem', 
+                                                                    fontSize: '0.707rem', 
                                                                     fontWeight: '850', 
                                                                     color: '#DC2626', 
                                                                     background: '#FEF2F2', 
                                                                     border: '1px solid #FECACA',
-                                                                    padding: '0.2rem 0.5rem', 
+                                                                    padding: '0.181rem 0.453rem', 
                                                                     borderRadius: '6px' 
                                                                 }}>
                                                                     -{redeemedPts} pts redeemed
@@ -1287,26 +1287,26 @@ const LoyaltyRewards = () => {
 
                                                         {/* Total Amount */}
                                                         <div style={{ textAlign: 'right' }}>
-                                                            <span style={{ fontSize: '0.68rem', fontWeight: '750', color: '#64748B', display: 'block' }}>BILL TOTAL</span>
-                                                            <span style={{ fontSize: '1.25rem', fontWeight: '900', color: '#0F172A' }}>
+                                                            <span style={{ fontSize: '0.616rem', fontWeight: '750', color: '#64748B', display: 'block' }}>BILL TOTAL</span>
+                                                            <span style={{ fontSize: '1.133rem', fontWeight: '900', color: '#0F172A' }}>
                                                                 {formatCurrency(totalAmt)}
                                                             </span>
                                                         </div>
 
                                                         {/* Actions: View Receipt Modal + Expand Items Toggle */}
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                                             <button
                                                                 onClick={() => handleOpenInvoiceModal(purchase)}
                                                                 style={{
                                                                     display: 'flex',
                                                                     alignItems: 'center',
-                                                                    gap: '0.35rem',
-                                                                    padding: '0.5rem 0.85rem',
+                                                                    gap: '0.317rem',
+                                                                    padding: '0.453rem 0.77rem',
                                                                     borderRadius: '8px',
                                                                     border: '1px solid #1B6B3A',
                                                                     background: '#FFFFFF',
                                                                     color: '#1B6B3A',
-                                                                    fontSize: '0.78rem',
+                                                                    fontSize: '0.707rem',
                                                                     fontWeight: '800',
                                                                     cursor: 'pointer',
                                                                     transition: 'all 0.15s ease'
@@ -1327,7 +1327,7 @@ const LoyaltyRewards = () => {
                                                                 <button
                                                                     onClick={() => toggleExpandPurchase(pId)}
                                                                     style={{
-                                                                        padding: '0.5rem',
+                                                                        padding: '0.453rem',
                                                                         borderRadius: '8px',
                                                                         border: '1px solid #E2E8F0',
                                                                         background: '#F8FAFC',
@@ -1348,8 +1348,8 @@ const LoyaltyRewards = () => {
 
                                                 {/* Expandable Items List */}
                                                 {isExpanded && items.length > 0 && (
-                                                    <div style={{ padding: '1rem 1.5rem', background: '#FAFAFA' }}>
-                                                        <div style={{ fontSize: '0.75rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase', marginBottom: '0.65rem' }}>
+                                                    <div style={{ padding: '0.906rem 1.359rem', background: '#FAFAFA' }}>
+                                                        <div style={{ fontSize: '0.68rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase', marginBottom: '0.589rem' }}>
                                                             Billed Products ({items.length})
                                                         </div>
                                                         <div style={{
@@ -1361,9 +1361,9 @@ const LoyaltyRewards = () => {
                                                             <div style={{
                                                                 display: 'grid',
                                                                 gridTemplateColumns: '2fr 80px 100px 90px 110px',
-                                                                padding: '0.65rem 1rem',
+                                                                padding: '0.589rem 0.906rem',
                                                                 background: '#F1F5F9',
-                                                                fontSize: '0.7rem',
+                                                                fontSize: '0.634rem',
                                                                 fontWeight: '800',
                                                                 color: '#475569',
                                                                 textTransform: 'uppercase'
@@ -1387,16 +1387,16 @@ const LoyaltyRewards = () => {
                                                                         style={{
                                                                             display: 'grid',
                                                                             gridTemplateColumns: '2fr 80px 100px 90px 110px',
-                                                                            padding: '0.75rem 1rem',
+                                                                            padding: '0.68rem 0.906rem',
                                                                             borderBottom: itIdx === items.length - 1 ? 'none' : '1px solid #F1F5F9',
-                                                                            fontSize: '0.8rem',
+                                                                            fontSize: '0.725rem',
                                                                             color: '#1E293B'
                                                                         }}
                                                                     >
                                                                         <div style={{ fontWeight: '700' }}>
                                                                             {itName}
                                                                             {it.hsn_code && (
-                                                                                <span style={{ fontSize: '0.68rem', color: '#94A3B8', marginLeft: '0.4rem' }}>
+                                                                                <span style={{ fontSize: '0.616rem', color: '#94A3B8', marginLeft: '0.363rem' }}>
                                                                                     HSN: {it.hsn_code}
                                                                                 </span>
                                                                             )}
@@ -1421,28 +1421,28 @@ const LoyaltyRewards = () => {
 
                     {/* TAB 4: PERKS & WALLET OFFERS */}
                     {activeTab === 'offers' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.359rem' }}>
                             <div style={{
                                 background: 'linear-gradient(135deg, #064E3B 0%, #1B6B3A 100%)',
-                                borderRadius: '24px',
-                                padding: '2rem',
+                                borderRadius: '16px',
+                                padding: '1.812rem',
                                 color: '#FFFFFF',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
                                 flexWrap: 'wrap',
-                                gap: '1.5rem',
+                                gap: '1.359rem',
                                 boxShadow: '0 8px 24px rgba(6, 78, 59, 0.15)'
                             }}>
                                 <div style={{ maxWidth: '640px' }}>
-                                    <div style={{ background: 'rgba(255,255,255,0.12)', padding: '0.35rem 0.75rem', borderRadius: '99px', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.75rem' }}>
+                                    <div style={{ background: 'rgba(255,255,255,0.12)', padding: '0.317rem 0.68rem', borderRadius: '99px', display: 'inline-flex', alignItems: 'center', gap: '0.363rem', marginBottom: '0.68rem' }}>
                                         <Sparkles size={14} color="#FCD34D" />
-                                        <span style={{ fontSize: '0.7rem', fontWeight: '800', color: '#A7F3D0', textTransform: 'uppercase' }}>Points Conversion</span>
+                                        <span style={{ fontSize: '0.634rem', fontWeight: '800', color: '#A7F3D0', textTransform: 'uppercase' }}>Points Conversion</span>
                                     </div>
-                                    <h2 style={{ fontSize: '1.65rem', fontWeight: '850', margin: '0 0 0.5rem 0' }}>
+                                    <h2 style={{ fontSize: '1.495rem', fontWeight: '850', margin: '0 0 0.453rem 0' }}>
                                         Convert Store Points Directly to Wallet Cash
                                     </h2>
-                                    <p style={{ opacity: 0.9, fontSize: '0.9rem', margin: 0, lineHeight: 1.5 }}>
+                                    <p style={{ opacity: 0.9, fontSize: '0.816rem', margin: 0, lineHeight: 1.5 }}>
                                         Every 10 loyalty points you hold equals ₹1.00 in real spending money. Convert your points balance directly to your Cliks Wallet to pay for utilities, split bills, or subscription discounts!
                                     </p>
                                 </div>
@@ -1450,18 +1450,18 @@ const LoyaltyRewards = () => {
                                 <button
                                     onClick={() => navigate('/payments/wallet?addMoney=true&tab=points')}
                                     style={{
-                                        padding: '0.85rem 1.5rem',
+                                        padding: '0.77rem 1.359rem',
                                         borderRadius: '12px',
                                         border: 'none',
                                         background: 'linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%)',
                                         color: '#78350F',
                                         fontWeight: '850',
-                                        fontSize: '0.9rem',
+                                        fontSize: '0.816rem',
                                         cursor: 'pointer',
                                         boxShadow: '0 4px 14px rgba(245, 158, 11, 0.35)',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        gap: '0.5rem'
+                                        gap: '0.453rem'
                                     }}
                                 >
                                     <Wallet size={18} /> Convert Points to Wallet
@@ -1469,7 +1469,7 @@ const LoyaltyRewards = () => {
                             </div>
 
                             {/* Booster Deals */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.25rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.133rem' }}>
                                 {[
                                     { title: 'Starter Wallet Load Reward', desc: 'Load ₹5,000 or more into your Cliks Wallet and claim a 2% flat discount on your next monthly or annual Cliks Pro subscription.', label: '2% OFF PRO', icon: Wallet, bg: '#ECFDF5', accent: '#10B981', text: '#065F46' },
                                     { title: 'Silver Wallet Load Reward', desc: 'Load ₹10,000 or more into your Cliks Wallet and claim a 3.5% flat discount on your next monthly or annual Cliks Pro subscription.', label: '3.5% OFF PRO', icon: Coins, bg: '#EFF6FF', accent: '#3B82F6', text: '#1E40AF' },
@@ -1482,9 +1482,9 @@ const LoyaltyRewards = () => {
                                             background: '#FFFFFF',
                                             borderRadius: '18px',
                                             border: '1px solid #E2E8F0',
-                                            padding: '1.35rem',
+                                            padding: '1.223rem',
                                             display: 'flex',
-                                            gap: '1.25rem',
+                                            gap: '1.133rem',
                                             boxShadow: '0 1px 3px rgba(0,0,0,0.02)'
                                         }}
                                     >
@@ -1502,13 +1502,13 @@ const LoyaltyRewards = () => {
                                             <deal.icon size={22} />
                                         </div>
                                         <div style={{ flex: 1 }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.4rem' }}>
-                                                <h4 style={{ fontSize: '0.98rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>{deal.title}</h4>
-                                                <span style={{ fontSize: '0.65rem', fontWeight: '850', padding: '0.2rem 0.5rem', borderRadius: '6px', background: deal.bg, color: deal.text }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.363rem' }}>
+                                                <h4 style={{ fontSize: '0.888rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>{deal.title}</h4>
+                                                <span style={{ fontSize: '0.589rem', fontWeight: '850', padding: '0.181rem 0.453rem', borderRadius: '6px', background: deal.bg, color: deal.text }}>
                                                     {deal.label}
                                                 </span>
                                             </div>
-                                            <p style={{ fontSize: '0.825rem', color: '#64748B', lineHeight: 1.45, margin: '0 0 0.85rem 0' }}>
+                                            <p style={{ fontSize: '0.748rem', color: '#64748B', lineHeight: 1.45, margin: '0 0 0.77rem 0' }}>
                                                 {deal.desc}
                                             </p>
                                             <button
@@ -1518,12 +1518,12 @@ const LoyaltyRewards = () => {
                                                     border: 'none',
                                                     color: deal.accent,
                                                     fontWeight: '800',
-                                                    fontSize: '0.8rem',
+                                                    fontSize: '0.725rem',
                                                     cursor: 'pointer',
                                                     padding: 0,
                                                     display: 'inline-flex',
                                                     alignItems: 'center',
-                                                    gap: '0.3rem'
+                                                    gap: '0.272rem'
                                                 }}
                                             >
                                                 Load Wallet Now →
@@ -1554,7 +1554,7 @@ const LoyaltyRewards = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             zIndex: 9999,
-                            padding: '1.5rem'
+                            padding: '1.359rem'
                         }}
                     >
                         <motion.div
@@ -1566,7 +1566,7 @@ const LoyaltyRewards = () => {
                                 width: '100%',
                                 maxWidth: '680px',
                                 maxHeight: '90vh',
-                                borderRadius: '24px',
+                                borderRadius: '16px',
                                 overflow: 'hidden',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -1575,61 +1575,61 @@ const LoyaltyRewards = () => {
                         >
                             {/* Modal Header */}
                             <div style={{
-                                padding: '1.25rem 1.75rem',
+                                padding: '1.133rem 1.586rem',
                                 background: '#F8FAFC',
                                 borderBottom: '1px solid #E2E8F0',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                     <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#DCFCE7', color: '#15803D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Receipt size={20} />
                                     </div>
                                     <div>
-                                        <h3 style={{ fontSize: '1.15rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>
+                                        <h3 style={{ fontSize: '1.042rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>
                                             Tax Invoice & Receipt Slip
                                         </h3>
-                                        <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '600' }}>
+                                        <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '600' }}>
                                             #{selectedInvoice.invoice_number || `INV-${selectedInvoice.id}`}
                                         </span>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() => setIsInvoiceModalOpen(false)}
-                                    style={{ background: 'none', border: 'none', color: '#64748B', cursor: 'pointer', padding: '0.4rem', borderRadius: '8px' }}
+                                    style={{ background: 'none', border: 'none', color: '#64748B', cursor: 'pointer', padding: '0.363rem', borderRadius: '8px' }}
                                 >
                                     <X size={20} />
                                 </button>
                             </div>
 
                             {/* Modal Printable Receipt Content */}
-                            <div style={{ flex: 1, overflowY: 'auto', padding: '1.75rem' }}>
+                            <div style={{ flex: 1, overflowY: 'auto', padding: '1.586rem' }}>
                                 {/* Merchant & Customer Info Cards */}
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                                        <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>BILLED BY (STORE)</span>
-                                        <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#0F172A', margin: '0.2rem 0' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem', marginBottom: '1.359rem' }}>
+                                    <div style={{ background: '#F8FAFC', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                        <span style={{ fontSize: '0.616rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>BILLED BY (STORE)</span>
+                                        <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#0F172A', margin: '0.181rem 0' }}>
                                             {selectedInvoice.merchant?.name || selectedInvoice.merchant_name || 'CLIKS Partner Store'}
                                         </h4>
-                                        <p style={{ fontSize: '0.75rem', color: '#64748B', margin: 0 }}>
+                                        <p style={{ fontSize: '0.68rem', color: '#64748B', margin: 0 }}>
                                             {selectedInvoice.merchant?.email || selectedInvoice.merchant_email || 'Verified Merchant Partner'}
                                         </p>
                                     </div>
 
-                                    <div style={{ background: '#F8FAFC', padding: '1rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
-                                        <span style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>CUSTOMER DETAILS</span>
-                                        <h4 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#0F172A', margin: '0.2rem 0' }}>
+                                    <div style={{ background: '#F8FAFC', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                        <span style={{ fontSize: '0.616rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase' }}>CUSTOMER DETAILS</span>
+                                        <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#0F172A', margin: '0.181rem 0' }}>
                                             {selectedInvoice.customer?.name || selectedInvoice.customer_name || selectedInvoice.client_name || user?.username || 'Customer'}
                                         </h4>
-                                        <p style={{ fontSize: '0.75rem', color: '#64748B', margin: 0 }}>
+                                        <p style={{ fontSize: '0.68rem', color: '#64748B', margin: 0 }}>
                                             {selectedInvoice.customer?.email || selectedInvoice.customer_email || selectedInvoice.client_email || user?.email || 'N/A'}
                                         </p>
                                     </div>
                                 </div>
 
                                 {/* Bill Meta details */}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem 1rem', background: '#ECFDF5', borderRadius: '10px', marginBottom: '1.25rem', fontSize: '0.8rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0.68rem 0.906rem', background: '#ECFDF5', borderRadius: '10px', marginBottom: '1.133rem', fontSize: '0.725rem' }}>
                                     <div>
                                         <span style={{ color: '#065F46', fontWeight: '600' }}>Date: </span>
                                         <span style={{ fontWeight: '800', color: '#064E3B' }}>{formatDate(selectedInvoice.invoice_date || selectedInvoice.created_at)}</span>
@@ -1645,8 +1645,8 @@ const LoyaltyRewards = () => {
                                 </div>
 
                                 {/* Line Items Table */}
-                                <div style={{ borderRadius: '12px', border: '1px solid #E2E8F0', overflow: 'hidden', marginBottom: '1.5rem' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 80px 100px 110px', padding: '0.7rem 1rem', background: '#F1F5F9', fontSize: '0.72rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase' }}>
+                                <div style={{ borderRadius: '12px', border: '1px solid #E2E8F0', overflow: 'hidden', marginBottom: '1.359rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 80px 100px 110px', padding: '0.634rem 0.906rem', background: '#F1F5F9', fontSize: '0.652rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase' }}>
                                         <div>Item Description</div>
                                         <div>Qty</div>
                                         <div>Price</div>
@@ -1659,7 +1659,7 @@ const LoyaltyRewards = () => {
                                             const price = parseFloat(it.price || it.rate || it.unit_price) || 0;
                                             const tot = parseFloat(it.total || it.amount || it.item_total) || (qty * price);
                                             return (
-                                                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 80px 100px 110px', padding: '0.75rem 1rem', borderTop: idx > 0 ? '1px solid #F1F5F9' : 'none', fontSize: '0.825rem' }}>
+                                                <div key={idx} style={{ display: 'grid', gridTemplateColumns: '2fr 80px 100px 110px', padding: '0.68rem 0.906rem', borderTop: idx > 0 ? '1px solid #F1F5F9' : 'none', fontSize: '0.748rem' }}>
                                                     <div style={{ fontWeight: '750', color: '#0F172A' }}>
                                                         {it.product_name || it.description || it.name || 'Product Item'}
                                                     </div>
@@ -1670,15 +1670,15 @@ const LoyaltyRewards = () => {
                                             );
                                         })
                                     ) : (
-                                        <div style={{ padding: '1rem', textAlign: 'center', color: '#64748B', fontSize: '0.825rem' }}>
+                                        <div style={{ padding: '0.906rem', textAlign: 'center', color: '#64748B', fontSize: '0.748rem' }}>
                                             Standard billing items included
                                         </div>
                                     )}
                                 </div>
 
                                 {/* Financial Summary Totals */}
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
-                                    <div style={{ width: '260px', display: 'flex', flexDirection: 'column', gap: '0.45rem', fontSize: '0.825rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.359rem' }}>
+                                    <div style={{ width: '260px', display: 'flex', flexDirection: 'column', gap: '0.408rem', fontSize: '0.748rem' }}>
                                         {selectedInvoice.subtotal > 0 && (
                                             <div style={{ display: 'flex', justifyContent: 'space-between', color: '#64748B' }}>
                                                 <span>Subtotal</span>
@@ -1697,8 +1697,8 @@ const LoyaltyRewards = () => {
                                                 <span style={{ fontWeight: '700' }}>{formatCurrency(selectedInvoice.gst_amount)}</span>
                                             </div>
                                         )}
-                                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.2rem 0' }} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.1rem', fontWeight: '900', color: '#0F172A' }}>
+                                        <div style={{ height: '1px', background: '#E2E8F0', margin: '0.181rem 0' }} />
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.997rem', fontWeight: '900', color: '#0F172A' }}>
                                             <span>Grand Total</span>
                                             <span>{formatCurrency(selectedInvoice.grand_total || selectedInvoice.total_amount || selectedInvoice.net_amount || 0)}</span>
                                         </div>
@@ -1709,26 +1709,26 @@ const LoyaltyRewards = () => {
                                 <div style={{
                                     background: '#F0FDF4',
                                     borderRadius: '14px',
-                                    padding: '1rem 1.25rem',
+                                    padding: '0.906rem 1.133rem',
                                     border: '1px solid #BBF7D0',
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#DCFCE7', color: '#15803D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <Star size={18} fill="#15803D" />
                                         </div>
                                         <div>
-                                            <h5 style={{ fontSize: '0.85rem', fontWeight: '850', color: '#166534', margin: 0 }}>
+                                            <h5 style={{ fontSize: '0.77rem', fontWeight: '850', color: '#166534', margin: 0 }}>
                                                 Loyalty Earned on this Bill
                                             </h5>
-                                            <span style={{ fontSize: '0.72rem', color: '#15803D', fontWeight: '600' }}>
+                                            <span style={{ fontSize: '0.652rem', color: '#15803D', fontWeight: '600' }}>
                                                 Earned 1 point per ₹100 eligible spend
                                             </span>
                                         </div>
                                     </div>
-                                    <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#15803D' }}>
+                                    <div style={{ fontSize: '1.133rem', fontWeight: '900', color: '#15803D' }}>
                                         +{(selectedInvoice.points_earned || selectedInvoice.loyalty_points_earned || Math.floor((selectedInvoice.grand_total || selectedInvoice.total_amount || 0) / 100))} pts
                                     </div>
                                 </div>
@@ -1736,29 +1736,29 @@ const LoyaltyRewards = () => {
 
                             {/* Modal Footer Actions */}
                             <div style={{
-                                padding: '1rem 1.75rem',
+                                padding: '0.906rem 1.586rem',
                                 background: '#F8FAFC',
                                 borderTop: '1px solid #E2E8F0',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center'
                             }}>
-                                <span style={{ fontSize: '0.75rem', color: '#64748B', fontWeight: '600' }}>
+                                <span style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: '600' }}>
                                     Synced directly from CLIKS Business POS
                                 </span>
-                                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                                <div style={{ display: 'flex', gap: '0.68rem' }}>
                                     <button
                                         onClick={() => window.print()}
                                         style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '0.35rem',
-                                            padding: '0.55rem 1rem',
+                                            gap: '0.317rem',
+                                            padding: '0.498rem 0.906rem',
                                             borderRadius: '10px',
                                             border: '1px solid #CBD5E1',
                                             background: '#FFFFFF',
                                             color: '#334155',
-                                            fontSize: '0.825rem',
+                                            fontSize: '0.748rem',
                                             fontWeight: '800',
                                             cursor: 'pointer'
                                         }}
@@ -1768,12 +1768,12 @@ const LoyaltyRewards = () => {
                                     <button
                                         onClick={() => setIsInvoiceModalOpen(false)}
                                         style={{
-                                            padding: '0.55rem 1.25rem',
+                                            padding: '0.498rem 1.133rem',
                                             borderRadius: '10px',
                                             border: 'none',
                                             background: '#1B6B3A',
                                             color: '#FFFFFF',
-                                            fontSize: '0.825rem',
+                                            fontSize: '0.748rem',
                                             fontWeight: '800',
                                             cursor: 'pointer'
                                         }}
@@ -1803,7 +1803,7 @@ const LoyaltyRewards = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             zIndex: 9999,
-                            padding: '1.5rem'
+                            padding: '1.359rem'
                         }}
                     >
                         <motion.div
@@ -1820,16 +1820,16 @@ const LoyaltyRewards = () => {
                             }}
                         >
                             <div style={{
-                                padding: '1.25rem 1.5rem',
+                                padding: '1.133rem 1.359rem',
                                 background: '#F8FAFC',
                                 borderBottom: '1px solid #E2E8F0',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center'
                             }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
                                     <HelpCircle size={20} color="#1B6B3A" />
-                                    <h3 style={{ fontSize: '1.1rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>
+                                    <h3 style={{ fontSize: '0.997rem', fontWeight: '850', color: '#0F172A', margin: 0 }}>
                                         Loyalty Point Rules & Ratio
                                     </h3>
                                 </div>
@@ -1841,28 +1841,28 @@ const LoyaltyRewards = () => {
                                 </button>
                             </div>
 
-                            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                                <div style={{ background: '#F0FDF4', borderRadius: '14px', padding: '1rem', border: '1px solid #BBF7D0' }}>
-                                    <h4 style={{ fontSize: '0.9rem', fontWeight: '850', color: '#166534', margin: '0 0 0.35rem 0' }}>
+                            <div style={{ padding: '1.359rem', display: 'flex', flexDirection: 'column', gap: '1.133rem' }}>
+                                <div style={{ background: '#F0FDF4', borderRadius: '14px', padding: '0.906rem', border: '1px solid #BBF7D0' }}>
+                                    <h4 style={{ fontSize: '0.816rem', fontWeight: '850', color: '#166534', margin: '0 0 0.317rem 0' }}>
                                         Earning Ratio
                                     </h4>
-                                    <p style={{ fontSize: '0.825rem', color: '#15803D', margin: 0, lineHeight: 1.45 }}>
+                                    <p style={{ fontSize: '0.748rem', color: '#15803D', margin: 0, lineHeight: 1.45 }}>
                                         You earn <strong>1 Loyalty Point</strong> for every <strong>₹100</strong> billed across any CLIKS Business participating merchant.
                                     </p>
                                 </div>
 
-                                <div style={{ background: '#EFF6FF', borderRadius: '14px', padding: '1rem', border: '1px solid #BFDBFE' }}>
-                                    <h4 style={{ fontSize: '0.9rem', fontWeight: '850', color: '#1E40AF', margin: '0 0 0.35rem 0' }}>
+                                <div style={{ background: '#EFF6FF', borderRadius: '14px', padding: '0.906rem', border: '1px solid #BFDBFE' }}>
+                                    <h4 style={{ fontSize: '0.816rem', fontWeight: '850', color: '#1E40AF', margin: '0 0 0.317rem 0' }}>
                                         Redemption & Cash Value
                                     </h4>
-                                    <p style={{ fontSize: '0.825rem', color: '#1D4ED8', margin: 0, lineHeight: 1.45 }}>
+                                    <p style={{ fontSize: '0.748rem', color: '#1D4ED8', margin: 0, lineHeight: 1.45 }}>
                                         Every <strong>10 Points = ₹1.00 Value</strong>. Points can be redeemed at checkout with the merchant or converted to your Cliks Wallet balance.
                                     </p>
                                 </div>
 
                                 {/* Interactive Calculator */}
-                                <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '1.25rem', border: '1px solid #E2E8F0' }}>
-                                    <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                                <div style={{ background: '#F8FAFC', borderRadius: '14px', padding: '1.133rem', border: '1px solid #E2E8F0' }}>
+                                    <label style={{ display: 'block', fontSize: '0.707rem', fontWeight: '800', color: '#475569', textTransform: 'uppercase', marginBottom: '0.453rem' }}>
                                         Bill Amount Calculator (₹)
                                     </label>
                                     <input
@@ -1871,27 +1871,27 @@ const LoyaltyRewards = () => {
                                         onChange={(e) => setCalcAmount(e.target.value)}
                                         style={{
                                             width: '100%',
-                                            padding: '0.65rem 0.85rem',
+                                            padding: '0.589rem 0.77rem',
                                             borderRadius: '8px',
                                             border: '1px solid #CBD5E1',
-                                            fontSize: '1rem',
+                                            fontSize: '0.906rem',
                                             fontWeight: '800',
                                             color: '#0F172A',
-                                            marginBottom: '1rem'
+                                            marginBottom: '0.906rem'
                                         }}
                                         placeholder="e.g. 5000"
                                     />
 
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', textAlign: 'center' }}>
-                                        <div style={{ background: '#FFFFFF', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                                            <span style={{ fontSize: '0.7rem', fontWeight: '750', color: '#64748B' }}>Points Earned</span>
-                                            <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#1B6B3A', marginTop: '0.2rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem', textAlign: 'center' }}>
+                                        <div style={{ background: '#FFFFFF', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                                            <span style={{ fontSize: '0.634rem', fontWeight: '750', color: '#64748B' }}>Points Earned</span>
+                                            <div style={{ fontSize: '1.133rem', fontWeight: '900', color: '#1B6B3A', marginTop: '0.181rem' }}>
                                                 +{Math.floor((parseFloat(calcAmount) || 0) / 100)} pts
                                             </div>
                                         </div>
-                                        <div style={{ background: '#FFFFFF', padding: '0.75rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
-                                            <span style={{ fontSize: '0.7rem', fontWeight: '750', color: '#64748B' }}>Cashback Value</span>
-                                            <div style={{ fontSize: '1.25rem', fontWeight: '900', color: '#2563EB', marginTop: '0.2rem' }}>
+                                        <div style={{ background: '#FFFFFF', padding: '0.68rem', borderRadius: '10px', border: '1px solid #E2E8F0' }}>
+                                            <span style={{ fontSize: '0.634rem', fontWeight: '750', color: '#64748B' }}>Cashback Value</span>
+                                            <div style={{ fontSize: '1.133rem', fontWeight: '900', color: '#2563EB', marginTop: '0.181rem' }}>
                                                 {formatCurrency((Math.floor((parseFloat(calcAmount) || 0) / 100)) / 10)}
                                             </div>
                                         </div>
@@ -1901,13 +1901,13 @@ const LoyaltyRewards = () => {
                                 <button
                                     onClick={() => setShowCalculatorModal(false)}
                                     style={{
-                                        padding: '0.75rem',
+                                        padding: '0.68rem',
                                         borderRadius: '10px',
                                         border: 'none',
                                         background: '#1B6B3A',
                                         color: '#FFFFFF',
                                         fontWeight: '850',
-                                        fontSize: '0.85rem',
+                                        fontSize: '0.77rem',
                                         cursor: 'pointer'
                                     }}
                                 >
