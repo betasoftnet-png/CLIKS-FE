@@ -403,10 +403,34 @@ const PurchaseDetails = () => {
         return { background: '#F8FAFC', color: '#64748B' };
     };
 
-    // Calculate money value ratio: 10 Points = ₹1.00 Value (1 Pt = ₹0.10)
-    const pointsToMoneyRatio = 0.10;
-    const currentPoints = walletData?.total_points || loyalty?.available_points || 0;
-    const currentMoneyValue = walletData?.total_value || (currentPoints * pointsToMoneyRatio).toFixed(2);
+    // Dynamic loyalty conversion ratios controlled from Cliks Business settings
+    const activeMerchant = useMemo(() => {
+        if (!Array.isArray(rawMerchants) || rawMerchants.length === 0) return null;
+        if (selectedShop) {
+            const found = rawMerchants.find(m => 
+                (selectedShop.business_id && (m.business_id === selectedShop.business_id || m.merchant_business_id === selectedShop.business_id)) ||
+                (selectedShop.business_name && String(m.business_name || '').toLowerCase() === String(selectedShop.business_name || '').toLowerCase())
+            );
+            if (found) return found;
+        }
+        return rawMerchants[0];
+    }, [rawMerchants, selectedShop]);
+
+    const rsPer1Point = activeMerchant?.rs_per_point || 100;
+    const pointsToMoneyRatio = Number(activeMerchant?.point_value_currency !== undefined ? activeMerchant.point_value_currency : 1.0);
+    const currentPoints = walletData?.total_points || walletData?.points_balance || loyalty?.available_points || 0;
+
+    const currentMoneyValue = useMemo(() => {
+        if (Array.isArray(rawMerchants) && rawMerchants.length > 0) {
+            const total = rawMerchants.reduce((sum, m) => {
+                const pts = Number(m.net_points || m.available_points || m.points_balance || 0);
+                const rate = Number(m.point_value_currency !== undefined ? m.point_value_currency : pointsToMoneyRatio);
+                return sum + (pts * rate);
+            }, 0);
+            if (total > 0) return total.toFixed(2);
+        }
+        return (currentPoints * pointsToMoneyRatio).toFixed(2);
+    }, [rawMerchants, currentPoints, pointsToMoneyRatio]);
 
     // Active modal invoice
     const activeModalInvoice = useMemo(() => {
@@ -550,12 +574,20 @@ const PurchaseDetails = () => {
                     </div>
 
                     {/* Points-to-Money Ratio Explanation Banner */}
-                    <div style={{ background: '#F8FAFC', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.707rem' }}>
-                        <div>
+                    <div style={{ background: '#F8FAFC', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.707rem', flexWrap: 'wrap', gap: '6px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                             <span style={{ fontWeight: '800', color: '#334155' }}>Points Ratio: </span>
-                            <span style={{ color: '#059669', fontWeight: '800' }}>₹100 Spent = 1 Pt</span>
-                            <span style={{ color: '#64748B', margin: '0 6px' }}>|</span>
-                            <span style={{ color: '#7C3AED', fontWeight: '800' }}>10 Pts = ₹1.00 Value</span>
+                            <span style={{ color: '#059669', fontWeight: '800' }}>₹{rsPer1Point} Spent = 1 Pt</span>
+                            <span style={{ color: '#64748B', margin: '0 4px' }}>|</span>
+                            <span style={{ color: '#7C3AED', fontWeight: '800' }}>1 Pt = ₹{pointsToMoneyRatio.toFixed(2)} Value</span>
+                            {activeMerchant?.enable_tiers && activeMerchant?.current_tier && (
+                                <>
+                                    <span style={{ color: '#64748B', margin: '0 4px' }}>|</span>
+                                    <span style={{ color: activeMerchant.current_tier.color || '#D97706', fontWeight: '850', background: activeMerchant.current_tier.badge_bg || '#FEF3C7', padding: '1px 6px', borderRadius: '4px' }}>
+                                        VIP: {activeMerchant.current_tier.name} ({activeMerchant.current_tier.multiplier}x)
+                                    </span>
+                                </>
+                            )}
                         </div>
                         <button 
                             onClick={() => setShowPointsModal(true)} 
@@ -652,8 +684,9 @@ const PurchaseDetails = () => {
                     ) : (
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.133rem' }}>
                             {rawMerchants.map((merchant, mIdx) => {
-                                const pts = merchant.available_points || merchant.points_balance || 0;
-                                const val = merchant.cashback_value || (pts * pointsToMoneyRatio).toFixed(2);
+                                const pts = merchant.net_points !== undefined ? merchant.net_points : (merchant.available_points || merchant.points_balance || 0);
+                                const mRate = Number(merchant.point_value_currency !== undefined ? merchant.point_value_currency : pointsToMoneyRatio);
+                                const val = merchant.cashback_value || (pts * mRate).toFixed(2);
                                 const totalSpent = merchant.total_spend || merchant.total_spent || 0;
                                 const ordersCount = merchant.total_orders || merchant.orders_count || merchant.invoices_count || 0;
 
@@ -668,9 +701,16 @@ const PurchaseDetails = () => {
                                                     <h4 style={{ margin: 0, fontSize: '0.952rem', fontWeight: 850, color: '#0F172A' }}>
                                                         {merchant.business_name || 'Store'}
                                                     </h4>
-                                                    <span style={{ fontSize: '0.634rem', color: '#059669', background: '#ECFDF5', padding: '1px 6px', borderRadius: '6px', fontWeight: 800, textTransform: 'uppercase' }}>
-                                                        Connected Store
-                                                    </span>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                                                        <span style={{ fontSize: '0.634rem', color: '#059669', background: '#ECFDF5', padding: '1px 6px', borderRadius: '6px', fontWeight: 800, textTransform: 'uppercase' }}>
+                                                            Connected Store
+                                                        </span>
+                                                        {merchant.enable_tiers && merchant.current_tier && (
+                                                            <span style={{ fontSize: '0.616rem', color: merchant.current_tier.color || '#D97706', background: merchant.current_tier.badge_bg || '#FEF3C7', padding: '1px 6px', borderRadius: '6px', fontWeight: 800 }}>
+                                                                {merchant.current_tier.name} ({merchant.current_tier.multiplier}x)
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -1144,7 +1184,7 @@ const PurchaseDetails = () => {
                                     <h3 style={{ fontSize: '1.087rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
                                         <Calculator size={20} color="#1B6B3A" /> Loyalty Points Rules & Calculator
                                     </h3>
-                                    <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Standard conversion rules across CLIKS Business</p>
+                                    <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Controlled dynamically by store settings in CLIKS Business</p>
                                 </div>
                                 <button onClick={() => setShowPointsModal(false)} style={{ width: 34, height: 34, borderRadius: '8px', background: '#fff', border: '1px solid #E2E8F0', color: '#64748B', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                             </div>
@@ -1153,12 +1193,12 @@ const PurchaseDetails = () => {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                     <div style={{ background: '#F0FDF4', padding: '0.906rem', borderRadius: '14px', border: '1px solid #BBF7D0' }}>
                                         <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase' }}>1. Earning Ratio</div>
-                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#1B6B3A', margin: '4px 0' }}>₹100 = 1 Pt</div>
-                                        <div style={{ fontSize: '0.68rem', color: '#15803D' }}>1% of purchase bill credited as loyalty points.</div>
+                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#1B6B3A', margin: '4px 0' }}>₹{rsPer1Point} = 1 Pt</div>
+                                        <div style={{ fontSize: '0.68rem', color: '#15803D' }}>Dynamic store earning rate configured in CLIKS Business.</div>
                                     </div>
                                     <div style={{ background: '#FAF5FF', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E9D5FF' }}>
                                         <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#6B21A8', textTransform: 'uppercase' }}>2. Redemption Ratio</div>
-                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#7C3AED', margin: '4px 0' }}>10 Pts = ₹1.00</div>
+                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#7C3AED', margin: '4px 0' }}>1 Pt = ₹{pointsToMoneyRatio.toFixed(2)}</div>
                                         <div style={{ fontSize: '0.68rem', color: '#7E22CE' }}>Points convert into cash discounts at checkout.</div>
                                     </div>
                                 </div>
@@ -1176,13 +1216,13 @@ const PurchaseDetails = () => {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.68rem', paddingTop: '0.68rem', borderTop: '1px dashed #CBD5E1' }}>
                                         <span style={{ fontSize: '0.743rem', color: '#64748B', fontWeight: 700 }}>Points Earned:</span>
                                         <span style={{ fontSize: '0.997rem', fontWeight: 900, color: '#059669' }}>
-                                            +{Math.floor((Number(calcAmountInput) || 0) / 100)} pts
+                                            +{Math.floor(((Number(calcAmountInput) || 0) / rsPer1Point) * (activeMerchant?.enable_tiers && activeMerchant?.current_tier?.multiplier ? Number(activeMerchant.current_tier.multiplier) : 1))} pts
                                         </span>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.317rem' }}>
                                         <span style={{ fontSize: '0.743rem', color: '#64748B', fontWeight: 700 }}>Redemption Cash Value:</span>
                                         <span style={{ fontSize: '0.997rem', fontWeight: 900, color: '#7C3AED' }}>
-                                            ₹{((Math.floor((Number(calcAmountInput) || 0) / 100)) * pointsToMoneyRatio).toFixed(2)}
+                                            ₹{((Math.floor(((Number(calcAmountInput) || 0) / rsPer1Point) * (activeMerchant?.enable_tiers && activeMerchant?.current_tier?.multiplier ? Number(activeMerchant.current_tier.multiplier) : 1))) * pointsToMoneyRatio).toFixed(2)}
                                         </span>
                                     </div>
                                 </div>
