@@ -33,7 +33,7 @@ import { ApiError, normalizeError } from './errors';
 /**
  * Build the full URL for an API request.
  */
-function buildUrl(endpoint, params = null) {
+export function buildUrl(endpoint, params = null) {
     let baseUrl = API_BASE_URL;
     if (!baseUrl) {
         if (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
