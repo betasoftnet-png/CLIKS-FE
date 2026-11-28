@@ -9,13 +9,12 @@ import {
     IndianRupee,
     Briefcase,
     Building2,
-    Search,
-    Filter,
-    ChevronDown,
     Trash2,
     Edit2
 } from 'lucide-react';
 import '../App.css';
+import BookEntryFilters, { useBookEntryFilters } from '../components/BookEntryFilters';
+import { openBookEntry } from '../lib/bookEntry';
 import { formatCurrency } from '../lib/formatCurrency';
 
 const ICON_MAP = {
@@ -48,14 +47,16 @@ const Income = () => {
     const queryClient = useQueryClient();
     
     // Fetch income data
-    const { data: incomeData = [], isLoading } = useQuery({
+    const { data: incomeData = [], isLoading, isError, error } = useQuery({
         queryKey: ['income'],
         queryFn: async () => {
-            const data = await incomeService.getIncome();
-            return data.map(item => ({
+            const raw = await incomeService.getIncome();
+            const list = Array.isArray(raw) ? raw : (Array.isArray(raw?.data) ? raw.data : []);
+            return list.map(item => ({
                 id: item.id,
-                source: item.source,
-                amount: parseFloat(item.amount),
+                record: item,
+                source: item.source || item.title || '',
+                amount: parseFloat(item.amount) || 0,
                 category: item.category,
                 date: item.date || item.created_at,
                 recurring: !!item.recurring,
@@ -69,6 +70,11 @@ const Income = () => {
         mutationFn: (id) => incomeService.deleteIncome(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
         }
     });
 
@@ -80,6 +86,39 @@ const Income = () => {
 
     const totalIncome = incomeData.reduce((sum, item) => sum + item.amount, 0);
     const recurringIncome = incomeData.filter(item => item.recurring).reduce((sum, item) => sum + item.amount, 0);
+
+    // Compute month-over-month growth from real transaction dates if available
+    const momIncomeGrowth = (() => {
+        const now = new Date();
+        const thisMonth = now.getMonth();
+        const thisYear = now.getFullYear();
+        const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+        const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
+
+        let thisMonthSum = 0;
+        let lastMonthSum = 0;
+        incomeData.forEach(item => {
+            if (!item.date) return;
+            const d = new Date(item.date);
+            if (isNaN(d.getTime())) return;
+            if (d.getFullYear() === thisYear && d.getMonth() === thisMonth) {
+                thisMonthSum += item.amount;
+            } else if (d.getFullYear() === lastMonthYear && d.getMonth() === lastMonth) {
+                lastMonthSum += item.amount;
+            }
+        });
+
+        if (lastMonthSum > 0) {
+            const pct = Math.round(((thisMonthSum - lastMonthSum) / lastMonthSum) * 100);
+            return `${pct >= 0 ? '+' : ''}${pct}% from last month`;
+        }
+        if (thisMonthSum > 0) {
+            return 'Active this month';
+        }
+        return 'Updated live';
+    })();
+
+    const filters = useBookEntryFilters(incomeData, item => item.source);
 
     if (isLoading) {
         return (
@@ -101,19 +140,20 @@ const Income = () => {
                     </div>
                     <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.816rem', fontWeight: 500 }}>Track and manage your revenue streams</p>
                 </div>
-                <button className="btn-primary" data-tour="income-record-button">
+                <button type="button" className="btn-primary" data-tour="income-record-button" onClick={() => openBookEntry('income')}>
                     <Plus size={18} />
                     <span>Record Income</span>
                 </button>
             </div>
 
             <div className="content-wrapper">
+                {isError && <p role="alert" style={{ color: 'var(--accent-error, #B91C1C)', marginBottom: '1rem' }}>{error?.message || 'Unable to load entries.'}</p>}
                 {/* Stats Grid */}
                 <div className="income-stats-grid">
                     <IncomeStr
                         label="Total Income"
                         value={formatCurrency(totalIncome)}
-                        subtext="+12% from last month"
+                        subtext={momIncomeGrowth}
                         icon={IndianRupee}
                         colorClass="icon-green"
                     />
@@ -134,25 +174,7 @@ const Income = () => {
                 </div>
 
                 {/* Filters & Actions */}
-                <div className="controls-bar">
-                    <div className="search-wrapper">
-                        <Search size={18} className="search-icon" />
-                        <input type="text" placeholder="Search income sources..." className="search-input" />
-                    </div>
-
-                    <div className="flex gap-3">
-                        <button className="filter-btn">
-                            <Filter size={16} />
-                            <span>Filter</span>
-                            <ChevronDown size={14} />
-                        </button>
-                        <button className="filter-btn">
-                            <Calendar size={16} />
-                            <span>This Month</span>
-                            <ChevronDown size={14} />
-                        </button>
-                    </div>
-                </div>
+                <BookEntryFilters label="Search income sources..." categoryLabel="All categories" filters={filters} />
 
                 {/* Income Table */}
                 <div className="income-list-container">
@@ -167,14 +189,14 @@ const Income = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {incomeData.length === 0 ? (
+                            {filters.visibleRecords.length === 0 ? (
                                 <tr>
                                     <td colSpan="5" style={{ textAlign: 'center', padding: '2.719rem', color: '#94a3b8' }}>
                                         No income records found.
                                     </td>
                                 </tr>
                             ) : (
-                                incomeData.map((item) => (
+                                filters.visibleRecords.map((item) => (
                                     <tr key={item.id}>
                                         <td>
                                             <div className="flex items-center gap-3">
@@ -198,7 +220,7 @@ const Income = () => {
                                         <td className="font-bold text-success">+{formatCurrency(item.amount)}</td>
                                         <td>
                                             <div className="flex gap-2">
-                                                <button className="action-btn hover-blue" title="Edit">
+                                                <button type="button" className="action-btn hover-blue" title="Edit" onClick={() => openBookEntry('income', item.record)}>
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button 

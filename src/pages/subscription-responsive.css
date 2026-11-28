@@ -1,0 +1,283 @@
+/* Subscription & Billing Mobile Responsive Styles */
+
+.sub-page-container {
+    padding: 1.133rem 2.266rem;
+    background: #F8FAFC;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.sub-header-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.359rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.sub-header-text {
+    min-width: 0;
+    flex: 1 1 240px;
+}
+
+.sub-badge-wrapper {
+    display: flex;
+    background: #DCF2E4;
+    padding: 0.544rem 1.133rem;
+    border-radius: 14px;
+    align-items: center;
+    gap: 0.453rem;
+    flex-shrink: 0;
+}
+
+/* Plan status card */
+.sub-plan-status-card {
+    border-radius: 16px;
+    padding: 1.133rem 1.812rem;
+    color: white;
+    margin-bottom: 1.812rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.359rem;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.sub-plan-status-left {
+    display: flex;
+    align-items: center;
+    gap: 1.359rem;
+    flex-wrap: wrap;
+    min-width: 0;
+}
+
+.sub-plan-renewal-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.68rem 1.359rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    gap: 1.359rem;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+/* Tabs container */
+.sub-tabs-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.812rem;
+    width: 100%;
+    min-width: 0;
+}
+
+.sub-tabs-inner {
+    display: flex;
+    background: rgba(220, 242, 228, 0.7);
+    backdrop-filter: blur(8px);
+    padding: 0.363rem;
+    border-radius: 16px;
+    border: 1px solid rgba(27, 107, 58, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(27, 107, 58, 0.04);
+    gap: 0.227rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.sub-tab-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sub-tab-btn:hover {
+    transform: translateY(-1px) scale(1.03);
+    opacity: 0.95;
+}
+
+/* Pricing Grid */
+.sub-pricing-grid {
+    display: grid;
+    gap: 1.359rem;
+    margin-bottom: 2.719rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.plan-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.plan-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08) !important;
+}
+
+.upgrade-btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.upgrade-btn:hover {
+    opacity: 0.95;
+    transform: scale(1.02);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .sub-page-container {
+        padding: 0.75rem 0.85rem 5.5rem 0.85rem !important;
+        height: auto !important;
+        min-height: 100% !important;
+        overflow-y: visible !important;
+    }
+
+    /* Ensure scrollable main content wrapper scrolls properly or allows page flow */
+    .sub-page-container > div[style*="overflowY"],
+    .sub-page-container > div[style*="overflow-y"] {
+        overflow-y: visible !important;
+        height: auto !important;
+        flex: none !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .sub-header-wrapper {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.35rem !important;
+        margin-bottom: 0.65rem !important;
+    }
+
+    .sub-header-text {
+        flex: none !important;
+        width: 100% !important;
+    }
+
+    .sub-header-text > div:first-child {
+        gap: 0.5rem !important;
+        margin-bottom: 0.35rem !important;
+    }
+
+    .sub-header-text > div:first-child > div:first-child {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 10px !important;
+    }
+
+    .sub-header-text > div:first-child > div:first-child svg {
+        width: 17px !important;
+        height: 17px !important;
+    }
+
+    .sub-header-text h1 {
+        font-size: 1.35rem !important;
+        line-height: 1.2 !important;
+        margin: 0 !important;
+    }
+
+    .sub-header-text p {
+        font-size: 0.75rem !important;
+        line-height: 1.35 !important;
+        margin: 0 0 8px 0 !important;
+    }
+
+    .sub-badge-wrapper {
+        align-self: flex-start !important;
+        margin-top: 0 !important;
+        margin-bottom: 0.75rem !important;
+        padding: 0.35rem 0.75rem !important;
+        border-radius: 10px !important;
+        font-size: 0.725rem !important;
+    }
+
+    .sub-plan-status-card {
+        padding: 1.133rem 1rem;
+        gap: 1rem;
+        margin-bottom: 1.359rem;
+    }
+
+    .sub-plan-renewal-box {
+        width: 100%;
+        justify-content: space-between;
+        padding: 0.68rem 1rem;
+    }
+
+    .sub-tabs-inner {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 0.3rem;
+        padding: 0.3rem;
+    }
+
+    .sub-tab-btn {
+        width: 100%;
+        padding: 0.6rem 0.5rem !important;
+        font-size: 0.725rem !important;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .sub-pricing-grid {
+        grid-template-columns: 1fr !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .sub-page-container {
+        padding: 0.65rem 0.75rem 5.5rem 0.75rem !important;
+    }
+
+    .sub-header-text h1 {
+        font-size: 1.25rem !important;
+    }
+
+    .sub-header-text p {
+        font-size: 0.72rem !important;
+        margin: 0 0 6px 0 !important;
+    }
+
+    .sub-badge-wrapper {
+        margin-bottom: 0.65rem !important;
+        padding: 0.3rem 0.65rem !important;
+    }
+
+    .sub-plan-status-left {
+        gap: 0.75rem;
+    }
+
+    .sub-plan-renewal-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.68rem;
+    }
+
+    .sub-plan-renewal-box > div:nth-child(2) {
+        display: none; /* Hide vertical divider in compact 2-column view */
+    }
+}

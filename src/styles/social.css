@@ -80,7 +80,7 @@
 .sf-nav-item:hover,
 .sf-nav-item.active {
   background: #F0FDF4;
-  color: var(--primary);
+  color: var(--accent-ink);
 }
 
 .sf-nav-item.active {
@@ -103,7 +103,7 @@
 .sf-nav-item:hover .sf-nav-icon,
 .sf-nav-item.active .sf-nav-icon {
   background: #F0FDF4;
-  color: var(--primary);
+  color: var(--accent-ink);
 }
 
 /* Profile mini card */
@@ -204,7 +204,7 @@
 }
 
 .sf-compose-textarea:focus {
-  border-color: var(--primary);
+  border-color: var(--accent-ink);
   box-shadow: 0 0 0 3px rgba(27, 107, 58, 0.1);
   background: var(--card-bg);
 }
@@ -362,7 +362,7 @@
 .sf-tag {
   font-size: 0.68rem;
   font-weight: 600;
-  color: var(--primary);
+  color: var(--accent-ink);
   background: #F0FDF4;
   padding: 0.181rem 0.544rem;
   border-radius: 999px;
@@ -455,7 +455,7 @@
 }
 
 .sf-community-stats .sf-widget-title {
-  color: #1B6B3A !important;
+  color: var(--accent-ink) !important;
 }
 
 /* Trending stocks */
@@ -474,7 +474,7 @@
   height: 34px;
   border-radius: 8px;
   background: #F0FDF4;
-  color: var(--primary);
+  color: var(--accent-ink);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -632,7 +632,7 @@
 
 .sf-filter-tab.active {
   background: var(--card-bg);
-  color: var(--primary);
+  color: var(--accent-ink);
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
@@ -651,7 +651,7 @@
 .sf-chart-label {
   font-size: 0.652rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--accent-ink);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -684,4 +684,61 @@
   font-size: 0.707rem;
   font-weight: 600;
   color: #15803D;
+}
+
+/* ============================================================
+   SME Deal Marketplace Banner Mobile Responsiveness
+   ============================================================ */
+@media (max-width: 768px) {
+  .sme-banner-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 1.133rem !important;
+    gap: 1rem !important;
+  }
+
+  .sme-banner-content {
+    width: 100% !important;
+  }
+
+  .sme-banner-content h1 {
+    font-size: 1.359rem !important;
+  }
+
+  .sme-banner-content p {
+    font-size: 0.77rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .sme-banner-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.544rem !important;
+    align-items: stretch !important;
+  }
+
+  .sme-banner-region-wrapper {
+    width: 100% !important;
+  }
+
+  .sme-banner-btn {
+    width: 100% !important;
+    height: 42px !important;
+    padding: 0 0.85rem !important;
+    justify-content: center !important;
+    font-size: 0.77rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .sme-region-label {
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+  }
+
+  .sme-banner-btn-venture span {
+    white-space: nowrap !important;
+  }
 }

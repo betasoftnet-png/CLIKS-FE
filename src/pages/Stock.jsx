@@ -35,6 +35,7 @@ import * as XLSX from 'xlsx';
 import FilterableTableHead from '../components/FilterableTableHead';
 import { applyTableFilters } from '../utils/filterUtils';
 import '../App.css';
+import './stock-responsive.css';
 
 const Stock = () => {
     const queryClient = useQueryClient();
@@ -308,19 +309,19 @@ const Stock = () => {
     };
 
     return (
-        <div style={{ padding: '1.359rem 1.812rem', background: '#F8FAFC', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+        <div className="stock-page-container">
             {/* Top Navigation / Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
-                <div>
+            <div className="stock-header">
+                <div className="stock-header-title">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)', flexShrink: 0 }}>
                             <Box size={22} />
                         </div>
-                        <h1 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Inventory Suite</h1>
+                        <h1 style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em', margin: 0 }}>Inventory Suite</h1>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '0.797rem', fontWeight: '500' }}>Precision stock management for enterprise growth.</p>
+                    <p style={{ color: '#475569', fontSize: '0.797rem', fontWeight: '500', margin: 0 }}>Precision stock management for enterprise growth.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.906rem' }}>
+                <div className="stock-header-actions">
                     <button data-tour="stock-export-report" onClick={handleExportReport} style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', background: 'white', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}>
                         <Download size={18} />
                         Export Report
@@ -346,7 +347,7 @@ const Stock = () => {
             </div>
 
             {/* Premium Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.359rem' }}>
+            <div className="stock-stats-grid">
                 {/* Total Inventory Value */}
                 <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
@@ -384,7 +385,7 @@ const Stock = () => {
                 </div>
 
                 {/* Split fourth slot into two side-by-side square cards */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.133rem' }}>
+                <div className="stock-stats-split">
                     {/* Low Stock Alerts */}
                     <div style={{ background: 'white', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01)', transition: 'transform 0.2s, box-shadow 0.2s' }} className="stat-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.906rem' }}>
@@ -412,10 +413,10 @@ const Stock = () => {
             </div>
 
             {/* Main Content Area */}
-            <div style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
+            <div className="stock-main-card">
                 {/* Custom Toolbar */}
-                <div style={{ padding: '0.68rem 0.906rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
-                    <div style={{ position: 'relative', width: '320px', maxWidth: '100%' }}>
+                <div className="stock-toolbar">
+                    <div className="stock-search-wrapper">
                         <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                         <input 
                             type="text" 
@@ -426,7 +427,8 @@ const Stock = () => {
                             style={{ 
                                 width: '100%', padding: '0.544rem 0.77rem 0.544rem 2.356rem', borderRadius: '10px', 
                                 border: '1px solid #E2E8F0', outline: 'none', background: 'white',
-                                fontSize: '0.861rem', fontWeight: '500', transition: 'all 0.2s'
+                                fontSize: '0.861rem', fontWeight: '500', transition: 'all 0.2s',
+                                boxSizing: 'border-box'
                             }}
                             onFocus={(e) => {
                                 e.target.style.borderColor = '#1B6B3A';
@@ -438,7 +440,7 @@ const Stock = () => {
                             }}
                         />
                     </div>
-                    <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center' }}>
+                    <div className="stock-filters-wrapper">
                         <select 
                             data-tour="stock-category-filter"
                             value={categoryFilter} 
@@ -463,7 +465,7 @@ const Stock = () => {
                             <option value="Out of Stock">Out of Stock</option>
                         </select>
 
-                        <div style={{ display: 'flex', background: '#F1F5F9', padding: '4px', borderRadius: '14px', height: '44px', boxSizing: 'border-box', alignItems: 'center' }}>
+                        <div className="stock-filter-toggle" style={{ display: 'flex', background: '#F1F5F9', padding: '4px', borderRadius: '14px', height: '44px', boxSizing: 'border-box', alignItems: 'center' }}>
                             <button 
                                 data-tour="stock-all-items-filter"
                                 onClick={() => setFilterStatus('all')}
@@ -479,14 +481,14 @@ const Stock = () => {
                 </div>
 
                 {/* Table Container */}
-                <div className="cliks-table-scroll">
+                <div className="cliks-table-scroll stock-table-wrapper">
                     {isLoading ? (
                         <div style={{ padding: '3.625rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.359rem' }}>
                             <Loader2 className="animate-spin" size={40} color="#1B6B3A" />
                             <p style={{ color: '#64748B', fontWeight: '600' }}>Synchronizing inventory data...</p>
                         </div>
                     ) : (
-                        <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                        <table className="cliks-table stock-table">
                             <FilterableTableHead 
                                 columns={[
                                     { key: 'name', label: 'Product Details', placeholder: 'Product...' },

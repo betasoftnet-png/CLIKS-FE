@@ -3,8 +3,7 @@
 /* Premium Design System - Command Center Aesthetic */
 
 :root {
-  --primary: #1B6B3A;
-  --primary-glow: rgba(27, 107, 58, 0.2);
+  --primary-glow: var(--accent-shadow);
   --success: #059669;
   --danger: #DC2626;
   --warning: #D97706;
@@ -170,7 +169,7 @@ body {
 }
 
 .btn-premium.primary {
-  background: linear-gradient(135deg, var(--primary), #22C55E);
+  background: var(--primary-gradient);
   color: white;
   box-shadow: 0 4px 12px var(--primary-glow);
 }

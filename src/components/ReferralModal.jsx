@@ -83,8 +83,10 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                             background: '#FFFFFF',
                             width: '100%',
                             maxWidth: '520px',
+                            maxHeight: 'min(90vh, 720px)',
+                            overflowY: 'auto',
+                            boxSizing: 'border-box',
                             borderRadius: '20px',
-                            overflow: 'hidden',
                             boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                             border: '1px solid rgba(255, 255, 255, 0.1)',
                             position: 'relative'
@@ -162,48 +164,55 @@ const ReferralModal = ({ isOpen, onClose, availablePoints }) => {
                                 YOUR UNIQUE REFERRAL LINK
                             </label>
 
-                            <div style={{ 
-                                background: '#F8FAFC', 
-                                borderRadius: '16px', 
-                                border: '1.5px dashed #CBD5E1', 
-                                padding: '0.77rem 0.906rem', 
-                                display: 'flex', 
-                                alignItems: 'center', 
-                                gap: '0.68rem', 
-                                marginBottom: '1.359rem'
+                            <div style={{
+                                background: '#F8FAFC',
+                                borderRadius: '16px',
+                                border: '1.5px dashed #CBD5E1',
+                                padding: '0.544rem 0.68rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.453rem',
+                                marginBottom: '1.359rem',
+                                boxSizing: 'border-box',
+                                width: '100%',
+                                maxWidth: '100%',
+                                minWidth: 0
                             }}>
-                                <input 
+                                <input
                                     readOnly
                                     value={referralLink}
-                                    style={{ 
-                                        flex: 1, 
-                                        background: 'transparent', 
-                                        border: 'none', 
-                                        fontSize: '0.77rem', 
-                                        fontWeight: '700', 
-                                        color: '#064E3B', 
+                                    style={{
+                                        flex: 1,
+                                        minWidth: 0,
+                                        background: 'transparent',
+                                        border: 'none',
+                                        fontSize: '0.77rem',
+                                        fontWeight: '700',
+                                        color: '#064E3B',
                                         outline: 'none',
                                         textOverflow: 'ellipsis',
                                         overflow: 'hidden',
                                         whiteSpace: 'nowrap'
                                     }}
                                 />
-                                <Motion.button 
+                                <Motion.button
                                     whileTap={{ scale: 0.95 }}
                                     onClick={copyToClipboard}
-                                    style={{ 
-                                        display: 'flex', 
-                                        alignItems: 'center', 
-                                        gap: '0.363rem', 
-                                        padding: '0.544rem 0.816rem', 
-                                        borderRadius: '12px', 
-                                        border: 'none', 
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.363rem',
+                                        padding: '0.544rem 0.77rem',
+                                        borderRadius: '12px',
+                                        border: 'none',
                                         cursor: 'pointer',
-                                        background: copied ? '#059669' : '#1F2937', 
+                                        background: copied ? '#059669' : '#1F2937',
                                         color: 'white',
-                                        fontWeight: '800', 
-                                        fontSize: '0.725rem', 
-                                        whiteSpace: 'nowrap'
+                                        fontWeight: '800',
+                                        fontSize: '0.725rem',
+                                        whiteSpace: 'nowrap',
+                                        flexShrink: 0
                                     }}
                                 >
                                     {copied ? <><Check size={15} /> Copied!</> : <><Copy size={15} /> Copy URL</>}

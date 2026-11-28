@@ -23,6 +23,7 @@ import { caService } from '../services';
 import { profileService } from '../services/profileService';
 import { getPlanDuration } from '../utils/subscriptionUtils';
 import '../App.css';
+import './subscription-responsive.css';
 import { formatCurrency } from '../lib/formatCurrency';
 import { useAuth } from '../context';
 
@@ -385,7 +386,7 @@ const Subscription = () => {
     const renewal = getRenewalDetails();
 
     return (
-        <div style={{ padding: '1.133rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="sub-page-container" style={{ padding: '1.133rem 2.266rem 5.5rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             <style>{`
                 .sub-tab-btn {
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -411,8 +412,8 @@ const Subscription = () => {
             `}</style>
 
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
-                <div>
+            <div className="sub-header-wrapper" style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
+                <div className="sub-header-text">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
                         <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                             <CreditCard size={22} />
@@ -423,7 +424,7 @@ const Subscription = () => {
                 </div>
                 
                 {/* Billing Badge */}
-                <div style={{ display: 'flex', background: '#DCF2E4', padding: '0.544rem 1.133rem', borderRadius: '14px', alignItems: 'center', gap: '0.453rem' }}>
+                <div className="sub-badge-wrapper" style={{ display: 'flex', background: '#DCF2E4', padding: '0.544rem 1.133rem', borderRadius: '14px', alignItems: 'center', gap: '0.453rem' }}>
                     <span style={{ color: '#064E3B', fontWeight: '800', fontSize: '0.77rem' }}>
                         {renewal.billingPeriod
                             ? `${renewal.billingPeriod === 'month' ? 'Monthly' : 'Annual'} Billing Cycle`
@@ -439,7 +440,7 @@ const Subscription = () => {
             <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
 
             {/* Current Tier Widget */}
-            <div style={{ 
+            <div className="sub-plan-status-card" style={{
                 background: renewal.gradient, 
                 borderRadius: '16px', 
                 padding: '1.133rem 1.812rem', 
@@ -457,7 +458,7 @@ const Subscription = () => {
             }}>
                 <div style={{ position: 'absolute', right: '-50px', top: '-50px', width: '200px', height: '200px', background: 'rgba(255,255,255,0.03)', borderRadius: '50%', pointerEvents: 'none' }} />
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.359rem', flexWrap: 'wrap' }}>
+                <div className="sub-plan-status-left" style={{ display: 'flex', alignItems: 'center', gap: '1.359rem', flexWrap: 'wrap' }}>
                     <div style={{ background: 'rgba(255,255,255,0.15)', width: '48px', height: '48px', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         <Sparkles size={20} />
                     </div>
@@ -474,7 +475,7 @@ const Subscription = () => {
                     </div>
                 </div>
 
-                <div style={{ 
+                <div className="sub-plan-renewal-box" style={{
                     background: 'rgba(255, 255, 255, 0.1)', 
                     padding: '0.68rem 1.359rem', 
                     borderRadius: '16px', 
@@ -506,8 +507,8 @@ const Subscription = () => {
             </div>
 
             {/* Custom Modern Tabs */}
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.812rem' }}>
-                <div style={{ 
+            <div className="sub-tabs-wrapper" style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.812rem' }}>
+                <div className="sub-tabs-inner" style={{
                     display: 'flex', 
                     background: 'rgba(220, 242, 228, 0.7)', 
                     backdropFilter: 'blur(8px)',
@@ -616,7 +617,7 @@ const Subscription = () => {
             <h3 data-tour="subscription-plans-heading" style={{ fontSize: '1.359rem', fontWeight: '850', color: '#064E3B', marginBottom: '1.133rem' }}>
                 {activeCategory === 'basic' ? 'Business Details' : 'Upgrade Workspace Tier'}
             </h3>
-            <div style={{
+            <div className="sub-pricing-grid" style={{
                 display: 'grid',
                 gridTemplateColumns: activeCategory === 'basic'
                     ? 'repeat(1, minmax(0, 360px))'

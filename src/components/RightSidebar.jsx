@@ -145,6 +145,7 @@ const RightSidebar = ({
     const handleToolClick = (toolName) => {
         if (activePanel === toolName) {
             closeAllPanels();
+            window.dispatchEvent(new CustomEvent('cliks:bit-tool-click', { detail: { tool: toolName, open: false } }));
             return;
         }
 
@@ -169,6 +170,7 @@ const RightSidebar = ({
         } else {
             setInternalPanel(toolName);
         }
+        window.dispatchEvent(new CustomEvent('cliks:bit-tool-click', { detail: { tool: toolName } }));
     };
 
     const allAvailableTools = [
@@ -353,6 +355,7 @@ const RightSidebar = ({
                                             return (
                                                 <button
                                                     key={idx}
+                                                    data-tour={`bit-tool-${tool.name.toLowerCase()}`}
                                                     onClick={tool.action}
                                                     title={tool.name}
                                                     style={{
@@ -475,6 +478,7 @@ const RightSidebar = ({
                     {activePanel && (
                         <motion.div
                             key="docked-drawer"
+                            data-tour={`docked-${activePanel.toLowerCase().replace(/\s+/g, '-')}`}
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}

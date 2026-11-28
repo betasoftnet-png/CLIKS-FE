@@ -507,41 +507,6 @@ export const MAIN_TOUR_STEPS = [
  * and replayable on demand from Help & Support.
  */
 export const PAGE_TOURS = {
-    page_dashboard: {
-        id: 'page_dashboard',
-        title: 'Books Dashboard Guide',
-        route: '/books/dashboard',
-        matchPath: (pathname) => pathname === '/books/dashboard',
-        steps: [
-            {
-                id: 'dashboard-quick-actions',
-                target: '[data-tour="books-dashboard-shortcuts"]',
-                title: 'Quick Action Center',
-                description: 'Open your saved shortcuts or customize which frequently used modules appear here.',
-                placement: 'bottom',
-            },
-            {
-                id: 'dashboard-bit-launcher',
-                target: '[data-tour="sidebar-product-launcher"]',
-                title: 'BIT Tool entry point',
-                description: 'Open the product launcher from the sidebar to find BIT Tool and other available apps.',
-                placement: 'right',
-                interactiveClick: true,
-                requiresSidebar: true,
-            },
-            {
-                id: 'dashboard-bit-tool',
-                targets: [
-                    '[data-tour="product-bit-tool-icon"]',
-                    '[data-tour="product-bit-tool"]',
-                ],
-                title: 'Open BIT Tool',
-                description: 'Select BIT Tool to open its external app (bit-tool.com) in a separate tab.',
-                placement: 'left',
-                interactiveClick: true,
-            },
-        ],
-    },
     page_books: {
         id: 'page_books',
         title: 'Books Overview Guide',
@@ -576,8 +541,8 @@ export const PAGE_TOURS = {
     page_notifications: {
         id: 'page_notifications',
         title: 'Notifications Guide',
-        route: '/books/dashboard',
-        matchPath: (pathname) => pathname === '/books/dashboard',
+        route: '/notifications',
+        matchPath: (pathname) => pathname === '/notifications' || pathname === '/books/notifications',
         steps: [
             {
                 id: 'notification-trigger',
@@ -658,29 +623,15 @@ export const PAGE_TOURS = {
     },
     page_people: {
         id: 'page_people',
-        title: 'People Network & Escrow Guide',
+        title: 'people network Guide',
         route: '/payments/people',
         matchPath: (pathname) => pathname === '/payments/people' || pathname === '/books/people',
         steps: [
             {
-                id: 'people-payables',
-                targets: ['[data-tour="people-pay-icon"]', '[data-tour="people-pay-heading"]'],
-                title: 'To Pay',
-                description: 'Track outstanding amounts you owe and the progress of settling them.',
-                placement: 'bottom',
-            },
-            {
                 id: 'people-log-transaction',
                 target: '[data-tour="people-log-transaction"]',
                 title: 'Log Transaction',
-                description: 'Record a lent or borrowed entry for a person; this guide will not open or save the form.',
-                placement: 'bottom',
-            },
-            {
-                id: 'people-add-contact',
-                target: '[data-tour="people-add-contact"]',
-                title: 'Add People Contact',
-                description: 'Add a contact to organize shared ledgers and keep personal or business relationships together.',
+                description: 'Record money lent to or borrowed from a contact.',
                 placement: 'bottom',
             },
             {
@@ -689,7 +640,6 @@ export const PAGE_TOURS = {
                 title: 'Contacts',
                 description: 'Open your contact list to find and manage the people in your network.',
                 placement: 'bottom',
-                interactiveClick: true,
             },
             {
                 id: 'people-groups-tab',
@@ -697,15 +647,13 @@ export const PAGE_TOURS = {
                 title: 'Financial Groups',
                 description: 'Open shared groups to organize people who manage expenses or ledgers together.',
                 placement: 'bottom',
-                interactiveClick: true,
             },
             {
                 id: 'people-requests-tab',
                 target: '[data-tour="people-tab-requests"]',
-                title: 'Requests',
+                title: 'Request',
                 description: 'Review incoming contact and group invitations before responding.',
                 placement: 'bottom',
-                interactiveClick: true,
             },
             {
                 id: 'people-ledger-tab',
@@ -713,7 +661,6 @@ export const PAGE_TOURS = {
                 title: 'Global Ledger',
                 description: 'Review transaction history across your people network.',
                 placement: 'bottom',
-                interactiveClick: true,
             },
             {
                 id: 'people-reminders-tab',
@@ -721,9 +668,8 @@ export const PAGE_TOURS = {
                 title: 'Repayment Alerts',
                 description: 'Review repayment reminders and upcoming follow-ups.',
                 placement: 'bottom',
-                interactiveClick: true,
             },
-        ],
+        ].map((step) => ({ ...step, interactiveClick: true, showNext: true, visibleDelay: 2000 })),
     },
     page_finance: {
         id: 'page_finance',
@@ -1166,45 +1112,6 @@ export const PAGE_TOURS = {
                 target: '[data-tour="subscription-plans-heading"]',
                 title: 'Plan details',
                 description: 'Compare the displayed plan details; selecting or purchasing a plan is not part of this guide.',
-                placement: 'bottom',
-            },
-        ],
-    },
-    page_settings: {
-        id: 'page_settings',
-        title: 'Settings Guide',
-        route: '/books/settings',
-        matchPath: (pathname) => pathname === '/books/settings',
-        steps: [
-            {
-                id: 'settings-heading',
-                target: '[data-tour="settings-heading"]',
-                title: 'Settings',
-                description: 'Manage application preferences and workspace configuration.',
-                placement: 'bottom',
-            },
-            ...[
-                ['profile', 'Profile'],
-                ['general', 'General'],
-                ['security', 'Security'],
-                ['notifications', 'Notifications'],
-                ['appearance', 'Appearance'],
-                ['billing', 'Billing'],
-                ['integrations', 'Integrations'],
-                ['advanced', 'Advanced'],
-            ].map(([id, title]) => ({
-                id: `settings-tab-${id}`,
-                target: `[data-tour="settings-tab-${id}"]`,
-                title: `${title} settings`,
-                description: `Open the ${title.toLowerCase()} settings section to review its available preferences.`,
-                placement: 'bottom',
-                interactiveClick: true,
-            })),
-            {
-                id: 'settings-save',
-                target: '[data-tour="settings-save"]',
-                title: 'Save Changes',
-                description: 'Apply preference updates after reviewing them; this guide will not save changes.',
                 placement: 'bottom',
             },
         ],

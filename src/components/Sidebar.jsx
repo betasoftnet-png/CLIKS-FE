@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
+import { BOOK_ENTRY_EVENT } from '../lib/bookEntry';
 import { storageService } from '../services/storageService';
 import { Tooltip } from './common';
 import {
@@ -127,6 +129,12 @@ const CrownIcon = () => {
     );
 };
 
+const BOOK_ENTRY_CATEGORIES = {
+    income: ['Sales & Revenue', 'Consulting & Services', 'Investments', 'Salary', 'Rental Income', 'Other Income'],
+    expense: ['Office Rent', 'Utilities & Bills', 'Supplies & Hardware', 'Staff & Payroll', 'Travel & Fuel', 'Food & Refreshments', 'Other Expense'],
+};
+const BOOK_ENTRY_MODES = ['UPI', 'Bank Transfer', 'Cash', 'Credit Card', 'Debit Card', 'Cheque', 'Other'];
+
 const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
     const { user } = useAuth();
     const location = useLocation();
@@ -172,6 +180,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
     const queryClient = useQueryClient();
     const { currency } = useCurrency();
     const [isAddBookModalOpen, setIsAddBookModalOpen] = useState(false);
+    const [editingBookId, setEditingBookId] = useState(null);
+    const [bookEntryError, setBookEntryError] = useState('');
+    const bookEntryRef = useRef(null);
     const [bookModalType, setBookModalType] = useState('income'); // 'income' | 'expense'
     const [bookTxForm, setBookTxForm] = useState({
         title: '',
@@ -183,20 +194,38 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         reference: ''
     });
     const [isSubmittingBookTx, setIsSubmittingBookTx] = useState(false);
+    const entryCategories = BOOK_ENTRY_CATEGORIES[bookModalType];
 
-    const openBookTxModal = (type) => {
+    const openBookTxModal = useCallback((type, record) => {
+        if (type !== 'income' && type !== 'expense') return;
         setBookModalType(type);
+        setEditingBookId(record?.id ?? null);
+        setBookEntryError('');
         setBookTxForm({
-            title: '',
-            amount: '',
-            category: type === 'income' ? 'Sales & Revenue' : 'Office Rent',
-            payment_mode: 'UPI',
-            date: new Date().toISOString().split('T')[0],
+            title: record?.source ?? record?.description ?? record?.name ?? '',
+            amount: record?.amount ?? '',
+            category: record?.category || (type === 'income' ? 'Sales & Revenue' : 'Office Rent'),
+            payment_mode: record?.payment_mode || record?.payment_method || 'UPI',
+            date: String(record?.date || record?.created_at || new Date().toISOString()).slice(0, 10),
             notes: '',
-            reference: ''
+            reference: '',
+            recurring: record?.recurring ?? false,
         });
         setIsAddBookModalOpen(true);
-    };
+    }, []);
+
+    useEffect(() => {
+        const onEntry = ({ detail }) => openBookTxModal(detail?.type, detail?.record);
+        window.addEventListener(BOOK_ENTRY_EVENT, onEntry);
+        return () => window.removeEventListener(BOOK_ENTRY_EVENT, onEntry);
+    }, [openBookTxModal]);
+
+    useEffect(() => {
+        if (!isAddBookModalOpen) return;
+        const trigger = document.activeElement;
+        bookEntryRef.current?.focus();
+        return () => { if (trigger?.isConnected) trigger.focus(); };
+    }, [isAddBookModalOpen]);
 
     const handleSaveBookTx = async (e) => {
         e.preventDefault();
@@ -211,7 +240,41 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
         }
 
         setIsSubmittingBookTx(true);
+        setBookEntryError('');
         try {
+            if (editingBookId !== null) {
+                const fields = {
+                    amount: amt,
+                    category: bookTxForm.category,
+                    date: bookTxForm.date,
+                    payment_mode: bookTxForm.payment_mode,
+                };
+                if (bookModalType === 'income') {
+                    await incomeService.updateIncome(editingBookId, {
+                        ...fields, source: bookTxForm.title, recurring: bookTxForm.recurring,
+                    });
+                } else {
+                    await expensesService.updateExpense(editingBookId, { ...fields, description: bookTxForm.title });
+                }
+                queryClient.invalidateQueries({ queryKey: ['income'] });
+                queryClient.invalidateQueries({ queryKey: ['expenses'] });
+                queryClient.invalidateQueries({ queryKey: ['transactions'] });
+                queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+                queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+                queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+                queryClient.invalidateQueries({ queryKey: ['accounts'] });
+
+                if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: bookModalType, amount: amt } }));
+                }
+
+                setIsAddBookModalOpen(false);
+                return;
+            }
+            const syncErrors = [];
+            const keepSyncError = (label) => (error) => {
+                syncErrors.push(label + ': ' + (error?.message || 'Request failed'));
+            };
             if (bookModalType === 'income') {
                 await incomeService.createIncome({
                     source: bookTxForm.title,
@@ -220,7 +283,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     date: bookTxForm.date,
                     payment_mode: bookTxForm.payment_mode,
                     recurring: false
-                }).catch(() => {});
+                });
 
                 await transactionsService.createTransaction({
                     type: 'Income',
@@ -229,7 +292,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     amount: amt,
                     date: bookTxForm.date,
                     notes: bookTxForm.notes || bookTxForm.reference || ''
-                }).catch(() => {});
+                }).catch(keepSyncError('Transaction history'));
 
                 await paymentService.receivePayment({
                     customer_name: bookTxForm.title,
@@ -237,7 +300,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     amount: amt,
                     payment_mode: bookTxForm.payment_mode,
                     reference_number: bookTxForm.reference || `REF-${Date.now().toString().slice(-6)}`
-                }).catch(() => {});
+                }).catch(keepSyncError('Payment register'));
             } else {
                 await expensesService.createExpense({
                     description: bookTxForm.title,
@@ -245,7 +308,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     category: bookTxForm.category || 'Office Rent',
                     date: bookTxForm.date,
                     payment_mode: bookTxForm.payment_mode
-                }).catch(() => {});
+                });
 
                 await transactionsService.createTransaction({
                     type: 'Expense',
@@ -254,7 +317,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     amount: amt,
                     date: bookTxForm.date,
                     notes: bookTxForm.notes || bookTxForm.reference || ''
-                }).catch(() => {});
+                }).catch(keepSyncError('Transaction history'));
 
                 await paymentService.paySupplier({
                     supplier_name: bookTxForm.title,
@@ -262,18 +325,24 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     amount: amt,
                     payment_mode: bookTxForm.payment_mode,
                     reference_number: bookTxForm.reference || `REF-${Date.now().toString().slice(-6)}`
-                }).catch(() => {});
+                }).catch(keepSyncError('Payment register'));
             }
 
             queryClient.invalidateQueries({ queryKey: ['income'] });
             queryClient.invalidateQueries({ queryKey: ['expenses'] });
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
             queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
 
             if (typeof window !== 'undefined') {
                 window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: bookModalType, amount: amt } }));
             }
 
+            if (syncErrors.length) {
+                window.alert('The entry was saved, but some records could not be updated.\n' + syncErrors.join('\n'));
+            }
             setIsAddBookModalOpen(false);
             setBookTxForm({
                 title: '',
@@ -285,7 +354,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 reference: ''
             });
         } catch (err) {
-            console.error('Failed to save entry:', err);
+            setBookEntryError(err?.message || 'Unable to save this entry.');
         } finally {
             setIsSubmittingBookTx(false);
         }
@@ -371,7 +440,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         }
                     }}
                     style={{ 
-                        background: '#f0fdf4', 
+                        background: 'var(--accent-sidebar)',
                         padding: '1px', 
                         borderRadius: '6px', 
                         display: 'flex', 
@@ -386,7 +455,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                     onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.08)'}
                     onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
-                    <Grid3X3 size={18} style={{ color: '#1B6B3A' }} />
+                    <Grid3X3 size={18} style={{ color: 'var(--accent-ink)' }} />
                 </div>
                 <h2 className="app-title">CLIKS</h2>
             </div>
@@ -412,7 +481,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                 justifyContent: 'center',
                                 gap: '0.4rem',
                                 padding: '0.5rem 0.75rem',
-                                background: 'linear-gradient(135deg, #1B6B3A 0%, #135029 100%)',
+                                background: 'var(--primary-gradient)',
                                 color: '#FFFFFF',
                                 borderRadius: '8px',
                                 border: 'none',
@@ -438,7 +507,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('People', '/payments/people')}
                         >
                             <div className="flex items-center gap-3">
-                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : '#1B6B3A' }} />
+                                <Users size={20} style={{ color: activeItem === 'People' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">People</span>
                             </div>
                         </button>
@@ -450,7 +519,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Transaction', '/payments/transactions')}
                         >
                             <div className="flex items-center gap-3">
-                                <CreditCard size={20} style={{ color: activeItem === 'Transaction' ? '#ffffff' : '#1B6B3A' }} />
+                                <CreditCard size={20} style={{ color: activeItem === 'Transaction' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Transaction</span>
                             </div>
                         </button>
@@ -461,7 +530,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Segregation', '/payments/segregation')}
                         >
                             <div className="flex items-center gap-3">
-                                <Target size={20} style={{ color: activeItem === 'Segregation' ? '#ffffff' : '#1B6B3A' }} />
+                                <Target size={20} style={{ color: activeItem === 'Segregation' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Segregation</span>
                             </div>
                         </button>
@@ -472,7 +541,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Split & Collect', '/payments/split-collect')}
                         >
                             <div className="flex items-center gap-3">
-                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : '#1B6B3A' }} />
+                                <Split size={20} style={{ color: activeItem === 'Split & Collect' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Split & Collect</span>
                             </div>
                         </button>
@@ -483,7 +552,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Planner', '/payments/plan')}
                         >
                             <div className="flex items-center gap-3">
-                                <Calendar size={20} style={{ color: activeItem === 'Planner' ? '#ffffff' : '#1B6B3A' }} />
+                                <Calendar size={20} style={{ color: activeItem === 'Planner' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Planner</span>
                             </div>
                         </button>
@@ -554,7 +623,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Dashboard', '/books/dashboard')}
                         >
                             <div className="flex items-center gap-3">
-                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : '#1B6B3A' }} />
+                                <Home size={20} style={{ color: (activeItem === 'Dashboard' || activeItem === 'Books Dashboard') ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Dashboard</span>
                             </div>
                         </button>
@@ -568,7 +637,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Accounts', '/books/accounting')}
                         >
                             <div className="flex items-center gap-3">
-                                <Calculator size={20} style={{ color: activeItem === 'Accounts' ? '#ffffff' : '#1B6B3A' }} />
+                                <Calculator size={20} style={{ color: activeItem === 'Accounts' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Accounts</span>
                             </div>
                         </button>
@@ -580,7 +649,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Purchases', '/books/purchase-details')}
                         >
                             <div className="flex items-center gap-3">
-                                <ShoppingCart size={20} style={{ color: activeItem === 'Purchases' ? '#ffffff' : '#1B6B3A' }} />
+                                <ShoppingCart size={20} style={{ color: activeItem === 'Purchases' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Purchases</span>
                             </div>
                         </button>
@@ -592,7 +661,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Income', '/books/income')}
                         >
                             <div className="flex items-center gap-3">
-                                <Banknote size={20} style={{ color: activeItem === 'Income' ? '#ffffff' : '#1B6B3A' }} />
+                                <Banknote size={20} style={{ color: activeItem === 'Income' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Income</span>
                             </div>
                         </button>
@@ -604,7 +673,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Expense', '/books/expenses')}
                         >
                             <div className="flex items-center gap-3">
-                                <TrendingDown size={20} style={{ color: (activeItem === 'Expense' || activeItem === 'Expenses') ? '#ffffff' : '#1B6B3A' }} />
+                                <TrendingDown size={20} style={{ color: (activeItem === 'Expense' || activeItem === 'Expenses') ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Expense</span>
                             </div>
                         </button>
@@ -616,7 +685,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             onClick={() => handleItemClick('Report', '/books')}
                         >
                             <div className="flex items-center gap-3">
-                                <BarChart3 size={20} style={{ color: activeItem === 'Report' ? '#ffffff' : '#1B6B3A' }} />
+                                <BarChart3 size={20} style={{ color: activeItem === 'Report' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Report</span>
                             </div>
                         </button>
@@ -643,10 +712,11 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         {/* Trading docs */}
                         <button
                             className={`sidebar-item ${activeItem === 'Trading docs' ? 'active' : ''}`}
+                            data-tour="social-trading-dock"
                             onClick={() => handleItemClick('Trading docs', '/social/trading')}
                         >
                             <div className="flex items-center gap-3">
-                                <LineChart size={20} style={{ color: activeItem === 'Trading docs' ? '#ffffff' : '#1B6B3A' }} />
+                                <LineChart size={20} style={{ color: activeItem === 'Trading docs' ? '#ffffff' : 'var(--accent-ink)' }} />
                                 <span className="sidebar-label">Trading docs</span>
                             </div>
                         </button>
@@ -660,6 +730,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             {/* Refer & Earn Block */}
             <div style={{ padding: '0 0.75rem', marginBottom: '0.4rem', flexShrink: 0 }}>
                 <button
+                    data-tour="sidebar-refer-earn"
                     onClick={() => {
                         if (onReferralClick) onReferralClick();
                     }}
@@ -713,6 +784,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                 {/* Subscription Badge: Dark rounded card holding two gold circular badges */}
                 <button
                     type="button"
+                    data-tour="sidebar-finpro-subscription"
                     onClick={() => handleItemClick('Subscription', '/subscription')}
                     style={{
                         width: '100%',
@@ -798,9 +870,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         onClick={() => handleItemClick('Settings', '/books/settings')}
                         className="sidebar-footer-btn"
                         style={{
-                            color: location.pathname.includes('/books/settings') ? '#1B6B3A' : '#334155',
-                            backgroundColor: location.pathname.includes('/books/settings') ? '#F0FDF4' : '#FFFFFF',
-                            borderColor: location.pathname.includes('/books/settings') ? '#BBF7D0' : '#D8F3E5'
+                            color: location.pathname.includes('/books/settings') ? 'var(--accent-ink)' : '#334155',
+                            backgroundColor: location.pathname.includes('/books/settings') ? 'var(--accent-tint)' : '#FFFFFF',
+                            borderColor: location.pathname.includes('/books/settings') ? 'var(--accent-shadow)' : 'var(--accent-tint)'
                         }}
                         title="Settings"
                     >
@@ -814,9 +886,9 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                         onClick={() => handleItemClick('Help & Support', '/books/faq')}
                         className="sidebar-footer-btn"
                         style={{
-                            color: location.pathname.includes('/books/faq') ? '#1B6B3A' : '#334155',
-                            backgroundColor: location.pathname.includes('/books/faq') ? '#F0FDF4' : '#FFFFFF',
-                            borderColor: location.pathname.includes('/books/faq') ? '#BBF7D0' : '#D8F3E5'
+                            color: location.pathname.includes('/books/faq') ? 'var(--accent-ink)' : '#334155',
+                            backgroundColor: location.pathname.includes('/books/faq') ? 'var(--accent-tint)' : '#FFFFFF',
+                            borderColor: location.pathname.includes('/books/faq') ? 'var(--accent-shadow)' : 'var(--accent-tint)'
                         }}
                         title="Help & Support"
                     >
@@ -1066,21 +1138,28 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
             )}
 
             {/* Add Income / Add Expense Modal */}
-            {isAddBookModalOpen && (
-                <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000, backdropFilter: 'blur(8px)', padding: '1.5rem' }}>
-                    <div style={{ background: '#FFFFFF', width: '100%', maxWidth: '460px', borderRadius: '24px', padding: '1.75rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', border: '1px solid #E2E8F0', maxHeight: '90vh', overflowY: 'auto' }}>
+            {isAddBookModalOpen && createPortal(
+                <div data-tour-blocking="true" style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3000, backdropFilter: 'blur(8px)', padding: '1.5rem' }}>
+                    <div role="dialog" aria-modal="true" aria-labelledby="book-entry-title" tabIndex={-1} ref={bookEntryRef}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Escape' && !isSubmittingBookTx) {
+                                event.stopPropagation();
+                                setIsAddBookModalOpen(false);
+                            }
+                        }}
+                        style={{ background: '#FFFFFF', width: '100%', maxWidth: '460px', borderRadius: '24px', padding: '1.75rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', border: '1px solid #E2E8F0', maxHeight: '90vh', overflowY: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                            <h3 style={{ fontSize: '1.25rem', fontWeight: '850', color: bookModalType === 'income' ? '#059669' : '#DC2626', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <h3 id="book-entry-title" style={{ fontSize: '1.25rem', fontWeight: '850', color: bookModalType === 'income' ? '#059669' : '#DC2626', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                 {bookModalType === 'income' ? <ArrowDownRight size={22} /> : <ArrowUpRight size={22} />}
-                                {bookModalType === 'income' ? 'Add Income' : 'Add Expense'}
+                                {editingBookId !== null ? (bookModalType === 'income' ? 'Edit Income' : 'Edit Expense') : (bookModalType === 'income' ? 'Add Income' : 'Add Expense')}
                             </h3>
-                            <button onClick={() => setIsAddBookModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.45rem', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
+                            <button type="button" aria-label="Close entry" disabled={isSubmittingBookTx} onClick={() => setIsAddBookModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.45rem', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B' }}>
                                 <X size={18} />
                             </button>
                         </div>
 
                         {/* Income / Expense Switcher Tab */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', background: '#F1F5F9', padding: '4px', borderRadius: '12px', marginBottom: '1.2rem' }}>
+                        {editingBookId === null && <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', background: '#F1F5F9', padding: '4px', borderRadius: '12px', marginBottom: '1.2rem' }}>
                             <button
                                 type="button"
                                 onClick={() => {
@@ -1129,7 +1208,7 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                             >
                                 <ArrowUpRight size={15} /> Expense
                             </button>
-                        </div>
+                        </div>}
 
                         <form onSubmit={handleSaveBookTx} style={{ display: 'flex', flexDirection: 'column', gap: '0.9rem' }}>
                             {/* Description / Source */}
@@ -1185,26 +1264,10 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                         onChange={(e) => setBookTxForm({ ...bookTxForm, category: e.target.value })}
                                         style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.85rem', boxSizing: 'border-box', background: '#FFFFFF' }}
                                     >
-                                        {bookModalType === 'income' ? (
-                                            <>
-                                                <option value="Sales & Revenue">Sales & Revenue</option>
-                                                <option value="Consulting & Services">Consulting & Services</option>
-                                                <option value="Investments">Investments</option>
-                                                <option value="Salary">Salary</option>
-                                                <option value="Rental Income">Rental Income</option>
-                                                <option value="Other Income">Other Income</option>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <option value="Office Rent">Office Rent</option>
-                                                <option value="Utilities & Bills">Utilities & Bills</option>
-                                                <option value="Supplies & Hardware">Supplies & Hardware</option>
-                                                <option value="Staff & Payroll">Staff & Payroll</option>
-                                                <option value="Travel & Fuel">Travel & Fuel</option>
-                                                <option value="Food & Refreshments">Food & Refreshments</option>
-                                                <option value="Other Expense">Other Expense</option>
-                                            </>
+                                        {!entryCategories.includes(bookTxForm.category) && (
+                                            <option value={bookTxForm.category}>{bookTxForm.category}</option>
                                         )}
+                                        {entryCategories.map(category => <option key={category} value={category}>{category}</option>)}
                                     </select>
                                 </div>
                                 <div>
@@ -1214,19 +1277,16 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                         onChange={(e) => setBookTxForm({ ...bookTxForm, payment_mode: e.target.value })}
                                         style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.85rem', boxSizing: 'border-box', background: '#FFFFFF' }}
                                     >
-                                        <option value="UPI">UPI</option>
-                                        <option value="Bank Transfer">Bank Transfer</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Credit Card">Credit Card</option>
-                                        <option value="Debit Card">Debit Card</option>
-                                        <option value="Cheque">Cheque</option>
-                                        <option value="Other">Other</option>
+                                        {!BOOK_ENTRY_MODES.includes(bookTxForm.payment_mode) && (
+                                            <option value={bookTxForm.payment_mode}>{bookTxForm.payment_mode}</option>
+                                        )}
+                                        {BOOK_ENTRY_MODES.map(mode => <option key={mode} value={mode}>{mode}</option>)}
                                     </select>
                                 </div>
                             </div>
 
                             {/* Reference / Notes */}
-                            <div>
+                            {editingBookId === null && <div>
                                 <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#475569', marginBottom: '0.35rem' }}>Notes / Reference (Optional)</label>
                                 <input
                                     type="text"
@@ -1235,12 +1295,14 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                     onChange={(e) => setBookTxForm({ ...bookTxForm, notes: e.target.value, reference: e.target.value })}
                                     style={{ width: '100%', padding: '0.7rem 0.9rem', borderRadius: '10px', border: '1.5px solid #E2E8F0', outline: 'none', fontSize: '0.88rem', boxSizing: 'border-box' }}
                                 />
-                            </div>
+                            </div>}
 
+                            {bookEntryError && <p role="alert" style={{ color: '#DC2626' }}>{bookEntryError}</p>}
                             {/* Action Buttons */}
                             <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.6rem' }}>
                                 <button
                                     type="button"
+                                    disabled={isSubmittingBookTx}
                                     onClick={() => setIsAddBookModalOpen(false)}
                                     style={{ flex: 1, padding: '0.75rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: '#F8FAFC', color: '#64748B', fontWeight: '750', fontSize: '0.88rem', cursor: 'pointer' }}
                                 >
@@ -1263,12 +1325,13 @@ const Sidebar = ({ isOpen, onReferralClick, onItemClick, onLogoClick }) => {
                                         boxShadow: bookModalType === 'income' ? '0 4px 14px rgba(16, 185, 129, 0.3)' : '0 4px 14px rgba(239, 68, 68, 0.3)'
                                     }}
                                 >
-                                    {isSubmittingBookTx ? 'Saving...' : (bookModalType === 'income' ? 'Save Income Entry' : 'Save Expense Entry')}
+                                    {isSubmittingBookTx ? 'Saving...' : editingBookId !== null ? 'Save Changes' : (bookModalType === 'income' ? 'Save Income Entry' : 'Save Expense Entry')}
                                 </button>
                             </div>
                         </form>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
         </aside>

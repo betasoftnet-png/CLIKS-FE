@@ -5,7 +5,7 @@ import { apiClient } from '../api/client';
  */
 export const incomeService = {
     getIncome: async () => {
-        return await apiClient.get('/income');
+        return await apiClient.get('/income').then(res => res?.data?.data || res?.data || res);
     },
     createIncome: async (data) => {
         return await apiClient.post('/income', data);

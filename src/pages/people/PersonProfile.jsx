@@ -43,6 +43,7 @@ const PersonProfile = () => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const [activeTab, setActiveTab] = useState('Overview');
+    const [showAllActivity, setShowAllActivity] = useState(false);
 
     // ── Modal States ───────────────────────────────────────────────────────
     const [modalType, setModalType] = useState(null); // 'transaction', 'note', 'reminder', 'wallet'
@@ -97,6 +98,14 @@ const PersonProfile = () => {
             queryClient.invalidateQueries({ queryKey: ['person-reminders', id] });
             setModalType(null);
         }
+    });
+
+    const settleReminderMutation = useMutation({
+        mutationFn: (reminderId) => peopleService.updateReminder(id, reminderId, { status: 'settled' }),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['person-reminders', id] });
+            queryClient.invalidateQueries({ queryKey: ['people-reminders-all'] });
+        },
     });
 
     const createWalletMutation = useMutation({
@@ -237,7 +246,7 @@ const PersonProfile = () => {
                                     <div className="ov-section">
                                         <div className="sec-header">
                                             <h3>Recent Activity</h3>
-                                            <button className="sec-link">View All</button>
+                                            <button type="button" className="sec-link" aria-expanded={showAllActivity} onClick={() => setShowAllActivity(value => !value)}>{showAllActivity ? 'Show Less' : 'View All'}</button>
                                         </div>
                                         <div className="timeline-list">
                                             {(() => {
@@ -246,7 +255,7 @@ const PersonProfile = () => {
                                                 const recs = records.data || records;
                                                 const list = [...(Array.isArray(txs) ? txs : []), ...(Array.isArray(rems) ? rems : []), ...(Array.isArray(recs) ? recs : [])]
                                                     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-                                                    .slice(0, 4);
+                                                    .slice(0, showAllActivity ? undefined : 4);
                                                 
                                                 return list.length > 0 ? list.map((item, i) => (
                                                     <div className="timeline-item" key={i}>
@@ -431,6 +440,9 @@ const PersonProfile = () => {
                                 </button>
                             </div>
                             <div className="reminders-list-v2">
+                                {settleReminderMutation.isError && (
+                                    <p role="alert">{settleReminderMutation.error?.message || 'Unable to settle the reminder.'}</p>
+                                )}
                                 {(() => {
                                     const rems = reminders.data || reminders;
                                     const list = Array.isArray(rems) ? rems : [];
@@ -451,7 +463,10 @@ const PersonProfile = () => {
                                              )}
                                             <div className="rem-footer">
                                                 <span className="rem-status-v2">{rem.status}</span>
-                                                <button className="btn-mark-done">Mark Settled</button>
+                                                 {rem.status !== 'settled' && (
+                                                    <button type="button" className="btn-mark-done" disabled={settleReminderMutation.isPending}
+                                                        onClick={() => settleReminderMutation.mutate(rem.id)}>Mark Settled</button>
+                                                )}
                                             </div>
                                         </div>
                                     )) : <div className="empty-state-v2">No reminders scheduled.</div>;

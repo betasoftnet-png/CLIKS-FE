@@ -1,6 +1,16 @@
 :root {
-    --primary: #1B6B3A;
-    --primary-hover: #14522d;
+    --accent: #1B6B3A;
+    --accent-solid: #1B6B3A;
+    --cliks-accent: var(--accent);
+    --primary: var(--accent-solid);
+    --primary-hover: color-mix(in srgb, var(--primary) 78%, black);
+    --primary-gradient: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    --accent-ink: color-mix(in srgb, var(--primary) 86%, black);
+    --accent-tint: color-mix(in srgb, var(--accent) 13%, white);
+    --accent-sidebar: color-mix(in srgb, var(--accent) 6%, white);
+    --accent-focus: var(--accent-ink);
+    --accent-shadow: color-mix(in srgb, var(--accent) 27%, transparent);
+    --accent-topbar: color-mix(in srgb, var(--primary) 75%, black);
     --secondary: #228B4C;
     --bg-color: #F0FDF4;
     /* User requested brand green bg */
@@ -45,8 +55,11 @@
     --text-muted:   var(--dm-text-muted);
     --card-bg:      var(--dm-surface);
     --border-color: var(--dm-border);
-    --primary:      var(--dm-primary);
-    --primary-hover: #86efac;
+    --accent-ink: color-mix(in srgb, var(--accent) 39%, white);
+    --accent-tint: color-mix(in srgb, var(--accent) 23%, var(--dm-surface));
+    --accent-sidebar: color-mix(in srgb, var(--accent) 14%, #0B111E);
+    --accent-topbar: color-mix(in srgb, var(--primary) 54%, #081016);
+    --accent-error: #FCA5A5;
     --tour-spotlight-border: rgba(255, 255, 255, 0.18);
     --tour-scrim-bg:         rgba(2, 8, 12, 0.68);
     color-scheme: dark;
@@ -67,7 +80,6 @@
 }
 
 /* ── Topbar / headers ── */
-[data-theme='dark'] .topbar,
 [data-theme='dark'] .dashboard-header,
 [data-theme='dark'] .app-header,
 [data-theme='dark'] .main-header {
@@ -78,8 +90,7 @@
 
 /* ── Sidebar ── */
 [data-theme='dark'] .sidebar {
-    background: var(--dm-surface) !important;
-    background-color: var(--dm-surface) !important;
+    background: var(--accent-sidebar) !important;
     border-right-color: var(--dm-border) !important;
 }
 [data-theme='dark'] .sidebar-header,

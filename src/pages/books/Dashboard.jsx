@@ -1,49 +1,155 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useCurrency, useLanguage } from '../../context';
-import { LayoutDashboard, Package, Users, Wallet, SplitSquareVertical, ArrowRight,
-    ArrowUpRight, ArrowDownLeft,Search, Bell, Settings, Activity, Plus, Loader2, TrendingUp,
-    Target, Clock, PiggyBank, FileText, ShieldCheck, Briefcase, X, Calendar, Award} from 'lucide-react';
+import { useCurrency, useLanguage, useAuth } from '../../context';
+import {
+    Calculator,
+    ShoppingCart,
+    Banknote,
+    TrendingDown,
+    BarChart3,
+    Gift,
+    Award,
+    Users,
+    CreditCard,
+    Target,
+    Split,
+    Calendar,
+    Contact2,
+    LayoutDashboard,
+    Package,
+    Wallet,
+    SplitSquareVertical,
+    ArrowRight,
+    ArrowUpRight,
+    ArrowDownLeft,
+    Search,
+    Bell,
+    Settings,
+    Activity,
+    Plus,
+    Loader2,
+    TrendingUp,
+    Clock,
+    PiggyBank,
+    FileText,
+    ShieldCheck,
+    Briefcase,
+    X
+} from 'lucide-react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { homeService } from '../../services';
 import '../../App.css';
 
 const MASTER_SHORTCUTS = [
-    { id: 'stock_management', label: 'Stock Management', path: '/inventory/stock', icon: LayoutDashboard, color: '#1B6B3A' },
-    { id: 'people_hub', label: 'People Hub', path: '/people', icon: Users, color: '#2563EB' },
-    { id: 'expenses', label: 'Expenses', path: '/finance/expenses', icon: FileText, color: '#DC2626' },
-    { id: 'budgets', label: 'Budgets & Planning', path: '/finance/budgets', icon: PiggyBank, color: '#D97706' },
-    { id: 'split_collect', label: 'Split & Collect', path: '/books/split-collect', icon: Wallet, color: '#059669' },
-    { id: 'segregation', label: 'Segregation', path: '/finance/segregation', icon: SplitSquareVertical, color: '#7C3AED' },
-    { id: 'planner', label: 'Planner & Reminders', path: '/planner', icon: Calendar, color: '#0284C7' },
-    { id: 'rewards', label: 'Rewards & Benefits', path: '/payments/rewards', icon: Award, color: '#E11D48' },
-    { id: 'investments', label: 'Investments', path: '/finance/investments', icon: ArrowUpRight, color: '#EA580C' },
-    { id: 'debts', label: 'Debts & Loans', path: '/finance/debts', icon: ShieldCheck, color: '#65A30D' },
-    { id: 'ca_hub', label: 'FIN-PRO CA Hub', path: '/ca', icon: Briefcase, color: '#004aad' },
-    { id: 'finance_module', label: 'Finance', path: '/books/accounting', icon: TrendingUp, color: '#1B6B3A' },
+    { id: 'accounts', label: 'Accounts', path: '/books/accounting', icon: Calculator, color: '#1B6B3A' },
+    { id: 'purchases', label: 'Purchases', path: '/books/purchase-details', icon: ShoppingCart, color: '#F59E0B' },
+    { id: 'income', label: 'Income', path: '/books/income', icon: Banknote, color: '#10B981' },
+    { id: 'expense', label: 'Expense', path: '/books/expenses', icon: TrendingDown, color: '#DC2626' },
+    { id: 'report', label: 'Report', path: '/books', icon: BarChart3, color: '#4F46E5' },
+    { id: 'refer_earn', label: 'Refer & Earn', path: '/refer-earn', action: 'referral_modal', icon: Gift, color: '#8B5CF6' },
+    { id: 'loyalty_rewards', label: 'Loyalty Rewards', path: '/books/purchase-details', icon: Award, color: '#EC4899' },
+    { id: 'people', label: 'People', path: '/payments/people', icon: Users, color: '#2563EB' },
+    { id: 'transaction', label: 'Transaction', path: '/payments/transactions', icon: CreditCard, color: '#0D9488' },
+    { id: 'segregation', label: 'Segregation', path: '/payments/segregation', icon: Target, color: '#7C3AED' },
+    { id: 'split_collect', label: 'Split & Collect', path: '/payments/split-collect', icon: Split, color: '#059669' },
+    { id: 'planner', label: 'Planner', path: '/payments/plan', icon: Calendar, color: '#0284C7' },
+    { id: 'contacts', label: 'Contacts', path: '/payments/people?tab=contacts', icon: Contact2, color: '#0891B2' },
 ];
+
+const DEFAULT_SHORTCUT_IDS = [
+    'accounts',
+    'purchases',
+    'income',
+    'expense',
+    'people',
+    'segregation'
+];
+
+const VALID_SHORTCUT_IDS = new Set(MASTER_SHORTCUTS.map(s => s.id));
 
 const BooksDashboard = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
     const { formatCurrency } = useCurrency();
     const { t } = useLanguage();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // User-scoped storage key with guest fallback
+    const storageKey = useMemo(() => {
+        const uid = user?.id || user?._id || user?.email || 'guest';
+        return `cliks_books_shortcuts_${uid}`;
+    }, [user]);
+
+    // Helper to sanitize shortcut IDs against VALID_SHORTCUT_IDS
+    const sanitizeShortcuts = useCallback((rawList) => {
+        if (!Array.isArray(rawList)) return null;
+        const validList = rawList.filter(id => VALID_SHORTCUT_IDS.has(id));
+        return validList.length > 0 ? Array.from(new Set(validList)) : null;
+    }, []);
+
     const [selectedShortcuts, setSelectedShortcuts] = useState(() => {
-        const default6 = ['stock_management', 'people_hub', 'expenses', 'budgets', 'split_collect', 'segregation'];
-        const saved = localStorage.getItem('cliks_books_shortcuts');
-        if (saved) {
-            const parsed = JSON.parse(saved);
-            if (parsed.length > 6) {
-                localStorage.setItem('cliks_books_shortcuts', JSON.stringify(default6));
-                return default6;
-            }
-            return parsed;
+        const uid = user?.id || user?._id || user?.email || 'guest';
+        const scopedKey = `cliks_books_shortcuts_${uid}`;
+        const savedScoped = localStorage.getItem(scopedKey);
+        const parsedScoped = savedScoped ? (() => { try { return JSON.parse(savedScoped); } catch { return null; } })() : null;
+        const validScoped = sanitizeShortcuts(parsedScoped);
+        if (validScoped) return validScoped;
+
+        // Fallback to legacy global key
+        const savedLegacy = localStorage.getItem('cliks_books_shortcuts');
+        const parsedLegacy = savedLegacy ? (() => { try { return JSON.parse(savedLegacy); } catch { return null; } })() : null;
+        const validLegacy = sanitizeShortcuts(parsedLegacy);
+        if (validLegacy) {
+            try {
+                localStorage.setItem(scopedKey, JSON.stringify(validLegacy));
+                localStorage.setItem('cliks_books_shortcuts', JSON.stringify(validLegacy));
+            } catch {}
+            return validLegacy;
         }
-        localStorage.setItem('cliks_books_shortcuts', JSON.stringify(default6));
-        return default6;
+
+        // Default initial shortcuts
+        try {
+            localStorage.setItem(scopedKey, JSON.stringify(DEFAULT_SHORTCUT_IDS));
+            localStorage.setItem('cliks_books_shortcuts', JSON.stringify(DEFAULT_SHORTCUT_IDS));
+        } catch {}
+        return DEFAULT_SHORTCUT_IDS;
     });
+
+    // Sync state when active user changes or mounts
+    useEffect(() => {
+        const savedScoped = localStorage.getItem(storageKey);
+        const parsed = savedScoped ? (() => { try { return JSON.parse(savedScoped); } catch { return null; } })() : null;
+        const valid = sanitizeShortcuts(parsed);
+        if (valid) {
+            setSelectedShortcuts(valid);
+        } else {
+            const savedLegacy = localStorage.getItem('cliks_books_shortcuts');
+            const parsedLegacy = savedLegacy ? (() => { try { return JSON.parse(savedLegacy); } catch { return null; } })() : null;
+            const validLegacy = sanitizeShortcuts(parsedLegacy);
+            const fallback = validLegacy || DEFAULT_SHORTCUT_IDS;
+            setSelectedShortcuts(fallback);
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(fallback));
+                localStorage.setItem('cliks_books_shortcuts', JSON.stringify(fallback));
+            } catch {}
+        }
+    }, [storageKey, sanitizeShortcuts]);
+
+    // Handle cross-tab or cross-window storage synchronization
+    useEffect(() => {
+        const handleStorageChange = (e) => {
+            if (e.key === storageKey || e.key === 'cliks_books_shortcuts') {
+                try {
+                    const nextParsed = JSON.parse(e.newValue);
+                    const valid = sanitizeShortcuts(nextParsed);
+                    if (valid) setSelectedShortcuts(valid);
+                } catch {}
+            }
+        };
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, [storageKey, sanitizeShortcuts]);
 
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -52,9 +158,23 @@ const BooksDashboard = () => {
             const next = prev.includes(id)
                 ? prev.filter(s => s !== id)
                 : [...prev, id];
-            localStorage.setItem('cliks_books_shortcuts', JSON.stringify(next));
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(next));
+                localStorage.setItem('cliks_books_shortcuts', JSON.stringify(next));
+            } catch {}
             return next;
         });
+    };
+
+    const handleShortcutClick = (shortcut) => {
+        if (shortcut.action === 'referral_modal') {
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('cliks:open-referral-modal'));
+            }
+        }
+        if (shortcut.path) {
+            navigate(shortcut.path);
+        }
     };
 
     const { data: stats, isLoading, refetch } = useQuery({
@@ -68,12 +188,17 @@ const BooksDashboard = () => {
 
     React.useEffect(() => {
         refetch();
+        const handleTxAdded = () => {
+            refetch();
+        };
+        window.addEventListener('transaction-added', handleTxAdded);
+        return () => window.removeEventListener('transaction-added', handleTxAdded);
     }, [refetch]);
 
     if (isLoading) {
         return (
             <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                <Loader2 size={48} className="animate-spin" color="#1B6B3A" />
+                <Loader2 size={48} className="animate-spin" color="var(--accent-ink)" />
             </div>
         );
     }
@@ -92,7 +217,7 @@ const BooksDashboard = () => {
             value: formatCurrency(stats?.income || 0), 
             change: t('live', 'Live'), 
             icon: ArrowUpRight, 
-            color: '#1B6B3A' 
+            color: '#1B6B3A'
         },
         { 
             label: t('totalExpenses', 'Total Expenses'), 
@@ -151,11 +276,12 @@ const BooksDashboard = () => {
                     </div>
 
                     <button
+                        data-tour="dashboard-customize-btn"
                         onClick={() => setIsModalOpen(true)}
                         style={{
                             padding: '0.589rem 1.359rem',
                             borderRadius: '12px',
-                            background: '#1B6B3A',
+                            background: 'var(--primary)',
                             color: 'white',
                             border: 'none',
                             fontWeight: '700',
@@ -174,21 +300,86 @@ const BooksDashboard = () => {
             <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '0.906rem' }}>
                 <div className="dashboard-stats-grid">
                     {metrics.map((stat, idx) => (
-                        <div key={idx} className="dashboard-stat-card">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.544rem' }}>
-                                <div
-                                    style={{ width: '34px', height: '34px', borderRadius: '10px', background: `${stat.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color }}
+                        <div
+                            key={idx}
+                            className="dashboard-stat-card compact-stat-card"
+                            style={{
+                                borderTop: `3px solid ${stat.color}`,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                position: 'relative'
+                            }}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.4rem', marginBottom: '0.25rem' }}>
+                                <h3
+                                    style={{
+                                        fontSize: '0.72rem',
+                                        fontWeight: '800',
+                                        color: '#64748B',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.04em',
+                                        margin: 0,
+                                        lineHeight: 1.2
+                                    }}
                                 >
-                                    <stat.icon size={17} />
+                                    {stat.label}
+                                </h3>
+                                <div
+                                    style={{
+                                        width: '26px',
+                                        height: '26px',
+                                        borderRadius: '50%',
+                                        background: `${stat.color}15`,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: stat.color,
+                                        flexShrink: 0
+                                    }}
+                                >
+                                    <stat.icon size={14} strokeWidth={2.5} />
                                 </div>
-                                <span style={{ fontSize: '0.652rem', fontWeight: '700', color: '#059669', background: '#F0FDF4', padding: '0.181rem 0.408rem', borderRadius: '6px' }}>{stat.change}</span>
                             </div>
-                            <h3
-                                style={{ fontSize: '0.725rem', fontWeight: '600', color: '#64748B', marginBottom: '0.227rem', width: 'fit-content' }}
+
+                            <h2
+                                style={{
+                                    fontSize: '1.25rem',
+                                    fontWeight: '900',
+                                    color: '#0F172A',
+                                    letterSpacing: '-0.5px',
+                                    margin: '0 0 0.25rem 0',
+                                    lineHeight: 1.2,
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}
                             >
-                                {stat.label}
-                            </h3>
-                            <h2 style={{ fontSize: '1.223rem', fontWeight: '800', color: '#0F172A', letterSpacing: '-0.4px' }}>{stat.value}</h2>
+                                {stat.value}
+                            </h2>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                <span
+                                    style={{
+                                        width: '6px',
+                                        height: '6px',
+                                        borderRadius: '50%',
+                                        background: stat.color,
+                                        display: 'inline-block'
+                                    }}
+                                />
+                                <span
+                                    style={{
+                                        fontSize: '0.62rem',
+                                        fontWeight: '800',
+                                        color: '#64748B',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.04em'
+                                    }}
+                                >
+                                    LIVE
+                                </span>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -217,7 +408,7 @@ const BooksDashboard = () => {
                                             return (
                                                 <button
                                                     key={shortcut.id}
-                                                    onClick={() => navigate(shortcut.path)}
+                                                    onClick={() => handleShortcutClick(shortcut)}
                                                     className="dashboard-shortcut-btn"
                                                     style={{ '--shortcut-color': shortcut.color }}
                                                 >
@@ -254,16 +445,20 @@ const BooksDashboard = () => {
                 {/* Main Content Grid */}
                 <div className="dashboard-content-split">
                     {/* Left Panel: Modules Suite */}
-                    <div className="dashboard-panel" style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem', background: 'white', padding: '1.042rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
+                    <div className="dashboard-panel" data-tour="dashboard-modules-suite" style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem', background: 'white', padding: '1.042rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <h3 style={{ fontSize: '0.952rem', fontWeight: '800', color: '#0F172A', margin: 0 }}>Modules & Management Suite</h3>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem' }}>
                             {/* Inventory Module */}
-                            <div style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }} onClick={() => navigate('/books/stock')}>
+                            <div
+                                data-tour="dashboard-module-inventory"
+                                style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => navigate('/books/stock')}
+                            >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
-                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                         <Package size={20} />
                                     </div>
                                     <div>
@@ -271,15 +466,19 @@ const BooksDashboard = () => {
                                         <p style={{ fontSize: '0.707rem', color: '#64748B', fontWeight: '500', margin: 0, lineHeight: '1.4' }}>Real-time overview of products, stock alerts, and individual restock thresholds.</p>
                                     </div>
                                 </div>
-                                <div style={{ color: '#1B6B3A', background: '#DCF2E4', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <div style={{ color: 'var(--accent-ink)', background: 'var(--accent-tint)', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     <ArrowRight size={15} />
                                 </div>
                             </div>
 
                             {/* People Module */}
-                            <div style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }} onClick={() => navigate('/books/people')}>
+                            <div
+                                data-tour="dashboard-module-people"
+                                style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => navigate('/books/people')}
+                            >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
-                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                         <Users size={20} />
                                     </div>
                                     <div>
@@ -287,15 +486,19 @@ const BooksDashboard = () => {
                                         <p style={{ fontSize: '0.707rem', color: '#64748B', fontWeight: '500', margin: 0, lineHeight: '1.4' }}>Operational base for handling contacts, payables, receivables, and transactions.</p>
                                     </div>
                                 </div>
-                                <div style={{ color: '#1B6B3A', background: '#DCF2E4', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <div style={{ color: 'var(--accent-ink)', background: 'var(--accent-tint)', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     <ArrowRight size={15} />
                                 </div>
                             </div>
 
                             {/* Finance Module */}
-                            <div style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }} onClick={() => navigate('/books/accounting')}>
+                            <div
+                                data-tour="dashboard-module-finance"
+                                style={{ padding: '0.816rem 0.906rem', borderRadius: '12px', border: '1px solid #F1F5F9', background: '#F8FAFC', display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => navigate('/books/accounting')}
+                            >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
-                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'white', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                         <TrendingUp size={20} />
                                     </div>
                                     <div>
@@ -303,7 +506,7 @@ const BooksDashboard = () => {
                                         <p style={{ fontSize: '0.607rem', color: '#64748B', fontWeight: '300', margin: 0, lineHeight: '1.0' }}>Track personal income, fixed costs, and daily expenses with automatic balance calculation.</p>
                                     </div>
                                 </div>
-                                <div style={{ color: '#1B6B3A', background: '#DCF2E4', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <div style={{ color: 'var(--accent-ink)', background: 'var(--accent-tint)', width: '30px', height: '30px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                     <ArrowRight size={15} />
                                 </div>
                             </div>
@@ -317,7 +520,7 @@ const BooksDashboard = () => {
                         <div style={{ background: 'white', padding: '1.042rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.77rem' }}>
                                 <h3 style={{ fontSize: '0.952rem', fontWeight: '800', color: '#0F172A' }}>Fund Segregation</h3>
-                                <Link to="/payments/segregation" style={{ textDecoration: 'none', fontSize: '0.725rem', fontWeight: '700', color: '#1B6B3A' }}>
+                                <Link to="/payments/segregation" style={{ textDecoration: 'none', fontSize: '0.725rem', fontWeight: '700', color: 'var(--accent-ink)' }}>
                                     Manage
                                 </Link>
                             </div>
@@ -484,7 +687,7 @@ const BooksDashboard = () => {
                                     width: '100%',
                                     padding: '0.725rem',
                                     borderRadius: '12px',
-                                    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
+                                    background: 'var(--primary-gradient)',
                                     color: 'white',
                                     fontWeight: '850',
                                     fontSize: '0.861rem',

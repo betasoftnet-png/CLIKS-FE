@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Wallet, BookOpen, Users, Bell, Briefcase } from 'lucide-react';
-import { useQuery } from '@tanstack/react-query';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { Wallet, BookOpen, Users, Bell, Briefcase, Check } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import '../App.css';
 import { useLocation, useNavigate, NavLink } from 'react-router-dom';
 import { useAuth } from '../context';
@@ -9,28 +9,78 @@ import logoPng from '../assets/logo_new.png'; // Final branding
 import { ProfileDropdown } from './ProfileDropdown';
 import SearchBox from './SearchBox';
 import { pitchesService } from '../services/pitchesService';
+import { caService } from '../services/caService';
+
+const formatNotificationTime = (timestamp) => {
+    if (!timestamp) return '';
+    try {
+        const d = new Date(timestamp);
+        if (Number.isNaN(d.getTime())) return '';
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month = months[d.getMonth()];
+        const day = d.getDate();
+        let hours = d.getHours();
+        const minutes = d.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        const formattedHours = hours ? hours.toString().padStart(2, '0') : '12';
+        return `${month} ${day} · ${formattedHours}:${minutes} ${ampm}`;
+    } catch {
+        return '';
+    }
+};
 
 const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen, isSidebarOpen, onOpenCalculator }) => {
-    const { logout, user } = useAuth();
+    const { logout, user, token: authToken } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-    const storedFinProPlan = user?.active_subscriptions?.fin_pro?.plan || user?.finpro_plan;
-    const [hasActiveFinPro, setHasActiveFinPro] = useState(Boolean(storedFinProPlan));
     const notificationsRef = useRef(null);
 
-    useEffect(() => {
-        setHasActiveFinPro(Boolean(storedFinProPlan));
-    }, [user, storedFinProPlan]);
+    // Safely parse user.active_subscriptions if stored as JSON string
+    const userSubs = React.useMemo(() => {
+        if (!user?.active_subscriptions) return {};
+        if (typeof user.active_subscriptions === 'string') {
+            try {
+                return JSON.parse(user.active_subscriptions);
+            } catch {
+                return {};
+            }
+        }
+        return user.active_subscriptions;
+    }, [user?.active_subscriptions]);
 
+    const storedFinProPlan = userSubs?.fin_pro?.plan || user?.finpro_plan || user?.ca_plan;
+    const isUserFinProActive = Boolean(
+        storedFinProPlan ||
+        userSubs?.fin_pro?.active === true ||
+        userSubs?.fin_pro?.status === 'active' ||
+        userSubs?.fin_pro?.status === 'ACTIVE'
+    );
+
+    // Read notification tracking with user-scoped persistence
+    const userReadStorageKey = `cliks_read_notifications_${user?.id || user?._id || 'guest'}`;
+
+    const [localReadIds, setLocalReadIds] = useState(() => {
+        try {
+            const saved = localStorage.getItem(`cliks_read_notifications_${user?.id || user?._id || 'guest'}`);
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    // Keep localStorage in sync whenever user switches
     useEffect(() => {
-        const handleFinProActivation = () => {
-            if (user) setHasActiveFinPro(true);
-        };
-        window.addEventListener('finpro:subscription-activated', handleFinProActivation);
-        return () => window.removeEventListener('finpro:subscription-activated', handleFinProActivation);
-    }, [user]);
+        try {
+            const saved = localStorage.getItem(userReadStorageKey);
+            setLocalReadIds(saved ? JSON.parse(saved) : []);
+        } catch {
+            setLocalReadIds([]);
+        }
+    }, [userReadStorageKey]);
 
     const {
         data: notifications = [],
@@ -50,7 +100,67 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
         staleTime: 30_000
     });
 
-    const unreadNotificationCount = notifications.filter(notification => !notification.is_read).length;
+    const isNotificationRead = useCallback((notification) => {
+        if (!notification) return false;
+        if (notification.is_read || notification.read) return true;
+        const id = notification.id ?? notification._id;
+        return id != null && localReadIds.includes(String(id));
+    }, [localReadIds]);
+
+    const unreadNotificationCount = useMemo(() => {
+        return notifications.filter(notification => !isNotificationRead(notification)).length;
+    }, [notifications, isNotificationRead]);
+
+    const [markingReadIds, setMarkingReadIds] = useState([]);
+
+    const handleMarkAsRead = async (notification, event) => {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        const id = notification.id ?? notification._id;
+        if (id == null) return;
+        const strId = String(id);
+        if (isNotificationRead(notification) || markingReadIds.includes(strId)) return;
+
+        setMarkingReadIds(prev => [...prev, strId]);
+
+        // Optimistically update local read state and persistence
+        setLocalReadIds(prev => {
+            const next = Array.from(new Set([...prev, strId]));
+            try {
+                localStorage.setItem(userReadStorageKey, JSON.stringify(next));
+            } catch {
+                // Ignore storage write issues
+            }
+            return next;
+        });
+
+        // Also update React Query cache if available
+        queryClient.setQueryData(['user-notifications'], (oldData) => {
+            if (!Array.isArray(oldData)) return oldData;
+            return oldData.map(item => {
+                const itemId = item.id ?? item._id;
+                if (String(itemId) === strId) {
+                    return { ...item, is_read: true, read: true };
+                }
+                return item;
+            });
+        });
+
+        // Call backend API if available
+        try {
+            if (typeof pitchesService.markNotificationRead === 'function') {
+                await pitchesService.markNotificationRead(id);
+            } else if (typeof caService.markNotificationRead === 'function') {
+                await caService.markNotificationRead(id);
+            }
+        } catch {
+            // Keep local persistence intact so UI stays responsive and consistent
+        } finally {
+            setMarkingReadIds(prev => prev.filter(item => item !== strId));
+        }
+    };
 
     useEffect(() => {
         if (!isNotificationsOpen) return undefined;
@@ -77,12 +187,6 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
     };
 
     const handleNavigation = (path) => {
-        if (selectedPlan === 'Free Plan' && path !== '/dashboard' && path !== '/ca') {
-            alert('You are on the Free Plan! Please subscribe to unlock full access to this feature.');
-            navigate('/subscription');
-            setIsNavOpen(false);
-            return;
-        }
         navigate(path);
         setIsNavOpen(false);
     };
@@ -106,8 +210,13 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
         { name: 'Social', url: '/social', icon: Users, activeBase: '/social' },
     ];
 
+    // Auth token and query enablement
+    const token = typeof window !== 'undefined'
+        ? (localStorage.getItem('books_auth_token') || localStorage.getItem('bnx_auth_token') || authToken)
+        : authToken;
+    const isQueryEnabled = Boolean(user || token);
+
     // ICAI Verification / FIN-PRO Status Query
-    const token = typeof window !== 'undefined' ? (localStorage.getItem('books_auth_token') || localStorage.getItem('bnx_auth_token')) : null;
     const { data: icaiVerification } = useQuery({
         queryKey: ['icaiVerification'],
         queryFn: async () => {
@@ -117,7 +226,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                 return null;
             }
         },
-        enabled: Boolean(token),
+        enabled: isQueryEnabled,
         staleTime: 30000,
         refetchInterval: (query) => {
             // Once verified, avoid polling; otherwise poll every 15s to detect admin approval in real-time
@@ -127,20 +236,91 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
         refetchOnWindowFocus: true
     });
 
+    // Explicit FIN-PRO subscription query from backend API
+    const { data: finproSubData } = useQuery({
+        queryKey: ['finproSubscription'],
+        queryFn: async () => {
+            try {
+                return await caService.getFinproSubscription();
+            } catch (e) {
+                return null;
+            }
+        },
+        enabled: isQueryEnabled,
+        staleTime: 30000,
+        refetchOnWindowFocus: true
+    });
+
+    const icaiPayload = icaiVerification?.data || icaiVerification;
+    const finproPayload = finproSubData?.data || finproSubData;
+
     const isFinProVerified = React.useMemo(() => {
-        const vStatus = icaiVerification?.status || user?.ca_verification_status;
-        const isVer = icaiVerification?.isVerified === true || user?.is_finpro_verified === true || user?.is_ca === 1 || user?.role === 'ca';
+        const vStatus = String(icaiPayload?.status || user?.ca_verification_status || '').toUpperCase();
+        const isVer =
+            icaiPayload?.isVerified === true ||
+            user?.is_finpro_verified === true ||
+            user?.is_ca === 1 ||
+            user?.is_ca === true ||
+            user?.role === 'ca';
         return vStatus === 'VERIFIED' || isVer;
-    }, [icaiVerification, user]);
+    }, [icaiPayload, user]);
+
+    const isFinProSubActive = React.useMemo(() => {
+        const hasIcaiSub = Boolean(
+            icaiPayload?.isSubscribed === true ||
+            icaiPayload?.subscription?.status === 'ACTIVE' ||
+            icaiPayload?.subscription?.status === 'active' ||
+            icaiPayload?.subscription?.plan_name ||
+            icaiPayload?.plan ||
+            icaiPayload?.active_plan
+        );
+        const hasFinproApiSub = Boolean(
+            finproPayload?.active === true ||
+            finproPayload?.subscription?.status === 'ACTIVE' ||
+            finproPayload?.subscription?.status === 'active' ||
+            finproPayload?.subscription?.plan_name
+        );
+        return isUserFinProActive || hasIcaiSub || hasFinproApiSub;
+    }, [isUserFinProActive, icaiPayload, finproPayload]);
+
+    const [hasActiveFinPro, setHasActiveFinPro] = useState(isFinProSubActive);
+
+    useEffect(() => {
+        setHasActiveFinPro(isFinProSubActive);
+    }, [isFinProSubActive]);
+
+    useEffect(() => {
+        const handleFinProActivation = () => {
+            if (user) {
+                setHasActiveFinPro(true);
+                queryClient.invalidateQueries({ queryKey: ['icaiVerification'] });
+                queryClient.invalidateQueries({ queryKey: ['finproSubscription'] });
+                queryClient.invalidateQueries({ queryKey: ['icaiVerificationStatus'] });
+            }
+        };
+        window.addEventListener('finpro:subscription-activated', handleFinProActivation);
+        return () => window.removeEventListener('finpro:subscription-activated', handleFinProActivation);
+    }, [user, queryClient]);
+
+    const hasFinProCached = typeof window !== 'undefined' && localStorage.getItem('cliks_finpro_verified') === 'true';
 
     React.useEffect(() => {
         if (typeof window === 'undefined') return;
-        if (isFinProVerified) {
+        if (isFinProVerified || isFinProSubActive || hasActiveFinPro) {
             localStorage.setItem('cliks_finpro_verified', 'true');
         } else {
             localStorage.removeItem('cliks_finpro_verified');
         }
-    }, [isFinProVerified]);
+    }, [isFinProVerified, isFinProSubActive, hasActiveFinPro]);
+
+    const showFinProBadge = React.useMemo(() => {
+        return Boolean(user) && (
+            isFinProVerified ||
+            isFinProSubActive ||
+            hasActiveFinPro ||
+            hasFinProCached
+        );
+    }, [user, isFinProVerified, isFinProSubActive, hasActiveFinPro, hasFinProCached]);
 
     return (
         <header className="topbar" style={{ paddingRight: '14px' }}>
@@ -162,7 +342,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}
                     title="Toggle Sidebar"
                 >
-                    <div className="brand-logo-small" style={{ backgroundColor: '#f0fdf4', padding: '2px', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
+                    <div className="brand-logo-small" style={{ backgroundColor: 'var(--accent-tint)', padding: '2px', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' }}>
                         <img src={logoPng} alt="CLIKS Logo" style={{ height: '75%', width: '75%', objectFit: 'contain' }} />
                     </div>
                     <span className="topbar-brand-text" style={{ color: '#ffffff', fontSize: '1.042rem', fontWeight: '700', letterSpacing: '0.4px' }}>
@@ -286,7 +466,7 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                                     fontSize: '10px',
                                     fontWeight: '700',
                                     color: '#ffffff',
-                                    border: '2px solid #135029',
+                                    border: '2px solid var(--accent-topbar)',
                                 }}
                             >
                                 {unreadNotificationCount > 99 ? '99+' : unreadNotificationCount}
@@ -298,103 +478,189 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                         <div
                             role="dialog"
                             aria-label="Notifications"
+                            className="topbar-notifications-dropdown"
                             style={{
                                 position: 'absolute',
                                 top: 'calc(100% + 10px)',
                                 right: 0,
-                                width: '340px',
+                                width: '380px',
                                 maxWidth: 'calc(100vw - 24px)',
-                                maxHeight: 'min(60vh, 480px)',
-                                overflowY: 'auto',
-                                background: '#FFFFFF',
-                                color: '#0F172A',
-                                border: '1px solid #E2E8F0',
-                                borderRadius: '14px',
-                                boxShadow: '0 12px 32px rgba(15, 23, 42, 0.18)',
+                                maxHeight: 'min(75vh, 520px)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                background: 'var(--bg-card, #FFFFFF)',
+                                color: 'var(--text-primary, #0F172A)',
+                                border: '1px solid var(--border-color, #E2E8F0)',
+                                borderRadius: '16px',
+                                boxShadow: '0 16px 36px rgba(15, 23, 42, 0.16)',
                                 zIndex: 100,
+                                overflow: 'hidden'
                             }}
                         >
                             <div data-tour="notification-panel-heading" style={{
-                                padding: '14px 16px',
-                                borderBottom: '1px solid #E2E8F0',
-                                fontWeight: 700,
-                                fontSize: '15px',
+                                padding: '16px 20px',
+                                borderBottom: '1px solid var(--border-color, #E2E8F0)',
+                                fontWeight: 750,
+                                fontSize: '16px',
+                                color: 'var(--text-primary, #0F172A)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                background: 'var(--bg-card, #FFFFFF)'
                             }}>
-                                Notifications
+                                <span>Notifications</span>
+                                {unreadNotificationCount > 0 && (
+                                    <span style={{
+                                        fontSize: '12px',
+                                        fontWeight: 600,
+                                        color: '#2563EB',
+                                        background: '#EFF6FF',
+                                        padding: '2px 8px',
+                                        borderRadius: '999px'
+                                    }}>
+                                        {unreadNotificationCount} unread
+                                    </span>
+                                )}
                             </div>
-                            {!user ? (
-                                <p style={{ margin: 0, padding: '18px 16px', color: '#64748B', fontSize: '14px' }}>
-                                    Sign in to view notifications.
-                                </p>
-                            ) : areNotificationsLoading ? (
-                                <p role="status" style={{ margin: 0, padding: '18px 16px', color: '#64748B', fontSize: '14px' }}>
-                                    Loading notifications...
-                                </p>
-                            ) : notificationsFailed ? (
-                                <div style={{ padding: '16px' }}>
-                                    <p role="alert" style={{ margin: '0 0 12px', color: '#B91C1C', fontSize: '14px' }}>
-                                        Notifications couldn’t be loaded.
+                            <div style={{
+                                padding: '14px 16px',
+                                overflowY: 'auto',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '12px',
+                                maxHeight: 'min(60vh, 440px)'
+                            }}>
+                                {!user ? (
+                                    <p style={{ margin: 0, padding: '18px 0', color: 'var(--text-secondary, #64748B)', fontSize: '14px', textAlign: 'center' }}>
+                                        Sign in to view notifications.
                                     </p>
-                                    <button
-                                        type="button"
-                                        onClick={() => refetchNotifications()}
-                                        style={{
-                                            border: 0,
-                                            borderRadius: '8px',
-                                            background: '#E8F5EC',
-                                            color: '#135029',
-                                            padding: '8px 12px',
-                                            fontWeight: 700,
-                                            cursor: 'pointer',
-                                        }}
-                                    >
-                                        Try again
-                                    </button>
-                                </div>
-                            ) : notifications.length === 0 ? (
-                                <p style={{ margin: 0, padding: '18px 16px', color: '#64748B', fontSize: '14px' }}>
-                                    You’re all caught up.
-                                </p>
-                            ) : (
-                                notifications.map((notification, index) => {
-                                    const title = [notification.title, notification.message, notification.content]
-                                        .find(value => typeof value === 'string' && value.trim())
-                                        || 'New notification';
-                                    return (
-                                        <div
-                                            key={notification.id ?? index}
+                                ) : areNotificationsLoading ? (
+                                    <p role="status" style={{ margin: 0, padding: '18px 0', color: 'var(--text-secondary, #64748B)', fontSize: '14px', textAlign: 'center' }}>
+                                        Loading notifications...
+                                    </p>
+                                ) : notificationsFailed ? (
+                                    <div style={{ padding: '12px 0', textAlign: 'center' }}>
+                                        <p role="alert" style={{ margin: '0 0 12px', color: '#B91C1C', fontSize: '14px' }}>
+                                            Notifications couldn’t be loaded.
+                                        </p>
+                                        <button
+                                            type="button"
+                                            onClick={() => refetchNotifications()}
                                             style={{
-                                                display: 'flex',
-                                                alignItems: 'flex-start',
-                                                gap: '10px',
-                                                padding: '13px 16px',
-                                                borderBottom: index < notifications.length - 1 ? '1px solid #F1F5F9' : 'none',
+                                                border: 0,
+                                                borderRadius: '8px',
+                                                background: '#E8F5EC',
+                                                color: '#135029',
+                                                padding: '8px 12px',
+                                                fontWeight: 700,
+                                                cursor: 'pointer',
                                             }}
                                         >
-                                            {!notification.is_read && (
-                                                <span
-                                                    aria-label="Unread"
-                                                    style={{
-                                                        width: '8px',
-                                                        height: '8px',
-                                                        marginTop: '5px',
-                                                        flexShrink: 0,
-                                                        borderRadius: '50%',
-                                                        background: '#16A34A',
-                                                    }}
-                                                />
-                                            )}
-                                            <span style={{ fontSize: '14px', lineHeight: 1.45 }}>{title}</span>
-                                        </div>
-                                    );
-                                })
-                            )}
+                                            Try again
+                                        </button>
+                                    </div>
+                                ) : notifications.length === 0 ? (
+                                    <p style={{ margin: 0, padding: '24px 0', color: 'var(--text-secondary, #64748B)', fontSize: '14px', textAlign: 'center' }}>
+                                        You’re all caught up.
+                                    </p>
+                                ) : (
+                                    notifications.map((notification, index) => {
+                                        const message = [notification.message, notification.title, notification.content]
+                                            .find(value => typeof value === 'string' && value.trim())
+                                            || 'New notification';
+                                        const read = isNotificationRead(notification);
+                                        const timeStr = formatNotificationTime(
+                                            notification.created_at ||
+                                            notification.createdAt ||
+                                            notification.timestamp ||
+                                            notification.date
+                                        );
+                                        const notifId = notification.id ?? notification._id ?? index;
+                                        const isMarking = markingReadIds.includes(String(notifId));
+
+                                        return (
+                                            <div
+                                                key={notifId}
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    padding: '14px 16px',
+                                                    background: 'var(--bg-card, #FFFFFF)',
+                                                    border: read
+                                                        ? '1px solid var(--border-color, #E2E8F0)'
+                                                        : '1px solid rgba(37, 99, 235, 0.25)',
+                                                    borderRadius: '12px',
+                                                    boxShadow: read
+                                                        ? 'none'
+                                                        : '0 2px 8px rgba(37, 99, 235, 0.04)',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {/* Notification Message */}
+                                                <div style={{
+                                                    fontSize: '13.5px',
+                                                    fontWeight: 500,
+                                                    lineHeight: 1.45,
+                                                    color: 'var(--text-primary, #1E293B)',
+                                                    marginBottom: '10px',
+                                                    wordBreak: 'break-word'
+                                                }}>
+                                                    {message}
+                                                </div>
+
+                                                {/* Date & Time + Mark as read Action */}
+                                                <div style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between',
+                                                    gap: '12px',
+                                                    marginTop: 'auto'
+                                                }}>
+                                                    <span style={{
+                                                        fontSize: '12px',
+                                                        fontWeight: 500,
+                                                        color: 'var(--text-secondary, #64748B)'
+                                                    }}>
+                                                        {timeStr}
+                                                    </span>
+
+                                                    <button
+                                                        type="button"
+                                                        disabled={read || isMarking}
+                                                        onClick={(e) => handleMarkAsRead(notification, e)}
+                                                        title={read ? 'Already read' : 'Mark as read'}
+                                                        aria-label={read ? 'Read' : 'Mark as read'}
+                                                        style={{
+                                                            display: 'inline-flex',
+                                                            alignItems: 'center',
+                                                            gap: '5px',
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            padding: '2px 4px',
+                                                            fontSize: '12.5px',
+                                                            fontWeight: 600,
+                                                            cursor: read ? 'default' : 'pointer',
+                                                            color: read ? '#94A3B8' : '#2563EB',
+                                                            transition: 'color 0.15s ease',
+                                                            outline: 'none',
+                                                            opacity: isMarking ? 0.6 : 1
+                                                        }}
+                                                    >
+                                                        <Check size={14} color={read ? '#94A3B8' : '#2563EB'} strokeWidth={2.5} />
+                                                        <span>{read ? 'Read' : 'Mark as read'}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
                         </div>
                     )}
                 </div>
 
-                {/* FIN-PRO Badge (Displayed for ICAI-verified CA members, reference flow) */}
-                {isFinProVerified && (
+                {/* FIN-PRO Badge (Displayed for eligible / ICAI-verified FIN-PRO members) */}
+                {showFinProBadge && (
                     <button
                         onClick={() => handleNavigation('/ca')}
                         title="FIN-PRO Audit & Practice Hub"
@@ -452,7 +718,10 @@ const Topbar = ({ onToggleSidebar, onToggleAudit, onToggleToolbar, isToolbarOpen
                     {/* Sliders / filter icon — far right, toggles the quick-access toolbar */}
                     <button
                         data-tour="topbar-toolbar-toggle"
-                        onClick={onToggleToolbar}
+                        onClick={(e) => {
+                            window.dispatchEvent(new CustomEvent('cliks:bit-toggle-click'));
+                            if (onToggleToolbar) onToggleToolbar(e);
+                        }}
                         title={isToolbarOpen ? 'Close Toolbar' : 'Open Toolbar'}
                         aria-pressed={isToolbarOpen}
                         style={{

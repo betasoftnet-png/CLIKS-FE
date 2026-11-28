@@ -67,6 +67,7 @@ const Transactions = () => {
     const [formData, setFormData] = useState(EMPTY_FORM);
     const [formError, setFormError] = useState('');
     const [searchQuery, setSearchQuery] = useState('');
+    const [page, setPage] = useState(0);
     const menuRef = useRef(null);
 
     // Fetch transactions
@@ -92,6 +93,15 @@ const Transactions = () => {
         mutationFn: (newTx) => transactionsService.createTransaction(newTx),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: modalType, amount: parseFloat(formData.amount) } }));
+            }
             closeModal();
         },
         onError: (err) => {
@@ -104,6 +114,12 @@ const Transactions = () => {
         mutationFn: (id) => transactionsService.deleteTransaction(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
         }
     });
 
@@ -163,6 +179,12 @@ const Transactions = () => {
         (t.title || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
         (t.category || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
+    const pageSize = 25;
+    const lastPage = Math.max(0, Math.ceil(filtered.length / pageSize) - 1);
+    const currentPage = Math.min(page, lastPage);
+    const pageOffset = currentPage * pageSize;
+    const pageRows = filtered.slice(pageOffset, pageOffset + pageSize);
+
 
     const getIcon = (category) => ICON_MAP[category] || ICON_MAP.Default;
 
@@ -228,7 +250,7 @@ const Transactions = () => {
                             placeholder="Search transactions..."
                             className="search-input"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) => { setSearchQuery(e.target.value); setPage(0); }}
                         />
                     </div>
                     <div className="filter-actions">
@@ -264,7 +286,7 @@ const Transactions = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {filtered.map((item) => {
+                            {pageRows.map((item) => {
                                 const ItemIcon = getIcon(item.category);
                                 return (
                                     <tr key={item.id} className="table-row-card">
@@ -310,10 +332,10 @@ const Transactions = () => {
 
                 {/* Pagination */}
                 <div className="pagination-bar">
-                    <span className="page-info">Showing {filtered.length} entries</span>
+                    <span className="page-info">Showing {filtered.length ? pageOffset + 1 : 0} to {pageOffset + pageRows.length} of {filtered.length} entries</span>
                     <div className="page-controls">
-                        <button className="btn-page" disabled>Previous</button>
-                        <button className="btn-page">Next</button>
+                        <button type="button" className="btn-page" disabled={currentPage === 0} onClick={() => setPage(currentPage - 1)}>Previous</button>
+                        <button type="button" className="btn-page" disabled={currentPage === lastPage} onClick={() => setPage(currentPage + 1)}>Next</button>
                     </div>
                 </div>
             </div>

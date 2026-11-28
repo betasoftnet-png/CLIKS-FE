@@ -44,13 +44,13 @@ import { config } from '../lib/config';
 const INITIAL_SPLITS = [];
 
 export const getBackendBaseUrl = () => {
-    const envApi = config.api.baseUrl || (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_API_BASE_URL : '');
+    const envApi = config.api.baseUrl;
     if (envApi && (envApi.startsWith('http://') || envApi.startsWith('https://'))) {
         return envApi.replace(/\/api\/v1\/?$/, '').replace(/\/api\/?$/, '').replace(/\/+$/, '');
     }
     if (typeof window !== 'undefined') {
         const host = window.location.hostname;
-        if (host === 'localhost' || host === '127.0.0.1') {
+        if (import.meta.env.DEV && (host === 'localhost' || host === '127.0.0.1')) {
             return 'http://localhost:3000';
         }
         if (host.includes('cliksbusiness.com')) {
@@ -58,7 +58,7 @@ export const getBackendBaseUrl = () => {
         }
         return window.location.origin;
     }
-    return 'http://localhost:3000';
+    return '';
 };
 
 export const resolveFileUrl = (filePath) => {
@@ -1829,11 +1829,56 @@ const BusinessSplitCollect = () => {
     );
 
     return (
-        <div style={{ padding: '1.133rem 1.812rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="split-page-container" style={{ padding: '1.133rem 1.812rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .split-page-container {
+                        padding: 0.906rem 0.85rem 5.5rem 0.85rem !important;
+                    }
+                    .split-header-wrapper {
+                        flex-direction: row !important;
+                        align-items: flex-end !important;
+                        justify-content: space-between !important;
+                        gap: 0.68rem !important;
+                        margin-bottom: 1rem !important;
+                    }
+                    .split-header-text {
+                        flex: 1 1 auto !important;
+                        min-width: 0 !important;
+                    }
+                    .split-header-text h1 {
+                        font-size: 1.25rem !important;
+                        line-height: 1.2 !important;
+                    }
+                    .split-header-text p {
+                        font-size: 0.75rem !important;
+                        line-height: 1.35 !important;
+                    }
+                    .split-create-btn {
+                        flex-shrink: 0 !important;
+                        padding: 0.65rem 0.85rem !important;
+                        font-size: 0.77rem !important;
+                        border-radius: 14px !important;
+                        white-space: nowrap !important;
+                        max-width: 140px !important;
+                    }
+                    .split-search-wrapper {
+                        max-width: 100% !important;
+                        width: 100% !important;
+                        box-sizing: border-box !important;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .split-create-btn {
+                        font-size: 0.72rem !important;
+                        padding: 0.55rem 0.65rem !important;
+                    }
+                }
+            `}</style>
             
             {/* Header Dashboard Banner */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
-                <div>
+            <div className="split-header-wrapper" style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
+                <div className="split-header-text">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.544rem', marginBottom: '0.181rem' }}>
                         <div style={{ 
                             width: '36px', 
@@ -1844,7 +1889,8 @@ const BusinessSplitCollect = () => {
                             alignItems: 'center', 
                             justifyContent: 'center', 
                             color: 'white', 
-                            boxShadow: '0 4px 10px rgba(27, 107, 58, 0.15)' 
+                            boxShadow: '0 4px 10px rgba(27, 107, 58, 0.15)',
+                            flexShrink: 0
                         }}>
                             <CreditCard size={18} />
                         </div>
@@ -1856,6 +1902,7 @@ const BusinessSplitCollect = () => {
                 {!selectedSplitId && (
                     <button 
                         data-tour="split-create"
+                        data-tour-action="split-new-ticket"
                         onClick={() => {
                             setEditingGroupId(null);
                             setGroupForm({ title: '', currency: 'INR', description: '', participants: ['You'] });
@@ -1864,6 +1911,7 @@ const BusinessSplitCollect = () => {
                             setEmailError('');
                             setIsCreateGroupModalOpen(true);
                         }}
+                        className="split-create-btn"
                         style={{ 
                             display: 'flex', alignItems: 'center', gap: '0.363rem', 
                             padding: '0.589rem 1.042rem', borderRadius: '12px', 
@@ -1893,7 +1941,7 @@ const BusinessSplitCollect = () => {
                             style={{ display: 'flex', flexDirection: 'column', gap: '1.133rem', height: '100%' }}
                         >
                             {/* Search bar */}
-                            <div style={{ background: 'white', borderRadius: '14px', padding: '0.544rem 0.906rem', display: 'flex', alignItems: 'center', gap: '0.453rem', border: '1px solid #E2E8F0', maxWidth: '320px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
+                            <div className="split-search-wrapper" style={{ background: 'white', borderRadius: '14px', padding: '0.544rem 0.906rem', display: 'flex', alignItems: 'center', gap: '0.453rem', border: '1px solid #E2E8F0', maxWidth: '320px', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
                                 <Search size={16} color="#94A3B8" />
                                 <input
                                     data-tour="split-search"

@@ -10,6 +10,8 @@ import { useAuth } from './auth-context';
 import { OnboardingContext } from './onboarding-context';
 import { MAIN_TOUR_STEPS, PAGE_TOURS, PAGE_TOUR_LIST } from '../config/onboardingTours';
 
+import { BIT_GUIDES, CHECKLIST_TOURS, LEGACY_ONBOARDING_KEY, readChecklistProgress } from '../config/onboardingChecklist';
+
 const STORAGE_PREFIX = 'cliks_onboarding_v1:';
 const REGISTERED_EMAIL_KEY = 'cliks_just_registered_email';
 const NEW_USER_MAX_AGE_MS = 24 * 60 * 60 * 1000;
@@ -21,6 +23,7 @@ const PUBLIC_OR_CRITICAL_PREFIXES = [
     '/auditor',
     '/books/profile',
     '/books/tax-filing',
+    '/books/settings',
 ];
 
 const EXISTING_ACTIVITY_KEYS = [
@@ -32,7 +35,8 @@ const EXISTING_ACTIVITY_KEYS = [
 
 const getUserKey = (user) => {
     if (!user) return null;
-    const raw = user.id ?? user.user_id ?? user.email;
+    // The existing SSO fallback is shared by accounts whose token has no subject.
+    const raw = (user.id === 'sso-user' ? user.user_id : user.id ?? user.user_id) ?? user.email;
     if (raw === undefined || raw === null || String(raw).trim() === '') return null;
     return String(raw).trim().toLowerCase();
 };
@@ -46,6 +50,7 @@ const defaultState = () => ({
     autoWelcomeSuppressed: false,
     suppressAutoPageTours: false,
     completedPages: {},
+    guides: {},
     firstSeenAt: Date.now(),
     updatedAt: Date.now(),
 });
@@ -80,7 +85,7 @@ const writeStoredState = (userKey, state) => {
     }
 };
 
-const detectExistingUser = (user) => {
+const detectExistingUser = (user, requireFirstTimeEvidence = false) => {
     if (!user) return true;
 
     const email = user.email ? String(user.email).trim().toLowerCase() : null;
@@ -106,6 +111,8 @@ const detectExistingUser = (user) => {
         }
     }
 
+    if (requireFirstTimeEvidence) return true;
+
     try {
         const hasActivity = EXISTING_ACTIVITY_KEYS.some((key) => {
             const val = localStorage.getItem(key);
@@ -130,6 +137,23 @@ const isElementVisibleAndEnabled = (el) => {
     return rect.width > 0 && rect.height > 0;
 };
 
+const isTargetExposed = (target) => {
+    if (typeof document.elementsFromPoint !== 'function') return true;
+    const { left, top, right, bottom } = target.getBoundingClientRect();
+    const visibleLeft = Math.max(0, left);
+    const visibleTop = Math.max(0, top);
+    const visibleRight = Math.min(window.innerWidth, right);
+    const visibleBottom = Math.min(window.innerHeight, bottom);
+    if (visibleRight <= visibleLeft || visibleBottom <= visibleTop) return false;
+    const x = (visibleLeft + visibleRight) / 2;
+    return [0.15, 0.5, 0.85].some((fraction) => {
+        const y = visibleTop + (visibleBottom - visibleTop) * fraction;
+        const hit = document.elementsFromPoint(x, y).find((element) =>
+            !element.closest('[data-onboarding-tooltip]'));
+        return hit && target.contains(hit);
+    });
+};
+
 const isCriticalRoute = (pathname) => {
     if (!pathname || pathname === '/') return true;
     return PUBLIC_OR_CRITICAL_PREFIXES.some((prefix) => pathname.startsWith(prefix));
@@ -144,14 +168,15 @@ const hasBlockingWorkflowDialog = () => {
     return false;
 };
 
-export const OnboardingProvider = ({ children }) => {
+export const OnboardingProvider = ({ children, checklist = false }) => {
     const { user, isAuthenticated, isLoading } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
 
     const userKey = useMemo(() => (isAuthenticated ? getUserKey(user) : null), [isAuthenticated, user]);
 
-    const [userState, setUserState] = useState(null);
+    const [sessionState, setSessionState] = useState(null);
+    const userState = sessionState?.owner === userKey ? sessionState.state : null;
     const [showWelcome, setShowWelcome] = useState(false);
     const [activeTour, setActiveTour] = useState(null); // { id, title, isMain, steps }
     const [stepIndex, setStepIndex] = useState(0);
@@ -161,6 +186,8 @@ export const OnboardingProvider = ({ children }) => {
     const activeTourRef = useRef(null);
     activeTourRef.current = activeTour;
     const pendingNavigationRef = useRef(null);
+    const pendingPageEntryRef = useRef(null);
+    const [requestedTool, setRequestedTool] = useState(null);
 
     const eligibilityCtx = useMemo(() => {
         let activePlan = 'Free Plan';
@@ -175,10 +202,23 @@ export const OnboardingProvider = ({ children }) => {
         } catch {
             // ignore storage failures
         }
+        let parsedSubs = user?.active_subscriptions;
+        if (typeof parsedSubs === 'string') {
+            try { parsedSubs = JSON.parse(parsedSubs); } catch {}
+        }
+        const hasFinProSub = Boolean(
+            parsedSubs?.fin_pro?.plan ||
+            parsedSubs?.fin_pro?.active ||
+            user?.finpro_plan ||
+            user?.ca_plan
+        );
         const isFinProVerified = Boolean(
             user?.is_finpro_verified ||
                 user?.ca_verification_status === 'verified' ||
+                user?.ca_verification_status === 'VERIFIED' ||
                 user?.is_ca ||
+                user?.role === 'ca' ||
+                hasFinProSub ||
                 finproFlag
         );
         return { user, activePlan, isFinProVerified };
@@ -204,43 +244,51 @@ export const OnboardingProvider = ({ children }) => {
         setShowWelcome(false);
 
         if (!isAuthenticated || isLoading || !userKey) {
-            setUserState(null);
+            setSessionState(null);
             return;
         }
 
         const existing = readStoredState(userKey);
-        if (existing) {
-            setUserState(existing);
-            return;
-        }
-
-        const existingUser = detectExistingUser(user);
-        const initial = {
+        const guides = checklist ? { ...readChecklistProgress(userKey), ...existing?.guides } : {};
+        const existingUser = existing ? existing.suppressAutoPageTours : detectExistingUser(user, checklist);
+        const state = existing || {
             ...defaultState(),
             mainSkipped: existingUser,
             autoWelcomeSuppressed: existingUser,
             suppressAutoPageTours: existingUser,
         };
-        writeStoredState(userKey, initial);
-        setUserState(initial);
-    }, [isAuthenticated, isLoading, userKey, user]);
+        const next = checklist ? {
+            ...state,
+            guides,
+            checklistEligible: state.checklistEligible ??
+                (Object.keys(guides).length > 0 || (!existingUser && !state.mainCompleted && !state.mainSkipped)),
+        } : state;
+
+        if (!existing || (checklist && existing.checklistEligible === undefined)) writeStoredState(userKey, next);
+        setSessionState({ owner: userKey, state: next });
+    }, [isAuthenticated, isLoading, userKey, checklist]);
 
     const updateUserState = useCallback(
         (updater) => {
             if (!userKey) return;
-            setUserState((prev) => {
-                const base = prev || readStoredState(userKey) || defaultState();
+            setSessionState((previous) => {
+                if (previous?.owner !== userKey) return previous;
+                const stored = readStoredState(userKey);
+                const base = checklist && stored
+                    ? { ...stored, guides: { ...previous.state.guides, ...stored.guides } }
+                    : previous.state;
                 const next = typeof updater === 'function' ? updater(base) : { ...base, ...updater };
                 writeStoredState(userKey, next);
-                return next;
+                return { owner: userKey, state: next };
             });
         },
-        [userKey]
+        [checklist, userKey]
     );
 
     // Show welcome modal once for eligible first-time users after shell mounts
     useEffect(() => {
         if (
+            checklist ||
             !userKey ||
             !userState ||
             activeTour ||
@@ -271,11 +319,12 @@ export const OnboardingProvider = ({ children }) => {
             window.cancelAnimationFrame(rafId);
             observer.disconnect();
         };
-    }, [userKey, userState, activeTour, location.pathname]);
+    }, [checklist, userKey, userState, activeTour, location.pathname]);
 
     // Auto-start contextual page tour on first visit for complex pages
     useEffect(() => {
         if (
+            checklist ||
             !userKey ||
             !userState ||
             activeTour ||
@@ -303,7 +352,7 @@ export const OnboardingProvider = ({ children }) => {
         let started = false;
         const tryStart = () => {
             if (started || hasBlockingWorkflowDialog()) return false;
-            const firstMatch = filtered.find((step) => {
+            const firstMatch = filtered[0].visibleDelay || filtered.find((step) => {
                 const selectors = step.targets || [step.target];
                 return selectors.every((selector) =>
                     isElementVisibleAndEnabled(document.querySelector(selector))
@@ -337,6 +386,7 @@ export const OnboardingProvider = ({ children }) => {
             observer.disconnect();
         };
     }, [
+        checklist,
         userKey,
         userState,
         activeTour,
@@ -358,13 +408,11 @@ export const OnboardingProvider = ({ children }) => {
                     completedPages: status === 'completed'
                         ? {
                             ...prev.completedPages,
-                            page_dashboard: 'completed',
                             page_accounting: 'completed',
                             page_purchases: 'completed',
                             page_finance: 'completed',
                             page_books: 'completed',
                             page_stock: 'completed',
-                            page_people: 'completed',
                             page_notifications: 'completed',
                             page_social: 'completed',
                         }
@@ -385,22 +433,107 @@ export const OnboardingProvider = ({ children }) => {
 
     const stopTour = useCallback(() => {
         pendingNavigationRef.current = null;
+        pendingPageEntryRef.current = null;
         setActiveTour(null);
         setStepIndex(0);
         setTargetElement(null);
+        setTargetElements([]);
     }, []);
 
+    const openChecklistTour = useCallback((config, steps) => {
+        if (!steps.length) return false;
+        setShowWelcome(false);
+        setTargetElement(null);
+        setTargetElements([]);
+        setActiveTour({ ...config, steps, checklist: true });
+        setStepIndex(0);
+        return true;
+    }, []);
+
+    const activeChecklist = CHECKLIST_TOURS.find((tour) => tour.matchPath(location.pathname));
+
+    useEffect(() => {
+        if (!checklist || !userKey || !userState || isCriticalRoute(location.pathname)) return;
+        if (activeTour) return;
+        const tool = requestedTool?.pathname === location.pathname && BIT_GUIDES[requestedTool.name];
+        if (tool && !userState.guides?.['page_bit:' + tool.id]) {
+            const { pathname } = requestedTool;
+            openChecklistTour({ id: 'page_bit', title: 'BIT Tool', matchPath: (path) => path === pathname }, [tool]);
+            return;
+        }
+        if (!userState.checklistEligible || !activeChecklist) return;
+        const steps = activeChecklist.steps.filter((step) => !userState.guides?.[activeChecklist.id + ':' + step.id]);
+        openChecklistTour(activeChecklist, steps);
+    }, [checklist, userKey, userState, activeTour, activeChecklist, location.pathname, requestedTool, openChecklistTour]);
+
+    useEffect(() => {
+        if (!checklist) return;
+        const cancelTool = () => {
+            setRequestedTool(null);
+            if (activeTourRef.current?.id === 'page_bit') stopTour();
+        };
+        const requestTool = ({ detail }) => {
+            const name = detail?.tool?.toLowerCase();
+            const step = BIT_GUIDES[name];
+            if (!userState?.checklistEligible || isCriticalRoute(location.pathname)) return;
+            if (detail?.open === false || !step || userState?.guides?.['page_bit:' + step.id]) {
+                cancelTool();
+                return;
+            }
+            setRequestedTool({ name, pathname: location.pathname });
+            stopTour();
+        };
+        window.addEventListener('cliks:bit-tool-click', requestTool);
+        window.addEventListener('cliks:bit-toggle-click', cancelTool);
+        return () => {
+            window.removeEventListener('cliks:bit-tool-click', requestTool);
+            window.removeEventListener('cliks:bit-toggle-click', cancelTool);
+        };
+    }, [checklist, location.pathname, userState, stopTour]);
+
+    useEffect(() => { setRequestedTool(null); }, [location.pathname, userKey]);
+
+    const advanceChecklist = useCallback((status) => {
+        const tour = activeTourRef.current;
+        if (!tour?.checklist || !currentStep) return false;
+        const key = tour.id + ':' + currentStep.id;
+        updateUserState((prev) => ({
+            ...prev,
+            guides: {
+                ...prev.guides,
+                [key]: prev.guides?.[key] || status,
+            },
+        }));
+        if (stepIndex + 1 >= activeSteps.length) {
+            if (tour.id === 'page_bit') setRequestedTool(null);
+            stopTour();
+        } else {
+            setTargetElement(null);
+            setTargetElements([]);
+            setStepIndex(stepIndex + 1);
+        }
+        return true;
+    }, [activeSteps.length, currentStep, stepIndex, stopTour, updateUserState]);
+
     const finishActiveTour = useCallback(() => {
+        if (advanceChecklist('completed')) return;
         const tour = activeTourRef.current;
         completeTourState(tour, 'completed');
         stopTour();
-    }, [completeTourState, stopTour]);
+    }, [advanceChecklist, completeTourState, stopTour]);
 
     const skipActiveTour = useCallback(() => {
+        if (advanceChecklist('skipped')) return;
         const tour = activeTourRef.current;
+        if (currentStep?.visibleDelay && stepIndex < activeSteps.length - 1) {
+            setTargetElement(null);
+            setTargetElements([]);
+            setStepIndex(stepIndex + 1);
+            return;
+        }
         completeTourState(tour, 'skipped');
         stopTour();
-    }, [completeTourState, stopTour]);
+    }, [activeSteps.length, advanceChecklist, completeTourState, currentStep, stepIndex, stopTour]);
 
     const skipMainTour = useCallback(() => {
         setShowWelcome(false);
@@ -413,6 +546,14 @@ export const OnboardingProvider = ({ children }) => {
 
     const startMainTour = useCallback(
         ({ manual = false } = {}) => {
+            if (checklist) {
+                const dashboard = CHECKLIST_TOURS[0];
+                if (!dashboard.matchPath(location.pathname)) {
+                    pendingPageEntryRef.current = location.pathname;
+                    navigate(dashboard.route);
+                }
+                return openChecklistTour(dashboard, dashboard.steps);
+            }
             setShowWelcome(false);
             const steps = filterEligibleSteps(MAIN_TOUR_STEPS);
             if (steps.length === 0) return false;
@@ -436,11 +577,19 @@ export const OnboardingProvider = ({ children }) => {
 
             return true;
         },
-        [filterEligibleSteps, updateUserState]
+        [checklist, filterEligibleSteps, location.pathname, navigate, openChecklistTour, updateUserState]
     );
 
     const startPageTour = useCallback(
         (tourId, { manual = true } = {}) => {
+            const config = checklist && CHECKLIST_TOURS.find((item) => item.id === tourId);
+            if (config) {
+                if (!config.matchPath(location.pathname)) {
+                    pendingPageEntryRef.current = location.pathname;
+                    navigate(config.route);
+                }
+                return openChecklistTour(config, config.steps);
+            }
             const tour = PAGE_TOURS[tourId];
             if (!tour) return false;
             if (tour.when && !tour.when(eligibilityCtx)) return false;
@@ -459,15 +608,17 @@ export const OnboardingProvider = ({ children }) => {
             });
             setStepIndex(0);
 
-            if ((manual || !tour.matchPath(location.pathname)) && tour.route && location.pathname !== tour.route) {
+            if ((!tour.matchPath(location.pathname) || (manual && !steps[0].visibleDelay)) && tour.route && location.pathname !== tour.route) {
+                if (steps[0].visibleDelay) pendingPageEntryRef.current = location.pathname;
                 navigate(tour.route);
             }
             return true;
         },
-        [eligibilityCtx, filterEligibleSteps, location.pathname, navigate]
+        [checklist, eligibilityCtx, filterEligibleSteps, location.pathname, navigate, openChecklistTour]
     );
 
     const nextStep = useCallback(() => {
+        if (advanceChecklist('completed')) return;
         pendingNavigationRef.current = null;
         setTargetElement(null);
         if (stepIndex + 1 >= activeSteps.length) {
@@ -478,7 +629,7 @@ export const OnboardingProvider = ({ children }) => {
             return;
         }
         setStepIndex(stepIndex + 1);
-    }, [stepIndex, activeSteps.length, completeTourState]);
+    }, [stepIndex, activeSteps.length, advanceChecklist, completeTourState]);
 
     const prevStep = useCallback(() => {
         pendingNavigationRef.current = null;
@@ -504,19 +655,41 @@ export const OnboardingProvider = ({ children }) => {
     }, [currentStep, location.pathname, nextStep, stepIndex]);
 
     const resetOnboarding = useCallback(() => {
-        if (!userKey) return;
-        const fresh = {
-            ...defaultState(),
-            mainCompleted: false,
-            mainSkipped: false,
-            autoWelcomeSuppressed: false,
-            suppressAutoPageTours: false,
-            completedPages: {},
-        };
+        if (!userKey || (checklist && !import.meta.env.DEV)) return;
+        const fresh = { ...defaultState(), checklistEligible: true };
         writeStoredState(userKey, fresh);
-        setUserState(fresh);
+        setSessionState({ owner: userKey, state: fresh });
         stopTour();
-    }, [userKey, stopTour]);
+    }, [checklist, userKey, stopTour]);
+
+    useEffect(() => {
+        if (!checklist || !userKey || !import.meta.env.DEV || !['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)) return;
+        const resetAll = () => {
+            Object.keys(localStorage).filter((key) =>
+                LEGACY_ONBOARDING_KEY.test(key) && key.slice(key.indexOf(':') + 1) === userKey)
+                .forEach((key) => localStorage.removeItem(key));
+            setRequestedTool(null);
+            resetOnboarding();
+        };
+        window.__cliksResetAllOnboarding = resetAll;
+        for (const config of CHECKLIST_TOURS) {
+            window[config.resetName] = () => {
+                if (config.legacyPrefix) localStorage.removeItem(config.legacyPrefix + userKey);
+                updateUserState((prev) => ({
+                    ...prev,
+                    guides: Object.fromEntries(Object.entries(prev.guides || {}).filter(([key]) =>
+                        !key.startsWith(config.id + ':') &&
+                        !(config.id === 'page_dashboard' && key.startsWith('page_bit:')))),
+                }));
+                setRequestedTool(null);
+                stopTour();
+            };
+        }
+        return () => {
+            delete window.__cliksResetAllOnboarding;
+            CHECKLIST_TOURS.forEach((config) => { delete window[config.resetName]; });
+        };
+    }, [checklist, resetOnboarding, stopTour, updateUserState, userKey]);
 
     // Resolve only on the expected route and wait for the rendered target before showing a step.
     useEffect(() => {
@@ -544,6 +717,90 @@ export const OnboardingProvider = ({ children }) => {
             setTargetElements([]);
             setStepIndex(stepIndex + 1);
             return;
+        }
+
+        if (currentStep.visibleDelay && !(activeTour.matchPath || PAGE_TOURS[activeTour.id]?.matchPath)?.(location.pathname)) {
+            if (pendingPageEntryRef.current !== location.pathname) stopTour();
+            return;
+        }
+
+        if (currentStep.visibleDelay) {
+            pendingPageEntryRef.current = null;
+            let target;
+            let inView = false;
+            let timer;
+            let shown = false;
+
+            const canShow = () => inView && isElementVisibleAndEnabled(target) &&
+                !hasBlockingWorkflowDialog() && (!activeTour.checklist || isTargetExposed(target));
+
+            const refresh = () => {
+                if (!canShow()) {
+                    clearTimeout(timer);
+                    timer = undefined;
+                    if (shown) {
+                        shown = false;
+                        setTargetElement(null);
+                        setTargetElements([]);
+                    }
+                    return;
+                }
+
+                if (shown || timer !== undefined) return;
+                timer = window.setTimeout(() => {
+                    timer = undefined;
+                    if (!canShow()) return;
+                    shown = true;
+                    setTargetElement(target);
+                    setTargetElements([target]);
+                }, currentStep.visibleDelay);
+            };
+
+            const intersection = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(([entry]) => {
+                if (entry.target !== target) return;
+                const { width, height } = entry.intersectionRect || {};
+                inView = entry.isIntersecting && (activeTour.checklist && width !== undefined
+                    ? width >= Math.min(entry.boundingClientRect.width, 24) && height >= Math.min(entry.boundingClientRect.height, 24)
+                    : entry.intersectionRatio >= 0.75);
+                refresh();
+            }, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
+
+            const checkTarget = () => {
+                const candidate = currentStep.target.split(',').flatMap((selector) =>
+                    [...document.querySelectorAll(selector.trim())]).find(isElementVisibleAndEnabled);
+                if (candidate !== target) {
+                    if (!candidate && target && activeTour.id === 'page_bit') {
+                        setRequestedTool(null);
+                        stopTour();
+                        return;
+                    }
+                    intersection?.disconnect();
+                    target = candidate;
+                    inView = false;
+                    if (target) intersection?.observe(target);
+                }
+                refresh();
+            };
+
+            checkTarget();
+            const mutations = new MutationObserver(checkTarget);
+            mutations.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['hidden', 'disabled', 'aria-disabled', 'data-tour-blocking', 'data-tour', 'class'],
+            });
+            window.addEventListener('scroll', checkTarget, true);
+            window.addEventListener('resize', checkTarget);
+            window.addEventListener('transitionend', checkTarget, true);
+            return () => {
+                clearTimeout(timer);
+                intersection?.disconnect();
+                mutations.disconnect();
+                window.removeEventListener('scroll', checkTarget, true);
+                window.removeEventListener('resize', checkTarget);
+                window.removeEventListener('transitionend', checkTarget, true);
+            };
         }
 
         if (currentStep.route && location.pathname !== currentStep.route) {
@@ -609,11 +866,15 @@ export const OnboardingProvider = ({ children }) => {
         activeSteps.length,
         location.pathname,
         finishActiveTour,
+        stopTour,
     ]);
 
     const availablePageTours = useMemo(
-        () => PAGE_TOUR_LIST.filter((tour) => !tour.when || tour.when(eligibilityCtx)),
-        [eligibilityCtx]
+        () => (checklist ? [
+            ...CHECKLIST_TOURS,
+            ...PAGE_TOUR_LIST.filter((tour) => !CHECKLIST_TOURS.some(({ id }) => id === tour.id)),
+        ] : PAGE_TOUR_LIST).filter((tour) => !tour.when || tour.when(eligibilityCtx)),
+        [checklist, eligibilityCtx]
     );
 
     const value = useMemo(

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, Download, Printer, Calendar } from 'lucide-react';
+import './analytics-responsive.css';
 
 const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' }) => {
     const [reportType, setReportType] = useState('Monthly');
@@ -76,21 +77,14 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
     };
 
     return (
-        <div data-tour="books-report-ready" style={{
-            background: 'white',
-            borderRadius: '16px',
-            padding: '1.359rem',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-            border: '1px solid #E2E8F0',
-            marginBottom: '1.359rem'
-        }}>
+        <div data-tour="books-report-ready" className="analytics-card-container">
             {/* Header */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem' }}>
+            <div className="reports-header-row">
                 <h3 data-tour="books-report-heading" style={{ fontSize: '0.997rem', fontWeight: 800, color: '#1E293B', display: 'flex', alignItems: 'center', gap: '0.453rem', margin: 0, width: 'fit-content' }}>
                     <FileText size={20} style={{ color: '#7C3AED' }} /> Reports Engine
                 </h3>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.453rem', alignItems: 'center' }}>
+                <div className="reports-select-group">
                     <select 
                         value={reportType} 
                         onChange={e => setReportType(e.target.value)}
@@ -122,8 +116,8 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
             </div>
 
             {/* Print Section Container */}
-            <div id="finance-report-sheet" style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: '12px', padding: '1.359rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #E2E8F0', paddingBottom: '0.68rem', marginBottom: '0.906rem' }}>
+            <div id="finance-report-sheet" className="reports-sheet-container">
+                <div className="reports-statement-summary-header">
                     <div>
                         <h4 style={{ margin: '0 0 0.227rem 0', fontSize: '0.906rem', fontWeight: 800, color: '#0F172A' }}>
                             {reportType} Statement Summary
@@ -138,12 +132,7 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
                 </div>
 
                 {/* Metrics */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                    gap: '0.906rem',
-                    marginBottom: '1.359rem'
-                }}>
+                <div className="reports-metrics-grid">
                     <div style={{ background: 'white', border: '1px solid #E2E8F0', padding: '0.77rem', borderRadius: '8px' }}>
                         <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 750, textTransform: 'uppercase' }}>Income Summary</span>
                         <h5 style={{ margin: '0.227rem 0 0 0', fontSize: '0.997rem', fontWeight: 850, color: '#10B981' }}>{currencySymbol}{incomeSum.toLocaleString('en-IN')}</h5>
@@ -196,7 +185,7 @@ const FinanceReports = ({ transactions = [], budget = 0, currencySymbol = '₹' 
             </div>
 
             {/* Export Toolbar */}
-            <div style={{ display: 'flex', gap: '0.453rem', justifyContent: 'flex-end', marginTop: '1.133rem' }}>
+            <div className="reports-export-toolbar">
                 <button 
                     onClick={() => exportCSV('csv')} 
                     style={{ padding: '0.453rem 0.906rem', borderRadius: '8px', border: '1px solid #E2E8F0', background: 'white', color: '#475569', fontSize: '0.725rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}

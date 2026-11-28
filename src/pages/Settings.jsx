@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { settingsService } from '../services';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { settingsService } from '../services/settingsService';
+import { applyAccent, normalizeAccent, readSavedAccent, saveAccent, useAppearanceSettings } from '../lib/appearance';
 import { Toggle } from '../components/ui/toggle';
 import {
     Save, User, Settings2, Shield, Bell, Palette,
@@ -13,12 +14,6 @@ import {
 const applyDarkMode = (isDark) => {
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     localStorage.setItem('cliks_dark_mode', isDark ? 'true' : 'false');
-};
-
-const applyAccentColor = (color) => {
-    if (!color) return;
-    document.documentElement.style.setProperty('--primary', color);
-    localStorage.setItem('cliks_accent_color', color);
 };
 
 const applyFontSize = (size) => {
@@ -79,7 +74,7 @@ const ToggleRow = ({ label, description, checked, onChange }) => (
             <div style={{ fontWeight: 600, color: '#334155', fontSize: '0.816rem' }}>{label}</div>
             {description && <div style={{ fontSize: '0.725rem', color: '#94A3B8', marginTop: '2px' }}>{description}</div>}
         </div>
-        <Toggle checked={checked} onChange={onChange} size="md" />
+        <Toggle label={label} hideLabel checked={checked} onChange={onChange} size="md" />
     </div>
 );
 
@@ -146,46 +141,47 @@ const Settings = () => {
         newPassword: false,
         confirmPassword: false
     });
-    const [accentColor, setAccentColor] = useState(localStorage.getItem('cliks_accent_color') || '#1B6B3A');
+    const { data: savedSettings, isLoading, owner, queryKey } = useAppearanceSettings();
+    const [accentColor, setAccentColor] = useState(() => readSavedAccent(owner));
+    const [accentInput, setAccentInput] = useState(accentColor);
+    const validAccent = normalizeAccent(accentInput);
     const [fontSize, setFontSize] = useState(localStorage.getItem('cliks_font_size') || 'medium');
     const [apiKey, setApiKey] = useState('sk-••••••••••••••••••••••••••••');
     const [avatarPreview, setAvatarPreview] = useState(null);
 
     /* ── API query / mutation ── */
-    const { isLoading } = useQuery({
-        queryKey: ['settings'],
-        queryFn: settingsService.getSettings,
-        onSuccess: (data) => {
-            if (data?.settings) {
-                const s = data.settings;
-                setToggles(prev => ({ ...prev, ...s }));
-                if (s.darkMode !== undefined) applyDarkMode(s.darkMode);
-                if (s.accentColor) {
-                    setAccentColor(s.accentColor);
-                    applyAccentColor(s.accentColor);
-                }
-                if (s.fontSize) {
-                    setFontSize(s.fontSize);
-                    applyFontSize(s.fontSize);
-                }
-            }
-        },
-    });
+    React.useEffect(() => {
+        if (!savedSettings) return;
+        setToggles(prev => ({ ...prev, ...savedSettings }));
+        if (savedSettings.darkMode !== undefined) applyDarkMode(savedSettings.darkMode);
+        const color = normalizeAccent(savedSettings.accentColor) || readSavedAccent(owner);
+        setAccentColor(color);
+        setAccentInput(color);
+        applyAccent(color);
+        if (savedSettings.fontSize) {
+            setFontSize(savedSettings.fontSize);
+            applyFontSize(savedSettings.fontSize);
+        }
+    }, [savedSettings, owner]);
 
     const mutation = useMutation({
         mutationFn: (data) => settingsService.updateSettings({ settings: data }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['settings'] });
+        onSuccess: (_, data) => {
+            saveAccent(data.accentColor, owner);
+            queryClient.setQueryData(queryKey, data);
             setSuccessMsg('Settings saved successfully.');
             setTimeout(() => setSuccessMsg(''), 3500);
         },
     });
 
-    React.useEffect(() => {
-        applyAccentColor(localStorage.getItem('cliks_accent_color') || accentColor);
-        applyFontSize(localStorage.getItem('cliks_font_size') || fontSize);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const previewAccent = (value) => {
+        const color = normalizeAccent(value);
+        setAccentInput(color || value);
+        if (color) {
+            setAccentColor(color);
+            applyAccent(color);
+        }
+    };
 
     const handleToggle = (key) => {
         setToggles(prev => {
@@ -196,10 +192,12 @@ const Settings = () => {
     };
 
     const handleSave = () => {
+        if (!validAccent) return;
+        saveAccent(validAccent, owner);
+        applyAccent(validAccent);
         applyDarkMode(toggles.darkMode);
-        applyAccentColor(accentColor);
         applyFontSize(fontSize);
-        mutation.mutate({ ...toggles, ...general, accentColor, fontSize });
+        mutation.mutate({ ...toggles, ...general, accentColor: validAccent, fontSize });
     };
 
     const handleAvatarChange = (e) => {
@@ -213,7 +211,7 @@ const Settings = () => {
     if (isLoading) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '400px' }}>
-                <div style={{ width: '40px', height: '40px', border: '4px solid #DCF2E4', borderTopColor: '#1B6B3A', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+                <div style={{ width: '40px', height: '40px', border: '4px solid var(--accent-tint)', borderTopColor: 'var(--primary)', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
             </div>
         );
     }
@@ -443,10 +441,11 @@ const Settings = () => {
             <div style={{ marginTop: '1.133rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.906rem' }}>
                 <Field label="Accent Color">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
-                        <input type="color" value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }}
+                        <input type="color" aria-label="Accent color picker" value={accentColor} disabled={mutation.isPending} onChange={e => previewAccent(e.target.value)}
                             style={{ width: 40, height: 36, borderRadius: 8, border: '1px solid #E2E8F0', cursor: 'pointer', padding: 2 }} />
-                        <input style={{ ...inputStyle, flex: 1 }} value={accentColor} onChange={e => { setAccentColor(e.target.value); applyAccentColor(e.target.value); }} />
+                        <input style={{ ...inputStyle, flex: 1 }} aria-label="Accent color HEX" aria-invalid={!validAccent} aria-describedby={!validAccent ? 'accent-color-error' : undefined} value={accentInput} disabled={mutation.isPending} onChange={e => previewAccent(e.target.value)} />
                     </div>
+                    {!validAccent && <p id="accent-color-error" style={{ color: 'var(--accent-error, #B91C1C)', fontSize: '0.725rem', marginTop: '0.363rem' }}>Enter a six-digit HEX color, such as #1B6B3A.</p>}
                 </Field>
                 <Field label="Font Size">
                     <select style={selectStyle} value={fontSize} onChange={e => { setFontSize(e.target.value); applyFontSize(e.target.value); }}>
@@ -476,7 +475,7 @@ const Settings = () => {
             </div>
             <button
                 onClick={() => window.location.href = '/subscription'}
-                style={{ padding: '0.634rem 1.586rem', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontSize: '0.793rem' }}>
+                style={{ padding: '0.634rem 1.586rem', background: 'var(--primary-gradient)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: 700, cursor: 'pointer', fontSize: '0.793rem' }}>
                 Upgrade Plan
             </button>
         </div>
@@ -555,23 +554,23 @@ const Settings = () => {
             {/* ── Page header ── */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.586rem', flexWrap: 'wrap', gap: '0.906rem' }}>
                 <div>
-                    <h1 data-tour="settings-heading" style={{ fontSize: '1.586rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>Settings</h1>
+                    <h1 style={{ fontSize: '1.586rem', fontWeight: 800, color: '#0F172A', margin: 0 }}>Settings</h1>
                     <p style={{ color: '#64748B', marginTop: '0.317rem', fontSize: '0.816rem', fontWeight: 500 }}>
                         Manage your application preferences and system configuration.
                     </p>
                 </div>
                 <button
-                    data-tour="settings-save"
+                    className="accent-action"
                     onClick={handleSave}
-                    disabled={mutation.isPending}
+                    disabled={mutation.isPending || !validAccent}
                     style={{
                         display: 'flex', alignItems: 'center', gap: '0.453rem',
                         padding: '0.634rem 1.586rem',
-                        background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
+                        background: 'var(--primary-gradient)',
                         color: 'white', border: 'none', borderRadius: '10px',
-                        fontWeight: 700, cursor: mutation.isPending ? 'not-allowed' : 'pointer',
-                        fontSize: '0.793rem', opacity: mutation.isPending ? 0.7 : 1,
-                        boxShadow: '0 4px 12px rgba(27,107,58,0.25)',
+                        fontWeight: 700, cursor: mutation.isPending || !validAccent ? 'not-allowed' : 'pointer',
+                        fontSize: '0.793rem', opacity: mutation.isPending || !validAccent ? 0.7 : 1,
+                        boxShadow: '0 4px 12px var(--accent-shadow)',
                     }}
                 >
                     <Save size={16} />
@@ -595,14 +594,13 @@ const Settings = () => {
                     return (
                         <button
                             key={tab.id}
-                            data-tour={`settings-tab-${tab.id}`}
                             onClick={() => setActiveTab(tab.id)}
                             style={{
                                 display: 'flex', alignItems: 'center', gap: '0.408rem',
                                 padding: '0.498rem 0.906rem',
                                 borderRadius: '10px', border: 'none',
                                 background: active ? '#ffffff' : 'transparent',
-                                color: active ? '#1B6B3A' : '#64748B',
+                                color: active ? 'var(--accent-ink)' : 'var(--text-muted)',
                                 fontWeight: active ? 700 : 600,
                                 fontSize: '0.748rem',
                                 cursor: 'pointer',

@@ -1,3 +1,4 @@
+import { buildUrl } from '../api/client';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -111,18 +112,33 @@ export default function BusinessCA({ mode }) {
     });
 
     const icaiVerification = icaiData?.data || icaiData || {};
+    let userActiveSubs = user?.active_subscriptions;
+    if (typeof userActiveSubs === 'string') {
+        try { userActiveSubs = JSON.parse(userActiveSubs); } catch {}
+    }
+    const hasUserFinProSub = Boolean(
+        userActiveSubs?.fin_pro?.plan ||
+        userActiveSubs?.fin_pro?.active === true ||
+        userActiveSubs?.fin_pro?.status === 'active' ||
+        userActiveSubs?.fin_pro?.status === 'ACTIVE' ||
+        user?.finpro_plan ||
+        user?.ca_plan
+    );
+
     const isAccountIcaiVerified = 
         icaiVerification?.status === 'VERIFIED' || 
         icaiVerification?.isVerified === true ||
         Boolean(user?.is_finpro_verified) || 
         user?.ca_verification_status === 'VERIFIED' || 
+        user?.ca_verification_status === 'verified' ||
         user?.is_ca === 1 || 
+        user?.is_ca === true ||
         user?.role === 'ca';
 
     // In business mode (/finance/fintech), Audit Center is accessible to all business accounts.
-    // In personal CA mode (/ca), access is restricted to verified ICAI CA members.
+    // In personal CA mode (/ca), access is granted to verified ICAI CA members with active FIN-PRO subscription.
     const isCaVerified = activeMode === 'business' || isAccountIcaiVerified;
-    const isFinProSubscribed = activeMode === 'business' || Boolean(icaiVerification?.isSubscribed);
+    const isFinProSubscribed = activeMode === 'business' || Boolean(icaiVerification?.isSubscribed) || Boolean(icaiVerification?.subscription) || hasUserFinProSub;
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
@@ -5390,7 +5406,7 @@ export default function BusinessCA({ mode }) {
                                                                     </tr>
                                                                 ) : (
                                                                     clientDocuments.map(doc => {
-                                                                        const fileUrl = doc.path.startsWith('/uploads/') ? `http://localhost:5173${doc.path}` : doc.path;
+                                                                        const fileUrl = doc.path;
                                                                         return (
                                                                             <tr key={doc.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                                                                 <td style={{ padding: '14px 16px', fontWeight: '750', color: '#0F172A' }}>{doc.name}</td>
@@ -5561,7 +5577,7 @@ export default function BusinessCA({ mode }) {
                                                                         <td style={{ padding: '12px 8px' }}>
                                                                             <button
                                                                                 type="button"
-                                                                                onClick={() => window.open(`http://localhost:5000/api/v1/ca/invoices/${inv.id}/pdf`, '_blank')}
+                                                                                onClick={() => window.open(buildUrl(`/ca/invoices/${inv.id}/pdf`), '_blank', 'noopener,noreferrer')}
                                                                                 style={{ border: 'none', background: 'transparent', color: '#15803d', cursor: 'pointer', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '4px' }}
                                                                             >
                                                                                 <Download size={14} /> PDF

@@ -30,8 +30,13 @@ const MainLayout = ({ children }) => {
 
     useEffect(() => {
         const handleEnsureSidebarOpen = () => setIsSidebarOpen(true);
+        const handleOpenReferralModal = () => setIsReferralOpen(true);
         window.addEventListener('cliks:ensure-sidebar-open', handleEnsureSidebarOpen);
-        return () => window.removeEventListener('cliks:ensure-sidebar-open', handleEnsureSidebarOpen);
+        window.addEventListener('cliks:open-referral-modal', handleOpenReferralModal);
+        return () => {
+            window.removeEventListener('cliks:ensure-sidebar-open', handleEnsureSidebarOpen);
+            window.removeEventListener('cliks:open-referral-modal', handleOpenReferralModal);
+        };
     }, []);
     const [isAuditOpen,   setIsAuditOpen]   = useState(false);
     const [isReferralOpen, setIsReferralOpen] = useState(false);
@@ -63,6 +68,7 @@ const MainLayout = ({ children }) => {
                     // Open the toolbar if closed, then open calc
                     if (!isToolbarOpen) setIsToolbarOpen(true);
                     setIsCalcOpen(true);
+                    window.dispatchEvent(new CustomEvent('cliks:bit-tool-click', { detail: { tool: 'Calculator' } }));
                 }}
             />
             <div className="app-body">

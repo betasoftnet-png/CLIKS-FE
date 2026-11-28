@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion as Motion } from 'framer-motion';
 
-export const Toggle = ({ checked, onChange, size = 'md', label, disabled = false }) => {
+export const Toggle = ({ checked, onChange, size = 'md', label, hideLabel = false, disabled = false }) => {
     // Dimensions based on size prop (currently just 'md' supported as standard)
     const dimensions = {
         md: { width: 44, height: 24, handle: 20, padding: 2 },
@@ -25,7 +25,7 @@ export const Toggle = ({ checked, onChange, size = 'md', label, disabled = false
                 style={{
                     width: `${width}px`,
                     height: `${height}px`,
-                    backgroundColor: checked ? '#1B6B3A' : '#CBD5E1',
+                    backgroundColor: checked ? 'var(--primary)' : '#CBD5E1',
                     borderRadius: '999px',
                     position: 'relative',
                     transition: 'background-color 0.2s ease',
@@ -55,7 +55,7 @@ export const Toggle = ({ checked, onChange, size = 'md', label, disabled = false
                     }}
                 />
             </div>
-            {label && (
+            {label && !hideLabel && (
                 <span style={{ fontSize: '0.816rem', color: '#1E293B', fontWeight: 500 }}>
                     {label}
                 </span>

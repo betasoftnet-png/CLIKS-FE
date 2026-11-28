@@ -1,0 +1,363 @@
+/* Payment Planner (FinancialPlan) Responsive Styles */
+
+.planner-page-container {
+    padding: 1.133rem 2.266rem 5.5rem 2.266rem;
+    background: #F8FAFC;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+}
+
+.planner-header-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.359rem;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.planner-header-text {
+    min-width: 0;
+    flex: 1 1 auto;
+}
+
+.planner-schedule-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.544rem;
+    padding: 0.77rem 1.586rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%);
+    color: white;
+    border: none;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(27, 107, 58, 0.25);
+    transition: transform 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* Quick Stats Grid */
+.planner-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.133rem;
+    margin-bottom: 1.812rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.planner-stat-card {
+    background: white;
+    padding: 1.133rem;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+    flex-shrink: 0;
+}
+
+/* Filters and List Container */
+.planner-content-card {
+    flex: 1;
+    min-height: 0;
+    background: white;
+    border-radius: 18px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.planner-filter-header {
+    padding: 1.133rem 1.359rem;
+    border-bottom: 1px solid #F1F5F9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.906rem;
+    flex-wrap: wrap;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+.planner-tabs-group {
+    display: inline-flex;
+    align-items: center;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    gap: 4px;
+    box-sizing: border-box;
+}
+
+.planner-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.408rem;
+    padding: 0.498rem 1.042rem;
+    border-radius: 12px;
+    border: none;
+    font-weight: 800;
+    font-size: 0.743rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+
+.planner-search-wrapper {
+    display: flex;
+    align-items: center;
+    background: #F8FAFC;
+    padding: 0.498rem 0.906rem;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    width: 280px;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.planner-list-item {
+    padding: 1.133rem;
+    background: #F8FAFC;
+    border-radius: 20px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+/* Tablet & Mobile Breakpoints */
+@media (max-width: 768px) {
+    .planner-page-container {
+        padding: 0.906rem 0.85rem 5.5rem 0.85rem;
+    }
+
+    /* Keep Heading & Description on Left, Button on Right in the same row */
+    .planner-header-wrapper {
+        flex-direction: row !important;
+        align-items: flex-end !important;
+        justify-content: space-between !important;
+        gap: 0.68rem !important;
+    }
+
+    .planner-header-text {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    .planner-header-text h1 {
+        font-size: 1.45rem !important;
+    }
+
+    .planner-header-icon-box {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+        max-width: 38px !important;
+        max-height: 38px !important;
+        border-radius: 12px !important;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .planner-header-icon-box svg {
+        flex-shrink: 0 !important;
+    }
+
+    .planner-header-text p {
+        font-size: 0.77rem !important;
+        line-height: 1.35 !important;
+        margin: 0 !important;
+    }
+
+    .planner-schedule-btn {
+        flex-shrink: 0 !important;
+        width: auto !important;
+        padding: 0.65rem 0.85rem !important;
+        font-size: 0.77rem !important;
+        border-radius: 14px !important;
+        white-space: normal !important;
+        text-align: center !important;
+        max-width: 130px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* Summary cards: horizontal scroll list without page overflow, identical card design */
+    .planner-stats-grid {
+        display: flex !important;
+        overflow-x: auto !important;
+        gap: 0.68rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 4px !important;
+        scrollbar-width: none !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .planner-stats-grid::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .planner-stat-card {
+        flex: 0 0 calc(50% - 0.34rem) !important;
+        min-width: 140px !important;
+        max-width: 180px !important;
+        padding: 0.906rem 0.85rem !important;
+        border-radius: 18px !important;
+        box-sizing: border-box !important;
+    }
+
+    .planner-stat-card h3 {
+        font-size: 1.25rem !important;
+    }
+
+    /* Filters: Tabs in single row, full-width search input below */
+    .planner-filter-header {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.68rem !important;
+        padding: 0.85rem !important;
+    }
+
+    .planner-tabs-group {
+        display: flex !important;
+        flex-direction: row !important;
+        width: 100% !important;
+        gap: 4px !important;
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+    }
+
+    .planner-tabs-group::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .planner-tab-btn {
+        flex: 1 1 0 !important;
+        justify-content: center !important;
+        padding: 0.453rem 0.35rem !important;
+        font-size: 0.725rem !important;
+        min-width: 0 !important;
+    }
+
+    .planner-tab-btn span {
+        white-space: nowrap !important;
+    }
+
+    .planner-stat-card > div:last-child {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        min-height: 44px !important;
+        border-radius: 12px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .planner-search-wrapper {
+        width: 100% !important;
+    }
+
+    /* Scheduled payment entries: matching reference screenshot card layout */
+    .planner-list-item {
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0.906rem !important;
+        border-radius: 18px !important;
+        position: relative !important;
+        gap: 0.68rem !important;
+    }
+
+    .planner-item-left {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        gap: 0.75rem !important;
+    }
+
+    .planner-item-icon-box {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 14px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .planner-item-details {
+        min-width: 0 !important;
+    }
+
+    .planner-item-details h4 {
+        font-size: 0.9rem !important;
+        font-weight: 800 !important;
+    }
+
+    .planner-item-meta {
+        gap: 0.453rem !important;
+        margin-top: 0.2rem !important;
+    }
+
+    .planner-item-right {
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.68rem !important;
+        border-top: none !important;
+        padding-top: 0 !important;
+        flex-shrink: 0 !important;
+    }
+
+    .planner-item-amount-box {
+        text-align: right !important;
+    }
+
+    .planner-item-amount-box p {
+        font-size: 0.589rem !important;
+    }
+
+    .planner-item-amount-box h4 {
+        font-size: 1.05rem !important;
+    }
+
+    .planner-item-actions button {
+        width: 34px !important;
+        height: 34px !important;
+        border-radius: 10px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .planner-schedule-btn {
+        max-width: 110px !important;
+        font-size: 0.7rem !important;
+        padding: 0.55rem 0.65rem !important;
+    }
+
+    .planner-tab-btn {
+        padding: 0.4rem 0.25rem !important;
+        font-size: 0.66rem !important;
+        gap: 0.2rem !important;
+    }
+}

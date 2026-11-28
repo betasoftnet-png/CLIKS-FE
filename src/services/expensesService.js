@@ -5,7 +5,7 @@ import { apiClient } from '../api/client';
  */
 export const expensesService = {
     getExpenses: async () => {
-        return await apiClient.get('/expenses');
+        return await apiClient.get('/expenses').then(res => res?.data?.data || res?.data || res);
     },
     createExpense: async (data) => {
         return await apiClient.post('/expenses', data);

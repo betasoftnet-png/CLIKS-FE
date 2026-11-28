@@ -135,7 +135,7 @@ export default function Public() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        color: '#1B6B3A'
+                        color: 'var(--accent-ink)'
                     }}>
                         <TrendingUp size={28} strokeWidth={2} />
                     </div>
@@ -183,7 +183,7 @@ export default function Public() {
             </div>
 
             <button style={{
-                background: '#1B6B3A',
+                background: 'var(--primary)',
                 color: 'white',
                 padding: '1.133rem 3.172rem',
                 borderRadius: '99px',
@@ -220,7 +220,7 @@ export default function Public() {
         <div style={{ padding: '0 0 1.812rem 0', fontFamily: "'Inter', sans-serif" }}>
             {/* Unique Header Banner */}
             <div style={{
-                background: 'linear-gradient(120deg, #1B6B3A 0%, #064E3B 100%)',
+                background: 'var(--primary-gradient)',
                 borderRadius: '16px',
                 padding: '2.719rem 1.812rem',
                 color: 'white',
@@ -254,7 +254,7 @@ export default function Public() {
                     <div style={{ display: 'flex', gap: '0.906rem' }}>
                         <button style={{
                             background: 'white',
-                            color: '#1B6B3A',
+                            color: 'var(--accent-ink)',
                             border: 'none',
                             padding: '0.68rem 1.359rem',
                             borderRadius: '12px',
@@ -294,7 +294,7 @@ export default function Public() {
                 <div style={{ flex: 1 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
                         <h2 style={{ fontSize: '1.359rem', fontWeight: '700', color: '#1f2937' }}>Featured Games</h2>
-                        <a href="#" style={{ color: '#1B6B3A', fontWeight: '600', textDecoration: 'none', fontSize: '0.816rem' }}>View All</a>
+                        <a href="#" style={{ color: 'var(--accent-ink)', fontWeight: '600', textDecoration: 'none', fontSize: '0.816rem' }}>View All</a>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.359rem' }}>
@@ -329,7 +329,7 @@ export default function Public() {
                                 <h3 style={{ fontSize: '1.586rem', fontWeight: '800', color: '#111827', margin: '0.453rem 0' }}>Ultimate Trading Simulator</h3>
                                 <p style={{ color: '#6b7280', marginBottom: '1.359rem', lineHeight: '1.5' }}>Experience the thrill of the stock market without the risk. Trade with virtual currency and compete.</p>
                                 <button style={{
-                                    background: '#1B6B3A',
+                                    background: 'var(--primary)',
                                     color: 'white',
                                     border: 'none',
                                     padding: '0.68rem 1.812rem',
@@ -417,7 +417,7 @@ export default function Public() {
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.359rem' }}>
                             <h3 style={{ fontSize: '1.133rem', fontWeight: '700', color: '#1f2937' }}>Top Players</h3>
-                            <button style={{ background: 'none', border: 'none', color: '#1B6B3A', fontWeight: '600', cursor: 'pointer', fontSize: '0.816rem' }}>
+                            <button style={{ background: 'none', border: 'none', color: 'var(--accent-ink)', fontWeight: '600', cursor: 'pointer', fontSize: '0.816rem' }}>
                                 This Week
                             </button>
                         </div>
@@ -559,7 +559,7 @@ export default function Public() {
             <div className="space-y-8">
                 {/* Header Section */}
                 <div style={{
-                    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
+                    background: 'var(--primary-gradient)',
                     borderRadius: '16px',
                     padding: '2.719rem',
                     color: 'white',
@@ -656,7 +656,7 @@ export default function Public() {
                                 padding: '0.68rem 1.359rem',
                                 borderRadius: '999px',
                                 border: filter === tab ? 'none' : '1px solid #E5E7EB',
-                                background: filter === tab ? '#1B6B3A' : 'white',
+                                background: filter === tab ? 'var(--primary)' : 'white',
                                 color: filter === tab ? 'white' : '#6B7280',
                                 fontWeight: '600',
                                 cursor: 'pointer',
@@ -772,7 +772,7 @@ export default function Public() {
                                     right: '0.906rem',
                                     padding: '0.227rem 0.68rem',
                                     background: 'white',
-                                    color: '#1B6B3A',
+                                    color: 'var(--accent-ink)',
                                     borderRadius: '999px',
                                     fontSize: '0.725rem',
                                     fontWeight: '800',
@@ -856,18 +856,18 @@ export default function Public() {
                                         padding: '0.453rem 1.133rem',
                                         border: '1px solid #1B6B3A',
                                         borderRadius: '8px',
-                                        color: '#1B6B3A',
+                                        color: 'var(--accent-ink)',
                                         background: 'transparent',
                                         fontWeight: '600',
                                         cursor: 'pointer'
                                     }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#1B6B3A';
+                                            e.currentTarget.style.background = 'var(--primary-hover)';
                                             e.currentTarget.style.color = 'white';
                                         }}
                                         onMouseLeave={(e) => {
                                             e.currentTarget.style.background = 'transparent';
-                                            e.currentTarget.style.color = '#1B6B3A';
+                                            e.currentTarget.style.color = 'var(--accent-ink)';
                                         }}
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -1051,7 +1051,7 @@ export default function Public() {
                                         marginTop: '0.906rem',
                                         width: '100%',
                                         padding: '0.906rem',
-                                        background: '#1B6B3A',
+                                        background: 'var(--primary)',
                                         color: 'white',
                                         border: 'none',
                                         borderRadius: '12px',

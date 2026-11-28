@@ -732,8 +732,8 @@ body.dark,
 .dark-theme .sidebar,
 .dark .sidebar,
 [data-theme='dark'] .sidebar-container {
-  background: #0B111E !important;
-  background-color: #0B111E !important;
+  background: var(--accent-sidebar) !important;
+  background-color: var(--accent-sidebar) !important;
   border-right: 1px solid #1E293B !important;
 }
 
@@ -768,14 +768,14 @@ body.dark,
 .dark .sidebar-item.active,
 html[data-theme='dark'] .sidebar-item.active,
 body.dark-theme .sidebar-item.active {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
-  background-color: #10B981 !important;
+  background: var(--primary-gradient) !important;
+  background-color: var(--primary) !important;
   color: #FFFFFF !important;
   font-weight: 800 !important;
   border-radius: 8px !important;
   border: none !important;
   border-left: none !important;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 4px 14px var(--accent-shadow) !important;
 }
 
 [data-theme='dark'] .sidebar-item.active .sidebar-label,
@@ -799,10 +799,10 @@ body.dark-theme .sidebar-item.active {
 .dark-theme .sidebar-item.has-children.active,
 .dark .sidebar-item.child-selected,
 .dark .sidebar-item.has-children.active {
-  background: rgba(16, 185, 129, 0.12) !important;
-  background-color: rgba(16, 185, 129, 0.12) !important;
-  color: #34D399 !important;
-  border: 1px solid rgba(16, 185, 129, 0.25) !important;
+  background: var(--accent-tint) !important;
+  background-color: var(--accent-tint) !important;
+  color: var(--accent-ink) !important;
+  border: 1px solid var(--accent-shadow) !important;
   border-radius: 8px !important;
   box-shadow: none !important;
 }
@@ -823,11 +823,11 @@ body.dark-theme .sidebar-item.active {
 .dark-theme .sidebar-item.has-children.active svg,
 .dark .sidebar-item.child-selected svg,
 .dark .sidebar-item.has-children.active svg {
-  color: #34D399 !important;
+  color: var(--accent-ink) !important;
 }
 
 [data-theme='dark'] .sidebar-footer-container {
-  background: #0B111E !important;
+  background: var(--accent-sidebar) !important;
   border-top: 1px solid #1E293B !important;
 }
 
@@ -862,7 +862,7 @@ body.dark-theme .sidebar-item.active {
 [data-theme='dark'] .topbar,
 .dark-theme .topbar,
 .dark .topbar {
-  background: #081B11 !important;
+  background: var(--accent-topbar) !important;
   border-bottom: 1px solid #1E293B !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
@@ -877,7 +877,7 @@ body.dark-theme .sidebar-item.active {
 .dark-theme .topbar-toolbar-toggle-wrapper,
 .dark .topbar-toolbar-toggle-wrapper {
   background-color: #081B11 !important;
-  background: #081B11 !important;
+  background: var(--accent-topbar) !important;
   border-bottom: 1px solid #1E293B !important;
 }
 
@@ -1744,3 +1744,96 @@ html, body, .sidebar, .topbar, .main-content-area, .card, .stat-card {
   color: #CBD5E1 !important;
 }
 
+/* Responsive Grid & Containers for Transactions and Segregation */
+.cliks-metrics-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.133rem;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .cliks-metrics-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cliks-metrics-grid-4 {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.cliks-tabs-scroll {
+  display: flex;
+  gap: 0.68rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  max-width: 100%;
+  flex-shrink: 1;
+}
+
+.cliks-tabs-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cliks-responsive-header {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 1.359rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .cliks-responsive-header {
+    align-items: flex-start;
+  }
+  .cliks-responsive-header > div:last-child {
+    width: 100%;
+  }
+  .cliks-responsive-header button[data-tour="finance-add-transaction"],
+  .cliks-responsive-header button[data-tour="segregation-create"] {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Brand controls shared by Books, Payments, and Social. */
+.btn-primary,
+button.btn-primary {
+  background-color: var(--primary) !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover,
+.accent-action:hover:not(:disabled),
+.app-root button[style*="--primary-gradient"]:hover:not(:disabled),
+.app-root button[style*="background: var(--primary)"]:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.topbar,
+[data-theme='dark'] .topbar,
+.dark-theme .topbar,
+.dark .topbar {
+  background: var(--accent-topbar) !important;
+}
+
+.top-nav-links .top-nav-link.active,
+[data-theme='dark'] .topbar .top-nav-link.active {
+  background: var(--primary) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.app-root :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+.app-root :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible {
+  border-color: var(--accent-focus) !important;
+  box-shadow: 0 0 0 2px var(--accent-shadow) !important;
+}

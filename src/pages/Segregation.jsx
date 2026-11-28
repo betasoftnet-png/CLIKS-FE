@@ -19,11 +19,10 @@ import {
     MoreVertical,
     Edit2
 } from 'lucide-react';
-import { goalWalletService, financePlusService } from '../services';
+import { goalWalletService } from '../services';
 import '../App.css';
 import { customConfirm } from '../utils/customConfirm';
 import { useCurrency, useAuth } from '../context';
-import FinancialGoals from './books/components/FinancialGoals';
 
 const Segregation = () => {
     const { currency, formatCurrency } = useCurrency();
@@ -35,13 +34,6 @@ const Segregation = () => {
     const queryClient = useQueryClient();
     const { user } = useAuth();
     const uid = user?.id ?? user?.email ?? 'guest';
-
-    // Financial Goals Queries & Mutations
-    const { data: goalsList = [] } = useQuery({ 
-        queryKey: ['finance-goals'], 
-        queryFn: financePlusService.getGoals, 
-        enabled: !!uid && uid !== 'guest' 
-    });
 
     const [toast, setToast] = useState(null);
     const showToast = (message, type = 'success') => {
@@ -55,33 +47,6 @@ const Segregation = () => {
         }
     }, [toast]);
 
-    const goalCreateMutation = useMutation({ 
-        mutationFn: (data) => financePlusService.createGoal(data), 
-        onSuccess: () => {
-            queryClient.invalidateQueries(['finance-goals']);
-            showToast("Goal created successfully!");
-        }
-    });
-    
-    const goalUpdateMutation = useMutation({ 
-        mutationFn: ({ id, data }) => financePlusService.updateGoal(id, data), 
-        onSuccess: (res, variables) => {
-            queryClient.setQueryData(['finance-goals'], old => {
-                if (!Array.isArray(old)) return old;
-                return old.map(g => g.id === variables.id ? { ...g, ...variables.data } : g);
-            });
-            queryClient.invalidateQueries(['finance-goals']);
-            showToast("Goal updated successfully!");
-        }
-    });
-    
-    const goalDeleteMutation = useMutation({ 
-        mutationFn: (id) => financePlusService.deleteGoal(id), 
-        onSuccess: () => {
-            queryClient.invalidateQueries(['finance-goals']);
-            showToast("Goal removed.");
-        }
-    });
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isAddMoneyModalOpen, setIsAddMoneyModalOpen] = useState(false);
     const [selectedWallet, setSelectedWallet] = useState(null);
@@ -369,16 +334,16 @@ const Segregation = () => {
     });
 
     return (
-        <div style={{ padding: '1.133rem 2.266rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="segregation-page" style={{ background: 'var(--bg-color, #F0F9F4)', minHeight: '100%', minWidth: 0, boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Main Title Bar */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
+            <div className="cliks-responsive-header">
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem', flexWrap: 'wrap' }}>
                         <div style={{ 
                             width: '44px', 
                             height: '44px', 
                             borderRadius: '14px', 
-                            background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                            background: 'var(--primary-gradient)',
                             display: 'flex', 
                             alignItems: 'center', 
                             justifyContent: 'center', 
@@ -462,7 +427,7 @@ const Segregation = () => {
                     style={{ 
                         display: 'flex', alignItems: 'center', gap: '0.544rem', 
                         padding: '0.816rem 1.586rem', borderRadius: '14px', 
-                        background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', 
+                        background: 'var(--primary-gradient)', color: 'white', border: 'none',
                         fontWeight: '800', fontSize: '0.906rem', cursor: 'pointer',
                         boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)',
                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -475,11 +440,8 @@ const Segregation = () => {
                 </button>
             </div>
 
-            {/* Scrollable Main Content Wrapper */}
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', paddingBottom: '1.812rem' }}>
-
             {/* Statistics Overhead Panel */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.359rem', marginBottom: '2.266rem' }}>
+            <div className="cliks-metrics-grid-4" style={{ marginBottom: '2.266rem' }}>
                 {[
                     { label: 'Target Wallets Active', value: activeWallets, icon: Target, color: '#059669', bg: '#ECFDF5' },
                     { label: 'Total Isolated Funds', value: formatCurrency(totalAllocated), icon: CurrencyIcon, color: '#10B981', bg: '#DCF2E4' },
@@ -494,11 +456,13 @@ const Segregation = () => {
                         padding: '1.359rem', 
                         borderRadius: '20px', 
                         border: '1px solid #E2E8F0', 
-                        boxShadow: '0 4px 20px -4px rgba(0,0,0,0.02)' 
+                        boxShadow: '0 4px 20px -4px rgba(0,0,0,0.02)',
+                        minWidth: 0,
+                        gap: '0.75rem'
                     }}>
-                        <div>
-                            <p data-tour={`segregation-stat-heading-${idx}`} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', margin: '0 0 0.227rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{stat.label}</p>
-                            <h3 style={{ fontSize: '1.359rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
+                        <div style={{ minWidth: 0, overflow: 'hidden' }}>
+                            <p data-tour={`segregation-stat-heading-${idx}`} style={{ fontSize: '0.68rem', fontWeight: '800', color: '#64748B', margin: '0 0 0.227rem 0', textTransform: 'uppercase', letterSpacing: '0.05em', whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{stat.label}</p>
+                            <h3 style={{ fontSize: '1.359rem', fontWeight: '950', color: '#0F172A', letterSpacing: '-0.02em', margin: 0, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{stat.value}</h3>
                         </div>
                         <div data-tour={`segregation-stat-icon-${idx}`} style={{ width: '48px', height: '48px', borderRadius: '14px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
                             <stat.icon size={22} />
@@ -508,16 +472,17 @@ const Segregation = () => {
             </div>
 
             {/* Container Category Filter Pill Navigation Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '1.812rem', flexWrap: 'wrap' }}>
+            <div className="cliks-tabs-scroll" style={{ alignItems: 'center', marginBottom: '1.812rem', flexWrap: 'wrap' }}>
                 {[
-                    { key: 'all', label: `All Containers [${categoryCounts.all}]` },
-                    { key: 'in_progress', label: `In Progress [${categoryCounts.inProgress}]` },
-                    { key: 'target_met', label: `Target Met [${categoryCounts.targetMet}]` },
-                    { key: 'claimed', label: `Claimed [${categoryCounts.claimed}]` }
+                    { key: 'all', tourKey: 'all', label: `All Containers [${categoryCounts.all}]` },
+                    { key: 'in_progress', tourKey: 'in-progress', label: `In Progress [${categoryCounts.inProgress}]` },
+                    { key: 'target_met', tourKey: 'target-met', label: `Target Met [${categoryCounts.targetMet}]` },
+                    { key: 'claimed', tourKey: 'claimed', label: `Claimed [${categoryCounts.claimed}]` }
                 ].map(pill => {
                     const isActive = categoryFilter === pill.key;
                     return (
                         <button
+                            data-tour={`segregation-filter-${pill.tourKey}`}
                             key={pill.key}
                             type="button"
                             onClick={() => setCategoryFilter(pill.key)}
@@ -527,11 +492,13 @@ const Segregation = () => {
                                 fontWeight: '800',
                                 fontSize: '0.77rem',
                                 border: isActive ? 'none' : '1px solid #E2E8F0',
-                                background: isActive ? '#064E3B' : 'white',
+                                background: isActive ? 'var(--primary)' : 'white',
                                 color: isActive ? 'white' : '#475569',
                                 cursor: 'pointer',
                                 transition: 'all 0.15s ease',
-                                boxShadow: isActive ? '0 4px 12px rgba(6, 78, 59, 0.2)' : 'none'
+                                boxShadow: isActive ? '0 4px 12px rgba(6, 78, 59, 0.2)' : 'none',
+                                whiteSpace: 'nowrap',
+                                flexShrink: 0
                             }}
                         >
                             {pill.label}
@@ -551,7 +518,7 @@ const Segregation = () => {
                     background: 'white', 
                     borderRadius: '16px', 
                     border: '1px solid #E2E8F0', 
-                    padding: '5.438rem 1.812rem', 
+                    padding: 'clamp(1.812rem, 5vh, 3rem) 1.812rem',
                     textAlign: 'center',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.02)'
                 }}>
@@ -578,7 +545,7 @@ const Segregation = () => {
                     background: 'white', 
                     borderRadius: '16px', 
                     border: '1px solid #E2E8F0', 
-                    padding: '4.531rem 1.812rem', 
+                    padding: 'clamp(1.812rem, 5vh, 3rem) 1.812rem',
                     textAlign: 'center',
                     boxShadow: '0 10px 30px rgba(0,0,0,0.02)'
                 }}>
@@ -601,7 +568,7 @@ const Segregation = () => {
                     </p>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.586rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1.586rem' }}>
                     {filteredWallets.map((wallet) => {
                         const isClaimed = Boolean(
                             wallet.isClaimed || 
@@ -893,19 +860,6 @@ const Segregation = () => {
                 </div>
             )}
 
-            {/* Financial Goals Section */}
-            <div style={{ marginTop: '2.719rem' }}>
-                <FinancialGoals
-                    goals={goalsList}
-                    onCreate={data => goalCreateMutation.mutate(data)}
-                    onUpdate={(id, data) => goalUpdateMutation.mutate({ id, data })}
-                    onDelete={id => goalDeleteMutation.mutate(id)}
-                    currencySymbol={currency.symbol}
-                    onToast={showToast}
-                />
-            </div>
-            </div>
-
             {/* SETUP NEW WALLET MODAL */}
             {isCreateModalOpen && (
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.3)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
@@ -996,7 +950,7 @@ const Segregation = () => {
                                     padding: '0.997rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
-                                    background: isSubmitDisabled ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: isSubmitDisabled ? '#94A3B8' : 'var(--primary-gradient)',
                                     color: 'white', 
                                     fontWeight: '850', 
                                     fontSize: '0.906rem', 
@@ -1064,7 +1018,7 @@ const Segregation = () => {
                                     padding: '0.997rem', 
                                     borderRadius: '14px', 
                                     border: 'none', 
-                                    background: (!addAmount || Number(addAmount) <= 0) ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
+                                    background: (!addAmount || Number(addAmount) <= 0) ? '#94A3B8' : 'var(--primary-gradient)',
                                     color: 'white', 
                                     fontWeight: '850', 
                                     fontSize: '0.906rem', 

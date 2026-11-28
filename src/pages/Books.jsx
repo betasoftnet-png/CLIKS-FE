@@ -64,7 +64,7 @@ const Books = () => {
     const uid = user?.id ?? user?.email ?? 'guest';
 
     // Queries
-    const { data: dbTransactions = [] } = useQuery({
+    const { data: dbTransactions = [], error: transactionsError } = useQuery({
         queryKey: ['transactions'],
         queryFn: () => transactionsService.getTransactions(),
         enabled: !!uid && uid !== 'guest',
@@ -107,7 +107,51 @@ const Books = () => {
     }, [dashboardData]);
 
     const allTransactions = useMemo(() => {
-        return dbTransactions.map(tx => {
+        // If backend returned a successful array (even empty []), respect the real backend response
+        if (Array.isArray(dbTransactions) && !transactionsError) {
+            return dbTransactions.map(tx => {
+                let type = tx.type || '';
+                if (type.toLowerCase() === 'income') type = 'Income';
+                if (type.toLowerCase() === 'expense') type = 'Expense';
+
+                let name = tx.name || tx.incomeName || tx.expenseName || tx.sourceName || tx.title || '';
+                if (name.startsWith('[Add] ')) {
+                    name = name.slice(6);
+                }
+
+                return {
+                    ...tx,
+                    type,
+                    name,
+                    amount: parseFloat(tx.amount) || 0
+                };
+            });
+        }
+
+        // Only when there is an actual network error or unauthenticated offline session, check local records
+        let list = [];
+        if (transactionsError) {
+            try {
+                const incomeKey = `cliks_finance_income_v2_${uid}`;
+                const expensesKey = `cliks_finance_expenses_${uid}`;
+                const addIncomeKey = `cliks_finance_add_income_${uid}`;
+                const addExpensesKey = `cliks_finance_add_expenses_${uid}`;
+
+                const localInc = JSON.parse(localStorage.getItem(incomeKey) || '[]');
+                const localExp = JSON.parse(localStorage.getItem(expensesKey) || '[]');
+                const localAddInc = JSON.parse(localStorage.getItem(addIncomeKey) || '[]');
+                const localAddExp = JSON.parse(localStorage.getItem(addExpensesKey) || '[]');
+
+                list = [
+                    ...localInc.map(i => ({ ...i, type: 'Income' })),
+                    ...localExp.map(e => ({ ...e, type: 'Expense' })),
+                    ...localAddInc.map(i => ({ ...i, type: 'Income' })),
+                    ...localAddExp.map(e => ({ ...e, type: 'Expense' })),
+                ];
+            } catch {}
+        }
+
+        return list.map(tx => {
             let type = tx.type || '';
             if (type.toLowerCase() === 'income') type = 'Income';
             if (type.toLowerCase() === 'expense') type = 'Expense';
@@ -124,7 +168,7 @@ const Books = () => {
                 amount: parseFloat(tx.amount) || 0
             };
         });
-    }, [dbTransactions]);
+    }, [dbTransactions, transactionsError, uid]);
 
     return (
         <>
@@ -133,8 +177,11 @@ const Books = () => {
             </div>
 
             <div className="content-wrapper">
-                <div className="analytics-section-wrapper">
-                    <AnalyticsSection />
+                <div data-tour="report-finance-analytics" className="analytics-section-wrapper">
+                    <AnalyticsSection
+                        transactions={allTransactions}
+                        error={allTransactions.length > 0 ? null : transactionsError}
+                    />
                 </div>
                 <div className="dashboard-grid books-dashboard-grid">
 
@@ -191,7 +238,7 @@ const Books = () => {
 
                 </div>
                 {/* Interactive Analytics Section */}
-                <div style={{ marginTop: '2.719rem' }}>
+                <div data-tour="report-interactive-analytics" style={{ marginTop: '2.719rem' }}>
                     <FinanceAnalytics 
                         transactions={allTransactions} 
                         currencySymbol={currencySymbol} 
@@ -199,7 +246,7 @@ const Books = () => {
                 </div>
 
                 {/* Reports Engine Section */}
-                <div style={{ marginTop: '2.719rem', paddingBottom: '2.719rem' }}>
+                <div data-tour="report-reports-engine" style={{ marginTop: '2.719rem', paddingBottom: '5.5rem' }}>
                     <FinanceReports 
                         transactions={allTransactions} 
                         budget={budget} 

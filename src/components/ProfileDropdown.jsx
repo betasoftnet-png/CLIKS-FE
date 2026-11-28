@@ -659,6 +659,7 @@ export function ProfileDropdown({
             <AnimatePresence>
                 {open && (
                     <motion.div
+                        className="profile-dropdown-menu"
                         initial={{ opacity: 0, scale: 0.95, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -947,6 +948,8 @@ export function ProfileDropdown({
 
                                     {/* Manage Account Button */}
                                     <button
+                                        type="button"
+                                        className="profile-manage-account-btn"
                                         onClick={() => {
                                             const token = localStorage.getItem('bnx_auth_token') ||
                                                           localStorage.getItem('books_auth_token') ||
@@ -962,9 +965,10 @@ export function ProfileDropdown({
                                             setOpen(false);
                                         }}
                                         style={{
-                                            display: 'flex',
+                                            display: 'inline-flex',
                                             alignItems: 'center',
-                                            gap: '7px',
+                                            justifyContent: 'center',
+                                            gap: '6px',
                                             padding: '6px 14px',
                                             borderRadius: '999px',
                                             border: '1px solid #e5e7eb',
@@ -974,7 +978,9 @@ export function ProfileDropdown({
                                             color: '#374151',
                                             cursor: 'pointer',
                                             boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                                            transition: 'all 0.15s ease'
+                                            transition: 'all 0.15s ease',
+                                            whiteSpace: 'nowrap',
+                                            lineHeight: '1.2'
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.backgroundColor = '#f9fafb';
@@ -985,8 +991,10 @@ export function ProfileDropdown({
                                             e.currentTarget.style.borderColor = '#e5e7eb';
                                         }}
                                     >
-                                        <UserCog size={13} color="#4b5563" />
-                                        {t ? t('manageYourAccount', 'Manage your account') : 'Manage your account'}
+                                        <UserCog size={13} color="#4b5563" style={{ flexShrink: 0 }} />
+                                        <span style={{ whiteSpace: 'nowrap' }}>
+                                            {t ? t('manageYourAccount', 'Manage your account') : 'Manage your account'}
+                                        </span>
                                     </button>
 
                                     {/* Other Logged-in IDs & Account Switcher */}

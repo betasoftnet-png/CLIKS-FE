@@ -8,9 +8,6 @@ import {
     Tag,
     Edit2,
     Trash2,
-    Filter,
-    Search,
-    ChevronDown,
     Receipt,
     Coffee,
     Zap,
@@ -19,6 +16,8 @@ import {
     CreditCard
 } from 'lucide-react';
 import '../App.css';
+import BookEntryFilters, { useBookEntryFilters } from '../components/BookEntryFilters';
+import { openBookEntry } from '../lib/bookEntry';
 import { formatCurrency } from '../lib/formatCurrency';
 
 const ICON_MAP = {
@@ -52,14 +51,16 @@ const Expenses = () => {
     const queryClient = useQueryClient();
     
     // Fetch expenses
-    const { data: expenseData = [], isLoading } = useQuery({
+    const { data: expenseData = [], isLoading, isError, error } = useQuery({
         queryKey: ['expenses'],
         queryFn: async () => {
-            const data = await expensesService.getExpenses();
-            return data.map(item => ({
+            const raw = await expensesService.getExpenses();
+            const list = Array.isArray(raw) ? raw : (Array.isArray(raw?.data) ? raw.data : []);
+            return list.map(item => ({
                 id: item.id,
-                name: item.name,
-                amount: parseFloat(item.amount),
+                record: item,
+                name: item.name || item.description || item.title || '',
+                amount: parseFloat(item.amount) || 0,
                 category: item.category,
                 date: item.date || item.created_at,
                 paymentMethod: item.payment_method || 'N/A',
@@ -73,6 +74,11 @@ const Expenses = () => {
         mutationFn: (id) => expensesService.deleteExpense(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
         }
     });
 
@@ -84,6 +90,39 @@ const Expenses = () => {
 
     const totalExpenses = expenseData.reduce((sum, item) => sum + item.amount, 0);
     const avgDaily = (totalExpenses / 30).toFixed(2); // Using a 30-day baseline
+
+    // Compute month-over-month change from real transaction dates if available
+    const momExpenseChange = (() => {
+        const now = new Date();
+        const thisMonth = now.getMonth();
+        const thisYear = now.getFullYear();
+        const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+        const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
+
+        let thisMonthSum = 0;
+        let lastMonthSum = 0;
+        expenseData.forEach(item => {
+            if (!item.date) return;
+            const d = new Date(item.date);
+            if (isNaN(d.getTime())) return;
+            if (d.getFullYear() === thisYear && d.getMonth() === thisMonth) {
+                thisMonthSum += item.amount;
+            } else if (d.getFullYear() === lastMonthYear && d.getMonth() === lastMonth) {
+                lastMonthSum += item.amount;
+            }
+        });
+
+        if (lastMonthSum > 0) {
+            const pct = Math.round(((thisMonthSum - lastMonthSum) / lastMonthSum) * 100);
+            return `${pct >= 0 ? '+' : ''}${pct}% vs last month`;
+        }
+        if (thisMonthSum > 0) {
+            return 'Active this month';
+        }
+        return 'Updated live';
+    })();
+
+    const filters = useBookEntryFilters(expenseData, item => item.name);
 
     if (isLoading) {
         return (
@@ -105,19 +144,20 @@ const Expenses = () => {
                     </div>
                     <p style={{ margin: 0, color: 'var(--text-muted, #64748B)', fontSize: '0.816rem', fontWeight: 500 }}>Monitor and control your spending habits</p>
                 </div>
-                <button className="btn-primary" data-tour="expense-add-button">
+                <button type="button" className="btn-primary" data-tour="expense-add-button" onClick={() => openBookEntry('expense')}>
                     <Plus size={18} />
                     <span>Add Expense</span>
                 </button>
             </div>
 
             <div className="content-wrapper">
+                {isError && <p role="alert" style={{ color: 'var(--accent-error, #B91C1C)', marginBottom: '1rem' }}>{error?.message || 'Unable to load entries.'}</p>}
                 {/* Stats Grid */}
                 <div className="expense-stats-grid">
                     <ExpenseStat
                         label="Total Spend"
                         value={formatCurrency(totalExpenses)}
-                        subtext="+5% vs last month"
+                        subtext={momExpenseChange}
                         icon={TrendingDown}
                         colorClass="icon-red"
                     />
@@ -138,25 +178,7 @@ const Expenses = () => {
                 </div>
 
                 {/* Controls */}
-                <div className="controls-bar">
-                    <div className="search-wrapper">
-                        <Search size={18} className="search-icon" />
-                        <input type="text" placeholder="Search expenses..." className="search-input" />
-                    </div>
-
-                    <div className="flex gap-3">
-                        <button className="filter-btn">
-                            <Filter size={16} />
-                            <span>Category</span>
-                            <ChevronDown size={14} />
-                        </button>
-                        <button className="filter-btn">
-                            <Calendar size={16} />
-                            <span>This Month</span>
-                            <ChevronDown size={14} />
-                        </button>
-                    </div>
-                </div>
+                <BookEntryFilters label="Search expenses..." categoryLabel="All categories" filters={filters} />
 
                 {/* Detailed List */}
                 <div className="expense-list-container">
@@ -172,14 +194,14 @@ const Expenses = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {expenseData.length === 0 ? (
+                            {filters.visibleRecords.length === 0 ? (
                                 <tr>
                                     <td colSpan="6" style={{ textAlign: 'center', padding: '2.719rem', color: '#94a3b8' }}>
                                         No expenses found.
                                     </td>
                                 </tr>
                             ) : (
-                                expenseData.map((item) => (
+                                filters.visibleRecords.map((item) => (
                                     <tr key={item.id}>
                                         <td>
                                             <div className="flex items-center gap-3">
@@ -204,7 +226,7 @@ const Expenses = () => {
                                         <td className="font-bold text-danger">-{formatCurrency(item.amount)}</td>
                                         <td>
                                             <div className="flex gap-2">
-                                                <button className="action-btn hover-blue" title="Edit">
+                                                <button type="button" className="action-btn hover-blue" title="Edit" onClick={() => openBookEntry('expense', item.record)}>
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button 

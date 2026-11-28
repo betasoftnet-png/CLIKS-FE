@@ -101,6 +101,8 @@ const PurchaseDetails = () => {
     const [showPointsModal, setShowPointsModal] = useState(false);
     const [calcAmountInput, setCalcAmountInput] = useState('10000');
     const [isShopModalOpen, setIsShopModalOpen] = useState(false);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [syncError, setSyncError] = useState('');
 
     // Supplier Request Modal states
     const [isAddSupplierModalOpen, setIsAddSupplierModalOpen] = useState(false);
@@ -131,16 +133,11 @@ const PurchaseDetails = () => {
     const { data: rawPurchases = [], isLoading: loadingPurchases } = useQuery({
         queryKey: ['customer-purchases'],
         queryFn: async () => {
-            try {
-                const res = await financePlusService.getPurchases();
-                if (Array.isArray(res)) return res;
-                if (Array.isArray(res?.data)) return res.data;
-                if (Array.isArray(res?.purchases)) return res.purchases;
-                return [];
-            } catch (e) {
-                console.error('Failed to load purchases:', e);
-                return [];
-            }
+            const res = await financePlusService.getPurchases();
+            if (Array.isArray(res)) return res;
+            if (Array.isArray(res?.data)) return res.data;
+            if (Array.isArray(res?.purchases)) return res.purchases;
+            return [];
         },
         refetchInterval: 5000
     });
@@ -381,12 +378,19 @@ const PurchaseDetails = () => {
         return [...matches, ...nonMatches];
     }, [selectedShopPurchases, warrantySearchQuery]);
 
-    const handleSync = () => {
-        queryClient.invalidateQueries(['customer-purchases']);
-        queryClient.invalidateQueries(['loyalty-stats']);
-        queryClient.invalidateQueries(['active-integrations']);
-        queryClient.invalidateQueries(['customer-merchants-loyalty']);
-        queryClient.invalidateQueries(['customer-loyalty-wallet']);
+    const handleSync = async () => {
+        setSyncError('');
+        setIsSyncing(true);
+        try {
+            await Promise.all([
+                'customer-purchases', 'loyalty-stats', 'active-integrations',
+                'customer-merchants-loyalty', 'customer-loyalty-wallet',
+            ].map(key => queryClient.invalidateQueries({ queryKey: [key] }, { throwOnError: true })));
+        } catch (error) {
+            setSyncError(error?.message || 'Unable to sync purchases.');
+        } finally {
+            setIsSyncing(false);
+        }
     };
 
     const toggleInvoiceItemsInline = (invId) => {
@@ -452,21 +456,23 @@ const PurchaseDetails = () => {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     <button
+                        data-tour="purchases-sync-data"
                         onClick={handleSync}
-                        disabled={loadingPurchases}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '10px', fontWeight: '700', color: '#1B6B3A', cursor: 'pointer', opacity: loadingPurchases ? 0.6 : 1 }}
+                        disabled={loadingPurchases || isSyncing}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '10px', fontWeight: '700', color: 'var(--accent-ink)', cursor: 'pointer', opacity: loadingPurchases || isSyncing ? 0.6 : 1 }}
                     >
-                        <RefreshCcw size={18} className={loadingPurchases ? 'animate-spin' : ''} /> {loadingPurchases ? 'Syncing...' : 'Sync Data'}
+                        <RefreshCcw size={18} className={loadingPurchases || isSyncing ? 'animate-spin' : ''} /> {loadingPurchases || isSyncing ? 'Syncing...' : 'Sync Data'}
                     </button>
                     <button
                         data-tour="purchases-link-store"
                         onClick={() => setIsShopModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: '#1B6B3A', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 2px 8px rgba(27,107,58,0.2)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 1.087rem', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '10px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 2px 8px rgba(27,107,58,0.2)' }}
                     >
                         <ExternalLink size={16} /> Link Store
                     </button>
                 </div>
             </div>
+            {syncError && <p role="alert" style={{ color: '#DC2626', marginBottom: '0.906rem' }}>{syncError}</p>}
 
             {/* Active Integrations & Loyalty Points on TOP for UI Context */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.359rem', marginBottom: '1.586rem' }}>
@@ -475,7 +481,7 @@ const PurchaseDetails = () => {
                 <div style={{ background: '#fff', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                         <h3 data-tour="purchases-stores-heading" style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
-                            <Building2 size={18} color="#1B6B3A" /> Active Store Integrations
+                            <Building2 size={18} color="var(--accent-ink)" /> Active Store Integrations
                         </h3>
                         <span style={{ fontSize: '0.652rem', fontWeight: '800', background: '#ECFDF5', color: '#059669', padding: '0.181rem 0.544rem', borderRadius: '12px' }}>
                             {connectedShops.length} Active Stores
@@ -543,11 +549,11 @@ const PurchaseDetails = () => {
                 </div>
 
                 {/* 2. Loyalty & Rewards Overview Top Card */}
-                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div data-tour="purchases-loyalty-points" style={{ background: '#fff', borderRadius: '16px', padding: '1.359rem', border: '1px solid #E2E8F0', boxShadow: '0 4px 12px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
-                            <h3 style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
-                                <Star size={18} color="#1B6B3A" /> Overall Loyalty Points Wallet
+                            <h3 data-tour="purchases-loyalty-heading" style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
+                                <Star size={18} color="var(--accent-ink)" /> Overall Loyalty Points Wallet
                             </h3>
                             <button 
                                 onClick={() => setShowPointsModal(true)}
@@ -560,7 +566,7 @@ const PurchaseDetails = () => {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.906rem 1.133rem', background: '#F0FDF4', borderRadius: '16px', border: '1px solid #BBF7D0', marginBottom: '0.77rem' }}>
                             <div>
                                 <div style={{ fontSize: '0.652rem', color: '#166534', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.03em' }}>TOTAL AVAILABLE POINTS</div>
-                                <div style={{ fontSize: '1.586rem', fontWeight: 900, color: '#1B6B3A', margin: '2px 0' }}>
+                                <div style={{ fontSize: '1.586rem', fontWeight: 900, color: 'var(--accent-ink)', margin: '2px 0' }}>
                                     {Number(currentPoints).toLocaleString()} <span style={{ fontSize: '0.816rem', fontWeight: 800 }}>pts</span>
                                 </div>
                                 <div style={{ fontSize: '0.707rem', color: '#15803D', fontWeight: '700' }}>
@@ -618,7 +624,7 @@ const PurchaseDetails = () => {
                                 padding: '0.544rem 0.997rem',
                                 borderRadius: '12px',
                                 border: 'none',
-                                background: isActive ? '#1B6B3A' : '#F1F5F9',
+                                background: isActive ? 'var(--primary)' : '#F1F5F9',
                                 color: isActive ? '#FFFFFF' : '#475569',
                                 fontWeight: '800',
                                 fontSize: '0.77rem',
@@ -654,7 +660,7 @@ const PurchaseDetails = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                             <h3 data-tour="purchases-store-points-heading" style={{ fontSize: '1.042rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
-                                <Store size={20} color="#1B6B3A" /> Points Earned Across Stores
+                                <Store size={20} color="var(--accent-ink)" /> Points Earned Across Stores
                             </h3>
                             <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 View how many loyalty points you have collected in each CLIKS Business store and their redeemable value.
@@ -664,7 +670,7 @@ const PurchaseDetails = () => {
 
                     {loadingMerchants ? (
                         <div style={{ padding: '2.719rem', textAlign: 'center', background: '#fff', borderRadius: '20px', border: '1px solid #E2E8F0' }}>
-                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.453rem' }} />
+                            <RefreshCcw size={28} className="animate-spin" style={{ color: 'var(--accent-ink)', marginBottom: '0.453rem' }} />
                             <div style={{ color: '#64748B', fontWeight: 600 }}>Loading store balances...</div>
                         </div>
                     ) : rawMerchants.length === 0 ? (
@@ -676,7 +682,7 @@ const PurchaseDetails = () => {
                             </p>
                             <button
                                 onClick={() => setIsShopModalOpen(true)}
-                                style={{ padding: '0.544rem 1.133rem', borderRadius: '10px', background: '#1B6B3A', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer' }}
+                                style={{ padding: '0.544rem 1.133rem', borderRadius: '10px', background: 'var(--primary)', color: 'white', border: 'none', fontWeight: 800, cursor: 'pointer' }}
                             >
                                 Link A Store
                             </button>
@@ -694,7 +700,7 @@ const PurchaseDetails = () => {
                                     <div key={merchant.id || merchant.business_id || mIdx} style={{ background: '#FFFFFF', borderRadius: '20px', border: '1px solid #E2E8F0', padding: '1.223rem', display: 'flex', flexDirection: 'column', gap: '0.906rem', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.589rem' }}>
-                                                <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.997rem' }}>
+                                                <div style={{ width: 44, height: 44, borderRadius: '12px', background: '#F0FDF4', color: 'var(--accent-ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', fontSize: '0.997rem' }}>
                                                     {(merchant.business_name || 'Store').charAt(0).toUpperCase()}
                                                 </div>
                                                 <div>
@@ -716,7 +722,7 @@ const PurchaseDetails = () => {
 
                                             <div style={{ textAlign: 'right' }}>
                                                 <span style={{ fontSize: '0.616rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Available In Store</span>
-                                                <div style={{ fontSize: '1.223rem', fontWeight: 900, color: '#1B6B3A' }}>
+                                                <div style={{ fontSize: '1.223rem', fontWeight: 900, color: 'var(--accent-ink)' }}>
                                                     {Number(pts).toLocaleString()} <span style={{ fontSize: '0.725rem' }}>pts</span>
                                                 </div>
                                                 <span style={{ fontSize: '0.652rem', color: '#166534', fontWeight: 700 }}>
@@ -779,7 +785,7 @@ const PurchaseDetails = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem', flexWrap: 'wrap', gap: '0.453rem' }}>
                         <div>
                             <h3 data-tour="purchases-history-heading" style={{ fontSize: '1.042rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
-                                <History size={20} color="#1B6B3A" /> Loyalty Points Ledger
+                                <History size={20} color="var(--accent-ink)" /> Loyalty Points Ledger
                             </h3>
                             <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 Chronological audit trail of points earned from purchases and points redeemed across all stores.
@@ -789,7 +795,7 @@ const PurchaseDetails = () => {
 
                     {loadingWallet ? (
                         <div style={{ padding: '2.719rem', textAlign: 'center' }}>
-                            <RefreshCcw size={28} className="animate-spin" style={{ color: '#1B6B3A', marginBottom: '0.453rem' }} />
+                            <RefreshCcw size={28} className="animate-spin" style={{ color: 'var(--accent-ink)', marginBottom: '0.453rem' }} />
                             <div style={{ color: '#64748B', fontWeight: 600 }}>Loading point transactions...</div>
                         </div>
                     ) : (!walletData.transactions || walletData.transactions.length === 0) ? (
@@ -886,7 +892,7 @@ const PurchaseDetails = () => {
                                 ) : (
                                     <div>
                                         <h3 data-tour="purchases-invoices-heading" style={{ fontSize: '1.133rem', fontWeight: '850', color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
-                                            <Receipt size={20} color="#1B6B3A" /> All Store Invoices ({purchases.length})
+                                            <Receipt size={20} color="var(--accent-ink)" /> All Store Invoices ({purchases.length})
                                         </h3>
                                         <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Showing all digital bills received across all connected shops</p>
                                     </div>
@@ -942,7 +948,7 @@ const PurchaseDetails = () => {
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                                                 <div>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                        <Receipt size={18} style={{ color: '#1B6B3A' }} />
+                                                        <Receipt size={18} style={{ color: 'var(--accent-ink)' }} />
                                                         <span style={{ fontSize: '0.906rem', fontWeight: 850, color: '#1E293B' }}>{inv?.invoice_number || `POS-${iIdx}`}</span>
                                                         <span style={{ fontSize: '0.652rem', fontWeight: 800, color: '#475569', background: '#F1F5F9', padding: '0.136rem 0.453rem', borderRadius: '6px' }}>
                                                             {inv?.merchant_name || selectedShop?.business_name || 'Store'}
@@ -958,7 +964,7 @@ const PurchaseDetails = () => {
                                                     </span>
                                                 </div>
                                                 <div style={{ textAlign: 'right' }}>
-                                                    <div style={{ fontSize: '1.042rem', fontWeight: 900, color: '#1B6B3A' }}>₹{(inv?.grand_total || inv?.total_amount || 0).toLocaleString()}</div>
+                                                    <div style={{ fontSize: '1.042rem', fontWeight: 900, color: 'var(--accent-ink)' }}>₹{(inv?.grand_total || inv?.total_amount || 0).toLocaleString()}</div>
                                                     <span style={{ fontSize: '0.589rem', fontWeight: 850, textTransform: 'uppercase', padding: '0.181rem 0.453rem', borderRadius: '6px', ...getStatusStyle(inv?.payment_status) }}>{inv?.payment_status || 'Paid'}</span>
                                                 </div>
                                             </div>
@@ -1010,7 +1016,7 @@ const PurchaseDetails = () => {
                                                                                 </span>
                                                                             )}
                                                                         </td>
-                                                                        <td className="cell-nowrap" style={{ padding: '0.5rem 0.68rem', textAlign: 'center', fontWeight: 800, color: '#1B6B3A', whiteSpace: 'nowrap' }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
+                                                                        <td className="cell-nowrap" style={{ padding: '0.5rem 0.68rem', textAlign: 'center', fontWeight: 800, color: 'var(--accent-ink)', whiteSpace: 'nowrap' }}>{it.quantity || 1} {it.unit || 'Pcs'}</td>
                                                                         <td className="cell-num" style={{ padding: '0.5rem 0.68rem', textAlign: 'right', color: '#475569', whiteSpace: 'nowrap' }}>₹{(it.price || 0).toLocaleString()}</td>
                                                                         <td className="cell-num" style={{ padding: '0.5rem 0.68rem', textAlign: 'right', fontWeight: 850, color: '#1E293B', whiteSpace: 'nowrap' }}>₹{(it.amount || ((it.quantity || 1) * (it.price || 0))).toLocaleString()}</td>
                                                                     </tr>
@@ -1035,7 +1041,7 @@ const PurchaseDetails = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem', flexWrap: 'wrap', gap: '0.906rem' }}>
                         <div>
                             <h3 data-tour="purchases-warranty-heading" style={{ fontSize: '1.133rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem', width: 'fit-content' }}>
-                                <Shield size={20} color="#1B6B3A" /> Customer Warranty Tracking ({filteredWarrantyProducts.length})
+                                <Shield size={20} color="var(--accent-ink)" /> Customer Warranty Tracking ({filteredWarrantyProducts.length})
                             </h3>
                             <p style={{ fontSize: '0.743rem', color: '#64748B', margin: '4px 0 0 0' }}>
                                 Products with warranty coverage automatically tracked from your purchase invoices.
@@ -1079,7 +1085,7 @@ const PurchaseDetails = () => {
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <div>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <Package size={18} style={{ color: '#1B6B3A' }} />
+                                                <Package size={18} style={{ color: 'var(--accent-ink)' }} />
                                                 <span style={{ fontSize: '0.952rem', fontWeight: 850, color: '#1E293B' }}>{wItem.product_name}</span>
                                                 <span style={{ fontSize: '0.616rem', fontWeight: '850', color: '#15803D', background: '#DCFCE7', padding: '0.136rem 0.544rem', borderRadius: '6px', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                                                     🛡️ Warranty: {wItem.warranty_period}
@@ -1090,7 +1096,7 @@ const PurchaseDetails = () => {
                                             </span>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <div style={{ fontSize: '1.042rem', fontWeight: 900, color: '#1B6B3A' }}>₹{wItem.amount.toLocaleString()}</div>
+                                            <div style={{ fontSize: '1.042rem', fontWeight: 900, color: 'var(--accent-ink)' }}>₹{wItem.amount.toLocaleString()}</div>
                                             <button
                                                 onClick={() => setViewingInvoiceId(wItem.invoice_id)}
                                                 style={{ marginTop: '4px', background: '#EFF6FF', border: '1px solid #BFDBFE', color: '#2563EB', fontSize: '0.68rem', fontWeight: 800, padding: '0.227rem 0.589rem', borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
@@ -1162,7 +1168,7 @@ const PurchaseDetails = () => {
                                     </div>
                                     <div style={{ textAlign: 'right' }}>
                                         <div style={{ fontSize: '0.68rem', color: '#64748B', fontWeight: 700, textTransform: 'uppercase' }}>Grand Total</div>
-                                        <div style={{ fontSize: '1.359rem', fontWeight: 900, color: '#1B6B3A' }}>
+                                        <div style={{ fontSize: '1.359rem', fontWeight: 900, color: 'var(--accent-ink)' }}>
                                             ₹{(activeModalInvoice?.grand_total || activeModalInvoice?.total_amount || 0).toLocaleString()}
                                         </div>
                                     </div>
@@ -1182,7 +1188,7 @@ const PurchaseDetails = () => {
                             <div style={{ padding: '1.359rem 1.586rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAFC' }}>
                                 <div>
                                     <h3 style={{ fontSize: '1.087rem', fontWeight: 850, color: '#1E293B', margin: 0, display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
-                                        <Calculator size={20} color="#1B6B3A" /> Loyalty Points Rules & Calculator
+                                        <Calculator size={20} color="var(--accent-ink)" /> Loyalty Points Rules & Calculator
                                     </h3>
                                     <p style={{ fontSize: '0.725rem', color: '#64748B', margin: '4px 0 0 0' }}>Controlled dynamically by store settings in CLIKS Business</p>
                                 </div>
@@ -1193,8 +1199,8 @@ const PurchaseDetails = () => {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem' }}>
                                     <div style={{ background: '#F0FDF4', padding: '0.906rem', borderRadius: '14px', border: '1px solid #BBF7D0' }}>
                                         <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase' }}>1. Earning Ratio</div>
-                                        <div style={{ fontSize: '1.133rem', fontWeight: 900, color: '#1B6B3A', margin: '4px 0' }}>₹{rsPer1Point} = 1 Pt</div>
-                                        <div style={{ fontSize: '0.68rem', color: '#15803D' }}>Dynamic store earning rate configured in CLIKS Business.</div>
+                                     <div style={{ fontSize: '1.133rem', fontWeight: 900, color: 'var(--accent-ink)', margin: '4px 0' }}>₹{rsPer1Point} = 1 Pt</div>
+                                     <div style={{ fontSize: '0.68rem', color: '#15803D' }}>Dynamic store earning rate configured in CLIKS Business.</div>
                                     </div>
                                     <div style={{ background: '#FAF5FF', padding: '0.906rem', borderRadius: '14px', border: '1px solid #E9D5FF' }}>
                                         <div style={{ fontSize: '0.652rem', fontWeight: 800, color: '#6B21A8', textTransform: 'uppercase' }}>2. Redemption Ratio</div>
@@ -1268,7 +1274,7 @@ const PurchaseDetails = () => {
                                         <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.861rem' }}>All Stores (Combined)</div>
                                         <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Show purchase bills and points across all merchants</div>
                                     </div>
-                                    <ChevronRight size={18} color="#1B6B3A" />
+                                    <ChevronRight size={18} color="var(--accent-ink)" />
                                 </button>
 
                                 {connectedShops.map((shop) => (
@@ -1294,7 +1300,7 @@ const PurchaseDetails = () => {
                                             <div style={{ fontWeight: 850, color: '#0F172A', fontSize: '0.861rem' }}>{shop.business_name}</div>
                                             <div style={{ fontSize: '0.68rem', color: '#64748B' }}>Customer: {shop.customer_name}</div>
                                         </div>
-                                        <span style={{ fontSize: '0.68rem', color: '#1B6B3A', fontWeight: 800 }}>Select →</span>
+                                        <span style={{ fontSize: '0.68rem', color: 'var(--accent-ink)', fontWeight: 800 }}>Select →</span>
                                     </div>
                                 ))}
                             </div>

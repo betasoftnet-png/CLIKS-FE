@@ -14,6 +14,7 @@ import SalaryManager from './components/SalaryManager';
 import PropertyManager from './components/PropertyManager';
 import PensionManager from './components/PensionManager';
 import InvestmentPortfolio from './components/InvestmentPortfolio';
+import { plannedPaymentsService } from '../../services';
 import FinanceAnalytics from './components/FinanceAnalytics';
 import FinanceReports from './components/FinanceReports';
 import FinanceSettings from './components/FinanceSettings';
@@ -51,7 +52,7 @@ const saveBtn = {
     alignItems: 'center',
     gap: '0.453rem',
     padding: '0.589rem 1.359rem',
-    background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)',
+    background: 'var(--primary-gradient)',
     color: '#ffffff',
     border: 'none',
     borderRadius: '10px',
@@ -107,14 +108,58 @@ const mapCategory = (name) => {
 const formatAPIDate = (dStr) => {
     try {
         if (!dStr) return new Date().toISOString().split('T')[0];
-        if (dStr.includes('-')) return dStr; // YYYY-MM-DD
-        const parts = dStr.split(' ');
+        if (dStr.includes('T')) return dStr.split('T')[0];
+        if (dStr.includes('-')) return dStr.trim(); // YYYY-MM-DD
+        const parts = dStr.trim().split(' ');
         if (parts.length !== 3) return new Date().toISOString().split('T')[0];
         const [d, m, y] = parts;
         const monthMap = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
         const date = new Date(y, monthMap[m], d);
         return isNaN(date.getTime()) ? new Date().toISOString().split('T')[0] : date.toISOString().split('T')[0];
     } catch { return new Date().toISOString().split('T')[0]; }
+};
+
+const formatDateDisplay = (dateVal) => {
+    if (!dateVal) return '—';
+    try {
+        let str = String(dateVal).trim();
+        if (str.includes('T')) {
+            str = str.split('T')[0];
+        }
+        if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+            const [y, m, d] = str.split('-');
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const mo = months[parseInt(m, 10) - 1] || m;
+            return `${d} ${mo} ${y}`;
+        }
+        return str || '—';
+    } catch {
+        return String(dateVal) || '—';
+    }
+};
+
+const formatTimeDisplay = (timeVal, dateVal) => {
+    if (timeVal && String(timeVal).trim()) {
+        const tStr = String(timeVal).trim();
+        if (/^\d{1,2}:\d{2}(:\d{2})?$/.test(tStr)) {
+            const [hh, mm] = tStr.split(':');
+            let h = parseInt(hh, 10);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            const hStr = h < 10 ? `0${h}` : `${h}`;
+            return `${hStr}:${mm} ${ampm}`;
+        }
+        return tStr;
+    }
+    if (dateVal && String(dateVal).includes('T')) {
+        try {
+            const d = new Date(dateVal);
+            if (!isNaN(d.getTime())) {
+                return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+            }
+        } catch {}
+    }
+    return '—';
 };
 
 const Accounting = () => {
@@ -132,6 +177,14 @@ const Accounting = () => {
     const { data: pensionRecords = [] } = useQuery({ queryKey: ['pension-records'], queryFn: financePlusService.getPensionRecords, enabled: !!uid && uid !== 'guest' });
     const { data: notifications = [] } = useQuery({ queryKey: ['finance-notifications'], queryFn: financePlusService.getNotifications, enabled: !!uid && uid !== 'guest' });
     const { data: dbTransactions } = useQuery({ queryKey: ['transactions'], queryFn: () => transactionsService.getTransactions(), enabled: !!uid && uid !== 'guest' });
+    const { data: plannedPayments = [], isLoading: isPlannedLoading } = useQuery({
+        queryKey: ['planned-payments'],
+        queryFn: async () => {
+            const res = await plannedPaymentsService.getPayments();
+            return Array.isArray(res) ? res : (res?.data || []);
+        },
+        enabled: !!uid && uid !== 'guest'
+    });
 
     // ── Mutations ───────────────────────────────────────────────────────────
 
@@ -149,16 +202,29 @@ const Accounting = () => {
 
     const accountUpdateMutation = useMutation({ mutationFn: ({ id, data }) => accountsService.updateAccount(id, data), onSuccess: () => { queryClient.invalidateQueries(['finance-dashboard-enhanced']); queryClient.invalidateQueries(['transactions']); } });
 
-    const budgetMutation = useMutation({ mutationFn: (val) => financePlusService.updateSettings({ global_budget: val }), onSuccess: () => queryClient.invalidateQueries(['finance-dashboard-enhanced']) });
+    const budgetKey = (uid) => `cliks_finance_budget_${uid}`;
+    const [budget, setBudget] = useState(() => {
+        try {
+            const saved = localStorage.getItem(`cliks_finance_budget_${uid}`);
+            if (saved !== null && saved !== undefined && saved !== '') {
+                const num = parseFloat(saved);
+                if (!isNaN(num) && num >= 0) return num;
+            }
+        } catch {}
+        return 20000;
+    });
+
+    const budgetMutation = useMutation({
+        mutationFn: (val) => financePlusService.updateSettings({ global_budget: val }),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['finance-dashboard-enhanced']);
+        },
+        onError: (err) => {
+            console.warn('Backend updateSettings failed, budget persisted locally:', err);
+        }
+    });
 
     const [isSynced, setIsSynced] = useState(false);
-    const [showOnboarding, setShowOnboarding] = useState(false);
-
-    useEffect(() => {
-        if (dashboardData && !dashboardData.primaryIncomeSource && uid !== 'guest') {
-            setShowOnboarding(true);
-        }
-    }, [dashboardData, uid]);
 
     // Data states for legacy/local sync
     const [incomeSources, setIncomeSources] = useState([]);
@@ -168,14 +234,21 @@ const Accounting = () => {
 
     /* ─── NEW EXTENDED STATE & HELPERS ───────────────────────── */
     const [wallets, setWallets] = useState([]);
-    const [budget, setBudget] = useState(20000);
 
     useEffect(() => {
         if (dashboardData) {
             if (dashboardData.accounts) setWallets(dashboardData.accounts);
-            if (dashboardData.globalBudget !== undefined) setBudget(dashboardData.globalBudget);
+            if (dashboardData.globalBudget !== undefined && dashboardData.globalBudget !== null) {
+                const apiBudget = Number(dashboardData.globalBudget);
+                if (!isNaN(apiBudget) && apiBudget >= 0) {
+                    setBudget(apiBudget);
+                    try {
+                        localStorage.setItem(budgetKey(uid), String(apiBudget));
+                    } catch {}
+                }
+            }
         }
-    }, [dashboardData]);
+    }, [dashboardData, uid]);
 
     const handleUpdateBalance = async (id, newBalance) => {
         const wallet = wallets.find(w => w.id === id);
@@ -184,7 +257,17 @@ const Accounting = () => {
     };
 
     const handleUpdateBudget = (value) => {
-        budgetMutation.mutate(value);
+        const numericVal = Math.max(0, parseFloat(value) || 0);
+        // Immediate UI update
+        setBudget(numericVal);
+        // User-specific persistence
+        try {
+            localStorage.setItem(budgetKey(uid), String(numericVal));
+        } catch (e) {
+            console.error('Failed to persist budget to localStorage:', e);
+        }
+        // Send to backend API
+        budgetMutation.mutate(numericVal);
     };
 
     const settingsKey = (uid) => `cliks_finance_settings_${uid}`;
@@ -507,9 +590,9 @@ const Accounting = () => {
                 name: name,
                 description: description,
                 amount: parseFloat(tx.amount) || 0,
-                date: tx.date || '',
-                time: tx.time || tx.scheduledTime || '',
-                schedule: tx.schedule || 'Monthly',
+                date: tx.date || (tx.created_at ? tx.created_at.split('T')[0] : ''),
+                time: tx.time || tx.scheduledTime || (tx.created_at && tx.created_at.includes('T') ? tx.created_at.split('T')[1].slice(0, 5) : ''),
+                schedule: tx.schedule || (tx.notes && !tx.notes.startsWith('wallet-') ? tx.notes : 'Monthly'),
                 category: tx.category || 'Other',
                 walletId: tx.notes && tx.notes.startsWith('wallet-') ? tx.notes : '',
             };
@@ -562,24 +645,59 @@ const Accounting = () => {
 
         const allExpenses = [...expenses, ...additionalExpenses];
         return allExpenses.reduce((sum, e) => {
-            if (!e.date) return sum;
+            if (!e.date) {
+                // If expense has no date, treat as monthly recurring current expense
+                return sum + (parseFloat(e.amount) || 0);
+            }
+            const dateStr = String(e.date).trim();
             let match = false;
-            if (e.date.includes('-')) {
-                const parts = e.date.split('-'); // YYYY-MM-DD
-                const yr = parseInt(parts[0]);
-                const mo = parseInt(parts[1]);
-                match = (yr === currentYear && mo === (currentMonthIdx + 1));
+            if (dateStr.includes('-')) {
+                // e.g. YYYY-MM-DD or DD-MM-YYYY
+                const parts = dateStr.split('-');
+                if (parts[0].length === 4) {
+                    const yr = parseInt(parts[0], 10);
+                    const mo = parseInt(parts[1], 10);
+                    match = (yr === currentYear && mo === (currentMonthIdx + 1));
+                } else if (parts[2] && parts[2].length === 4) {
+                    const yr = parseInt(parts[2], 10);
+                    const mo = parseInt(parts[1], 10);
+                    match = (yr === currentYear && mo === (currentMonthIdx + 1));
+                }
+            } else if (dateStr.includes('/')) {
+                // e.g. DD/MM/YYYY or YYYY/MM/DD
+                const parts = dateStr.split('/');
+                if (parts[0].length === 4) {
+                    const yr = parseInt(parts[0], 10);
+                    const mo = parseInt(parts[1], 10);
+                    match = (yr === currentYear && mo === (currentMonthIdx + 1));
+                } else if (parts[2] && parts[2].length === 4) {
+                    const yr = parseInt(parts[2], 10);
+                    const mo = parseInt(parts[1], 10);
+                    match = (yr === currentYear && mo === (currentMonthIdx + 1));
+                }
             } else {
-                const parts = e.date.split(' ');
+                const parts = dateStr.split(' ');
                 if (parts.length === 3) {
-                    match = (parts[1] === currentMonthName && parts[2] === String(currentYear));
+                    // e.g. "15 Nov 2026" or "15 Nov, 2026"
+                    const monthPart = parts[1].replace(',', '').substring(0, 3);
+                    const yearPart = parts[2].replace(',', '');
+                    match = (monthPart.toLowerCase() === currentMonthName.toLowerCase() && yearPart === String(currentYear));
                 }
             }
+
+            // Fallback: try parsing with native Date if not matched
+            if (!match) {
+                const parsedDate = new Date(dateStr);
+                if (!isNaN(parsedDate.getTime())) {
+                    match = (parsedDate.getFullYear() === currentYear && parsedDate.getMonth() === currentMonthIdx);
+                }
+            }
+
             return match ? sum + (parseFloat(e.amount) || 0) : sum;
         }, 0);
     }, [expenses, additionalExpenses]);
 
-    const budgetRemaining = Math.max(0, budget - currentMonthExpenses);
+    const budgetRemaining = budget - currentMonthExpenses;
 
     const allTransactions = useMemo(() => {
         const list = [];
@@ -647,6 +765,14 @@ const Accounting = () => {
             }
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: 'income', amount: entry.amount } }));
+            }
         } catch (err) { console.error(err); }
     };
 
@@ -729,6 +855,14 @@ const Accounting = () => {
             }
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: 'expense', amount: entry.amount } }));
+            }
         } catch (err) { console.error(err); }
     };
 
@@ -811,6 +945,14 @@ const Accounting = () => {
             }
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: 'income', amount: entry.amount } }));
+            }
         } catch (err) { console.error(err); }
     };
 
@@ -893,6 +1035,14 @@ const Accounting = () => {
             }
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: 'expense', amount: entry.amount } }));
+            }
         } catch (err) { console.error(err); }
     };
 
@@ -945,6 +1095,14 @@ const Accounting = () => {
             setSaved(true); setTimeout(() => setSaved(false), 2000);
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: 'income', amount: entry.amount } }));
+            }
         } catch (err) { alert(err.message); }
     };
 
@@ -959,7 +1117,7 @@ const Accounting = () => {
 
         return (
             <div style={{ position: 'relative', display: 'inline-block', marginLeft: '6px' }} className="no-print">
-                <button onClick={(e) => { e.stopPropagation(); setActiveFilter(isActive ? { type: null, column: null } : { type, column }); }} style={{ background: currentFilter.search || currentFilter.sort ? '#F0FDF4' : 'transparent', border: 'none', borderRadius: '4px', padding: '2px', cursor: 'pointer', color: currentFilter.search || currentFilter.sort ? '#1B6B3A' : '#94A3B8' }}>
+                <button onClick={(e) => { e.stopPropagation(); setActiveFilter(isActive ? { type: null, column: null } : { type, column }); }} style={{ background: currentFilter.search || currentFilter.sort ? 'var(--accent-tint)' : 'transparent', border: 'none', borderRadius: '4px', padding: '2px', cursor: 'pointer', color: currentFilter.search || currentFilter.sort ? 'var(--primary)' : '#94A3B8' }}>
                     <ArrowUpDown size={12} />
                 </button>
                 {isActive && (
@@ -1001,6 +1159,80 @@ const Accounting = () => {
                     height: 380px;
                     box-sizing: border-box;
                 }
+                .source-box-control-row {
+                    display: grid;
+                    grid-template-columns: minmax(0, 1fr) auto auto;
+                    align-items: center;
+                    gap: 0.68rem;
+                    margin-bottom: 1.359rem;
+                    background: #F8FAFC;
+                    padding: 0.75rem 1rem;
+                    border-radius: 16px;
+                    border: 1px solid #E2E8F0;
+                    box-sizing: border-box;
+                    width: 100%;
+                    max-width: 100%;
+                    min-width: 0;
+                }
+                .source-box-heading {
+                    font-size: 0.816rem;
+                    font-weight: 900;
+                    color: #1E40AF;
+                    margin: 0;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    min-width: 0;
+                }
+                .source-box-search {
+                    position: relative;
+                    width: 130px;
+                    max-width: 100%;
+                    min-width: 0;
+                }
+                .source-box-add-btn {
+                    background: transparent;
+                    border: none;
+                    cursor: pointer;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #1E40AF;
+                    padding: 4px;
+                    border-radius: 6px;
+                    flex-shrink: 0;
+                }
+                .source-box-add-btn:hover {
+                    background: #EFF6FF;
+                }
+                @media (max-width: 480px) {
+                    .finance-panel-left, .finance-panel-right {
+                        padding: 0.906rem;
+                    }
+                    .source-box-control-row {
+                        padding: 0.544rem 0.68rem;
+                        gap: 0.453rem;
+                    }
+                    .source-box-heading {
+                        font-size: 0.74rem;
+                    }
+                    .source-box-search {
+                        width: 115px;
+                    }
+                }
+                @media (max-width: 360px) {
+                    .source-box-control-row {
+                        gap: 0.35rem;
+                        padding: 0.453rem 0.5rem;
+                    }
+                    .source-box-heading {
+                        font-size: 0.68rem;
+                        letter-spacing: -0.02em;
+                    }
+                    .source-box-search {
+                        width: 100px;
+                    }
+                }
                 .finance-table-wrapper {
                     border: 1px solid #E2E8F0;
                     border-radius: 10px;
@@ -1026,7 +1258,7 @@ const Accounting = () => {
                 .search-filter-container { display: flex; align-items: center; gap: 0.453rem; position: absolute; right: 1.359rem; top: 1.359rem; }
                 .compact-search-input { padding: 0.363rem 0.68rem 0.363rem 1.812rem; border-radius: 999px; border: 1px solid #E2E8F0; font-size: 0.68rem; outline: none; width: 140px; }
                 .column-filter-option { width: 100%; padding: 6px 8px; font-size: 0.68rem; font-weight: 600; color: #475569; text-align: left; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; border-radius: 6px; }
-                .column-filter-option:hover { background: #F0FDF4; color: #1B6B3A; }
+                .column-filter-option:hover { background: #F0FDF4; color: var(--accent-ink); }
                 @media print {
                     .no-print { display: none !important; }
                     .finance-panel-left, .finance-panel-right {
@@ -1040,51 +1272,10 @@ const Accounting = () => {
                 }
             `}</style>
 
-            {/* ONBOARDING OVERLAY */}
-            <AnimatePresence>
-                {showOnboarding && (
-                    <div data-tour-blocking="true" style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.6)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(10px)' }}>
-                        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} style={{ width: '90%', maxWidth: '480px', background: '#fff', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 30px 60px -12px rgba(0,0,0,0.3)', textAlign: 'center' }}>
-                            <div style={{ width: 64, height: 64, borderRadius: '20px', background: '#F0FDF4', color: '#1B6B3A', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.359rem' }}>
-                                <Briefcase size={32} />
-                            </div>
-                            <h2 style={{ fontSize: '1.359rem', fontWeight: 900, color: '#0F172A', marginBottom: '0.453rem' }}>Personalize Your Experience</h2>
-                            <p style={{ color: '#64748B', fontSize: '0.861rem', marginBottom: '1.812rem', lineHeight: 1.5 }}>To provide you with the most relevant tools, what is your primary source of income?</p>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.906rem', marginBottom: '1.812rem' }}>
-                                {[
-                                    { label: 'Salaried Employee', icon: Briefcase },
-                                    { label: 'Rental Income', icon: Home },
-                                    { label: 'Pension Income', icon: Heart },
-                                    { label: 'Business Owner', icon: TrendingUp },
-                                    { label: 'Freelancer', icon: Pencil },
-                                    { label: 'Multiple Sources', icon: Plus },
-                                ].map(opt => (
-                                    <button
-                                        key={opt.label}
-                                        onClick={() => {
-                                            incomeSourceMutation.mutate(opt.label);
-                                            setShowOnboarding(false);
-                                        }}
-                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.453rem', padding: '0.906rem', borderRadius: '16px', border: '1px solid #E2E8F0', background: '#f8fafc', cursor: 'pointer', transition: 'all 0.2s' }}
-                                        onMouseOver={e => { e.currentTarget.style.borderColor = '#1B6B3A'; e.currentTarget.style.background = '#F0FDF4'; }}
-                                        onMouseOut={e => { e.currentTarget.style.borderColor = '#E2E8F0'; e.currentTarget.style.background = '#f8fafc'; }}
-                                    >
-                                        <opt.icon size={20} color="#1B6B3A" />
-                                        <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#475569' }}>{opt.label}</span>
-                                    </button>
-                                ))}
-                            </div>
-                            <button onClick={() => setShowOnboarding(false)} style={{ color: '#94A3B8', background: 'none', border: 'none', fontSize: '0.77rem', fontWeight: 600, cursor: 'pointer' }}>Skip for now</button>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
-
             <div style={{ marginBottom: '1.586rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.363rem' }}>
-                        <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'linear-gradient(135deg,#1B6B3A 0%,#064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}><IndianRupee size={20} /></div>
+                        <div style={{ width: 40, height: 40, borderRadius: '12px', background: 'var(--primary-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}><IndianRupee size={20} /></div>
                         <h1 style={{ fontSize: '1.223rem', fontWeight: 900, color: '#0F172A', margin: 0 }}>Finance</h1>
                     </div>
                     <p style={{ color: '#64748B', fontSize: '0.816rem', fontWeight: 500, margin: 0 }}>Track your income, fixed costs, and daily spending in one place.</p>
@@ -1142,7 +1333,21 @@ const Accounting = () => {
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                                 <div>
                                     <div style={{ fontSize: '1.269rem', fontWeight: 900, color: '#1E293B' }}>{currencySymbol}{(dashboardData?.taxSummary?.remaining || 0).toLocaleString('en-IN')}</div>
-                                    <span style={{ fontSize: '0.68rem', color: '#EF4444', fontWeight: 700 }}>Due by July 31st</span>
+                                    <span style={{ fontSize: '0.68rem', color: '#EF4444', fontWeight: 700 }}>
+                                        {(() => {
+                                            const rawDue = dashboardData?.taxSummary?.dueDate || dashboardData?.taxSummary?.due_date || dashboardData?.taxSummary?.due;
+                                            if (rawDue) {
+                                                const d = new Date(rawDue);
+                                                if (!isNaN(d.getTime())) {
+                                                    const day = d.getDate();
+                                                    const month = d.toLocaleString('en-IN', { month: 'long' });
+                                                    return `Due by ${month} ${day}${getOrdinal(day)}`;
+                                                }
+                                                return `Due by ${rawDue}`;
+                                            }
+                                            return 'Due by End of Financial Year';
+                                        })()}
+                                    </span>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
                                     <span style={{ fontSize: '0.634rem', color: '#64748B', fontWeight: 600 }}>TDS Paid</span>
@@ -1155,22 +1360,26 @@ const Accounting = () => {
 
 
             {/* NEW SECTIONS: WALLET AND BUDGET */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.359rem', marginBottom: '1.812rem' }}>
-                <MyWallet
-                    wallets={wallets}
-                    onUpdateBalance={handleUpdateBalance}
-                    currencySymbol={currencySymbol}
-                />
-                <BudgetPlanner
-                    budget={budget}
-                    onUpdateBudget={handleUpdateBudget}
-                    currentSpent={currentMonthExpenses}
-                    currencySymbol={currencySymbol}
-                />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))', alignItems: 'stretch', gap: '1.359rem', marginBottom: '1.812rem' }}>
+                <div data-tour="accounting-my-wallet" style={{ display: 'grid', minWidth: 0 }}>
+                    <MyWallet
+                        wallets={wallets}
+                        onUpdateBalance={handleUpdateBalance}
+                        currencySymbol={currencySymbol}
+                    />
+                </div>
+                <div data-tour="accounting-budget-planner" style={{ display: 'grid', minWidth: 0 }}>
+                    <BudgetPlanner
+                        budget={budget}
+                        onUpdateBudget={handleUpdateBudget}
+                        currentSpent={currentMonthExpenses}
+                        currencySymbol={currencySymbol}
+                    />
+                </div>
             </div>
 
             {/* FINANCIAL GOALS SECTION */}
-            <div style={{ marginBottom: '2.719rem' }}>
+            <div data-tour="accounting-financial-goals" style={{ marginBottom: '2.719rem' }}>
                 <FinancialGoals
                     goals={executiveGoals}
                     onCreate={data => goalCreateMutation.mutate(data)}
@@ -1181,7 +1390,7 @@ const Accounting = () => {
             </div>
 
             {/* INVESTMENT PORTFOLIO SECTION */}
-            <div style={{ marginBottom: '3.625rem' }}>
+            <div data-tour="accounting-investment-portfolio" style={{ marginBottom: '3.625rem' }}>
                 <InvestmentPortfolio
                     investments={dashboardData?.investmentStats?.list || []}
                     onAddInvestment={data => investmentCreateMutation.mutate(data)}
@@ -1195,7 +1404,7 @@ const Accounting = () => {
             <div style={{ marginBottom: '2.266rem', display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <div data-tour="accounting-additional-source" style={{ display: 'flex', alignItems: 'center', gap: '1.133rem', width: 'fit-content' }}>
-                        <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
+                        <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'var(--primary-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
                         <h2 style={{ fontSize: '1.359rem', fontWeight: 850, color: 'var(--text-main, #064E3B)', margin: 0 }}>Total Additional Source</h2>
                     </div>
                     <p style={{ color: '#475569', fontSize: '0.861rem', fontWeight: 500, margin: '0.181rem 0 0 0' }}>Manage your additional income sources and additional expenses here.</p>
@@ -1208,12 +1417,12 @@ const Accounting = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.359rem' }}>
                         <h2 style={{ fontSize: '1.087rem', fontWeight: 950, color: '#1E40AF', margin: 0, textTransform: 'uppercase' }}>Additional Source</h2>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem', background: '#F8FAFC', padding: '0.906rem 1.359rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                        <div style={{ textAlign: 'left' }}>
-                            <h3 style={{ fontSize: '0.816rem', fontWeight: 900, color: '#1E40AF', margin: 0, whiteSpace: 'nowrap' }}>ADDITIONAL INCOME</h3>
+                    <div className="source-box-control-row">
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <h3 className="source-box-heading">ADDITIONAL INCOME</h3>
                         </div>
 
-                        <div style={{ position: 'relative', width: '130px' }}>
+                        <div className="source-box-search">
                             <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input
                                 type="text"
@@ -1228,12 +1437,15 @@ const Accounting = () => {
                                     fontSize: '0.77rem',
                                     outline: 'none',
                                     background: '#fff',
+                                    boxSizing: 'border-box'
                                 }}
                             />
                         </div>
 
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
+                                className="source-box-add-btn"
+                                title="Add Additional Income"
                                 onClick={() => {
                                     setShowAddIncomeForm(true);
                                     setEditingAdditionalIncomeId(null);
@@ -1330,8 +1542,8 @@ const Accounting = () => {
                                         <tr key={i.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 700, color: '#10B981', textAlign: 'center' }}>{i.name}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{i.description || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{i.date}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{i.time || '—'}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{formatDateDisplay(i.date)}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{formatTimeDisplay(i.time, i.date)}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 800, textAlign: 'center' }}>{currencySymbol}{parseFloat(i.amount).toLocaleString('en-IN')}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>
                                                 <div style={{ display: 'flex', gap: '0.363rem', justifyContent: 'center' }}>
@@ -1355,12 +1567,12 @@ const Accounting = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.359rem' }}>
                         <h2 style={{ fontSize: '1.087rem', fontWeight: 950, color: '#1E40AF', margin: 0, textTransform: 'uppercase' }}>Additional Source</h2>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem', background: '#F8FAFC', padding: '0.906rem 1.359rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                        <div style={{ textAlign: 'left' }}>
-                            <h3 style={{ fontSize: '0.816rem', fontWeight: 900, color: '#1E40AF', margin: 0, whiteSpace: 'nowrap' }}>ADDITIONAL EXPENSE</h3>
+                    <div className="source-box-control-row">
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <h3 className="source-box-heading">ADDITIONAL EXPENSE</h3>
                         </div>
 
-                        <div style={{ position: 'relative', width: '130px' }}>
+                        <div className="source-box-search">
                             <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input
                                 type="text"
@@ -1375,12 +1587,14 @@ const Accounting = () => {
                                     fontSize: '0.77rem',
                                     outline: 'none',
                                     background: '#fff',
+                                    boxSizing: 'border-box'
                                 }}
                             />
                         </div>
 
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
+                                className="source-box-add-btn"
                                 title="Add Additional Expense"
                                 onClick={() => {
                                     setShowAddExpenseForm(true);
@@ -1478,8 +1692,8 @@ const Accounting = () => {
                                         <tr key={e.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 700, color: '#EF4444', textAlign: 'center' }}>{e.name}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{e.description || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{e.date}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{e.time || '—'}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{formatDateDisplay(e.date)}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>{formatTimeDisplay(e.time, e.date)}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 800, textAlign: 'center' }}>{currencySymbol}{parseFloat(e.amount).toLocaleString('en-IN')}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>
                                                 <div style={{ display: 'flex', gap: '0.363rem', justifyContent: 'center' }}>
@@ -1501,11 +1715,12 @@ const Accounting = () => {
             </div>
 
             {/* BILLS & REMINDERS SECTION */}
-            <div style={{ marginBottom: '2.266rem' }}>
+            <div data-tour="accounting-bills-reminders" style={{ marginBottom: '2.266rem' }}>
                 <BillsReminders 
                     bills={bills} 
                     onUpdateBills={handleUpdateBills} 
                     currencySymbol={currencySymbol}
+                    plannedPayments={plannedPayments}
                 />
             </div>
 
@@ -1513,7 +1728,7 @@ const Accounting = () => {
             <div style={{ marginBottom: '2.266rem', display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <div data-tour="accounting-fixed-source" style={{ display: 'flex', alignItems: 'center', gap: '1.133rem', width: 'fit-content' }}>
-                        <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
+                        <div style={{ width: 54, height: 54, borderRadius: '16px', background: 'var(--primary-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}><Briefcase size={28} /></div>
                         <h2 style={{ fontSize: '1.359rem', fontWeight: 850, color: 'var(--text-main, #064E3B)', margin: 0 }}>Fixed Source</h2>
                     </div>
                     <p style={{ color: '#475569', fontSize: '0.861rem', fontWeight: 500, margin: '0.181rem 0 0 0' }}>Manage your income sources and daily expenses here.</p>
@@ -1526,12 +1741,12 @@ const Accounting = () => {
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.359rem' }}>
                         <h2 style={{ fontSize: '1.087rem', fontWeight: 950, color: '#1E40AF', margin: 0, textTransform: 'uppercase' }}>Fixed Source</h2>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem', background: '#F8FAFC', padding: '0.906rem 1.359rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                        <div style={{ textAlign: 'left' }}>
-                            <h3 style={{ fontSize: '0.816rem', fontWeight: 900, color: '#1E40AF', margin: 0, whiteSpace: 'nowrap' }}>FIXED INCOME</h3>
+                    <div className="source-box-control-row">
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <h3 className="source-box-heading">FIXED INCOME</h3>
                         </div>
 
-                        <div style={{ position: 'relative', width: '130px' }}>
+                        <div className="source-box-search">
                             <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input
                                 type="text"
@@ -1546,12 +1761,15 @@ const Accounting = () => {
                                     fontSize: '0.77rem',
                                     outline: 'none',
                                     background: '#fff',
+                                    boxSizing: 'border-box'
                                 }}
                             />
                         </div>
 
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
+                                className="source-box-add-btn"
+                                title="Add Fixed Income"
                                 onClick={() => {
                                     setShowIncomeForm(true);
                                     setEditingIncomeId(null);
@@ -1675,8 +1893,8 @@ const Accounting = () => {
                                         <tr key={i.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 700, color: '#10B981', textAlign: 'center' }}>{i.name}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{i.description || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{i.date || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{i.time || '—'}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{formatDateDisplay(i.date)}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{formatTimeDisplay(i.time, i.date)}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{i.schedule || 'Monthly'}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 800, color: '#10B981', textAlign: 'center' }}>{currencySymbol}{(parseFloat(i.amount) || 0).toLocaleString('en-IN')}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>
@@ -1699,14 +1917,14 @@ const Accounting = () => {
                 {/* Expense panel */}
                 <div className="finance-panel-right">
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.359rem' }}>
-                        <h2 style={{ fontSize: '1.087rem', fontWeight: 950, color: '#1E40AF', margin: 0, textTransform: 'uppercase' }}>Additional Source</h2>
+                        <h2 style={{ fontSize: '1.087rem', fontWeight: 950, color: '#1E40AF', margin: 0, textTransform: 'uppercase' }}>Fixed Source</h2>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', gap: '0.906rem', marginBottom: '1.359rem', background: '#F8FAFC', padding: '0.906rem 1.359rem', borderRadius: '16px', border: '1px solid #E2E8F0' }}>
-                        <div style={{ textAlign: 'left' }}>
-                            <h3 style={{ fontSize: '0.816rem', fontWeight: 900, color: '#1E40AF', margin: 0, whiteSpace: 'nowrap' }}>ADDITIONAL EXPENSE</h3>
+                    <div className="source-box-control-row">
+                        <div style={{ textAlign: 'left', minWidth: 0 }}>
+                            <h3 className="source-box-heading">FIXED EXPENSE</h3>
                         </div>
 
-                        <div style={{ position: 'relative', width: '130px' }}>
+                        <div className="source-box-search">
                             <Search size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94A3B8' }} />
                             <input
                                 type="text"
@@ -1721,12 +1939,15 @@ const Accounting = () => {
                                     fontSize: '0.77rem',
                                     outline: 'none',
                                     background: '#fff',
+                                    boxSizing: 'border-box'
                                 }}
                             />
                         </div>
 
-                        <div style={{ textAlign: 'right' }}>
+                        <div style={{ textAlign: 'right', display: 'flex', justifyContent: 'flex-end' }}>
                             <button
+                                className="source-box-add-btn"
+                                title="Add Expense"
                                 onClick={() => {
                                     setShowExpenseForm(true);
                                     setEditingId(null);
@@ -1843,8 +2064,8 @@ const Accounting = () => {
                                         <tr key={e.id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 700, color: '#EF4444', textAlign: 'center' }}>{e.name}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{e.description || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{e.date || '—'}</td>
-                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{e.time || '—'}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{formatDateDisplay(e.date)}</td>
+                                            <td style={{ padding: '0.544rem 0.68rem', color: '#1E293B', fontWeight: 500, textAlign: 'center' }}>{formatTimeDisplay(e.time, e.date)}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', color: '#64748B', textAlign: 'center' }}>{e.schedule || 'Monthly'}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', fontWeight: 800, color: '#EF4444', textAlign: 'center' }}>{currencySymbol}{(parseFloat(e.amount) || 0).toLocaleString('en-IN')}</td>
                                             <td style={{ padding: '0.544rem 0.68rem', textAlign: 'center' }}>

@@ -101,7 +101,7 @@ const BusinessPayments = () => {
     const queryClient = useQueryClient();
 
     // Unified query loading both ledgers and accounts
-    const { data: reportsData = { receivables: [], payables: [], accounts: [] } } = useQuery({
+    const { data: reportsData = { receivables: [], payables: [], accounts: [] }, isLoading: isReportsLoading } = useQuery({
         queryKey: ['paymentReports'],
         queryFn: () => paymentService.getReports()
     });
@@ -291,6 +291,10 @@ const BusinessPayments = () => {
         p.payment_number.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const visibleReceivables = filteredReceivables.filter(item => applyTableFilters(item, colFilters));
+    const visiblePayables = filteredPayables.filter(item => applyTableFilters(item, colFilters));
+    const visibleOverdues = overdues.filter(item => applyTableFilters(item, colFilters));
+
     const handleSaveTransaction = async (e) => {
         e.preventDefault();
         const amt = parseFloat(txForm.amount);
@@ -334,6 +338,15 @@ const BusinessPayments = () => {
 
             queryClient.invalidateQueries({ queryKey: ['paymentReports'] });
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            queryClient.invalidateQueries({ queryKey: ['income'] });
+            queryClient.invalidateQueries({ queryKey: ['expenses'] });
+            queryClient.invalidateQueries({ queryKey: ['books-dashboard-data'] });
+            queryClient.invalidateQueries({ queryKey: ['finance-dashboard-enhanced'] });
+            queryClient.invalidateQueries({ queryKey: ['accounts'] });
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('transaction-added', { detail: { type: txForm.type, amount: amt } }));
+            }
 
             setIsAddTransactionModalOpen(false);
             setTxForm({
@@ -360,12 +373,12 @@ const BusinessPayments = () => {
     const totalBalance = accounts.reduce((sum, a) => sum + a.current_balance, 0);
 
     return (
-        <div style={{ padding: '1.133rem 1.359rem', background: 'var(--bg-color, #F8FAFC)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="transactions-page" style={{ background: 'var(--bg-color, #F8FAFC)', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
+            <div className="cliks-responsive-header">
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.453rem' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'var(--primary-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <CreditCard size={22} />
                         </div>
                         <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em', margin: 0 }}>Transactions</h1>
@@ -376,7 +389,7 @@ const BusinessPayments = () => {
                     <button 
                         data-tour="finance-add-transaction"
                         onClick={() => setIsAddTransactionModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.77rem 1.269rem', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)', fontSize: '0.834rem', transition: 'all 0.2s' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.77rem 1.269rem', borderRadius: '14px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)', fontSize: '0.834rem', transition: 'all 0.2s' }}
                     >
                         <Plus size={18} strokeWidth={2.5} /> Add Transaction
                     </button>
@@ -384,19 +397,19 @@ const BusinessPayments = () => {
             </div>
 
             {/* Quick Metrics Cards */}
-            <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.586rem' }}>
+            <div className="transactions-summary">
                 {[
-                    { label: 'Total Inflow (Income)', value: formatCurrency(totalIncome), icon: ArrowDownRight, color: '#1B6B3A', bg: '#DCF2E4' },
+                    { label: 'Total Inflow (Income)', value: formatCurrency(totalIncome), icon: ArrowDownRight, color: 'var(--accent-ink)', bg: '#DCF2E4' },
                     { label: 'Total Outflow (Expense)', value: formatCurrency(totalExpenses), icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
                     { label: 'Available Balances', value: formatCurrency(totalBalance), icon: Wallet, color: '#3B82F6', bg: '#DBEAFE' },
                     { label: 'Net Cash Balance', value: formatCurrency(totalIncome - totalExpenses), icon: CheckCircle2, color: '#0D9488', bg: '#CCFBF1' }
                 ].map((stat, idx) => (
-                    <div key={idx} className="stat-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '0.906rem 1.133rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)', cursor: 'default' }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.136rem' }}>
+                    <div key={idx} className="stat-card transactions-summary-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.01)', cursor: 'default', minWidth: 0, gap: '0.75rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.136rem', minWidth: 0 }}>
                             <p style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', margin: 0, textTransform: 'uppercase', letterSpacing: '0.03em' }}>{stat.label}</p>
                             <h3 style={{ fontSize: '1.223rem', fontWeight: '900', color: '#0F172A', letterSpacing: '-0.02em', margin: 0 }}>{stat.value}</h3>
                         </div>
-                        <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
+                        <div className="transactions-summary-icon" style={{ borderRadius: '12px', background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stat.color, flexShrink: 0 }}>
                             <stat.icon size={20} />
                         </div>
                     </div>
@@ -404,8 +417,8 @@ const BusinessPayments = () => {
             </div>
 
             {/* Tabs Row & Global Search */}
-            <div style={{ flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
-                <div style={{ display: 'flex', gap: '0.68rem' }}>
+            <div className="transactions-controls">
+                <div className="transactions-tabs">
                     {[
                         { id: 'receivables', label: 'Income (Inflow)', icon: ArrowDownRight },
                         { id: 'payables', label: 'Expenses (Outflow)', icon: ArrowUpRight },
@@ -415,10 +428,16 @@ const BusinessPayments = () => {
                         <button 
                             data-tour={`finance-tab-${tab.id}`}
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            className="accent-action"
+                            aria-pressed={activeTab === tab.id}
+                            onClick={() => {
+                                if (tab.id === activeTab) return;
+                                setColFilters({});
+                                setActiveTab(tab.id);
+                            }}
                             style={{ 
-                                padding: '0.589rem 1.133rem', borderRadius: '12px', 
-                                background: activeTab === tab.id ? '#064E3B' : 'white', 
+                                borderRadius: '12px',
+                                background: activeTab === tab.id ? 'var(--primary)' : 'white',
                                 color: activeTab === tab.id ? 'white' : '#475569',
                                 border: '1px solid #E2E8F0', fontWeight: '700', cursor: 'pointer',
                                 display: 'flex', alignItems: 'center', gap: '0.453rem',
@@ -426,58 +445,35 @@ const BusinessPayments = () => {
                                 fontSize: '0.797rem'
                             }}
                         >
-                            <tab.icon size={16} /> {tab.label}
+                            <tab.icon size={16} aria-hidden="true" /> <span>{tab.label}</span>
                         </button>
                     ))}
                 </div>
 
-                {/* Global Search Icon Outside Table */}
                 {(activeTab === 'receivables' || activeTab === 'payables') && (
-                    <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        background: '#FFF', 
-                        border: '1px solid #E2E8F0', 
-                        borderRadius: '12px', 
-                        padding: showSearch ? '0.453rem 0.906rem' : '0.453rem', 
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
-                        width: showSearch ? '280px' : '40px', 
-                        height: '40px',
-                        boxSizing: 'border-box',
-                        overflow: 'hidden',
-                        boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
-                    }}>
-                        <Search 
-                            size={18} 
-                            style={{ color: '#64748B', cursor: 'pointer', flexShrink: 0 }} 
-                            onClick={() => setShowSearch(!showSearch)} 
-                        />
-                        <input 
-                            type="text" 
-                            placeholder="Search records..." 
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ 
-                                border: 'none', 
-                                outline: 'none', 
-                                background: 'transparent', 
-                                marginLeft: '0.68rem', 
-                                width: '100%', 
-                                fontSize: '0.816rem', 
-                                color: '#1E293B',
-                                display: showSearch ? 'block' : 'none'
-                            }}
-                            autoFocus={showSearch}
-                        />
+                    <div className={showSearch ? 'transactions-search is-open' : 'transactions-search'}>
+                        <button type="button" aria-label={showSearch ? 'Close search' : 'Search records'} aria-expanded={showSearch} onClick={() => setShowSearch(!showSearch)}>
+                            <Search size={18} aria-hidden="true" />
+                        </button>
+                        {showSearch && (
+                            <input
+                                type="search"
+                                aria-label="Search records"
+                                placeholder="Search records..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                autoFocus
+                            />
+                        )}
                     </div>
                 )}
             </div>
 
             {/* Tab 1: Customer Receivables */}
             {activeTab === 'receivables' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
 
-                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                    <div className="cliks-table-scroll transactions-table-scroll" role="region" aria-label="Income transactions" tabIndex={0}>
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
         { key: 'receipt_id', label: 'Receipt ID', placeholder: 'e.g. RCP-001' },
@@ -490,20 +486,20 @@ const BusinessPayments = () => {
         { key: 'status', label: 'Reconciliation', placeholder: 'Status', align: 'center' }
     ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                             <tbody>
-                                {filteredReceivables.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((r) => (
+                                {visibleReceivables.map((r) => (
                                     <tr key={r.payment_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', whiteSpace: 'nowrap' }}>
-                                            <span style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={r.payment_number}>{r.payment_number}</span>
+                                            <span style={{ fontWeight: '800', color: 'var(--accent-ink)', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={r.payment_number}>{r.payment_number}</span>
                                         </td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{formatDisplayDate(r.payment_date)}</td>
                                         <td style={{ padding: '0.625rem 0.78rem', fontWeight: '700', color: '#1E293B', fontSize: '0.8rem', maxWidth: '180px' }} title={r.customer_name}>
-                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{r.customer_name}</div>
+                                            <div style={{ overflowWrap: 'anywhere', maxWidth: '180px' }}>{r.customer_name}</div>
                                         </td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }} title={r.invoice_id}>{r.invoice_id}</td>
                                         <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '600', color: '#475569', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(r.total_amount)}</td>
-                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: '#1B6B3A', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(r.paid_amount)}</td>
+                                        <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: 'var(--accent-ink)', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(r.paid_amount)}</td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                                            <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#F0FDF4', color: '#1B6B3A', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{r.payment_mode}</span>
+                                            <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#F0FDF4', color: 'var(--accent-ink)', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{r.payment_mode}</span>
                                         </td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
                                             <span className="badge-nowrap" style={{ padding: '0.2rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.68rem', whiteSpace: 'nowrap' }}>{r.reconciliation_status.toUpperCase()}</span>
@@ -513,14 +509,19 @@ const BusinessPayments = () => {
                             </tbody>
                         </table>
                     </div>
+                    {(!visibleReceivables.length || isReportsLoading) && (
+                        <p className="transactions-empty" role="status">
+                            {isReportsLoading ? 'Loading records?' : 'No income records found.'}
+                        </p>
+                    )}
                 </div>
             )}
 
             {/* Tab 2: Supplier Payables */}
             {activeTab === 'payables' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
 
-                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                    <div className="cliks-table-scroll transactions-table-scroll" role="region" aria-label="Expense transactions" tabIndex={0}>
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
         { key: 'receipt_id', label: 'Receipt ID', placeholder: 'e.g. RCP-001' },
@@ -533,14 +534,14 @@ const BusinessPayments = () => {
         { key: 'status', label: 'Reference', placeholder: 'Ref / Cheque', align: 'center' }
     ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                             <tbody>
-                                {filteredPayables.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((p) => (
+                                {visiblePayables.map((p) => (
                                     <tr key={p.payment_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', whiteSpace: 'nowrap' }}>
-                                            <span style={{ fontWeight: '800', color: '#064E3B', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={p.payment_number}>{p.payment_number}</span>
+                                            <span style={{ fontWeight: '800', color: 'var(--accent-ink)', fontSize: '0.8rem', whiteSpace: 'nowrap' }} title={p.payment_number}>{p.payment_number}</span>
                                         </td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#64748B', fontSize: '0.78rem', whiteSpace: 'nowrap' }}>{formatDisplayDate(p.payment_date)}</td>
                                         <td style={{ padding: '0.625rem 0.78rem', fontWeight: '700', color: '#1E293B', fontSize: '0.8rem', maxWidth: '180px' }} title={p.supplier_name}>
-                                            <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{p.supplier_name}</div>
+                                            <div style={{ overflowWrap: 'anywhere', maxWidth: '180px' }}>{p.supplier_name}</div>
                                         </td>
                                         <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '600', fontSize: '0.78rem', whiteSpace: 'nowrap' }} title={p.purchase_id}>{p.purchase_id}</td>
                                         <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '600', color: '#475569', fontSize: '0.8rem', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(p.total_amount)}</td>
@@ -554,30 +555,35 @@ const BusinessPayments = () => {
                             </tbody>
                         </table>
                     </div>
+                    {(!visiblePayables.length || isReportsLoading) && (
+                        <p className="transactions-empty" role="status">
+                            {isReportsLoading ? 'Loading records?' : 'No expense records found.'}
+                        </p>
+                    )}
                 </div>
             )}
 
             {/* Tab 3: Bank registers */}
             {activeTab === 'bank' && (
-                <div style={{ flex: 1, overflowY: 'auto', minHeight: 0, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.359rem', paddingBottom: '1.359rem' }}>
+                <div className="transactions-registers">
                     {accounts.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map(acc => (
                         <div key={acc.bank_account_id} style={{ background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', padding: '1.812rem', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.02)' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
                                 <span style={{ padding: '0.272rem 0.544rem', borderRadius: '8px', background: '#EFF6FF', color: '#2563EB', fontWeight: '800', fontSize: '0.68rem' }}>{(acc.type || 'ASSET').toUpperCase()}</span>
                             </div>
 
-                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B', marginBottom: '0.453rem' }}>{acc.bank_account_name}</h3>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: 'var(--accent-ink)', marginBottom: '0.453rem' }}>{acc.bank_account_name}</h3>
                             <p style={{ color: '#64748B', fontSize: '0.77rem', marginBottom: '1.359rem' }}>Account No: {acc.account_number}</p>
 
                             <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '1.133rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <span style={{ fontSize: '0.77rem', fontWeight: '700', color: '#64748B' }}>Current Balance:</span>
-                                <span style={{ fontSize: '1.359rem', fontWeight: '950', color: '#1B6B3A' }}>{formatCurrency(acc.current_balance)}</span>
+                                <span style={{ fontSize: '1.359rem', fontWeight: '950', color: 'var(--accent-ink)' }}>{formatCurrency(acc.current_balance)}</span>
                             </div>
                         </div>
                     ))}
                     <div style={{ background: 'white', borderRadius: '18px', border: '1px dashed #DDD6FE', padding: '1.812rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', cursor: 'pointer' }} onClick={() => setIsTransferModalOpen(true)}>
-                        <ArrowUpRight size={32} style={{ color: '#1B6B3A', marginBottom: '0.68rem' }} />
-                        <h4 style={{ fontWeight: '800', color: '#064E3B' }}>Internal Transfer Funds</h4>
+                        <ArrowUpRight size={32} style={{ color: 'var(--accent-ink)', marginBottom: '0.68rem' }} />
+                        <h4 style={{ fontWeight: '800', color: 'var(--accent-ink)' }}>Internal Transfer Funds</h4>
                         <p style={{ fontSize: '0.725rem', color: '#64748B' }}>Move money between Cash-In-Hand and Bank accounts</p>
                     </div>
                 </div>
@@ -585,9 +591,9 @@ const BusinessPayments = () => {
 
             {/* Tab 4: Overdue reminders */}
             {activeTab === 'reminders' && (
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '1.133rem 1.359rem', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden', marginBottom: '1rem' }}>
-                    <h3 style={{ flexShrink: 0, fontSize: '1.05rem', fontWeight: '850', color: '#064E3B', marginBottom: '0.906rem' }}>Overdue Customer Accounts Reminders (myBillBook flow)</h3>
-                    <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', padding: '1.133rem 1.359rem', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+                    <h3 style={{ flexShrink: 0, fontSize: '1.05rem', fontWeight: '850', color: 'var(--accent-ink)', marginBottom: '0.906rem' }}>Overdue Customer Accounts Reminders (myBillBook flow)</h3>
+                    <div className="cliks-table-scroll transactions-table-scroll" role="region" aria-label="Overdue reminders" tabIndex={0}>
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                             <FilterableTableHead columns={[
                                 { key: 'customer_name', label: 'CUSTOMER NAME', placeholder: 'Name' },
@@ -607,10 +613,10 @@ const BusinessPayments = () => {
                                 }
                             ]} onFilterChange={setColFilters} thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFFFFF' }} />
                         <tbody>
-                            {overdues.filter(item => applyTableFilters(item, typeof colFilters !== "undefined" ? colFilters : {})).map((ov) => (
+                            {visibleOverdues.map((ov) => (
                                 <tr key={ov.invoice_id} style={{ borderBottom: '1px solid #F1F5F9' }}>
                                     <td style={{ padding: '0.625rem 0.78rem', fontWeight: '800', maxWidth: '180px' }} title={ov.customer_name}>
-                                        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '180px' }}>{ov.customer_name}</div>
+                                        <div style={{ overflowWrap: 'anywhere', maxWidth: '180px' }}>{ov.customer_name}</div>
                                     </td>
                                     <td className="cell-nowrap" style={{ padding: '0.625rem 0.78rem', color: '#475569', fontWeight: '700', whiteSpace: 'nowrap' }}>{ov.invoice_id}</td>
                                     <td className="cell-num" style={{ padding: '0.625rem 0.78rem', fontWeight: '850', color: '#EF4444', whiteSpace: 'nowrap', textAlign: 'right' }}>{formatCurrency(ov.pending_amount)}</td>
@@ -666,6 +672,11 @@ const BusinessPayments = () => {
                         </tbody>
                     </table>
                     </div>
+                    {(!visibleOverdues.length || isReportsLoading) && (
+                        <p className="transactions-empty" role="status">
+                            {isReportsLoading ? 'Loading records?' : 'No overdue reminders found.'}
+                        </p>
+                    )}
                 </div>
             )}
 
@@ -674,7 +685,7 @@ const BusinessPayments = () => {
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
                     <div style={{ background: 'white', width: '100%', maxWidth: '480px', borderRadius: '18px', padding: '1.812rem 2.039rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.133rem' }}>
-                            <h3 style={{ fontSize: '1.223rem', fontWeight: '850', color: '#064E3B', margin: 0 }}>Add Transaction</h3>
+                            <h3 style={{ fontSize: '1.223rem', fontWeight: '850', color: 'var(--accent-ink)', margin: 0 }}>Add Transaction</h3>
                             <button onClick={() => setIsAddTransactionModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.453rem', borderRadius: '12px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><X size={18} /></button>
                         </div>
 
@@ -838,7 +849,7 @@ const BusinessPayments = () => {
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
                     <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
-                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Customer Payment</h3>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: 'var(--accent-ink)' }}>Record Customer Payment</h3>
                             <button onClick={() => setIsPaymentModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
@@ -936,7 +947,7 @@ const BusinessPayments = () => {
                                 </div>
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Finalize Payment Collection
                             </button>
                         </form>
@@ -949,7 +960,7 @@ const BusinessPayments = () => {
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
                     <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
-                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Supplier Disbursement</h3>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: 'var(--accent-ink)' }}>Record Supplier Disbursement</h3>
                             <button onClick={() => setIsSupplierModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
@@ -1008,7 +1019,7 @@ const BusinessPayments = () => {
                                 </div>
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Disburse Supplier Funds
                             </button>
                         </form>
@@ -1021,7 +1032,7 @@ const BusinessPayments = () => {
                 <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '1.812rem' }}>
                     <div style={{ background: 'white', width: '100%', maxWidth: '440px', borderRadius: '20px', padding: '2.266rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid #E2E8F0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
-                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Internal Vault Transfer</h3>
+                            <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: 'var(--accent-ink)' }}>Internal Vault Transfer</h3>
                             <button onClick={() => setIsTransferModalOpen(false)} style={{ border: 'none', background: '#F1F5F9', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer' }}><X size={20} /></button>
                         </div>
 
@@ -1062,7 +1073,7 @@ const BusinessPayments = () => {
                                 />
                             </div>
 
-                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
+                            <button type="submit" style={{ width: '100%', padding: '0.906rem', borderRadius: '16px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}>
                                 Settle Fund Transfer
                             </button>
                         </form>

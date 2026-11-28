@@ -32,7 +32,7 @@ const PeopleTransactions = () => {
     const [formData, setFormData] = useState({ person_id: '', type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '', category: '' });
 
     // ── Queries ─────────────────────────────────────────────────────────────
-    const { data: transactions = [], isLoading } = useQuery({
+    const { data: transactions = [], isLoading, isError, error } = useQuery({
         queryKey: ['people-transactions-all', searchTerm, typeFilter],
         queryFn: async () => {
             const res = await peopleService.getAllTransactions();
@@ -122,6 +122,29 @@ const PeopleTransactions = () => {
         return matchesSearch && matchesType;
     });
 
+    const exportTransactions = () => {
+        const escapeCell = (value) => {
+            const cell = String(value ?? '');
+            const safeCell = typeof value === 'string' && /^[\s]*[=+@-]/.test(cell) ? "'" + cell : cell;
+            return '"' + safeCell.replaceAll('"', '""') + '"';
+        };
+        const rows = [
+            ['Date', 'Contact', 'Type', 'Description', 'Category', 'Amount'],
+            ...filteredTransactions.map(tx => [
+                tx.date, tx.person_name, tx.type, tx.description, tx.category, Number(tx.amount ?? 0),
+            ]),
+        ];
+        const csv = rows.map(row => row.map(escapeCell).join(',')).join('\r\n');
+        const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'people-transactions.csv';
+        document.body.append(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+
     const stats = {
         totalLent: transactions.filter(t => t.type === 'lent').reduce((s, t) => s + Number(t.amount || 0), 0),
         totalBorrowed: transactions.filter(t => t.type === 'borrowed').reduce((s, t) => s + Number(t.amount || 0), 0),
@@ -147,7 +170,7 @@ const PeopleTransactions = () => {
                         <span>People Network</span>
                     </button>
                     <div className="header-actions-v2">
-                        <button className="btn-secondary-v2"><Download size={16} /> Export CSV</button>
+                        <button type="button" className="btn-secondary-v2" disabled={isError} onClick={exportTransactions}><Download size={16} /> Export CSV</button>
                         <button className="btn-primary-v2" onClick={openAddModal}><Plus size={18} /> Add Transaction</button>
                     </div>
                 </div>
@@ -159,6 +182,7 @@ const PeopleTransactions = () => {
                 </div>
             </div>
 
+            {isError && <p role="alert">{error?.message || 'Unable to load transactions for export.'}</p>}
             <div className="p-stats-grid">
                 <div className="p-stat-card green">
                     <div className="card-icon"><TrendingUp size={24} /></div>

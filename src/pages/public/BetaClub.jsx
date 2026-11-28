@@ -96,15 +96,20 @@ export default function BetaClub({ openAuthModal = null }) {
 
     // ── Queries & Mutations ──────────────────────────────────────────────────
     const { data: rawMarketplacePitches = [], isLoading: isMarketplaceLoading } = useQuery({
-        queryKey: ['marketplace-pitches', searchQuery, selectedSector],
-        queryFn: () => pitchesService.getMarketplacePitches({ search: searchQuery, sector: selectedSector })
+        queryKey: ['marketplace-pitches', searchQuery, selectedSector, selectedRegion],
+        queryFn: () => pitchesService.getMarketplacePitches({
+            search: searchQuery.trim() || undefined,
+            sector: (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL') ? selectedSector : undefined,
+            region: (selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions' && !selectedRegion.includes('Auto-Detected')) ? selectedRegion.replace(/^📍\s*/, '') : undefined
+        })
     });
     const allMarketplacePitches = Array.isArray(rawMarketplacePitches) ? rawMarketplacePitches : (rawMarketplacePitches?.pitches || rawMarketplacePitches?.data || []);
     
     // Filter deals shown in "Active Deals Marketplace"
     // 1. Only Admin-approved / published deals
     // 2. Sector Filter (matches selectedSector when not 'All Sectors' / 'ALL')
-    // 3. Search Query Filter (matches venture title, sector, headline, description, keywords)
+    // 3. Region / Location Filter (matches selectedRegion when not 'Select Region / Lock GPS' / 'All Regions')
+    // 4. Search Query Filter (matches venture title, sector, headline, description, keywords, location)
     const marketplacePitches = allMarketplacePitches.filter(deal => {
         const status = (deal.review_status || deal.status || '').toLowerCase();
         const isApproved = status === 'published' || status === 'accepted' || status === 'approved';
@@ -116,6 +121,19 @@ export default function BetaClub({ openAuthModal = null }) {
             const targetSector = selectedSector.trim().toLowerCase();
             if (dealSector !== targetSector && !dealSector.includes(targetSector)) {
                 return false;
+            }
+        }
+
+        // Region / Location Filter
+        if (selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions') {
+            const cleanRegion = selectedRegion.replace(/^📍\s*/, '').trim().toLowerCase();
+            if (cleanRegion && !cleanRegion.includes('auto-detected')) {
+                const dealLoc = (deal.location || '').trim().toLowerCase();
+                const regionTokens = cleanRegion.split(/,\s*/);
+                const matchesRegion = regionTokens.some(token => token && dealLoc.includes(token));
+                if (!matchesRegion && !dealLoc.includes(cleanRegion)) {
+                    return false;
+                }
             }
         }
 
@@ -342,7 +360,7 @@ export default function BetaClub({ openAuthModal = null }) {
         }}>
             
             {/* Top Deep Navy Blue Banner */}
-            <div style={{
+            <div className="sme-banner-card" style={{
                 flexShrink: 0,
                 background: '#172554',
                 borderRadius: '20px',
@@ -355,7 +373,7 @@ export default function BetaClub({ openAuthModal = null }) {
                 marginBottom: '1.133rem',
                 position: 'relative'
             }}>
-                <div>
+                <div className="sme-banner-content">
                     <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.363rem', padding: '0.317rem 0.68rem', background: 'rgba(255, 255, 255, 0.08)', borderRadius: '999px', marginBottom: '0.453rem', fontSize: '0.68rem', fontWeight: '700', color: '#60A5FA' }}>
                         <TrendingUp size={13} />
                         <span>CAPITAL MATRIX & VENTURE CONNECT</span>
@@ -369,11 +387,13 @@ export default function BetaClub({ openAuthModal = null }) {
                 </div>
 
                 {/* Banner Right Buttons */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexWrap: 'wrap', position: 'relative' }}>
-                    <div style={{ position: 'relative' }}>
+                <div className="sme-banner-buttons" style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', flexWrap: 'wrap', position: 'relative' }}>
+                    <div className="sme-banner-region-wrapper" style={{ position: 'relative' }}>
                         <button
                             type="button"
+                            data-tour="social-region"
                             onClick={() => setIsLocationMenuOpen(!isLocationMenuOpen)}
+                            className="sme-banner-btn sme-banner-btn-region"
                             style={{
                                 padding: '0.68rem 1.042rem',
                                 borderRadius: '12px',
@@ -389,7 +409,7 @@ export default function BetaClub({ openAuthModal = null }) {
                                 transition: 'all 0.2s'
                             }}
                         >
-                            <span>{selectedRegion}</span>
+                            <span className="sme-region-label">{selectedRegion}</span>
                             <span style={{ fontSize: '0.634rem' }}>▼</span>
                         </button>
 
@@ -448,6 +468,7 @@ export default function BetaClub({ openAuthModal = null }) {
                                 </button>
                                 <div style={{ height: '1px', background: '#F1F5F9', margin: '2px 0' }} />
                                 {[
+                                    'All Regions',
                                     '📍 Chennai, Tamil Nadu',
                                     '📍 Mumbai, Maharashtra',
                                     '📍 Bengaluru, Karnataka',
@@ -463,7 +484,7 @@ export default function BetaClub({ openAuthModal = null }) {
                                         style={{
                                             padding: '0.498rem 0.77rem',
                                             borderRadius: '10px',
-                                            background: 'transparent',
+                                            background: (selectedRegion === loc || (loc === 'All Regions' && selectedRegion === 'Select Region / Lock GPS')) ? '#F1F5F9' : 'transparent',
                                             color: '#334155',
                                             border: 'none',
                                             fontWeight: '700',
@@ -473,7 +494,7 @@ export default function BetaClub({ openAuthModal = null }) {
                                             transition: 'background 0.15s'
                                         }}
                                         onMouseOver={(e) => e.currentTarget.style.background = '#F8FAFC'}
-                                        onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+                                        onMouseOut={(e) => e.currentTarget.style.background = (selectedRegion === loc || (loc === 'All Regions' && selectedRegion === 'Select Region / Lock GPS')) ? '#F1F5F9' : 'transparent'}
                                     >
                                         {loc}
                                     </button>
@@ -484,7 +505,9 @@ export default function BetaClub({ openAuthModal = null }) {
 
                     <button
                         type="button"
+                        data-tour="social-list-venture"
                         onClick={() => setShowCreateModal(true)} 
+                        className="sme-banner-btn sme-banner-btn-venture"
                         style={{ 
                             padding: '0.68rem 1.133rem', 
                             borderRadius: '12px', 
@@ -537,7 +560,7 @@ export default function BetaClub({ openAuthModal = null }) {
             </div>
 
             {/* Filter & Search Bar */}
-            <div style={{ display: 'flex', gap: '0.68rem', marginBottom: '1.133rem', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: '0.68rem', marginBottom: '1.133rem', flexWrap: 'wrap', alignItems: 'center' }}>
                 <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
                     <Search size={16} style={{ position: 'absolute', left: '0.906rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
                     <input type="text" placeholder="Search deals by title, sector, problem, or keywords..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ width: '100%', padding: '0.589rem 0.906rem 0.589rem 2.266rem', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '0.793rem', outline: 'none', boxSizing: 'border-box' }} />
@@ -545,6 +568,33 @@ export default function BetaClub({ openAuthModal = null }) {
                 <select value={selectedSector} onChange={(e) => setSelectedSector(e.target.value)} style={{ padding: '0.589rem 0.906rem', borderRadius: '12px', border: '1px solid #cbd5e1', fontSize: '0.793rem', outline: 'none', background: 'white', fontWeight: '700', color: '#334155', cursor: 'pointer' }}>
                     {industryOptions.map(opt => <option key={opt} value={opt}>{opt === 'ALL' ? 'All Sectors' : opt}</option>)}
                 </select>
+                {(searchQuery.trim() || (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL') || (selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions')) && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setSearchQuery('');
+                            setSelectedSector('All Sectors');
+                            setSelectedRegion('Select Region / Lock GPS');
+                        }}
+                        style={{
+                            padding: '0.589rem 0.906rem',
+                            borderRadius: '12px',
+                            border: '1px solid #cbd5e1',
+                            background: '#f8fafc',
+                            fontSize: '0.793rem',
+                            fontWeight: '700',
+                            color: '#475569',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.363rem',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        <X size={14} />
+                        <span>Clear Filters</span>
+                    </button>
+                )}
             </div>
 
             {/* Marketplace Tab */}
@@ -561,14 +611,18 @@ export default function BetaClub({ openAuthModal = null }) {
                                 Not Available
                             </h3>
                             <p style={{ color: '#64748b', fontSize: '0.793rem', maxWidth: '420px', margin: '0 auto 1.133rem' }}>
-                                {searchQuery.trim() || (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL')
-                                    ? `No matching deals found for your current filter criteria${selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL' ? ` in ${selectedSector}` : ''}${searchQuery.trim() ? ` matching "${searchQuery.trim()}"` : ''}. Try resetting your search or selecting another sector.`
+                                {searchQuery.trim() || (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL') || (selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions')
+                                    ? `No matching deals found for your current filter criteria${selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL' ? ` in ${selectedSector}` : ''}${selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions' ? ` around ${selectedRegion.replace(/^📍\s*/, '')}` : ''}${searchQuery.trim() ? ` matching "${searchQuery.trim()}"` : ''}. Try resetting your search or selecting another sector.`
                                     : 'No active published deals are currently available in the marketplace.'}
                             </p>
-                            {(searchQuery.trim() || (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL')) && (
+                            {(searchQuery.trim() || (selectedSector && selectedSector !== 'All Sectors' && selectedSector !== 'ALL') || (selectedRegion && selectedRegion !== 'Select Region / Lock GPS' && selectedRegion !== 'All Regions')) && (
                                 <button
                                     type="button"
-                                    onClick={() => { setSearchQuery(''); setSelectedSector('All Sectors'); }}
+                                    onClick={() => {
+                                        setSearchQuery('');
+                                        setSelectedSector('All Sectors');
+                                        setSelectedRegion('Select Region / Lock GPS');
+                                    }}
                                     style={{ padding: '0.453rem 1.133rem', background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.725rem', fontWeight: '700', color: '#334155', cursor: 'pointer' }}
                                 >
                                     Reset Filters

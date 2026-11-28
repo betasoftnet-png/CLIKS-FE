@@ -321,23 +321,28 @@ describe('OnboardingContext & Tour System', () => {
     });
 
     it('shows Welcome and advances the main tour through real workspace clicks', async () => {
+        vi.useFakeTimers({ toFake: ['requestAnimationFrame', 'cancelAnimationFrame'] });
+        const afterFrame = async (assertStep) => {
+            await act(async () => { vi.advanceTimersToNextFrame(); });
+            assertStep();
+        };
         sessionStorage.setItem('cliks_just_registered_email', 'asha@example.com');
         const financialSpy = vi.fn();
         renderWithOnboarding({ initialRoute: '/books/faq', onFinancialAction: financialSpy });
 
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByText(/Welcome to CLIKS/i)).toBeTruthy();
         });
 
         fireEvent.click(screen.getByRole('button', { name: /Start Tour/i }));
 
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-books');
         });
         expect(screen.queryByRole('button', { name: /^Next$/i })).toBeNull();
 
         fireEvent.click(screen.getByRole('button', { name: 'Books' }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('current-route').textContent).toBe('/books/dashboard');
             expect(screen.getByTestId('active-step-id').textContent).toBe('dashboard-shortcuts');
         });
@@ -349,130 +354,130 @@ describe('OnboardingContext & Tour System', () => {
         expect(spotlights[0].style.borderRadius).toBe('14px');
 
         fireEvent.click(screen.getByRole('button', { name: /Next/i }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-payments');
         });
         expect(screen.queryByRole('button', { name: /^Next$/i })).toBeNull();
 
         fireEvent.click(screen.getByRole('button', { name: 'Payments' }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('current-route').textContent).toBe('/payments/people');
             expect(screen.getByTestId('active-step-id').textContent).toBe('payments-overview');
         });
 
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-social'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-social'));
         fireEvent.click(screen.getByRole('button', { name: 'Social' }));
 
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('current-route').textContent).toBe('/social/meetup');
             expect(screen.getByTestId('active-step-id').textContent).toBe('social-active-deals');
         });
         fireEvent.click(screen.getByRole('button', { name: 'Active Deals Marketplace' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('social-my-studio'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('social-my-studio'));
         fireEvent.click(screen.getByRole('button', { name: 'My Studio (Founder View)' }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('active-step-id').textContent).toBe('profile-menu');
         });
         fireEvent.click(screen.getByRole('button', { name: 'Profile' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('profile-summary'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('profile-summary'));
 
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('access-kit'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('access-kit'));
         fireEvent.click(screen.getByRole('button', { name: 'Access Kit' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('beta-products'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('beta-products'));
         fireEvent.click(screen.getByRole('button', { name: 'Product launcher' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('bit-tool'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('bit-tool'));
         fireEvent.click(document.querySelector('[data-tour="product-bit-tool"]'));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-books-for-accounts'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-books-for-accounts'));
         fireEvent.click(screen.getByRole('button', { name: 'Books' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-accounts'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-accounts'));
         fireEvent.click(screen.getByRole('button', { name: 'Accounts' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-tax-link'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-tax-link'));
         fireEvent.click(screen.getByRole('button', { name: 'Tax & Deductions' }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('current-route').textContent).toBe('/books/tax-deductions');
             expect(screen.getByTestId('active-step-id').textContent).toBe('tax-deductions-heading');
         });
 
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-to-accounts'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-to-accounts'));
         fireEvent.click(screen.getByRole('button', { name: 'Accounts' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-additional-source'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-additional-source'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-bills-reminders'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-bills-reminders'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-fixed-source'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('accounting-fixed-source'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-purchases'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-purchases'));
         fireEvent.click(screen.getByRole('button', { name: 'Purchases' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-link-store'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-link-store'));
 
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-stores'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-stores'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-store-points-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-store-points-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'shop-points' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-store-points'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-store-points'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-history-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-history-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'point-history' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-history-heading'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-history-heading'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-invoices-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-invoices-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'purchases' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-invoices-heading'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-invoices-heading'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-warranty-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-warranty-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'warranty' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-warranty-heading'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('purchases-warranty-heading'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-income'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-income'));
         fireEvent.click(screen.getByRole('button', { name: 'Income' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('income-record-button'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('income-record-button'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-expenses'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-expenses'));
         fireEvent.click(screen.getByRole('button', { name: 'Expenses' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('expense-add-button'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('expense-add-button'));
 
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-payments-transactions'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('workspace-payments-transactions'));
         fireEvent.click(screen.getByRole('button', { name: 'Payments' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-transactions'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-transactions'));
         fireEvent.click(screen.getByRole('button', { name: 'Transaction' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-add'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-add'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-income-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-income-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'receivables' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-expenses-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-expenses-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'payables' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-bank-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-bank-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'bank' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-reminders-tab'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('transaction-reminders-tab'));
         fireEvent.click(screen.getByRole('button', { name: 'reminders' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-books-workspace'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('return-books-workspace'));
         fireEvent.click(screen.getByRole('button', { name: 'Books' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-reports'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-reports'));
         fireEvent.click(screen.getByRole('button', { name: 'Report' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('books-interactive-analytics'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('books-interactive-analytics'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('books-stock-overview'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('books-stock-overview'));
         fireEvent.click(screen.getByRole('button', { name: 'Stock' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('stock-active-items'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('stock-active-items'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('stock-add-product'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('stock-add-product'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('topbar-search-tools'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('topbar-search-tools'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-open'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-open'));
         fireEvent.click(screen.getByRole('button', { name: 'Notifications' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-panel'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-panel'));
         fireEvent.click(screen.getByRole('button', { name: /^Next$/i }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-close'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('notifications-close'));
         fireEvent.click(screen.getByRole('button', { name: 'Notifications' }));
-        await waitFor(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-help-support'));
+        await afterFrame(() => expect(screen.getByTestId('active-step-id').textContent).toBe('sidebar-help-support'));
         fireEvent.click(screen.getByRole('button', { name: /^Finish$/i }));
-        await waitFor(() => {
+        await afterFrame(() => {
             expect(screen.getByTestId('active-tour-id').textContent).toBe('');
             expect(JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1')).mainCompleted).toBe(true);
         });
@@ -529,55 +534,79 @@ describe('OnboardingContext & Tour System', () => {
         expect(JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1')).mainSkipped).toBe(true);
     });
 
-    it('triggers contextual People page tour on first visit only and supports manual replay & reset', async () => {
-        localStorage.setItem(
-            'cliks_onboarding_v1:u1',
-            JSON.stringify({
-                version: 1,
-                mainCompleted: true,
-                mainSkipped: false,
-                autoWelcomeSuppressed: true,
-                suppressAutoPageTours: false,
-                completedPages: {},
-            })
-        );
-
-        const view = renderWithOnboarding({ initialRoute: '/payments/people' });
-
-        await waitFor(() => {
-            expect(screen.getByRole('dialog', { name: 'To Pay' })).toBeTruthy();
+    it('shows People guides in order after continuous visibility and supports skips, clicks, and replay', async () => {
+        vi.useFakeTimers();
+        let target;
+        let notify;
+        const reportVisibility = (visible) => act(() => notify([{
+            target,
+            isIntersecting: visible,
+            intersectionRatio: visible ? 1 : 0,
+        }]));
+        vi.stubGlobal('IntersectionObserver', class {
+            constructor(callback) { notify = callback; }
+            observe(element) { target = element; }
+            disconnect() {}
         });
+        const tick = (ms) => act(async () => vi.advanceTimersByTimeAsync(ms));
+        const guide = (title) => screen.queryByRole('dialog', { name: title });
+        const stored = () => JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1'));
+        localStorage.setItem('cliks_onboarding_v1:u1', JSON.stringify({
+            version: 1,
+            mainCompleted: true,
+            autoWelcomeSuppressed: true,
+            completedPages: {},
+        }));
 
-        // Escape closes and records page tour skipped so revisiting does not repeat
-        fireEvent.keyDown(window, { key: 'Escape' });
-        await waitFor(() => {
-            expect(screen.queryByRole('dialog', { name: 'To Pay' })).toBeNull();
-        });
+        try {
+            const view = renderWithOnboarding({ initialRoute: '/payments/people' });
+            await tick(20);
+            reportVisibility(true);
+            await tick(1999);
+            expect(guide('Log Transaction')).toBeNull();
+            await tick(1);
+            expect(guide('Log Transaction')).toBeTruthy();
+            fireEvent.click(screen.getByRole('button', { name: 'Skip', exact: true }));
 
-        expect(JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1')).completedPages.page_people).toBe('skipped');
+            reportVisibility(true);
+            await tick(1000);
+            reportVisibility(false);
+            await tick(2000);
+            expect(guide('Contacts')).toBeNull();
+            reportVisibility(true);
+            await tick(1999);
+            expect(guide('Contacts')).toBeNull();
+            await tick(1);
+            expect(guide('Contacts')).toBeTruthy();
+            fireEvent.click(screen.getByRole('button', { name: 'contacts', exact: true }));
 
-        view.unmount();
-        const view2 = renderWithOnboarding({ initialRoute: '/payments/people' });
-        await act(async () => {
-            await new Promise((r) => setTimeout(r, 30));
-        });
-        expect(screen.queryByRole('dialog', { name: 'To Pay' })).toBeNull();
+            for (const title of ['Financial Groups', 'Request', 'Global Ledger', 'Repayment Alerts']) {
+                reportVisibility(true);
+                await tick(1999);
+                expect(guide(title)).toBeNull();
+                await tick(1);
+                expect(guide(title)).toBeTruthy();
+                expect(screen.getByTestId('people-tab-content').textContent).toBe('contacts');
+                fireEvent.click(screen.getByRole('button', { name: title === 'Repayment Alerts' ? 'Finish' : 'Next' }));
+            }
+            expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled();
+            expect(stored().completedPages.page_people).toBe('completed');
 
-        // Manual replay from FAQ works even after completion/skip
-        view2.unmount();
-        const view3 = renderWithOnboarding({ initialRoute: '/books/faq' });
-        fireEvent.click(screen.getByRole('button', { name: 'Manual People Tour' }));
-        await waitFor(() => {
+            view.unmount();
+            const revisit = renderWithOnboarding({ initialRoute: '/payments/people' });
+            await tick(2100);
+            expect(guide('Log Transaction')).toBeNull();
+            revisit.unmount();
+
+            renderWithOnboarding({ initialRoute: '/books/faq' });
+            fireEvent.click(screen.getByRole('button', { name: 'Manual People Tour' }));
             expect(screen.getByTestId('current-route').textContent).toBe('/payments/people');
-            expect(screen.getByRole('dialog', { name: 'To Pay' })).toBeTruthy();
-        });
-
-        // Reset clears flags
-        view3.unmount();
-        renderWithOnboarding({ initialRoute: '/books/faq' });
-        fireEvent.click(screen.getByRole('button', { name: 'Reset Onboarding' }));
-        expect(JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1')).mainCompleted).toBe(false);
-        expect(JSON.parse(localStorage.getItem('cliks_onboarding_v1:u1')).completedPages).toEqual({});
+            reportVisibility(true);
+            await tick(2000);
+            expect(guide('Log Transaction')).toBeTruthy();
+        } finally {
+            vi.unstubAllGlobals();
+        }
     });
 
     it('filters steps and page guides by role (FIN-PRO CA vs sub_id) and supports interactive clicks', async () => {

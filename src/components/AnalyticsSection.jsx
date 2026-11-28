@@ -2,7 +2,76 @@ import React, { useState } from 'react';
 import { Calendar, Filter } from 'lucide-react';
 import { formatCurrency } from '../lib/formatCurrency';
 
-const AnalyticsSection = () => {
+const parseTransactionDate = (tx) => {
+    if (!tx) return null;
+    const raw = String(tx.date || tx.created_at || '').trim();
+    if (!raw) return null;
+
+    // ISO or hyphen format: YYYY-MM-DD
+    const isoMatch = raw.match(/^(\d{4})-(0[1-9]|1[0-2])/);
+    if (isoMatch) {
+        return { year: isoMatch[1], month: parseInt(isoMatch[2], 10) };
+    }
+
+    // Slash format: DD/MM/YYYY or YYYY/MM/DD
+    if (raw.includes('/')) {
+        const parts = raw.split('/');
+        if (parts[0].length === 4) {
+            return { year: parts[0], month: parseInt(parts[1], 10) };
+        } else if (parts[2] && parts[2].length === 4) {
+            return { year: parts[2], month: parseInt(parts[1], 10) };
+        }
+    }
+
+    // Text format: "15 Oct 2026" or "15 Oct, 2026"
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const parts = raw.split(' ');
+    if (parts.length >= 3) {
+        const monthPart = parts[1].replace(',', '').substring(0, 3);
+        const yearPart = parts[2].replace(',', '');
+        const moIdx = months.findIndex(m => m.toLowerCase() === monthPart.toLowerCase());
+        if (moIdx !== -1 && yearPart.length === 4) {
+            return { year: yearPart, month: moIdx + 1 };
+        }
+    }
+
+    // JavaScript Date parse fallback
+    const parsed = new Date(raw);
+    if (!isNaN(parsed.getTime())) {
+        return { year: String(parsed.getFullYear()), month: parsed.getMonth() + 1 };
+    }
+
+    return null;
+};
+
+const AnalyticsSection = ({ transactions = [], error }) => {
+    const [selectedYear, setSelectedYear] = useState('');
+    const [flow, setFlow] = useState('all');
+    const currentYear = new Date().getFullYear().toString();
+
+    const dates = transactions.map(tx => {
+        const parsed = parseTransactionDate(tx);
+        return { tx, parsed };
+    }).filter(entry => entry.parsed && ['Income', 'Expense'].includes(entry.tx.type));
+
+    const availableYears = dates.map(e => e.parsed.year);
+    const years = [...new Set([currentYear, ...availableYears])].sort().reverse();
+    const year = selectedYear || years[0];
+
+    const months = Array.from({ length: 12 }, (_, index) => ({
+        month: new Intl.DateTimeFormat('en', { month: 'short' }).format(new Date(2000, index, 1)),
+        income: 0,
+        expense: 0,
+    }));
+
+    const visible = dates.filter(({ tx, parsed }) => parsed.year === year && (flow === 'all' || tx.type === flow));
+    for (const { tx, parsed } of visible) {
+        const typeKey = tx.type.toLowerCase();
+        if (months[parsed.month - 1]) {
+            months[parsed.month - 1][typeKey] += (parseFloat(tx.amount) || 0);
+        }
+    }
+
     return (
         <section style={{
             backgroundColor: 'white',
@@ -27,7 +96,7 @@ const AnalyticsSection = () => {
                     <p style={{ fontSize: '14px', color: '#9CA3AF', margin: '4px 0 0 0' }}>Income vs Expense comparison</p>
                 </div>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                    <button style={{
+                    <label style={{
                         padding: '6px 12px',
                         fontSize: '14px',
                         border: '1px solid #E5E7EB',
@@ -39,9 +108,12 @@ const AnalyticsSection = () => {
                         gap: '8px',
                         cursor: 'pointer'
                     }}>
-                        <Calendar size={16} /> Yearly
-                    </button>
-                    <button style={{
+                        <Calendar size={16} aria-hidden="true" />
+                        <select aria-label="Analytics year" value={year} onChange={event => setSelectedYear(event.target.value)}>
+                            {years.map(value => <option key={value} value={value}>{value}</option>)}
+                        </select>
+                    </label>
+                    <label style={{
                         padding: '6px 12px',
                         fontSize: '14px',
                         border: '1px solid #E5E7EB',
@@ -53,37 +125,28 @@ const AnalyticsSection = () => {
                         gap: '8px',
                         cursor: 'pointer'
                     }}>
-                        <Filter size={16} /> Filter
-                    </button>
+                        <Filter size={16} aria-hidden="true" />
+                        <select aria-label="Analytics filter" value={flow} onChange={event => setFlow(event.target.value)}>
+                            <option value="all">Income and expenses</option>
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expenses</option>
+                        </select>
+                    </label>
                 </div>
             </div>
 
             {/* Chart Container */}
             <div className="chart-container" style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
-                <InteractiveBarChart />
+                {visible.length ? <InteractiveBarChart data={months} /> : (
+                    <p role={error ? 'alert' : 'status'} style={{ paddingTop: '1rem', textAlign: 'center', color: 'var(--text-muted)' }}>{error ? (error.message || 'Unable to load transactions.') : `No matching transactions for ${year}.`}</p>
+                )}
             </div>
         </section>
     );
 };
 
-const InteractiveBarChart = () => {
+const InteractiveBarChart = ({ data }) => {
     const [hoveredIndex, setHoveredIndex] = useState(null);
-
-    // Mock Data matching the visual style (Dark Income, Light Expense)
-    const data = [
-        { month: 'Jan', income: 600, expense: 500 },
-        { month: 'Feb', income: 750, expense: 450 },
-        { month: 'Mar', income: 800, expense: 400 },
-        { month: 'Apr', income: 890, expense: 760 },
-        { month: 'May', income: 950, expense: 490 },
-        { month: 'Jun', income: 800, expense: 510 },
-        { month: 'Jul', income: 900, expense: 580 },
-        { month: 'Aug', income: 990, expense: 600 },
-        { month: 'Sep', income: 810, expense: 480 },
-        { month: 'Oct', income: 780, expense: 540 },
-        { month: 'Nov', income: 680, expense: 600 },
-        { month: 'Dec', income: 900, expense: 650 },
-    ];
 
     const width = 800;
     const height = 300;
@@ -91,15 +154,17 @@ const InteractiveBarChart = () => {
     const graphWidth = width - padding.left - padding.right;
     const graphHeight = height - padding.top - padding.bottom;
 
-    const maxValue = 1000; // Y-axis max
-    const ySteps = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000];
+    const peak = Math.max(1, ...data.flatMap(({ income, expense }) => [income, expense]));
+    const step = Math.ceil(peak / 5);
+    const maxValue = step * 5;
+    const ySteps = Array.from({ length: 6 }, (_, index) => index * step);
 
     const barWidth = 12; // Width of individual bar
     const groupGap = 4; // Gap between income and expense bars
     const itemWidth = graphWidth / data.length; // Width allocated for each month
 
     // Helper to calculate bar height
-    const getBarHeight = (value) => (value / maxValue) * graphHeight;
+    const getBarHeight = (value) => (Math.max(0, value) / maxValue) * graphHeight;
     const getY = (value) => height - padding.bottom - getBarHeight(value);
 
     // Hover Tooltip Position (Centered over the group)

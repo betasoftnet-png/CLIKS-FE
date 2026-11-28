@@ -67,6 +67,7 @@ const SpotlightTourOverlay = ({
     const [rectState, setRectState] = useState(null);
     const [tooltipPos, setTooltipPos] = useState({ top: 80, left: 24, placement: 'bottom' });
 
+    const freeScroll = Boolean(step?.visibleDelay);
     const isLast = stepIndex >= totalSteps - 1;
     const targets = targetElements.length > 0 ? targetElements : (targetElement ? [targetElement] : []);
     const boxes = isOpen &&
@@ -114,13 +115,12 @@ const SpotlightTourOverlay = ({
             });
         };
 
-        try {
-            targets.forEach((target) => target.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' }));
-        } catch {
-            // fallback for jsdom or unsupported options
+        if (!freeScroll) {
+            targets.forEach((target) => target.scrollIntoView?.({ behavior: 'smooth', block: 'center', inline: 'nearest' }));
         }
 
-        queueMicrotask(updateRect);
+        if (freeScroll) updateRect();
+        else queueMicrotask(updateRect);
         const rafId = requestAnimationFrame(updateRect);
         const resizeObs = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(updateRect) : null;
         targets.forEach((target) => resizeObs?.observe(target));
@@ -134,7 +134,7 @@ const SpotlightTourOverlay = ({
             window.removeEventListener('resize', updateRect);
             window.removeEventListener('scroll', updateRect, true);
         };
-    }, [isOpen, targetElements, targetElement, step?.id]);
+    }, [isOpen, targetElements, targetElement, step?.id, freeScroll]);
 
     // Compute smart tooltip position to prevent viewport clipping
     useLayoutEffect(() => {
@@ -190,7 +190,7 @@ const SpotlightTourOverlay = ({
 
     // Focus management + keyboard navigation
     useEffect(() => {
-        if (!isOpen) return undefined;
+        if (!isOpen || freeScroll) return undefined;
         const raf = requestAnimationFrame(() => nextBtnRef.current?.focus());
 
         const onKeyDown = (e) => {
@@ -214,7 +214,34 @@ const SpotlightTourOverlay = ({
             cancelAnimationFrame(raf);
             window.removeEventListener('keydown', onKeyDown);
         };
-    }, [isOpen, stepIndex, isLast, onNext, onBack, onSkip, onFinish, step?.id]);
+    }, [isOpen, stepIndex, isLast, onNext, onBack, onSkip, onFinish, step?.id, freeScroll]);
+
+    // Global Outside Click listener: dismiss current guide on outside click while allowing original action to execute
+    useEffect(() => {
+        if (!isOpen) return undefined;
+
+        const onGlobalPointerDown = (e) => {
+            // If click is inside the tooltip card itself, do not dismiss
+            if (tooltipRef.current && tooltipRef.current.contains(e.target)) {
+                return;
+            }
+
+            const interactiveTargets = targetElements.length > 0 ? targetElements : (targetElement ? [targetElement] : []);
+            const isClickOnTarget = interactiveTargets.some((target) => target.contains(e.target));
+
+            if (isClickOnTarget) {
+                // If user clicks the highlighted target directly:
+                // Let the target execute its native action and complete/advance the guide
+                onTargetClick();
+            } else {
+                // If user clicks outside: dismiss only the current guide
+                onSkip();
+            }
+        };
+
+        window.addEventListener('pointerdown', onGlobalPointerDown, true);
+        return () => window.removeEventListener('pointerdown', onGlobalPointerDown, true);
+    }, [isOpen, targetElement, targetElements, onTargetClick, onSkip]);
 
     // Let the real target action happen before the tour handles its progression.
     useEffect(() => {
@@ -228,7 +255,6 @@ const SpotlightTourOverlay = ({
     }, [isOpen, step?.id, step?.interactiveClick, targetElement, targetElements, onTargetClick]);
 
     if (!isOpen || !step || !rect || !anchorRect) return null;
-    const scrimPanels = getScrimPanels([anchorRect], window.innerWidth, window.innerHeight);
 
     return (
         <div
@@ -240,20 +266,6 @@ const SpotlightTourOverlay = ({
                 pointerEvents: 'none',
             }}
         >
-            {/* Click-blocking scrim leaves the combined rounded spotlight interactive. */}
-            {scrimPanels.map((panel, index) => (
-                <div
-                    key={`scrim-${index}`}
-                    onClick={onSkip}
-                    style={{
-                        position: 'fixed',
-                        ...panel,
-                        background: 'transparent',
-                        pointerEvents: 'auto',
-                    }}
-                />
-            ))}
-
             {/* Option 3: Single Rounded Spotlight (no green borders, outlines, rings, or glows) */}
             <div
                 aria-hidden="true"
@@ -268,8 +280,8 @@ const SpotlightTourOverlay = ({
                     border: '1px solid var(--tour-spotlight-border, rgba(255, 255, 255, 0.9))',
                     boxShadow: '0 0 0 9999px var(--tour-scrim-bg, rgba(15, 23, 42, 0.54))',
                     background: 'transparent',
-                    pointerEvents: step.interactiveClick ? 'none' : 'auto',
-                    transition: 'all 0.2s ease',
+                    pointerEvents: freeScroll || step.interactiveClick ? 'none' : 'auto',
+                    transition: freeScroll ? 'none' : 'all 0.2s ease',
                 }}
             />
 
@@ -278,6 +290,7 @@ const SpotlightTourOverlay = ({
                 ref={tooltipRef}
                 role="dialog"
                 aria-modal="false"
+                data-onboarding-tooltip="true"
                 aria-labelledby="cliks-tour-step-title"
                 style={{
                     position: 'fixed',
@@ -309,7 +322,7 @@ const SpotlightTourOverlay = ({
                     <button
                         type="button"
                         onClick={onSkip}
-                        aria-label="Close tour"
+                        aria-label={freeScroll ? 'Skip guide' : 'Close tour'}
                         style={{
                             width: '26px',
                             height: '26px',
@@ -392,7 +405,7 @@ const SpotlightTourOverlay = ({
                             Skip
                         </button>
 
-                        {stepIndex > 0 && (
+                        {(!freeScroll || step.allowBack) && stepIndex > 0 && (
                             <button
                                 type="button"
                                 onClick={onBack}
@@ -415,7 +428,7 @@ const SpotlightTourOverlay = ({
                             </button>
                         )}
 
-                        {!step.interactiveClick && (
+                        {(!step.interactiveClick || step.showNext) && (
                             <button
                                 ref={nextBtnRef}
                                 type="button"
@@ -435,7 +448,7 @@ const SpotlightTourOverlay = ({
                                 whiteSpace: 'nowrap',
                                 }}
                             >
-                                {isLast ? (
+                                {step.actionLabel || (isLast ? (
                                     <>
                                         Finish <Check size={14} />
                                     </>
@@ -443,7 +456,7 @@ const SpotlightTourOverlay = ({
                                     <>
                                         Next <ChevronRight size={14} />
                                     </>
-                                )}
+                                ))}
                             </button>
                         )}
                     </div>

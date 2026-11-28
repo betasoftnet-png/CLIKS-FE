@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
 import { OnboardingProvider } from './context/OnboardingContext';
 import OnboardingManager from './components/onboarding/OnboardingManager';
 import { ProtectedRoute } from './routes/ProtectedRoute';
@@ -65,6 +64,7 @@ const PermissionManager = React.lazy(() => import('./components/PermissionManage
 const BusinessCustomization = React.lazy(() => import('./pages/BusinessCustomization'));
 
 import './App.css';
+import { applyAccent, readSavedAccent, SavedAccent } from './lib/appearance';
 
 // Apply persisted dark mode before first render
 const savedDarkMode = localStorage.getItem('cliks_dark_mode');
@@ -74,10 +74,7 @@ if (savedDarkMode === 'true') {
     document.documentElement.setAttribute('data-theme', 'light');
 }
 
-const savedAccentColor = localStorage.getItem('cliks_accent_color');
-if (savedAccentColor) {
-    document.documentElement.style.setProperty('--primary', savedAccentColor);
-}
+applyAccent(readSavedAccent());
 
 const savedFontSize = localStorage.getItem('cliks_font_size');
 if (savedFontSize) {
@@ -98,6 +95,7 @@ function AuthenticatedApp() {
     <ProtectedRoute>
       <ErrorBoundary>
         <MainLayout>
+            <SavedAccent />
             <div key={location.pathname} className="main-content-wrapper" style={{ height: '100%', width: '100%', minHeight: 0 }}>
               <Suspense fallback={<PageLoader />}>
                 <Routes location={location}>
@@ -201,7 +199,7 @@ function AppContent() {
 
   return (
     <Router>
-      <OnboardingProvider>
+      <OnboardingProvider checklist>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Landing />} />

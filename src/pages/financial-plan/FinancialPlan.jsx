@@ -21,6 +21,7 @@ import {
 import { plannedPaymentsService, peopleService } from '../../services';
 import { customConfirm } from '../../utils/customConfirm';
 import '../../App.css';
+import './financial-plan-responsive.css';
 
 const FinancialPlan = () => {
     const queryClient = useQueryClient();
@@ -191,12 +192,12 @@ const FinancialPlan = () => {
     }, [plans, searchTerm, activeFilter]);
 
     return (
-        <div style={{ padding: '1.133rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="planner-page-container" style={{ padding: '1.133rem 2.266rem 5.5rem 2.266rem', background: '#F8FAFC', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
-            <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
-                <div>
+            <div className="planner-header-wrapper" style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.359rem' }}>
+                <div className="planner-header-text">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.68rem' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
+                        <div className="planner-header-icon-box" style={{ width: '42px', height: '42px', minWidth: '42px', minHeight: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)', flexShrink: 0 }}>
                             <CalendarIcon size={22} />
                         </div>
                         <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: '#064E3B', letterSpacing: '-0.02em' }}>Payment Planner</h1>
@@ -206,6 +207,7 @@ const FinancialPlan = () => {
                 <button 
                     data-tour="planner-actions"
                     onClick={() => setIsModalOpen(true)}
+                    className="planner-schedule-btn"
                     style={{ 
                         display: 'flex', alignItems: 'center', gap: '0.544rem', 
                         padding: '0.77rem 1.586rem', borderRadius: '14px', 
@@ -223,14 +225,14 @@ const FinancialPlan = () => {
             </div>
 
             {/* Quick Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.812rem' }}>
+            <div className="planner-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.133rem', marginBottom: '1.812rem' }}>
                 {[
                     { label: 'Total Scheduled', value: stats.totalScheduled, icon: CalendarIcon, color: '#1B6B3A', bg: '#DCF2E4' },
                     { label: 'Total sended', value: `₹${stats.toSend.toLocaleString()}`, icon: ArrowUpRight, color: '#EF4444', bg: '#FEE2E2' },
                     { label: 'Total received', value: `₹${stats.toReceive.toLocaleString()}`, icon: ArrowDownRight, color: '#10B981', bg: '#D1FAE5' },
                     { label: 'Pending Task', value: stats.pendingCount, icon: Clock, color: '#F59E0B', bg: '#FEF3C7' }
                 ].map((stat, idx) => (
-                    <div key={idx} style={{ background: 'white', padding: '1.133rem', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={idx} className="planner-stat-card" style={{ background: 'white', padding: '1.133rem', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
                             <p style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', textTransform: 'uppercase', margin: 0 }}>{stat.label}</p>
                             <h3 style={{ fontSize: '1.359rem', fontWeight: '900', color: '#1E293B', margin: '0.181rem 0 0 0' }}>{stat.value}</h3>
@@ -243,10 +245,10 @@ const FinancialPlan = () => {
             </div>
 
             {/* Filters and List */}
-            <div style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <div style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.906rem', flexWrap: 'wrap' }}>
+            <div className="planner-content-card" style={{ flex: 1, minHeight: 0, background: 'white', borderRadius: '18px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <div className="planner-filter-header" style={{ padding: '1.133rem 1.359rem', borderBottom: '1px solid #F1F5F9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.906rem', flexWrap: 'wrap' }}>
                     {/* Subtab Filter Switcher */}
-                    <div style={{
+                    <div className="planner-tabs-group" style={{
                         display: 'inline-flex',
                         alignItems: 'center',
                         background: '#F1F5F9',
@@ -259,6 +261,7 @@ const FinancialPlan = () => {
                             data-tour="planner-filter-all"
                             type="button"
                             onClick={() => setActiveFilter('ALL')}
+                            className="planner-tab-btn"
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -294,6 +297,7 @@ const FinancialPlan = () => {
                             data-tour="planner-filter-send"
                             type="button"
                             onClick={() => setActiveFilter('SEND')}
+                            className="planner-tab-btn"
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -329,6 +333,7 @@ const FinancialPlan = () => {
                             data-tour="planner-filter-received"
                             type="button"
                             onClick={() => setActiveFilter('RECEIVE')}
+                            className="planner-tab-btn"
                             style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -360,7 +365,7 @@ const FinancialPlan = () => {
                         </button>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.498rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', width: '280px' }}>
+                    <div className="planner-search-wrapper" style={{ display: 'flex', alignItems: 'center', background: '#F8FAFC', padding: '0.498rem 0.906rem', borderRadius: '14px', border: '1px solid #E2E8F0', width: '280px' }}>
                         <Search size={18} color="#94A3B8" />
                         <input 
                             data-tour="planner-search"
@@ -394,9 +399,9 @@ const FinancialPlan = () => {
                                 const formattedAmount = parseFloat(plan.amount || 0).toLocaleString();
 
                                 return (
-                                <div key={plan.id} style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
-                                        <div style={{ 
+                                <div key={plan.id} className="planner-list-item" style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '20px', border: '1px solid #E2E8F0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div className="planner-item-left" style={{ display: 'flex', alignItems: 'center', gap: '1.133rem' }}>
+                                        <div className="planner-item-icon-box" style={{
                                             width: '50px', height: '50px', borderRadius: '15px', 
                                             background: isSend ? '#FFF1F2' : '#D1FAE5',
                                             color: isSend ? '#E11D48' : '#10B981',
@@ -404,9 +409,9 @@ const FinancialPlan = () => {
                                         }}>
                                             {isSend ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
                                         </div>
-                                        <div>
+                                        <div className="planner-item-details">
                                             <h4 style={{ margin: 0, fontSize: '0.952rem', fontWeight: '800', color: '#1E293B' }}>{displayTitle}</h4>
-                                            <div style={{ display: 'flex', gap: '0.68rem', alignItems: 'center', marginTop: '0.227rem', flexWrap: 'wrap' }}>
+                                            <div className="planner-item-meta" style={{ display: 'flex', gap: '0.68rem', alignItems: 'center', marginTop: '0.227rem', flexWrap: 'wrap' }}>
                                                 <span style={{ fontSize: '0.725rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '0.363rem', fontWeight: '600' }}>
                                                     <Clock size={14} /> {displayDate ? new Date(displayDate).toLocaleDateString() : 'No date'}
                                                 </span>
@@ -426,14 +431,14 @@ const FinancialPlan = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.812rem' }}>
-                                        <div>
+                                    <div className="planner-item-right" style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '1.812rem' }}>
+                                        <div className="planner-item-amount-box">
                                             <p style={{ margin: 0, fontSize: '0.634rem', fontWeight: '800', color: '#94A3B8', textTransform: 'uppercase' }}>Amount</p>
                                             <h4 style={{ margin: '0.091rem 0 0 0', fontSize: '1.133rem', fontWeight: '900', color: isSend ? '#E11D48' : '#10B981' }}>
                                                 ₹{formattedAmount}
                                             </h4>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '0.453rem' }}>
+                                        <div className="planner-item-actions" style={{ display: 'flex', gap: '0.453rem' }}>
                                             {plan.status !== 'paid' && (
                                                 <button 
                                                     onClick={() => markPaidMutation.mutate(plan.id)}

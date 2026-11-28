@@ -1,23 +1,24 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { 
-    Users, 
-    Plus, 
-    Search, 
-    TrendingUp, 
-    TrendingDown, 
-    Building2, 
-    Phone, 
-    Mail, 
-    X, 
-    Trash2, 
-    ChevronRight, 
-    ArrowLeftRight, 
-    Coins, 
-    Calendar, 
-    Bell, 
-    MessageSquare, 
+import {
+    Users,
+    Plus,
+    Search,
+    TrendingUp,
+    TrendingDown,
+    Building2,
+    Phone,
+    Mail,
+    X,
+    Trash2,
+    ChevronRight,
+    ArrowLeftRight,
+    Coins,
+    Calendar,
+    Bell,
+    MessageSquare,
     CheckCircle2,
     Edit2,
     Pin,
@@ -41,12 +42,36 @@ import { profileService } from '../services/profileService';
 import FilterableTableHead from '../components/FilterableTableHead';
 import { applyTableFilters } from '../utils/filterUtils';
 import '../App.css';
+import './people/people-responsive.css';
 import { customConfirm } from '../utils/customConfirm';
 import { useCurrency } from '../context';
 
 const BusinessPeople = () => {
     const { currency, formatCurrency } = useCurrency();
-    const [activeTab, setActiveTab] = useState('contacts'); // 'contacts', 'transactions', 'reminders'
+    const location = useLocation();
+    const [activeTab, setActiveTab] = useState(() => {
+        const params = new URLSearchParams(window?.location?.search || '');
+        const tabParam = params.get('tab');
+        return tabParam && ['contacts', 'groups', 'requests', 'transactions', 'reminders'].includes(tabParam)
+            ? tabParam
+            : 'contacts';
+    });
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tabParam = params.get('tab');
+        if (tabParam && ['contacts', 'groups', 'requests', 'transactions', 'reminders'].includes(tabParam)) {
+            setActiveTab(tabParam);
+        }
+    }, [location.search]);
+
+    const tabLabels = {
+        contacts: 'Contacts',
+        groups: 'Financial Groups',
+        requests: 'Requests',
+        transactions: 'Global Ledger',
+        reminders: 'Repayment Alerts',
+    };
     const [searchTerm, setSearchTerm] = useState('');
     const [showSearch, setShowSearch] = useState(false);
     const queryClient = useQueryClient();
@@ -541,10 +566,10 @@ const BusinessPeople = () => {
                         role: variables.role_type || '',
                         externalId: String(contactId)
                     };
-                    
+
                     const bitToolUrl = import.meta.env.VITE_CONTACT_API_BASE_URL || 'https://api.bit-tool.com/api/contacts';
                     const token = localStorage.getItem('bnx_auth_token');
-                    
+
                     const syncRes = await fetch(`${bitToolUrl}/add`, {
                         method: 'POST',
                         headers: {
@@ -553,7 +578,7 @@ const BusinessPeople = () => {
                         },
                         body: JSON.stringify(bitToolData)
                     });
-                    
+
                     if (!syncRes.ok) {
                         console.error('Failed to sync contact with BitTool API', await syncRes.text());
                     }
@@ -590,10 +615,10 @@ const BusinessPeople = () => {
                     phonenumber: variables.data.phone || '',
                     role: variables.data.role_type || ''
                 };
-                
+
                 const bitToolUrl = import.meta.env.VITE_CONTACT_API_BASE_URL || 'https://api.bit-tool.com/api/contacts';
                 const token = localStorage.getItem('bnx_auth_token');
-                
+
                 const syncRes = await fetch(`${bitToolUrl}/external/${variables.id}`, {
                     method: 'PUT',
                     headers: {
@@ -602,7 +627,7 @@ const BusinessPeople = () => {
                     },
                     body: JSON.stringify(bitToolData)
                 });
-                
+
                 if (!syncRes.ok) {
                     console.error('Failed to sync updated contact with BitTool API', await syncRes.text());
                 }
@@ -890,14 +915,14 @@ const BusinessPeople = () => {
     const handleSaveInlineRem = (e) => {
         e.preventDefault();
         if (!selectedPersonId) return alert('Target registry contact missing.');
-        
+
         if (inlineRemForm.amount !== undefined && inlineRemForm.amount !== null && inlineRemForm.amount !== '') {
             const parsed = Number(inlineRemForm.amount);
             if (isNaN(parsed) || parsed < 0) {
                 return alert('Claim Cap must be a valid number greater than or equal to 0.');
             }
         }
-        
+
         if (editingRemId) {
             updateReminderMutation.mutate(
                 { ...inlineRemForm, person_id: selectedPersonId, id: editingRemId }
@@ -961,16 +986,16 @@ const BusinessPeople = () => {
         const hues = [145, 195, 220, 260, 310, 340, 25, 55];
         const hue = hues[Math.abs(hash) % hues.length];
         return (
-            <div style={{ 
-                width: `${size}px`, 
-                height: `${size}px`, 
-                borderRadius: size > 50 ? '24px' : '12px', 
-                background: `hsl(${hue}, 75%, 93%)`, 
-                color: `hsl(${hue}, 75%, 32%)`, 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                fontWeight: '900', 
+            <div style={{
+                width: `${size}px`,
+                height: `${size}px`,
+                borderRadius: size > 50 ? '24px' : '12px',
+                background: `hsl(${hue}, 75%, 93%)`,
+                color: `hsl(${hue}, 75%, 32%)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: '900',
                 fontSize: `${size * 0.45}px`,
                 fontFamily: "'Outfit', 'Inter', sans-serif",
                 flexShrink: 0
@@ -995,7 +1020,7 @@ const BusinessPeople = () => {
     const filteredPeople = useMemo(() => {
         return people.filter(p => {
             const matchesSearch = (p.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                  (p.company || '').toLowerCase().includes(searchTerm.toLowerCase());
+                (p.company || '').toLowerCase().includes(searchTerm.toLowerCase());
             const matchesGroup = groupFilter === 'All' || p.relationship === groupFilter;
             const meta = getContactMeta(p.contact_info);
             const matchesStatus = statusFilter === 'All' || meta.status === statusFilter;
@@ -1018,30 +1043,30 @@ const BusinessPeople = () => {
     }, [transactions, searchTerm]);
 
     return (
-        <div style={{ padding: '1.133rem 2.266rem', background: 'var(--bg-color, #F0F9F4)', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxSizing: 'border-box', fontFamily: "'Inter', sans-serif" }}>
+        <div className="people-page" style={{ background: 'var(--bg-color, #F0F9F4)', fontFamily: "'Inter', sans-serif" }}>
             {/* Header */}
             <div style={{ display: 'flex', flexShrink: 0, justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1.042rem', flexWrap: 'wrap', gap: '0.68rem' }}>
                 <div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.317rem' }}>
-                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
+                        <div style={{ width: '42px', height: '42px', borderRadius: '14px', background: 'var(--primary-gradient)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', boxShadow: '0 8px 16px rgba(27, 107, 58, 0.2)' }}>
                             <Users size={22} />
                         </div>
-                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em' }}>People Network & Escrow</h1>
+                        <h1 style={{ fontSize: '1.812rem', fontWeight: '850', color: 'var(--text-main, #064E3B)', letterSpacing: '-0.02em' }}>People Network</h1>
                     </div>
                     <p style={{ color: '#475569', fontSize: '0.952rem', fontWeight: '500' }}>Track peer-to-peer relationships, log personal advances, track friendly loans, and set ledger alerts.</p>
                 </div>
-                <div style={{ display: 'flex', gap: '0.68rem' }}>
-                    <button 
+                <div className="people-wrap-actions" style={{ display: 'flex', gap: '0.68rem' }}>
+                    <button
                         data-tour="people-log-transaction"
                         onClick={() => setIsTxModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', background: 'white', fontSize: '0.77rem', whiteSpace: 'nowrap', color: '#1B6B3A', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', background: 'white', fontSize: '0.77rem', whiteSpace: 'nowrap', color: 'var(--accent-ink)', border: '1px solid #DCF2E4', fontWeight: '700', cursor: 'pointer', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}
                     >
                         <ArrowLeftRight size={16} /> Log Transaction
                     </button>
-                    <button 
+                    <button
                         data-tour="people-add-contact"
                         onClick={() => setIsContactModalOpen(true)}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.544rem 0.906rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '700', cursor: 'pointer', boxShadow: '0 10px 20px rgba(27, 107, 58, 0.25)' }}
                     >
                         <Plus size={16} /> Add People Contact
                     </button>
@@ -1058,7 +1083,7 @@ const BusinessPeople = () => {
                         className="shrink-0 w-full"
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
                             gap: '0.68rem',
                             marginBottom: '0.906rem',
                             maxWidth: '58rem'
@@ -1239,7 +1264,7 @@ const BusinessPeople = () => {
                             Review All ({((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))})
                         </button>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '0.77rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))', gap: '0.77rem' }}>
                         {/* Direct Contacts requests */}
                         {incomingRequests.slice(0, 2).map(req => (
                             <div key={`contact-${req.id}`} style={{
@@ -1392,22 +1417,22 @@ const BusinessPeople = () => {
                     {[
                         { id: 'contacts', label: 'Contacts', icon: Users },
                         { id: 'groups', label: `Financial Groups ${groupsList && groupsList.length > 0 ? `(${groupsList.length})` : ''}`, icon: FolderKanban },
-                        { 
-                            id: 'requests', 
-                            label: `Requests ${((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0)) > 0 ? `(${((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))})` : ''}`, 
-                            icon: UserPlus, 
-                            badge: ((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0)) 
+                        {
+                            id: 'requests',
+                            label: `Requests ${((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0)) > 0 ? `(${((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))})` : ''}`,
+                            icon: UserPlus,
+                            badge: ((incomingRequests?.length || 0) + (groupIncomingRequests?.length || 0))
                         },
                         { id: 'transactions', label: 'Global Ledger', icon: ArrowLeftRight },
                         { id: 'reminders', label: 'Repayment Alerts', icon: Bell }
                     ].map(tab => (
-                        <button 
+                        <button
                             data-tour={`people-tab-${tab.id}`}
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            style={{ 
+                            style={{
                                 padding: '0.544rem 0.997rem', borderRadius: '10px', fontSize: '0.77rem', whiteSpace: 'nowrap',
-                                background: activeTab === tab.id ? '#064E3B' : 'white', 
+                                background: activeTab === tab.id ? 'var(--primary)' : 'white',
                                 color: activeTab === tab.id ? 'white' : '#475569',
                                 border: '1px solid #E2E8F0', fontWeight: '700', cursor: 'pointer',
                                 display: 'flex', alignItems: 'center', gap: '0.544rem',
@@ -1424,19 +1449,19 @@ const BusinessPeople = () => {
                     ))}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
+                <div className="people-wrap-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                     {activeTab === 'groups' && (
-                        <button 
+                        <button
                             onClick={() => setIsCreateGroupModalOpen(true)}
-                            style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.589rem 1.133rem', borderRadius: '12px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', cursor: 'pointer', flexShrink: 0, boxShadow: '0 4px 10px rgba(6, 78, 59, 0.2)' }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.589rem 1.133rem', borderRadius: '12px', background: 'var(--primary)', color: 'white', border: 'none', fontWeight: '750', cursor: 'pointer', flexShrink: 0, boxShadow: '0 4px 10px rgba(6, 78, 59, 0.2)' }}
                         >
                             <Plus size={16} /> New Financial Group
                         </button>
                     )}
 
                     {activeTab === 'contacts' && activeConfig.partyGroup && (
-                        <select 
-                            value={groupFilter} 
+                        <select
+                            value={groupFilter}
                             onChange={(e) => setGroupFilter(e.target.value)}
                             style={{ padding: '0.453rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
                         >
@@ -1448,8 +1473,8 @@ const BusinessPeople = () => {
                     )}
 
                     {activeTab === 'contacts' && activeConfig.partyStatus && (
-                        <select 
-                            value={statusFilter} 
+                        <select
+                            value={statusFilter}
                             onChange={(e) => setStatusFilter(e.target.value)}
                             style={{ padding: '0.453rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700', color: '#475569', outline: 'none', cursor: 'pointer' }}
                         >
@@ -1459,37 +1484,37 @@ const BusinessPeople = () => {
                         </select>
                     )}
 
-                    <div style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        background: '#FFF', 
-                        border: '1px solid #E2E8F0', 
-                        borderRadius: '12px', 
-                        padding: showSearch ? '0.453rem 0.906rem' : '0.453rem', 
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', 
-                        width: showSearch ? '280px' : '40px', 
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        background: '#FFF',
+                        border: '1px solid #E2E8F0',
+                        borderRadius: '12px',
+                        padding: showSearch ? '0.453rem 0.906rem' : '0.453rem',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        width: showSearch ? '280px' : '40px',
                         height: '40px',
                         boxSizing: 'border-box',
                         overflow: 'hidden',
                         boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)'
                     }}>
-                        <Search 
-                            size={18} 
-                            style={{ color: '#64748B', cursor: 'pointer', flexShrink: 0 }} 
-                            onClick={() => setShowSearch(!showSearch)} 
+                        <Search
+                            size={18}
+                            style={{ color: '#64748B', cursor: 'pointer', flexShrink: 0 }}
+                            onClick={() => setShowSearch(!showSearch)}
                         />
-                        <input 
-                            type="text" 
-                            placeholder={`Lookup ${activeTab === 'contacts' ? 'contacts...' : activeTab === 'transactions' ? 'transactions...' : 'reminders...'}`} 
+                        <input
+                            type="text"
+                            placeholder={`Lookup ${activeTab === 'contacts' ? 'contacts...' : activeTab === 'transactions' ? 'transactions...' : 'reminders...'}`}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            style={{ 
-                                border: 'none', 
-                                outline: 'none', 
-                                background: 'transparent', 
-                                marginLeft: '0.68rem', 
-                                width: '100%', 
-                                fontSize: '0.816rem', 
+                            style={{
+                                border: 'none',
+                                outline: 'none',
+                                background: 'transparent',
+                                marginLeft: '0.68rem',
+                                width: '100%',
+                                fontSize: '0.816rem',
                                 color: '#1E293B',
                                 display: showSearch ? 'block' : 'none'
                             }}
@@ -1497,7 +1522,7 @@ const BusinessPeople = () => {
                         />
                     </div>
                     {activeTab === 'reminders' && (
-                        <button 
+                        <button
                             onClick={() => setIsReminderModalOpen(true)}
                             style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', padding: '0.589rem 1.042rem', borderRadius: '12px', background: '#ECFDF5', color: '#065F46', border: '1px solid #A7F3D0', fontWeight: '750', cursor: 'pointer', flexShrink: 0 }}
                         >
@@ -1508,12 +1533,12 @@ const BusinessPeople = () => {
             </div>
 
             {/* Main Dynamic Content */}
-            <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
-                <div className="cliks-table-scroll" style={{ flex: 1, minHeight: 0 }}>
+            <div className="people-results" style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'white', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+                <div className="cliks-table-scroll people-data-scroll" role="region" aria-label={tabLabels[activeTab]} tabIndex={0} style={{ flex: 1, minHeight: 0 }}>
                     {/* TAB 1: Contacts List */}
                     {activeTab === 'contacts' && (
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                            <FilterableTableHead 
+                            <FilterableTableHead
                                 columns={[
                                     { key: 'name', label: 'Profile Contact', placeholder: 'Name...' },
                                     { key: 'role_type', label: 'Classification', placeholder: 'Role...' },
@@ -1523,8 +1548,8 @@ const BusinessPeople = () => {
                                     { key: 'phone_email', label: 'Phone / Email', placeholder: 'Contact...' },
                                     { key: 'net_balance', label: 'Net Exposure', placeholder: 'Exposure...', align: 'right' },
                                     { key: '_actions', label: '', noFilter: true, align: 'right' }
-                                ]} 
-                                onFilterChange={setColFilters} 
+                                ]}
+                                onFilterChange={setColFilters}
                                 thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
@@ -1568,221 +1593,221 @@ const BusinessPeople = () => {
                                         const netBal = parseFloat(p.net_balance || 0);
                                         const isPinned = pinnedPeopleIds.includes(p.id);
                                         return (
-                                            <tr key={p.id} 
-                                                style={{ borderBottom: '1px solid #F8FAFC', cursor: 'pointer', transition: 'background 0.15s', background: 'white' }} 
+                                            <tr key={p.id}
+                                                style={{ borderBottom: '1px solid #F8FAFC', cursor: 'pointer', transition: 'background 0.15s', background: 'white' }}
                                                 onClick={() => setSelectedPersonId(p.id)}
                                                 onMouseOver={(e) => { e.currentTarget.style.background = '#F8FAFC'; }}
                                                 onMouseOut={(e) => { e.currentTarget.style.background = 'white'; }}
                                             >
-                                            <td style={{ padding: '0.589rem 0.78rem' }}>
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
-                                                    <div style={{ position: 'relative', flexShrink: 0 }}>
-                                                        {renderAvatar(p.name, 36)}
-                                                        {isPinned && (
-                                                            <div style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#004aad', color: 'white', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                                                                <Pin size={10} style={{ transform: 'rotate(45deg)' }} />
+                                                <td style={{ padding: '0.589rem 0.78rem' }}>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.72rem' }}>
+                                                        <div style={{ position: 'relative', flexShrink: 0 }}>
+                                                            {renderAvatar(p.name, 36)}
+                                                            {isPinned && (
+                                                                <div style={{ position: 'absolute', top: '-4px', right: '-4px', background: '#004aad', color: 'white', borderRadius: '50%', width: '16px', height: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+                                                                    <Pin size={10} style={{ transform: 'rotate(45deg)' }} />
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div style={{ minWidth: 0 }}>
+                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                                                <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.793rem', margin: 0, whiteSpace: 'nowrap' }} title={p.name}>{p.name}</p>
+                                                                {p.status === 'pending' && (
+                                                                    <span className="badge-nowrap" style={{ gap: '3px', background: '#FEF3C7', color: '#B45309', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
+                                                                        <Clock size={10} /> Pending Request
+                                                                    </span>
+                                                                )}
+                                                                {p.status === 'accepted' && (
+                                                                    <span className="badge-nowrap" style={{ gap: '3px', background: '#ECFDF5', color: '#047857', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
+                                                                        <Check size={10} /> Connected
+                                                                    </span>
+                                                                )}
+                                                                {p.status === 'rejected' && (
+                                                                    <span className="badge-nowrap" style={{ gap: '3px', background: '#FEE2E2', color: '#DC2626', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
+                                                                        <X size={10} /> Declined
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            {activeConfig.payReminder && netBal !== 0 && (
+                                                                <button
+                                                                    onClick={(e) => { e.stopPropagation(); handleSendWhatsAppReminder(p, netBal); }}
+                                                                    style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', border: 'none', background: '#ECFDF5', color: '#047857', padding: '0.181rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '750', marginTop: '4px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                                                                >
+                                                                    <MessageSquare size={11} /> Send Reminder
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                    <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.role_type}</span>
+                                                </td>
+                                                {activeConfig.partyGroup && (
+                                                    <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                        {p.relationship ? (
+                                                            <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#FEF3C7', color: '#D97706', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.relationship}</span>
+                                                        ) : (
+                                                            <span style={{ color: '#94A3B8', fontSize: '0.725rem' }}>None</span>
+                                                        )}
+                                                    </td>
+                                                )}
+                                                {activeConfig.partyStatus && (
+                                                    <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
+                                                        <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: meta.status === 'active' ? '#ECFDF5' : '#FEE2E2', color: meta.status === 'active' ? '#047857' : '#EF4444', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>
+                                                            {meta.status}
+                                                        </span>
+                                                    </td>
+                                                )}
+                                                <td style={{ padding: '0.589rem 0.78rem', color: '#64748B', fontWeight: '600', fontSize: '0.77rem', maxWidth: '170px' }} title={p.company || 'Individual'}>
+                                                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>{p.company || 'Individual'}</div>
+                                                </td>
+                                                <td style={{ padding: '0.589rem 0.78rem', color: '#475569', maxWidth: '210px' }}>
+                                                    <div style={{ fontSize: '0.77rem', fontWeight: '650', whiteSpace: 'nowrap' }}>{p.phone || 'N/A'}</div>
+                                                    <div style={{ fontSize: '0.68rem', color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }} title={p.email || ''}>{p.email || ''}</div>
+                                                </td>
+                                                <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                                                    <span style={{ fontWeight: '900', fontSize: '0.793rem', color: netBal >= 0 ? '#16A34A' : '#EF4444', whiteSpace: 'nowrap' }}>
+                                                        {formatCurr(p.net_balance)}
+                                                    </span>
+                                                    <div style={{ fontSize: '0.634rem', color: '#94A3B8', fontWeight: '700', whiteSpace: 'nowrap' }}>{netBal >= 0 ? 'RECEIVABLE' : 'PAYABLE'}</div>
+                                                </td>
+                                                <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', position: 'relative', whiteSpace: 'nowrap' }}>
+                                                    <div style={{ display: 'inline-block', position: 'relative' }}>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setActiveMenuId(activeMenuId === p.id ? null : p.id);
+                                                            }}
+                                                            style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', transition: 'color 0.2s', padding: '6px 12px', borderRadius: '8px' }}
+                                                            onMouseOver={(e) => e.currentTarget.style.color = '#004aad'}
+                                                            onMouseOut={(e) => e.currentTarget.style.color = '#94A3B8'}
+                                                        >
+                                                            <MoreVertical size={18} />
+                                                        </button>
+
+                                                        {activeMenuId === p.id && (
+                                                            <div style={{
+                                                                position: 'absolute',
+                                                                right: 0,
+                                                                top: '100%',
+                                                                background: 'white',
+                                                                borderRadius: '12px',
+                                                                boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05)',
+                                                                border: '1px solid #E2E8F0',
+                                                                padding: '6px',
+                                                                zIndex: 100,
+                                                                minWidth: '160px',
+                                                                textAlign: 'left'
+                                                            }}>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const next = pinnedPeopleIds.includes(p.id)
+                                                                            ? pinnedPeopleIds.filter(id => id !== p.id)
+                                                                            : [...pinnedPeopleIds, p.id];
+                                                                        setPinnedPeopleIds(next);
+                                                                        localStorage.setItem('cliks_pinned_people', JSON.stringify(next));
+                                                                        setActiveMenuId(null);
+                                                                    }}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '8px',
+                                                                        width: '100%',
+                                                                        padding: '8px 12px',
+                                                                        border: 'none',
+                                                                        background: 'none',
+                                                                        color: '#334155',
+                                                                        fontSize: '0.77rem',
+                                                                        fontWeight: '600',
+                                                                        cursor: 'pointer',
+                                                                        borderRadius: '8px',
+                                                                        transition: 'background 0.2s'
+                                                                    }}
+                                                                    onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                                                                    onMouseOut={(e) => e.currentTarget.style.background = 'none'}
+                                                                >
+                                                                    <Pin size={14} style={{ color: '#004aad', transform: isPinned ? 'rotate(45deg)' : 'none' }} />
+                                                                    {isPinned ? 'Unpin Contact' : 'Pin to top'}
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setEditingContactId(p.id);
+                                                                        setContactForm({
+                                                                            name: p.name || '',
+                                                                            role_type: p.role_type || 'friend',
+                                                                            phone: p.phone || '',
+                                                                            email: p.email || '',
+                                                                            company: p.company || '',
+                                                                            relationship: p.relationship || '',
+                                                                            contact_info: p.contact_info || JSON.stringify({ status: 'active', loyalty_points: 0 })
+                                                                        });
+                                                                        setIsContactModalOpen(true);
+                                                                        setActiveMenuId(null);
+                                                                    }}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '8px',
+                                                                        width: '100%',
+                                                                        padding: '8px 12px',
+                                                                        border: 'none',
+                                                                        background: 'none',
+                                                                        color: '#334155',
+                                                                        fontSize: '0.77rem',
+                                                                        fontWeight: '600',
+                                                                        cursor: 'pointer',
+                                                                        borderRadius: '8px',
+                                                                        transition: 'background 0.2s'
+                                                                    }}
+                                                                    onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
+                                                                    onMouseOut={(e) => e.currentTarget.style.background = 'none'}
+                                                                >
+                                                                    <Edit2 size={14} style={{ color: '#64748B' }} />
+                                                                    Edit Profile
+                                                                </button>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        handleDeleteContact(p.id);
+                                                                        setActiveMenuId(null);
+                                                                    }}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '8px',
+                                                                        width: '100%',
+                                                                        padding: '8px 12px',
+                                                                        border: 'none',
+                                                                        background: 'none',
+                                                                        color: '#EF4444',
+                                                                        fontSize: '0.77rem',
+                                                                        fontWeight: '600',
+                                                                        cursor: 'pointer',
+                                                                        borderRadius: '8px',
+                                                                        transition: 'background 0.2s'
+                                                                    }}
+                                                                    onMouseOver={(e) => e.currentTarget.style.background = '#FEF2F2'}
+                                                                    onMouseOut={(e) => e.currentTarget.style.background = 'none'}
+                                                                >
+                                                                    <Trash2 size={14} style={{ color: '#EF4444' }} />
+                                                                    Delete Contact
+                                                                </button>
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <div style={{ minWidth: 0 }}>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                                            <p style={{ fontWeight: '800', color: '#1E293B', fontSize: '0.793rem', margin: 0, whiteSpace: 'nowrap' }} title={p.name}>{p.name}</p>
-                                                            {p.status === 'pending' && (
-                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#FEF3C7', color: '#B45309', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
-                                                                    <Clock size={10} /> Pending Request
-                                                                </span>
-                                                            )}
-                                                            {p.status === 'accepted' && (
-                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#ECFDF5', color: '#047857', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
-                                                                    <Check size={10} /> Connected
-                                                                </span>
-                                                            )}
-                                                            {p.status === 'rejected' && (
-                                                                <span className="badge-nowrap" style={{ gap: '3px', background: '#FEE2E2', color: '#DC2626', padding: '0.136rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '800' }}>
-                                                                    <X size={10} /> Declined
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                        {activeConfig.payReminder && netBal !== 0 && (
-                                                            <button 
-                                                                onClick={(e) => { e.stopPropagation(); handleSendWhatsAppReminder(p, netBal); }}
-                                                                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', border: 'none', background: '#ECFDF5', color: '#047857', padding: '0.181rem 0.453rem', borderRadius: '6px', fontSize: '0.589rem', fontWeight: '750', marginTop: '4px', cursor: 'pointer', whiteSpace: 'nowrap' }}
-                                                            >
-                                                                <MessageSquare size={11} /> Send Reminder
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
-                                                <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.role_type}</span>
-                                            </td>
-                                            {activeConfig.partyGroup && (
-                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
-                                                    {p.relationship ? (
-                                                        <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: '#FEF3C7', color: '#D97706', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>{p.relationship}</span>
-                                                    ) : (
-                                                        <span style={{ color: '#94A3B8', fontSize: '0.725rem' }}>None</span>
-                                                    )}
                                                 </td>
-                                            )}
-                                            {activeConfig.partyStatus && (
-                                                <td className="cell-nowrap" style={{ padding: '0.589rem 0.78rem', whiteSpace: 'nowrap' }}>
-                                                    <span className="badge-nowrap" style={{ padding: '0.24rem 0.5rem', borderRadius: '6px', background: meta.status === 'active' ? '#ECFDF5' : '#FEE2E2', color: meta.status === 'active' ? '#047857' : '#EF4444', fontWeight: '800', fontSize: '0.652rem', textTransform: 'uppercase' }}>
-                                                        {meta.status}
-                                                    </span>
-                                                </td>
-                                            )}
-                                            <td style={{ padding: '0.589rem 0.78rem', color: '#64748B', fontWeight: '600', fontSize: '0.77rem', maxWidth: '170px' }} title={p.company || 'Individual'}>
-                                                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '170px' }}>{p.company || 'Individual'}</div>
-                                            </td>
-                                            <td style={{ padding: '0.589rem 0.78rem', color: '#475569', maxWidth: '210px' }}>
-                                                <div style={{ fontSize: '0.77rem', fontWeight: '650', whiteSpace: 'nowrap' }}>{p.phone || 'N/A'}</div>
-                                                <div style={{ fontSize: '0.68rem', color: '#94A3B8', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '200px' }} title={p.email || ''}>{p.email || ''}</div>
-                                            </td>
-                                            <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                                                <span style={{ fontWeight: '900', fontSize: '0.793rem', color: netBal >= 0 ? '#16A34A' : '#EF4444', whiteSpace: 'nowrap' }}>
-                                                    {formatCurr(p.net_balance)}
-                                                </span>
-                                                <div style={{ fontSize: '0.634rem', color: '#94A3B8', fontWeight: '700', whiteSpace: 'nowrap' }}>{netBal >= 0 ? 'RECEIVABLE' : 'PAYABLE'}</div>
-                                            </td>
-                                            <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', position: 'relative', whiteSpace: 'nowrap' }}>
-                                                <div style={{ display: 'inline-block', position: 'relative' }}>
-                                                    <button 
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            setActiveMenuId(activeMenuId === p.id ? null : p.id);
-                                                        }}
-                                                        style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', transition: 'color 0.2s', padding: '6px 12px', borderRadius: '8px' }}
-                                                        onMouseOver={(e) => e.currentTarget.style.color = '#004aad'}
-                                                        onMouseOut={(e) => e.currentTarget.style.color = '#94A3B8'}
-                                                    >
-                                                        <MoreVertical size={18} />
-                                                    </button>
-                                                    
-                                                    {activeMenuId === p.id && (
-                                                        <div style={{
-                                                            position: 'absolute',
-                                                            right: 0,
-                                                            top: '100%',
-                                                            background: 'white',
-                                                            borderRadius: '12px',
-                                                            boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.05)',
-                                                            border: '1px solid #E2E8F0',
-                                                            padding: '6px',
-                                                            zIndex: 100,
-                                                            minWidth: '160px',
-                                                            textAlign: 'left'
-                                                        }}>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    const next = pinnedPeopleIds.includes(p.id)
-                                                                        ? pinnedPeopleIds.filter(id => id !== p.id)
-                                                                        : [...pinnedPeopleIds, p.id];
-                                                                    setPinnedPeopleIds(next);
-                                                                    localStorage.setItem('cliks_pinned_people', JSON.stringify(next));
-                                                                    setActiveMenuId(null);
-                                                                }}
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '8px',
-                                                                    width: '100%',
-                                                                    padding: '8px 12px',
-                                                                    border: 'none',
-                                                                    background: 'none',
-                                                                    color: '#334155',
-                                                                    fontSize: '0.77rem',
-                                                                    fontWeight: '600',
-                                                                    cursor: 'pointer',
-                                                                    borderRadius: '8px',
-                                                                    transition: 'background 0.2s'
-                                                                }}
-                                                                onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
-                                                                onMouseOut={(e) => e.currentTarget.style.background = 'none'}
-                                                            >
-                                                                <Pin size={14} style={{ color: '#004aad', transform: isPinned ? 'rotate(45deg)' : 'none' }} />
-                                                                {isPinned ? 'Unpin Contact' : 'Pin to top'}
-                                                            </button>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    setEditingContactId(p.id);
-                                                                    setContactForm({
-                                                                        name: p.name || '',
-                                                                        role_type: p.role_type || 'friend',
-                                                                        phone: p.phone || '',
-                                                                        email: p.email || '',
-                                                                        company: p.company || '',
-                                                                        relationship: p.relationship || '',
-                                                                        contact_info: p.contact_info || JSON.stringify({ status: 'active', loyalty_points: 0 })
-                                                                    });
-                                                                    setIsContactModalOpen(true);
-                                                                    setActiveMenuId(null);
-                                                                }}
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '8px',
-                                                                    width: '100%',
-                                                                    padding: '8px 12px',
-                                                                    border: 'none',
-                                                                    background: 'none',
-                                                                    color: '#334155',
-                                                                    fontSize: '0.77rem',
-                                                                    fontWeight: '600',
-                                                                    cursor: 'pointer',
-                                                                    borderRadius: '8px',
-                                                                    transition: 'background 0.2s'
-                                                                }}
-                                                                onMouseOver={(e) => e.currentTarget.style.background = '#F1F5F9'}
-                                                                onMouseOut={(e) => e.currentTarget.style.background = 'none'}
-                                                            >
-                                                                <Edit2 size={14} style={{ color: '#64748B' }} />
-                                                                Edit Profile
-                                                            </button>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    handleDeleteContact(p.id);
-                                                                    setActiveMenuId(null);
-                                                                }}
-                                                                style={{
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '8px',
-                                                                    width: '100%',
-                                                                    padding: '8px 12px',
-                                                                    border: 'none',
-                                                                    background: 'none',
-                                                                    color: '#EF4444',
-                                                                    fontSize: '0.77rem',
-                                                                    fontWeight: '600',
-                                                                    cursor: 'pointer',
-                                                                    borderRadius: '8px',
-                                                                    transition: 'background 0.2s'
-                                                                }}
-                                                                onMouseOver={(e) => e.currentTarget.style.background = '#FEF2F2'}
-                                                                onMouseOut={(e) => e.currentTarget.style.background = 'none'}
-                                                            >
-                                                                <Trash2 size={14} style={{ color: '#EF4444' }} />
-                                                                Delete Contact
-                                                            </button>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                            </tr>
+                                        );
+                                    })}
                             </tbody>
                         </table>
                     )}
 
                     {/* TAB: Financial Groups */}
                     {activeTab === 'groups' && (
-                        <div style={{ padding: '1.812rem' }}>
+                        <div className="people-card-section">
                             <div style={{ marginBottom: '1.586rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.906rem' }}>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '900', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1798,7 +1823,7 @@ const BusinessPeople = () => {
                                         style={{
                                             padding: '0.589rem 1.133rem',
                                             borderRadius: '12px',
-                                            background: '#064E3B',
+                                            background: 'var(--primary)',
                                             color: 'white',
                                             border: 'none',
                                             fontWeight: '800',
@@ -1829,7 +1854,7 @@ const BusinessPeople = () => {
                                         style={{
                                             padding: '0.68rem 1.359rem',
                                             borderRadius: '12px',
-                                            background: '#064E3B',
+                                            background: 'var(--primary)',
                                             color: 'white',
                                             border: 'none',
                                             fontWeight: '800',
@@ -1844,15 +1869,15 @@ const BusinessPeople = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.359rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1.359rem' }}>
                                     {groupsList.map(group => {
-                                        const typeColor = 
+                                        const typeColor =
                                             group.group_type === 'syndicate' ? { bg: '#EFF6FF', text: '#1E40AF', border: '#DBEAFE' } :
-                                            group.group_type === 'pool' ? { bg: '#ECFDF5', text: '#065F46', border: '#A7F3D0' } :
-                                            group.group_type === 'credit' ? { bg: '#FEF3C7', text: '#92400E', border: '#FDE68A' } :
-                                            { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' };
+                                                group.group_type === 'pool' ? { bg: '#ECFDF5', text: '#065F46', border: '#A7F3D0' } :
+                                                    group.group_type === 'credit' ? { bg: '#FEF3C7', text: '#92400E', border: '#FDE68A' } :
+                                                        { bg: '#F5F3FF', text: '#5B21B6', border: '#DDD6FE' };
 
-                                        const progressPercent = group.target_amount > 0 
+                                        const progressPercent = group.target_amount > 0
                                             ? Math.min(100, Math.round((group.total_contributed / group.target_amount) * 100))
                                             : null;
 
@@ -1883,8 +1908,8 @@ const BusinessPeople = () => {
                                                             textTransform: 'uppercase'
                                                         }}>
                                                             {group.group_type === 'syndicate' ? 'Business Syndicate' :
-                                                             group.group_type === 'pool' ? 'Contribution Pool' :
-                                                             group.group_type === 'credit' ? 'Credit Circle' : 'Project Outlays'}
+                                                                group.group_type === 'pool' ? 'Contribution Pool' :
+                                                                    group.group_type === 'credit' ? 'Credit Circle' : 'Project Outlays'}
                                                         </span>
                                                         <span style={{ fontSize: '0.652rem', fontWeight: '800', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                                             <Users size={12} /> {group.member_count} active
@@ -1931,7 +1956,7 @@ const BusinessPeople = () => {
                                                     </div>
                                                 </div>
 
-                                                <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
+                                                <div className="people-wrap-actions" style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                     <button
                                                         onClick={() => {
                                                             setSelectedGroupId(group.id);
@@ -1941,7 +1966,7 @@ const BusinessPeople = () => {
                                                             flex: 1,
                                                             padding: '0.589rem 0.906rem',
                                                             borderRadius: '10px',
-                                                            background: '#064E3B',
+                                                            background: 'var(--primary)',
                                                             color: 'white',
                                                             border: 'none',
                                                             fontWeight: '800',
@@ -1989,7 +2014,7 @@ const BusinessPeople = () => {
 
                     {/* TAB: Connection & Financial Group Requests */}
                     {activeTab === 'requests' && (
-                        <div style={{ padding: '1.812rem' }}>
+                        <div className="people-card-section">
                             <div style={{ marginBottom: '1.359rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.906rem' }}>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '1.133rem', fontWeight: '900', color: '#0F172A' }}>Incoming Requests & Invitations</h3>
@@ -2008,7 +2033,7 @@ const BusinessPeople = () => {
                                     <h4 style={{ fontSize: '0.861rem', fontWeight: '850', color: '#1E3A8A', margin: '0 0 0.906rem 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                         <FolderKanban size={18} /> Financial Group Invitations ({groupIncomingRequests.length})
                                     </h4>
-                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.133rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1.133rem' }}>
                                         {groupIncomingRequests.map((req) => (
                                             <div key={`group-invite-${req.membership_id}`} style={{
                                                 background: '#FFFFFF',
@@ -2057,7 +2082,7 @@ const BusinessPeople = () => {
                                                     </div>
                                                 </div>
 
-                                                <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
+                                                <div className="people-wrap-actions" style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                     <button
                                                         onClick={() => respondGroupRequestMutation.mutate({ membershipId: req.membership_id, action: 'accept' })}
                                                         disabled={respondGroupRequestMutation.isPending}
@@ -2121,7 +2146,7 @@ const BusinessPeople = () => {
                                     </p>
                                 </div>
                             ) : (
-                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '1.133rem' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 360px), 1fr))', gap: '1.133rem' }}>
                                     {incomingRequests.map((req) => (
                                         <div key={req.id} style={{
                                             background: '#FFFFFF',
@@ -2156,7 +2181,7 @@ const BusinessPeople = () => {
                                                 </div>
                                             </div>
 
-                                            <div style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
+                                            <div className="people-wrap-actions" style={{ display: 'flex', gap: '0.68rem', paddingTop: '0.906rem', borderTop: '1px solid #F1F5F9' }}>
                                                 <button
                                                     onClick={() => respondRequestMutation.mutate({ id: req.id, action: 'accept' })}
                                                     disabled={respondRequestMutation.isPending}
@@ -2210,7 +2235,7 @@ const BusinessPeople = () => {
                     {/* TAB 2: Transactions Ledger */}
                     {activeTab === 'transactions' && (
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                            <FilterableTableHead 
+                            <FilterableTableHead
                                 columns={[
                                     { key: 'date', label: 'Execution Date', placeholder: 'Date...' },
                                     { key: 'person_name', label: 'Network Contact', placeholder: 'Contact...' },
@@ -2218,8 +2243,8 @@ const BusinessPeople = () => {
                                     { key: 'type', label: 'Classification', placeholder: 'Type...' },
                                     { key: 'amount', label: 'Ledger Flow', placeholder: 'Flow...', align: 'right' },
                                     { key: '_actions', label: '', noFilter: true, align: 'right' }
-                                ]} 
-                                onFilterChange={setColFilters} 
+                                ]}
+                                onFilterChange={setColFilters}
                                 thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
@@ -2245,7 +2270,7 @@ const BusinessPeople = () => {
                                             {t.type === 'lent' ? '+' : '-'}{formatCurr(t.amount)}
                                         </td>
                                         <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                                            <button 
+                                            <button
                                                 onClick={() => deleteTxMutation.mutate(t)}
                                                 title="Delete entry"
                                                 aria-label="Delete entry"
@@ -2263,15 +2288,15 @@ const BusinessPeople = () => {
                     {/* TAB 3: Reminders & Tasks */}
                     {activeTab === 'reminders' && (
                         <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                            <FilterableTableHead 
+                            <FilterableTableHead
                                 columns={[
                                     { key: 'due_date', label: 'MATURITY / DUE DATE', placeholder: 'Due Date...' },
                                     { key: 'person_name', label: 'TARGET CONTACT', placeholder: 'Contact...' },
                                     { key: 'title', label: 'MEMO LABEL', placeholder: 'Memo...' },
                                     { key: 'amount', label: 'CLAIM CAP', placeholder: 'Claim...', align: 'right' },
                                     { key: '_actions', label: '', noFilter: true, align: 'right' }
-                                ]} 
-                                onFilterChange={setColFilters} 
+                                ]}
+                                onFilterChange={setColFilters}
                                 thStyle={{ position: 'sticky', top: 0, zIndex: 10, background: '#FFF', padding: '0.56rem 0.78rem' }}
                             />
                             <tbody>
@@ -2296,13 +2321,13 @@ const BusinessPeople = () => {
                                         <td className="cell-num" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', fontWeight: '900', color: '#0F172A', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>{formatCurr(r.claim_cap !== undefined ? r.claim_cap : r.amount)}</td>
                                         <td className="cell-actions" style={{ padding: '0.589rem 0.78rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                                             <div style={{ display: 'inline-flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px' }}>
-                                                <button 
+                                                <button
                                                     onClick={() => alert(`Dispatched WhatsApp alert reminder to ${r.target_contact || r.person_name}.`)}
-                                                    style={{ border: 'none', background: '#F0FDF4', padding: '0.35rem 0.65rem', borderRadius: '8px', color: '#1B6B3A', fontWeight: '800', cursor: 'pointer', fontSize: '0.725rem', whiteSpace: 'nowrap' }}
+                                                    style={{ border: 'none', background: '#F0FDF4', padding: '0.35rem 0.65rem', borderRadius: '8px', color: 'var(--accent-ink)', fontWeight: '800', cursor: 'pointer', fontSize: '0.725rem', whiteSpace: 'nowrap' }}
                                                 >
                                                     Send
                                                 </button>
-                                                <button 
+                                                <button
                                                     onClick={() => deleteReminderMutation.mutate(r)}
                                                     style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', transition: 'color 0.15s' }}
                                                     onMouseOver={(e) => (e.currentTarget.style.color = '#EF4444')}
@@ -2311,7 +2336,7 @@ const BusinessPeople = () => {
                                                 >
                                                     <Trash2 size={18} />
                                                 </button>
-                                                <button 
+                                                <button
                                                     onClick={() => deleteReminderMutation.mutate(r)}
                                                     style={{ background: 'none', border: 'none', color: '#10B981', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
                                                     title="Mark alert as completed"
@@ -2345,12 +2370,12 @@ const BusinessPeople = () => {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Network Role</label>
-                                        <select 
-                                            value={['friend', 'family', 'colleague', 'business'].includes(contactForm.role_type) ? contactForm.role_type : 'others'} 
+                                        <select
+                                            value={['friend', 'family', 'colleague', 'business'].includes(contactForm.role_type) ? contactForm.role_type : 'others'}
                                             onChange={(e) => {
                                                 const val = e.target.value;
                                                 setContactForm({ ...contactForm, role_type: val === 'others' ? '' : val });
-                                            }} 
+                                            }}
                                             style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
                                         >
                                             <option value="friend">Friend</option>
@@ -2360,12 +2385,12 @@ const BusinessPeople = () => {
                                             <option value="others">Others (Custom)</option>
                                         </select>
                                         {!['friend', 'family', 'colleague', 'business'].includes(contactForm.role_type) && (
-                                            <input 
-                                                placeholder="Specify custom role..." 
-                                                type="text" 
-                                                value={contactForm.role_type} 
-                                                onChange={(e) => setContactForm({ ...contactForm, role_type: e.target.value })} 
-                                                style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', marginTop: '0.453rem' }} 
+                                            <input
+                                                placeholder="Specify custom role..."
+                                                type="text"
+                                                value={contactForm.role_type}
+                                                onChange={(e) => setContactForm({ ...contactForm, role_type: e.target.value })}
+                                                style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', marginTop: '0.453rem' }}
                                                 required
                                             />
                                         )}
@@ -2384,11 +2409,11 @@ const BusinessPeople = () => {
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>
                                             E-Mail Address (bnxmail) <span style={{ color: '#EF4444' }}>*</span>
                                         </label>
-                                        <input 
+                                        <input
                                             required
-                                            placeholder="username@bnxmail.com" 
-                                            type="email" 
-                                            value={contactForm.email} 
+                                            placeholder="username@bnxmail.com"
+                                            type="email"
+                                            value={contactForm.email}
                                             onChange={(e) => {
                                                 const val = e.target.value;
                                                 setContactForm({ ...contactForm, email: val });
@@ -2402,8 +2427,8 @@ const BusinessPeople = () => {
                                                 } else {
                                                     setContactEmailError('');
                                                 }
-                                            }} 
-                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: contactEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }} 
+                                            }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: contactEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none' }}
                                         />
                                         <span style={{ fontSize: '0.652rem', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '0.317rem' }}>
                                             <Mail size={12} /> Only @bnxmail.com accepted. Request will be sent for approval.
@@ -2419,8 +2444,8 @@ const BusinessPeople = () => {
                                 {activeConfig.partyGroup && (
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Group</label>
-                                        <select 
-                                            value={contactForm.relationship || ''} 
+                                        <select
+                                            value={contactForm.relationship || ''}
                                             onChange={(e) => setContactForm({ ...contactForm, relationship: e.target.value })}
                                             style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
                                         >
@@ -2438,13 +2463,13 @@ const BusinessPeople = () => {
                                 {activeConfig.partyStatus && (
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Status</label>
-                                        <select 
-                                            value={getContactMeta(contactForm.contact_info).status || 'active'} 
+                                        <select
+                                            value={getContactMeta(contactForm.contact_info).status || 'active'}
                                             onChange={(e) => {
                                                 const meta = getContactMeta(contactForm.contact_info);
-                                                setContactForm({ 
-                                                    ...contactForm, 
-                                                    contact_info: serializeContactMeta(e.target.value, meta.loyalty_points) 
+                                                setContactForm({
+                                                    ...contactForm,
+                                                    contact_info: serializeContactMeta(e.target.value, meta.loyalty_points)
                                                 });
                                             }}
                                             style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', background: 'white' }}
@@ -2455,7 +2480,7 @@ const BusinessPeople = () => {
                                     </div>
                                 )}
 
-                                <button type="submit" disabled={createContactMutation.isPending || updateContactMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer', marginTop: '0.453rem' }}>
+                                <button type="submit" disabled={createContactMutation.isPending || updateContactMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer', marginTop: '0.453rem' }}>
                                     {editingContactId ? (updateContactMutation.isPending ? 'Updating Profile...' : 'Save Profile Changes') : (createContactMutation.isPending ? 'Saving Contact...' : 'Create Contact Node')}
                                 </button>
                             </form>
@@ -2467,7 +2492,7 @@ const BusinessPeople = () => {
             {/* Modal 2: Log Escrow Transaction */}
             <AnimatePresence>
                 {isTxModalOpen && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
+                    <div data-tour-blocking="true" style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
                         <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '460px', borderRadius: '20px', padding: '1.586rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.359rem' }}>
                                 <h3 style={{ fontSize: '1.133rem', fontWeight: '850', color: '#064E3B' }}>Record Peer Transaction</h3>
@@ -2496,22 +2521,22 @@ const BusinessPeople = () => {
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Value Cap Amount ({currency.symbol})</label>
-                                    <input 
-                                        required 
-                                        type="text" 
+                                    <input
+                                        required
+                                        type="text"
                                         inputMode="decimal"
                                         maxLength={15}
-                                        placeholder="0.00" 
-                                        value={txForm.amount} 
-                                        onChange={handleAmountChange} 
-                                        style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.997rem', fontWeight: '900' }} 
+                                        placeholder="0.00"
+                                        value={txForm.amount}
+                                        onChange={handleAmountChange}
+                                        style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.997rem', fontWeight: '900' }}
                                     />
                                 </div>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Asset narrative / Memo</label>
                                     <input placeholder="e.g., Advance for marketing services" type="text" value={txForm.description} onChange={(e) => setTxForm({ ...txForm, description: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer' }}>
+                                <button type="submit" style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.861rem', cursor: 'pointer' }}>
                                     Authorize Entry Log
                                 </button>
                             </form>
@@ -2544,11 +2569,11 @@ const BusinessPeople = () => {
                                     </div>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Claim Cap (₹)</label>
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             inputMode="decimal"
-                                            placeholder="0.00" 
-                                            value={reminderForm.amount} 
+                                            placeholder="0.00"
+                                            value={reminderForm.amount}
                                             onChange={(e) => {
                                                 let val = e.target.value.replace(/[^0-9.]/g, '');
                                                 const parts = val.split('.');
@@ -2557,8 +2582,8 @@ const BusinessPeople = () => {
                                                 const decPart = parts.length > 1 ? '.' + parts[1].slice(0, 2) : '';
                                                 val = intPart + decPart;
                                                 setReminderForm({ ...reminderForm, amount: val });
-                                            }} 
-                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }} 
+                                            }}
+                                            style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '900' }}
                                         />
                                     </div>
                                 </div>
@@ -2566,7 +2591,7 @@ const BusinessPeople = () => {
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.363rem' }}>Maturity / Due Date <span style={{ color: '#EF4444' }}>*</span></label>
                                     <input required type="date" value={reminderForm.due_date} onChange={(e) => setReminderForm({ ...reminderForm, due_date: e.target.value })} style={{ width: '100%', padding: '0.589rem 0.77rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none' }} />
                                 </div>
-                                <button type="submit" disabled={isSubmittingAlert || createReminderMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: isSubmittingAlert || createReminderMutation.isPending ? '#94A3B8' : 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: isSubmittingAlert || createReminderMutation.isPending ? 'not-allowed' : 'pointer' }}>
+                                <button type="submit" disabled={isSubmittingAlert || createReminderMutation.isPending} style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', background: isSubmittingAlert || createReminderMutation.isPending ? '#94A3B8' : 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.997rem', cursor: isSubmittingAlert || createReminderMutation.isPending ? 'not-allowed' : 'pointer' }}>
                                     {isSubmittingAlert || createReminderMutation.isPending ? 'Scheduling Alert...' : 'Dispatch Repayment Alert'}
                                 </button>
                             </form>
@@ -2577,27 +2602,27 @@ const BusinessPeople = () => {
             {/* Modal 4: Person Detail Profile Modal */}
             <AnimatePresence>
                 {selectedPersonId && (
-                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)' }}>
-                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} style={{ background: 'white', width: '100%', maxWidth: '750px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', maxHeight: '90vh', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, backdropFilter: 'blur(8px)', padding: '0.75rem' }}>
+                        <Motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="person-detail-modal-container">
                             {/* Header */}
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '1.812rem', background: '#F0F9F4', borderBottom: '1px solid #DCF2E4' }}>
+                            <div className="person-detail-modal-header">
                                 {isPersonDetailLoading ? (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', height: '80px' }}>
-                                        <div className="premium-loader" style={{ width: '24px', height: '24px', border: '3px solid #DCF2E4', borderTopColor: '#1B6B3A', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
-                                        <p style={{ margin: 0, fontWeight: '700', color: '#064E3B' }}>Accessing network dossier...</p>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', height: '52px' }}>
+                                        <div className="premium-loader" style={{ width: '20px', height: '20px', border: '2.5px solid #DCF2E4', borderTopColor: '#1B6B3A', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                                        <p style={{ margin: 0, fontWeight: '700', fontSize: '0.816rem', color: '#064E3B' }}>Accessing network dossier...</p>
                                     </div>
                                 ) : (
-                                    <div style={{ display: 'flex', gap: '1.359rem', alignItems: 'center' }}>
-                                        {renderAvatar(personDetails?.name, 80)}
-                                        <div>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.227rem', flexWrap: 'wrap' }}>
-                                                <h2 style={{ margin: 0, fontSize: '1.586rem', fontWeight: '900', color: '#064E3B', textTransform: 'uppercase' }}>{personDetails?.name}</h2>
-                                                <span style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>{personDetails?.role_type}</span>
+                                    <div style={{ display: 'flex', gap: '0.906rem', alignItems: 'center', minWidth: 0 }}>
+                                        {renderAvatar(personDetails?.name, 52)}
+                                        <div style={{ minWidth: 0 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
+                                                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '900', color: '#064E3B', textTransform: 'uppercase', lineHeight: 1.2, wordBreak: 'break-word' }}>{personDetails?.name}</h2>
+                                                <span style={{ padding: '0.15rem 0.5rem', borderRadius: '6px', background: '#EFF6FF', color: '#1E40AF', fontSize: '0.62rem', fontWeight: '800', textTransform: 'uppercase' }}>{personDetails?.role_type}</span>
                                                 {activeConfig.partyGroup && personDetails?.relationship && (
-                                                    <span style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: '#FEF3C7', color: '#D97706', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase' }}>Group: {personDetails.relationship}</span>
+                                                    <span style={{ padding: '0.15rem 0.5rem', borderRadius: '6px', background: '#FEF3C7', color: '#D97706', fontSize: '0.62rem', fontWeight: '800', textTransform: 'uppercase' }}>Group: {personDetails.relationship}</span>
                                                 )}
                                                 {activeConfig.partyStatus && (
-                                                    <span 
+                                                    <span
                                                         onClick={() => {
                                                             const meta = getContactMeta(personDetails.contact_info);
                                                             const newStatus = meta.status === 'active' ? 'inactive' : 'active';
@@ -2607,410 +2632,408 @@ const BusinessPeople = () => {
                                                                 data: { ...personDetails, contact_info: updatedMeta }
                                                             });
                                                         }}
-                                                        style={{ padding: '0.227rem 0.68rem', borderRadius: '8px', background: getContactMeta(personDetails.contact_info).status === 'active' ? '#DCF2E4' : '#FEE2E2', color: getContactMeta(personDetails.contact_info).status === 'active' ? '#16A34A' : '#EF4444', fontSize: '0.634rem', fontWeight: '800', textTransform: 'uppercase', cursor: 'pointer' }}
+                                                        style={{ padding: '0.15rem 0.5rem', borderRadius: '6px', background: getContactMeta(personDetails.contact_info).status === 'active' ? '#DCF2E4' : '#FEE2E2', color: getContactMeta(personDetails.contact_info).status === 'active' ? '#16A34A' : '#EF4444', fontSize: '0.62rem', fontWeight: '800', textTransform: 'uppercase', cursor: 'pointer' }}
                                                         title="Click to toggle status"
                                                     >
                                                         {getContactMeta(personDetails.contact_info).status}
                                                     </span>
                                                 )}
                                             </div>
-                                            <div style={{ margin: 0, color: '#64748B', fontWeight: '600', display: 'flex', gap: '0.906rem', fontSize: '0.77rem' }}>
-                                                {personDetails?.company && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Building2 size={14} /> {personDetails.company}</span>}
-                                                {personDetails?.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Phone size={14} /> {personDetails.phone}</span>}
-                                                {personDetails?.email && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Mail size={14} /> {personDetails.email}</span>}
+                                            <div style={{ margin: 0, color: '#64748B', fontWeight: '600', display: 'flex', gap: '0.68rem', fontSize: '0.72rem', flexWrap: 'wrap', overflowWrap: 'anywhere' }}>
+                                                {personDetails?.company && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Building2 size={12} /> {personDetails.company}</span>}
+                                                {personDetails?.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Phone size={12} /> {personDetails.phone}</span>}
+                                                {personDetails?.email && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }}><Mail size={12} /> {personDetails.email}</span>}
                                             </div>
                                         </div>
                                     </div>
                                 )}
-                                <div style={{ display: 'flex', gap: '0.453rem', alignItems: 'center' }}>
-                                    <button 
+                                <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexShrink: 0 }}>
+                                    <button
                                         onClick={() => handleSendWhatsAppReminder(personDetails, computedNetBalance)}
-                                        style={{ border: 'none', background: 'white', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                                        style={{ border: 'none', background: 'white', padding: '0.45rem', borderRadius: '10px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                                         title="Share Contact"
                                     >
-                                        <Share2 size={18} />
+                                        <Share2 size={16} />
                                     </button>
-                                    <button onClick={() => setSelectedPersonId(null)} style={{ border: 'none', background: 'white', padding: '0.544rem', borderRadius: '14px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <X size={20} />
+                                    <button onClick={() => setSelectedPersonId(null)} style={{ border: 'none', background: 'white', padding: '0.45rem', borderRadius: '10px', cursor: 'pointer', color: '#475569', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <X size={18} />
                                     </button>
                                 </div>
                             </div>
 
                             {/* Content Body */}
-                            <div style={{ padding: '1.812rem', overflowY: 'auto', flex: 1, background: '#FAFAF9' }}>
+                            <div className="person-detail-modal-body">
                                 {!isPersonDetailLoading && personDetails && (
                                     <>
-
                                         {/* Exposure Card */}
-                                        <div style={{ background: computedNetBalance >= 0 ? '#ECFDF5' : '#FEF2F2', padding: '1.586rem', borderRadius: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.812rem', border: '1.5px solid', borderColor: computedNetBalance >= 0 ? '#A7F3D0' : '#FCA5A5', boxShadow: '0 4px 10px -2px rgba(0,0,0,0.02)' }}>
+                                        <div className="person-detail-exposure-card" style={{ background: computedNetBalance >= 0 ? '#ECFDF5' : '#FEF2F2', borderColor: computedNetBalance >= 0 ? '#A7F3D0' : '#FCA5A5' }}>
                                             <div>
-                                                <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '850', textTransform: 'uppercase', color: computedNetBalance >= 0 ? '#047857' : '#B91C1C', letterSpacing: '0.05em' }}>Consolidated Ledger Stand</p>
-                                                <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '2.039rem', fontWeight: '950', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', letterSpacing: '-0.03em' }}>
+                                                <p style={{ margin: 0, fontSize: '0.64rem', fontWeight: '850', textTransform: 'uppercase', color: computedNetBalance >= 0 ? '#047857' : '#B91C1C', letterSpacing: '0.04em' }}>Consolidated Ledger Stand</p>
+                                                <h3 style={{ margin: '0.2rem 0 0 0', fontSize: '1.65rem', fontWeight: '950', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
                                                     {formatCurr(computedNetBalance)}
                                                 </h3>
                                                 {activeConfig.payReminder && computedNetBalance !== 0 && (
-                                                    <button 
+                                                    <button
                                                         onClick={() => handleSendWhatsAppReminder(personDetails, computedNetBalance)}
-                                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', border: 'none', background: computedNetBalance >= 0 ? '#D1FAE5' : '#FEE2E2', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', padding: '0.363rem 0.725rem', borderRadius: '10px', fontSize: '0.68rem', fontWeight: '800', marginTop: '0.68rem', cursor: 'pointer' }}
+                                                        style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', border: 'none', background: computedNetBalance >= 0 ? '#D1FAE5' : '#FEE2E2', color: computedNetBalance >= 0 ? '#065F46' : '#991B1B', padding: '0.3rem 0.6rem', borderRadius: '8px', fontSize: '0.64rem', fontWeight: '800', marginTop: '0.45rem', cursor: 'pointer' }}
                                                     >
-                                                        <MessageSquare size={13} /> Send Payment Reminder
+                                                        <MessageSquare size={12} /> Send Payment Reminder
                                                     </button>
                                                 )}
                                             </div>
-                                            <div style={{ width: '56px', height: '56px', borderRadius: '18px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: computedNetBalance >= 0 ? '#059669' : '#DC2626', boxShadow: '0 4px 6px rgba(0,0,0,0.04)' }}>
-                                                {computedNetBalance >= 0 ? <TrendingUp size={28} /> : <TrendingDown size={28} />}
+                                            <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: computedNetBalance >= 0 ? '#059669' : '#DC2626', boxShadow: '0 3px 6px rgba(0,0,0,0.04)', flexShrink: 0 }}>
+                                                {computedNetBalance >= 0 ? <TrendingUp size={22} /> : <TrendingDown size={22} />}
                                             </div>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '1.812rem' }}>
+                                        <div className="person-detail-grid-layout">
                                             {/* Recent Ledger List */}
-                                           <div>
-    <div
-        style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '0.68rem'
-        }}
-    >
-        <h4
-            style={{
-                fontSize: '0.861rem',
-                fontWeight: '900',
-                color: '#1E293B',
-                margin: 0,
-                textTransform: 'uppercase',
-                letterSpacing: '0.02em'
-            }}
-        >
-            Direct Ledger Activity
-        </h4>
+                                            <div>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        justifyContent: 'space-between',
+                                                        alignItems: 'center',
+                                                        marginBottom: '0.55rem'
+                                                    }}
+                                                >
+                                                    <h4
+                                                        style={{
+                                                            fontSize: '0.78rem',
+                                                            fontWeight: '900',
+                                                            color: '#1E293B',
+                                                            margin: 0,
+                                                            textTransform: 'uppercase',
+                                                            letterSpacing: '0.02em'
+                                                        }}
+                                                    >
+                                                        Direct Ledger Activity
+                                                    </h4>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.453rem' }}>
-            <button
-                onClick={() => {
-                    setShowLedgerSearch(prev => !prev);
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                                                        <button
+                                                            onClick={() => {
+                                                                setShowLedgerSearch(prev => !prev);
+                                                                if (showLedgerSearch) {
+                                                                    setLedgerSearchTerm('');
+                                                                }
+                                                            }}
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                color: showLedgerSearch ? '#1B6B3A' : '#94A3B8',
+                                                                cursor: 'pointer',
+                                                                padding: '3px',
+                                                                display: 'flex'
+                                                            }}
+                                                            title="Search entries"
+                                                        >
+                                                            <Search size={14} />
+                                                        </button>
 
-                    if (showLedgerSearch) {
-                        setLedgerSearchTerm('');
-                    }
-                }}
-                style={{
-                    background: 'none',
-                    border: 'none',
-                    color: showLedgerSearch ? '#1B6B3A' : '#94A3B8',
-                    cursor: 'pointer',
-                    padding: '4px',
-                    display: 'flex'
-                }}
-                title="Search entries"
-            >
-                <Search size={16} />
-            </button>
+                                                        <ArrowLeftRight size={14} style={{ color: '#94A3B8' }} />
+                                                    </div>
+                                                </div>
 
-            <ArrowLeftRight size={16} style={{ color: '#94A3B8' }} />
-        </div>
-    </div>
+                                                {showLedgerSearch && (
+                                                    <div style={{ marginBottom: '0.5rem' }}>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Search by amount, date, or memo..."
+                                                            value={ledgerSearchTerm}
+                                                            onChange={(e) => setLedgerSearchTerm(e.target.value)}
+                                                            autoFocus
+                                                            style={{
+                                                                width: '100%',
+                                                                padding: '0.45rem 0.75rem',
+                                                                borderRadius: '10px',
+                                                                border: '1px solid #E2E8F0',
+                                                                outline: 'none',
+                                                                fontSize: '0.72rem',
+                                                                fontWeight: '600',
+                                                                color: '#1E293B',
+                                                                background: 'white',
+                                                                boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
+                                                                boxSizing: 'border-box'
+                                                            }}
+                                                        />
+                                                    </div>
+                                                )}
 
-    {showLedgerSearch && (
-        <div style={{ marginBottom: '0.68rem' }}>
-            <input
-                type="text"
-                placeholder="Search by amount, date, or memo..."
-                value={ledgerSearchTerm}
-                onChange={(e) => setLedgerSearchTerm(e.target.value)}
-                autoFocus
-                style={{
-                    width: '100%',
-                    padding: '0.544rem 0.906rem',
-                    borderRadius: '12px',
-                    border: '1px solid #E2E8F0',
-                    outline: 'none',
-                    fontSize: '0.743rem',
-                    fontWeight: '600',
-                    color: '#1E293B',
-                    background: 'white',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.03)',
-                    boxSizing: 'border-box'
-                }}
-            />
-        </div>
-    )}
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        gap: '0.5rem',
+                                                        maxHeight: '280px',
+                                                        overflowY: 'auto'
+                                                    }}
+                                                >
+                                                    {isPersonTxLoading ? (
+                                                        <p style={{ color: '#94A3B8', fontSize: '0.77rem' }}>
+                                                            Loading transactions...
+                                                        </p>
+                                                    ) : (!personTx ||
+                                                        (personTx.data
+                                                            ? personTx.data.length === 0
+                                                            : personTx.length === 0)) ? (
+                                                        <div
+                                                            style={{
+                                                                padding: '1.812rem',
+                                                                border: '2px dashed #E2E8F0',
+                                                                borderRadius: '16px',
+                                                                textAlign: 'center',
+                                                                background: 'white'
+                                                            }}
+                                                        >
+                                                            <p
+                                                                style={{
+                                                                    margin: 0,
+                                                                    color: '#94A3B8',
+                                                                    fontSize: '0.77rem',
+                                                                    fontStyle: 'italic',
+                                                                    fontWeight: '600'
+                                                                }}
+                                                            >
+                                                                Zero financial assets logged.
+                                                            </p>
+                                                        </div>
+                                                    ) : (
+                                                        (() => {
+                                                            const allTx = [...(personTx.data || personTx || [])].sort((a, b) => {
+                                                                const dateA = new Date(a.date || a.execution_date || a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime();
+                                                                const dateB = new Date(b.date || b.execution_date || b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime();
+                                                                if (dateB !== dateA) return dateB - dateA;
+                                                                return (Number(b.id) || 0) - (Number(a.id) || 0);
+                                                            });
 
-    <div
-        style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.68rem',
-            maxHeight: '320px',
-            overflowY: 'auto'
-        }}
-    >
-        {isPersonTxLoading ? (
-            <p style={{ color: '#94A3B8', fontSize: '0.77rem' }}>
-                Loading transactions...
-            </p>
-        ) : (!personTx ||
-          (personTx.data
-              ? personTx.data.length === 0
-              : personTx.length === 0)) ? (
-            <div
-                style={{
-                    padding: '1.812rem',
-                    border: '2px dashed #E2E8F0',
-                    borderRadius: '16px',
-                    textAlign: 'center',
-                    background: 'white'
-                }}
-            >
-                <p
-                    style={{
-                        margin: 0,
-                        color: '#94A3B8',
-                        fontSize: '0.77rem',
-                        fontStyle: 'italic',
-                        fontWeight: '600'
-                    }}
-                >
-                    Zero financial assets logged.
-                </p>
-            </div>
-        ) : (
-            (() => {
-                const allTx = [...(personTx.data || personTx || [])].sort((a, b) => {
-                    const dateA = new Date(a.date || a.execution_date || a.updatedAt || a.updated_at || a.createdAt || a.created_at || 0).getTime();
-                    const dateB = new Date(b.date || b.execution_date || b.updatedAt || b.updated_at || b.createdAt || b.created_at || 0).getTime();
-                    if (dateB !== dateA) return dateB - dateA;
-                    return (Number(b.id) || 0) - (Number(a.id) || 0);
-                });
+                                                            const filtered = ledgerSearchTerm.trim()
+                                                                ? allTx.filter(t => {
+                                                                    const term = ledgerSearchTerm.toLowerCase().trim();
 
-                const filtered = ledgerSearchTerm.trim()
-                    ? allTx.filter(t => {
-                          const term = ledgerSearchTerm.toLowerCase().trim();
+                                                                    const matchDesc = (t.description || '')
+                                                                        .toLowerCase()
+                                                                        .includes(term);
 
-                          const matchDesc = (t.description || '')
-                              .toLowerCase()
-                              .includes(term);
+                                                                    const matchAmt = String(t.amount).includes(term);
 
-                          const matchAmt = String(t.amount).includes(term);
+                                                                    const matchDate = new Date(t.date)
+                                                                        .toLocaleDateString('en-IN')
+                                                                        .includes(term);
 
-                          const matchDate = new Date(t.date)
-                              .toLocaleDateString('en-IN')
-                              .includes(term);
+                                                                    const matchType = (t.type || '')
+                                                                        .toLowerCase()
+                                                                        .includes(term);
 
-                          const matchType = (t.type || '')
-                              .toLowerCase()
-                              .includes(term);
+                                                                    return (
+                                                                        matchDesc ||
+                                                                        matchAmt ||
+                                                                        matchDate ||
+                                                                        matchType
+                                                                    );
+                                                                })
+                                                                : allTx;
 
-                          return (
-                              matchDesc ||
-                              matchAmt ||
-                              matchDate ||
-                              matchType
-                          );
-                      })
-                    : allTx;
+                                                            return filtered.length === 0 ? (
+                                                                <div
+                                                                    style={{
+                                                                        padding: '1.359rem',
+                                                                        border: '2px dashed #E2E8F0',
+                                                                        borderRadius: '16px',
+                                                                        textAlign: 'center',
+                                                                        background: 'white'
+                                                                    }}
+                                                                >
+                                                                    <p
+                                                                        style={{
+                                                                            margin: 0,
+                                                                            color: '#94A3B8',
+                                                                            fontSize: '0.77rem',
+                                                                            fontStyle: 'italic',
+                                                                            fontWeight: '600'
+                                                                        }}
+                                                                    >
+                                                                        No matching entries found for "
+                                                                        {ledgerSearchTerm}"
+                                                                    </p>
+                                                                </div>
+                                                            ) : (
+                                                                filtered.map((t, i) => (
+                                                                    <div
+                                                                        key={i}
+                                                                        style={{
+                                                                            padding: '0.997rem 1.133rem',
+                                                                            background: 'white',
+                                                                            border: '1px solid #E2E8F0',
+                                                                            borderRadius: '16px',
+                                                                            display: 'flex',
+                                                                            justifyContent: 'space-between',
+                                                                            alignItems: 'center',
+                                                                            boxShadow: '0 2px 4px rgba(0,0,0,0.01)',
+                                                                            gap: '0.906rem'
+                                                                        }}
+                                                                    >
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                flexDirection: 'column',
+                                                                                gap: '0.227rem',
+                                                                                flex: 1
+                                                                            }}
+                                                                        >
+                                                                            <p
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                    fontSize: '0.816rem',
+                                                                                    fontWeight: '800',
+                                                                                    color: '#334155'
+                                                                                }}
+                                                                            >
+                                                                                {t.description || 'Registry entry'}
+                                                                            </p>
 
-                return filtered.length === 0 ? (
-                    <div
-                        style={{
-                            padding: '1.359rem',
-                            border: '2px dashed #E2E8F0',
-                            borderRadius: '16px',
-                            textAlign: 'center',
-                            background: 'white'
-                        }}
-                    >
-                        <p
-                            style={{
-                                margin: 0,
-                                color: '#94A3B8',
-                                fontSize: '0.77rem',
-                                fontStyle: 'italic',
-                                fontWeight: '600'
-                            }}
-                        >
-                            No matching entries found for "
-                            {ledgerSearchTerm}"
-                        </p>
-                    </div>
-                ) : (
-                    filtered.map((t, i) => (
-                        <div
-                            key={i}
-                            style={{
-                                padding: '0.997rem 1.133rem',
-                                background: 'white',
-                                border: '1px solid #E2E8F0',
-                                borderRadius: '16px',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                boxShadow: '0 2px 4px rgba(0,0,0,0.01)',
-                                gap: '0.906rem'
-                            }}
-                        >
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '0.227rem',
-                                    flex: 1
-                                }}
-                            >
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        fontSize: '0.816rem',
-                                        fontWeight: '800',
-                                        color: '#334155'
-                                    }}
-                                >
-                                    {t.description || 'Registry entry'}
-                                </p>
+                                                                            <p
+                                                                                style={{
+                                                                                    margin: 0,
+                                                                                    fontSize: '0.68rem',
+                                                                                    color: '#94A3B8',
+                                                                                    fontWeight: '600'
+                                                                                }}
+                                                                            >
+                                                                                {new Date(t.date).toLocaleDateString(
+                                                                                    'en-IN'
+                                                                                )}
+                                                                            </p>
+                                                                        </div>
 
-                                <p
-                                    style={{
-                                        margin: 0,
-                                        fontSize: '0.68rem',
-                                        color: '#94A3B8',
-                                        fontWeight: '600'
-                                    }}
-                                >
-                                    {new Date(t.date).toLocaleDateString(
-                                        'en-IN'
-                                    )}
-                                </p>
-                            </div>
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                alignItems: 'center',
+                                                                                gap: '0.68rem'
+                                                                            }}
+                                                                        >
+                                                                            <div style={{ textAlign: 'right' }}>
+                                                                                <span
+                                                                                    style={{
+                                                                                        fontSize: '0.952rem',
+                                                                                        fontWeight: '900',
+                                                                                        color:
+                                                                                            t.type === 'lent'
+                                                                                                ? '#059669'
+                                                                                                : '#DC2626'
+                                                                                    }}
+                                                                                >
+                                                                                    {t.type === 'lent' ? '+' : '-'}
+                                                                                    {formatCurr(t.amount)}
+                                                                                </span>
 
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '0.68rem'
-                                }}
-                            >
-                                <div style={{ textAlign: 'right' }}>
-                                    <span
-                                        style={{
-                                            fontSize: '0.952rem',
-                                            fontWeight: '900',
-                                            color:
-                                                t.type === 'lent'
-                                                    ? '#059669'
-                                                    : '#DC2626'
-                                        }}
-                                    >
-                                        {t.type === 'lent' ? '+' : '-'}
-                                        {formatCurr(t.amount)}
-                                    </span>
+                                                                                <div
+                                                                                    style={{
+                                                                                        fontSize: '0.589rem',
+                                                                                        fontWeight: '850',
+                                                                                        textTransform: 'uppercase',
+                                                                                        color:
+                                                                                            t.type === 'lent'
+                                                                                                ? '#10B981'
+                                                                                                : '#EF4444',
+                                                                                        marginTop: '2px'
+                                                                                    }}
+                                                                                >
+                                                                                    {t.type}
+                                                                                </div>
+                                                                            </div>
 
-                                    <div
-                                        style={{
-                                            fontSize: '0.589rem',
-                                            fontWeight: '850',
-                                            textTransform: 'uppercase',
-                                            color:
-                                                t.type === 'lent'
-                                                    ? '#10B981'
-                                                    : '#EF4444',
-                                            marginTop: '2px'
-                                        }}
-                                    >
-                                        {t.type}
-                                    </div>
-                                </div>
+                                                                            <div
+                                                                                style={{
+                                                                                    display: 'flex',
+                                                                                    gap: '0.317rem',
+                                                                                    borderLeft: '1px solid #E2E8F0',
+                                                                                    paddingLeft: '0.68rem',
+                                                                                    alignItems: 'center'
+                                                                                }}
+                                                                            >
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
 
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        gap: '0.317rem',
-                                        borderLeft: '1px solid #E2E8F0',
-                                        paddingLeft: '0.68rem',
-                                        alignItems: 'center'
-                                    }}
-                                >
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
+                                                                                        setEditingTxId(t.id);
 
-                                            setEditingTxId(t.id);
+                                                                                        setInlineTxForm({
+                                                                                            type: t.type,
+                                                                                            amount: t.amount,
+                                                                                            date: new Date(t.date)
+                                                                                                .toISOString()
+                                                                                                .split('T')[0],
+                                                                                            description:
+                                                                                                t.description || ''
+                                                                                        });
 
-                                            setInlineTxForm({
-                                                type: t.type,
-                                                amount: t.amount,
-                                                date: new Date(t.date)
-                                                    .toISOString()
-                                                    .split('T')[0],
-                                                description:
-                                                    t.description || ''
-                                            });
+                                                                                        setIsInlineTxOpen(true);
+                                                                                        setIsInlineRemOpen(false);
+                                                                                    }}
+                                                                                    style={{
+                                                                                        background: 'none',
+                                                                                        border: 'none',
+                                                                                        color: '#94A3B8',
+                                                                                        cursor: 'pointer',
+                                                                                        transition: 'color 0.2s',
+                                                                                        padding: '4px'
+                                                                                    }}
+                                                                                    onMouseOver={(e) =>
+                                                                                    (e.currentTarget.style.color =
+                                                                                        '#7C3AED')
+                                                                                    }
+                                                                                    onMouseOut={(e) =>
+                                                                                    (e.currentTarget.style.color =
+                                                                                        '#94A3B8')
+                                                                                    }
+                                                                                    title="Edit Transaction"
+                                                                                >
+                                                                                    <Edit2 size={15} />
+                                                                                </button>
 
-                                            setIsInlineTxOpen(true);
-                                            setIsInlineRemOpen(false);
-                                        }}
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            color: '#94A3B8',
-                                            cursor: 'pointer',
-                                            transition: 'color 0.2s',
-                                            padding: '4px'
-                                        }}
-                                        onMouseOver={(e) =>
-                                            (e.currentTarget.style.color =
-                                                '#7C3AED')
-                                        }
-                                        onMouseOut={(e) =>
-                                            (e.currentTarget.style.color =
-                                                '#94A3B8')
-                                        }
-                                        title="Edit Transaction"
-                                    >
-                                        <Edit2 size={15} />
-                                    </button>
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
 
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-
-                                            if (
-                                                confirm(
-                                                    'Are you sure you want to delete this transaction?'
-                                                )
-                                            ) {
-                                                deleteTxMutation.mutate(t);
-                                            }
-                                        }}
-                                        style={{
-                                            background: 'none',
-                                            border: 'none',
-                                            color: '#94A3B8',
-                                            cursor: 'pointer',
-                                            transition: 'color 0.2s',
-                                            padding: '4px'
-                                        }}
-                                        onMouseOver={(e) =>
-                                            (e.currentTarget.style.color =
-                                                '#EF4444')
-                                        }
-                                        onMouseOut={(e) =>
-                                            (e.currentTarget.style.color =
-                                                '#94A3B8')
-                                        }
-                                        title="Delete Transaction"
-                                    >
-                                        <Trash2 size={15} />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                );
-            })()
-        )}
-    </div>
-</div>
+                                                                                        if (
+                                                                                            confirm(
+                                                                                                'Are you sure you want to delete this transaction?'
+                                                                                            )
+                                                                                        ) {
+                                                                                            deleteTxMutation.mutate(t);
+                                                                                        }
+                                                                                    }}
+                                                                                    style={{
+                                                                                        background: 'none',
+                                                                                        border: 'none',
+                                                                                        color: '#94A3B8',
+                                                                                        cursor: 'pointer',
+                                                                                        transition: 'color 0.2s',
+                                                                                        padding: '4px'
+                                                                                    }}
+                                                                                    onMouseOver={(e) =>
+                                                                                    (e.currentTarget.style.color =
+                                                                                        '#EF4444')
+                                                                                    }
+                                                                                    onMouseOut={(e) =>
+                                                                                    (e.currentTarget.style.color =
+                                                                                        '#94A3B8')
+                                                                                    }
+                                                                                    title="Delete Transaction"
+                                                                                >
+                                                                                    <Trash2 size={15} />
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))
+                                                            );
+                                                        })()
+                                                    )}
+                                                </div>
+                                            </div>
 
                                             {/* Specific Reminder Flows */}
                                             {/* Right Column: Reminders OR Inline Transaction Form OR Inline Reminder Form */}
@@ -3034,15 +3057,15 @@ const BusinessPeople = () => {
                                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
                                                                 <div>
                                                                     <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>AMOUNT ({currency.symbol})</label>
-                                                                    <input 
-                                                                        required 
-                                                                        type="text" 
+                                                                    <input
+                                                                        required
+                                                                        type="text"
                                                                         inputMode="decimal"
                                                                         maxLength={15}
-                                                                        placeholder="0.00" 
-                                                                        value={inlineTxForm.amount} 
-                                                                        onChange={handleInlineTxAmountChange} 
-                                                                        style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.816rem' }} 
+                                                                        placeholder="0.00"
+                                                                        value={inlineTxForm.amount}
+                                                                        onChange={handleInlineTxAmountChange}
+                                                                        style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontWeight: '800', fontSize: '0.816rem' }}
                                                                     />
                                                                 </div>
                                                                 <div>
@@ -3054,7 +3077,7 @@ const BusinessPeople = () => {
                                                                 <label style={{ display: 'block', fontSize: '0.634rem', fontWeight: '800', color: '#64748B', marginBottom: '0.227rem' }}>MEMO / NARRATIVE</label>
                                                                 <input placeholder="Registry note..." type="text" value={inlineTxForm.description} onChange={(e) => setInlineTxForm({ ...inlineTxForm, description: e.target.value })} style={{ width: '100%', padding: '0.589rem', borderRadius: '10px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} />
                                                             </div>
-                                                            <button type="submit" disabled={createTxMutation.isPending || updateTxMutation.isPending} style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.816rem', cursor: 'pointer', marginTop: '0.453rem' }}>
+                                                            <button type="submit" disabled={createTxMutation.isPending || updateTxMutation.isPending} style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', background: 'var(--primary-gradient)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.816rem', cursor: 'pointer', marginTop: '0.453rem' }}>
                                                                 {createTxMutation.isPending || updateTxMutation.isPending ? 'Saving...' : editingTxId ? 'Update Entry' : 'Submit Entry'}
                                                             </button>
                                                         </form>
@@ -3154,15 +3177,15 @@ const BusinessPeople = () => {
                                 )}
                             </div>
                             {/* Footer */}
-                            <div style={{ padding: '0.816rem 0.906rem', borderTop: '1px solid #E2E8F0', background: 'white', display: 'flex', justifyContent: 'flex-end', gap: '0.906rem' }}>
+                            <div style={{ padding: '0.65rem 1rem', borderTop: '1px solid #E2E8F0', background: 'white', display: 'flex', justifyContent: 'flex-end', gap: '0.68rem', flexWrap: 'wrap' }}>
                                 {!isInlineRemOpen && (
-                                    <button onClick={() => { setIsInlineTxOpen(prev => !prev); setIsInlineRemOpen(false); if (isInlineTxOpen) { setEditingTxId(null); setInlineTxForm({ type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '' }); } }} style={{ padding: '0.68rem 1.359rem', borderRadius: '12px', background: isInlineTxOpen ? '#FEE2E2' : '#F1F5F9', border: 'none', color: isInlineTxOpen ? '#991B1B' : '#475569', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        {isInlineTxOpen ? 'Cancel Entry' : <><Plus size={15} /> Record Transaction</>}
+                                    <button onClick={() => { setIsInlineTxOpen(prev => !prev); setIsInlineRemOpen(false); if (isInlineTxOpen) { setEditingTxId(null); setInlineTxForm({ type: 'lent', amount: '', date: new Date().toISOString().split('T')[0], description: '' }); } }} style={{ padding: '0.45rem 0.9rem', borderRadius: '10px', background: isInlineTxOpen ? '#FEE2E2' : '#F1F5F9', border: 'none', color: isInlineTxOpen ? '#991B1B' : '#475569', fontWeight: '750', fontSize: '0.743rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        {isInlineTxOpen ? 'Cancel Entry' : <><Plus size={14} /> Record Transaction</>}
                                     </button>
                                 )}
                                 {!isInlineTxOpen && (
-                                    <button onClick={() => { setIsInlineRemOpen(prev => !prev); setIsInlineTxOpen(false); if (isInlineRemOpen) { setEditingRemId(null); setInlineRemForm({ title: '', amount: '', due_date: new Date().toISOString().split('T')[0] }); } }} style={{ padding: '0.68rem 1.359rem', borderRadius: '12px', background: isInlineRemOpen ? '#FEF2F2' : '#FEF3C7', border: 'none', color: isInlineRemOpen ? '#991B1B' : '#D97706', fontWeight: '750', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                        {isInlineRemOpen ? 'Cancel Alarm' : <><Bell size={15} /> Set Maturity Due</>}
+                                    <button onClick={() => { setIsInlineRemOpen(prev => !prev); setIsInlineTxOpen(false); if (isInlineRemOpen) { setEditingRemId(null); setInlineRemForm({ title: '', amount: '', due_date: new Date().toISOString().split('T')[0] }); } }} style={{ padding: '0.45rem 0.9rem', borderRadius: '10px', background: isInlineRemOpen ? '#FEF2F2' : '#FEF3C7', border: 'none', color: isInlineRemOpen ? '#991B1B' : '#D97706', fontWeight: '750', fontSize: '0.743rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        {isInlineRemOpen ? 'Cancel Alarm' : <><Bell size={14} /> Set Maturity Due</>}
                                     </button>
                                 )}
                             </div>
@@ -3177,11 +3200,11 @@ const BusinessPeople = () => {
                     const person = shareModalData.person;
                     const balance = parseFloat(shareModalData.balance) || 0;
                     const isReceivable = balance >= 0;
-                    
+
                     // Sender info
                     const senderName = userProfile?.name || 'CliKs User';
                     const senderPhone = userProfile?.phone || '';
-                    
+
                     // Format date elegantly (e.g. 25 May 26)
                     const formatDateToLabel = (dateStr) => {
                         try {
@@ -3196,7 +3219,7 @@ const BusinessPeople = () => {
                             return dateStr;
                         }
                     };
-                    
+
                     const displayDate = formatDateToLabel(shareDate);
 
                     const drawCardToCanvas = (canvas) => {
@@ -3210,7 +3233,7 @@ const BusinessPeople = () => {
                         ctx.strokeStyle = '#F1F5F9';
                         ctx.lineWidth = 6;
                         ctx.strokeRect(15, 15, 770, 570);
-                        
+
                         ctx.strokeStyle = '#E2E8F0';
                         ctx.lineWidth = 1.5;
                         ctx.strokeRect(20, 20, 760, 560);
@@ -3324,10 +3347,10 @@ const BusinessPeople = () => {
 
                     return (
                         <div style={{ position: 'fixed', inset: 0, background: 'rgba(6, 78, 59, 0.45)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100, backdropFilter: 'blur(10px)' }}>
-                            <Motion.div 
-                                initial={{ opacity: 0, y: 20, scale: 0.98 }} 
-                                animate={{ opacity: 1, y: 0, scale: 1 }} 
-                                exit={{ opacity: 0, y: 20, scale: 0.98 }} 
+                            <Motion.div
+                                initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 20, scale: 0.98 }}
                                 style={{ background: '#F8FAFC', width: '92%', maxWidth: '820px', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 30px 60px -15px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', maxHeight: '90vh' }}
                             >
                                 {/* Header Banner */}
@@ -3346,20 +3369,20 @@ const BusinessPeople = () => {
 
                                 {/* Body Container split in two columns */}
                                 <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.1fr) 1fr', overflowY: 'auto', flex: 1, background: '#F8FAFC' }} className="share-grid-responsive">
-                                    
+
                                     {/* Left Side: Controls */}
                                     <div style={{ padding: '1.812rem', display: 'flex', flexDirection: 'column', gap: '1.359rem', borderRight: '1.5px solid #F1F5F9' }}>
-                                        
+
                                         {/* Amount input */}
                                         <div>
                                             <label style={{ display: 'block', fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.408rem' }}>Outstanding Amount ({currency.symbol})</label>
                                             <div style={{ position: 'relative' }}>
-                                                <input 
-                                                    type="text" 
+                                                <input
+                                                    type="text"
                                                     readOnly
                                                     disabled
-                                                    value={parseFloat(shareAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-                                                    style={{ width: '100%', padding: '0.77rem 0.906rem', paddingLeft: '1.812rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.042rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: '#F1F5F9', cursor: 'not-allowed', boxSizing: 'border-box' }} 
+                                                    value={parseFloat(shareAmount || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                    style={{ width: '100%', padding: '0.77rem 0.906rem', paddingLeft: '1.812rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '1.042rem', fontWeight: '900', outline: 'none', color: isReceivable ? '#DC2626' : '#16A34A', background: '#F1F5F9', cursor: 'not-allowed', boxSizing: 'border-box' }}
                                                 />
                                                 <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontWeight: '900', fontSize: '1.133rem', color: '#94A3B8' }}>{currency.symbol}</span>
                                             </div>
@@ -3368,35 +3391,35 @@ const BusinessPeople = () => {
                                         {/* Date selector */}
                                         <div>
                                             <label style={{ display: 'block', fontSize: '0.652rem', fontWeight: '850', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.408rem' }}>Maturity / Statement Date</label>
-                                            <input 
-                                                type="date" 
-                                                value={shareDate} 
-                                                onChange={(e) => setShareDate(e.target.value)} 
-                                                style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.816rem', fontWeight: '750', outline: 'none', background: 'white' }} 
+                                            <input
+                                                type="date"
+                                                value={shareDate}
+                                                onChange={(e) => setShareDate(e.target.value)}
+                                                style={{ width: '100%', padding: '0.77rem 0.906rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', fontSize: '0.816rem', fontWeight: '750', outline: 'none', background: 'white' }}
                                             />
                                         </div>
 
                                         {/* Action buttons */}
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.68rem', marginTop: 'auto' }}>
-                                            <button 
-                                                onClick={handleWhatsAppShare} 
+                                            <button
+                                                onClick={handleWhatsAppShare}
                                                 style={{ width: '100%', padding: '0.816rem', borderRadius: '16px', border: 'none', background: '#16A34A', color: 'white', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 12px rgba(22, 163, 74, 0.2)' }}
                                             >
                                                 <MessageSquare size={18} />
                                                 <span>Share on WhatsApp</span>
                                             </button>
-                                            
+
                                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.453rem' }}>
-                                                <button 
-                                                    onClick={handleDownloadCard} 
+                                                <button
+                                                    onClick={handleDownloadCard}
                                                     style={{ padding: '0.77rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.725rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                                                 >
                                                     <ChevronRight size={16} style={{ transform: 'rotate(90deg)' }} />
                                                     <span>Get PNG Card</span>
                                                 </button>
-                                                
-                                                <button 
-                                                    onClick={handleCopyCardAndText} 
+
+                                                <button
+                                                    onClick={handleCopyCardAndText}
                                                     style={{ padding: '0.77rem', borderRadius: '14px', border: '1.5px solid #E2E8F0', background: 'white', color: '#334155', fontWeight: '800', fontSize: '0.725rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', cursor: 'pointer' }}
                                                 >
                                                     <CheckCircle2 size={16} />
@@ -3410,7 +3433,7 @@ const BusinessPeople = () => {
                                     {/* Right Side: Live Visual Preview */}
                                     <div style={{ padding: '1.812rem', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F1F5F9' }}>
                                         <div style={{ background: 'white', width: '100%', maxWidth: '340px', borderRadius: '24px', padding: '1.586rem', border: '1px solid #E2E8F0', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05)', position: 'relative', overflow: 'hidden' }}>
-                                            
+
                                             {/* Mandala Ornament SVG (Elegant Flower Motif) */}
                                             <svg style={{ position: 'absolute', top: '-10px', right: '-10px', width: '130px', height: '130px', opacity: 0.22, pointerEvents: 'none' }} viewBox="0 0 100 100">
                                                 <circle cx="50" cy="50" r="46" fill="none" stroke="#C4A059" strokeWidth="0.5" strokeDasharray="1 1" />
@@ -3427,11 +3450,11 @@ const BusinessPeople = () => {
                                                 <p style={{ margin: 0, fontSize: '0.743rem', fontWeight: '750', color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                                     {isReceivable ? 'Payment reminder for' : 'Ledger stand statement for'}
                                                 </p>
-                                                
+
                                                 <h2 style={{ margin: '0.68rem 0', fontSize: '2.084rem', fontWeight: '950', color: isReceivable ? '#DC2626' : '#16A34A', letterSpacing: '-0.02em' }}>
                                                     {currency.symbol}{parseFloat(shareAmount || 0).toLocaleString()}
                                                 </h2>
-                                                
+
                                                 <p style={{ margin: 0, fontSize: '0.707rem', fontWeight: '700', color: '#64748B' }}>
                                                     on {displayDate}
                                                 </p>
@@ -3508,22 +3531,22 @@ const BusinessPeople = () => {
                             }} style={{ display: 'flex', flexDirection: 'column', gap: '1.042rem' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Group Title <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <input 
-                                        required 
-                                        placeholder="e.g. Q4 Inventory Syndicate or Retail Expansion Pool" 
-                                        type="text" 
-                                        value={newGroupForm.name} 
-                                        onChange={(e) => setNewGroupForm({ ...newGroupForm, name: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
+                                    <input
+                                        required
+                                        placeholder="e.g. Q4 Inventory Syndicate or Retail Expansion Pool"
+                                        type="text"
+                                        value={newGroupForm.name}
+                                        onChange={(e) => setNewGroupForm({ ...newGroupForm, name: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }}
                                     />
                                 </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Group Financial Model</label>
-                                        <select 
-                                            value={newGroupForm.group_type} 
-                                            onChange={(e) => setNewGroupForm({ ...newGroupForm, group_type: e.target.value })} 
+                                        <select
+                                            value={newGroupForm.group_type}
+                                            onChange={(e) => setNewGroupForm({ ...newGroupForm, group_type: e.target.value })}
                                             style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                         >
                                             <option value="syndicate">Business Syndicate</option>
@@ -3534,24 +3557,24 @@ const BusinessPeople = () => {
                                     </div>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Target Pool Amount (Optional)</label>
-                                        <input 
-                                            placeholder="e.g. 500000" 
-                                            type="number" 
-                                            value={newGroupForm.target_amount} 
-                                            onChange={(e) => setNewGroupForm({ ...newGroupForm, target_amount: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
+                                        <input
+                                            placeholder="e.g. 500000"
+                                            type="number"
+                                            value={newGroupForm.target_amount}
+                                            onChange={(e) => setNewGroupForm({ ...newGroupForm, target_amount: e.target.value })}
+                                            style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }}
                                         />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Description & Purpose</label>
-                                    <textarea 
-                                        placeholder="Outline capital objectives, expense boundaries, or settlement frequency..." 
+                                    <textarea
+                                        placeholder="Outline capital objectives, expense boundaries, or settlement frequency..."
                                         rows={2}
-                                        value={newGroupForm.description} 
-                                        onChange={(e) => setNewGroupForm({ ...newGroupForm, description: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                        value={newGroupForm.description}
+                                        onChange={(e) => setNewGroupForm({ ...newGroupForm, description: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                     />
                                 </div>
 
@@ -3568,31 +3591,31 @@ const BusinessPeople = () => {
 
                                     {/* Partner Input Row */}
                                     <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.6fr 1fr auto', gap: '0.453rem', alignItems: 'center' }}>
-                                        <input 
-                                            placeholder="Name" 
-                                            value={tempMemberInput.name} 
-                                            onChange={(e) => setTempMemberInput({ ...tempMemberInput, name: e.target.value })} 
-                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }} 
+                                        <input
+                                            placeholder="Name"
+                                            value={tempMemberInput.name}
+                                            onChange={(e) => setTempMemberInput({ ...tempMemberInput, name: e.target.value })}
+                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }}
                                         />
-                                        <input 
-                                            placeholder="partner@bnxmail.com" 
-                                            value={tempMemberInput.email} 
+                                        <input
+                                            placeholder="partner@bnxmail.com"
+                                            value={tempMemberInput.email}
                                             onChange={(e) => {
                                                 setTempMemberInput({ ...tempMemberInput, email: e.target.value });
                                                 setTempMemberEmailError('');
                                             }}
-                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: tempMemberEmailError ? '1.5px solid #EF4444' : '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }} 
+                                            style={{ padding: '0.544rem 0.68rem', borderRadius: '8px', border: tempMemberEmailError ? '1.5px solid #EF4444' : '1px solid #CBD5E1', fontSize: '0.725rem', outline: 'none' }}
                                         />
-                                        <select 
-                                            value={tempMemberInput.role} 
-                                            onChange={(e) => setTempMemberInput({ ...tempMemberInput, role: e.target.value })} 
+                                        <select
+                                            value={tempMemberInput.role}
+                                            onChange={(e) => setTempMemberInput({ ...tempMemberInput, role: e.target.value })}
                                             style={{ padding: '0.544rem 0.453rem', borderRadius: '8px', border: '1px solid #CBD5E1', background: 'white', fontSize: '0.68rem', fontWeight: '700' }}
                                         >
                                             <option value="member">Member</option>
                                             <option value="manager">Manager</option>
                                             <option value="auditor">Auditor</option>
                                         </select>
-                                        <button 
+                                        <button
                                             type="button"
                                             onClick={() => {
                                                 const email = (tempMemberInput.email || '').trim().toLowerCase();
@@ -3620,7 +3643,7 @@ const BusinessPeople = () => {
                                                 setTempMemberInput({ name: '', email: '', role: 'member' });
                                                 setTempMemberEmailError('');
                                             }}
-                                            style={{ padding: '0.544rem 0.77rem', borderRadius: '8px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '750', fontSize: '0.725rem', cursor: 'pointer' }}
+                                            style={{ padding: '0.544rem 0.77rem', borderRadius: '8px', background: 'var(--primary)', color: 'white', border: 'none', fontWeight: '750', fontSize: '0.725rem', cursor: 'pointer' }}
                                         >
                                             Add
                                         </button>
@@ -3639,15 +3662,15 @@ const BusinessPeople = () => {
                                                     <span style={{ fontWeight: '800', color: '#1E293B' }}>{m.name}</span>
                                                     <span style={{ color: '#64748B' }}>({m.email})</span>
                                                     <span style={{ padding: '0.091rem 0.317rem', borderRadius: '4px', background: '#ECFDF5', color: '#065F46', fontSize: '0.589rem', fontWeight: '800' }}>{m.role}</span>
-                                                    <X 
-                                                        size={12} 
-                                                        style={{ cursor: 'pointer', color: '#EF4444' }} 
+                                                    <X
+                                                        size={12}
+                                                        style={{ cursor: 'pointer', color: '#EF4444' }}
                                                         onClick={() => {
                                                             setNewGroupForm({
                                                                 ...newGroupForm,
                                                                 members: newGroupForm.members.filter((_, i) => i !== idx)
                                                             });
-                                                        }} 
+                                                        }}
                                                     />
                                                 </div>
                                             ))}
@@ -3656,17 +3679,17 @@ const BusinessPeople = () => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setIsCreateGroupModalOpen(false)} 
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsCreateGroupModalOpen(false)}
                                         style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         disabled={createGroupMutation.isPending}
-                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                                     >
                                         {createGroupMutation.isPending ? 'Dispatching Invites...' : 'Create Group & Send Invites'}
                                     </button>
@@ -3683,7 +3706,7 @@ const BusinessPeople = () => {
                     <div style={{ position: 'fixed', inset: 0, background: 'rgba(15, 23, 42, 0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1050, backdropFilter: 'blur(8px)', padding: '1.133rem' }}>
                         <Motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} style={{ background: '#FFFFFF', width: '100%', maxWidth: '960px', height: '88vh', borderRadius: '28px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                             {/* Header */}
-                            <div style={{ padding: '0.816rem 0.906rem', background: '#064E3B', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div style={{ padding: '0.816rem 0.906rem', background: 'var(--primary)', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.906rem' }}>
                                     <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <FolderKanban size={24} />
@@ -3701,13 +3724,13 @@ const BusinessPeople = () => {
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
-                                    <button 
+                                    <button
                                         onClick={() => setIsAddGroupTxModalOpen(true)}
                                         style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', background: '#10B981', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                     >
                                         <Plus size={14} /> Record Entry
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={() => setIsInviteMemberModalOpen(true)}
                                         style={{ padding: '0.544rem 0.906rem', borderRadius: '10px', background: 'rgba(255,255,255,0.15)', color: 'white', border: '1px solid rgba(255,255,255,0.25)', fontWeight: '800', fontSize: '0.725rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                     >
@@ -3754,7 +3777,7 @@ const BusinessPeople = () => {
                                 {groupActiveSubTab === 'balances' && (
                                     <div>
                                         {/* Financial Highlights */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '0.906rem', marginBottom: '1.812rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 170px), 1fr))', gap: '0.906rem', marginBottom: '1.812rem' }}>
                                             <div style={{ padding: '1.133rem', background: '#F0FDF4', borderRadius: '18px', border: '1px solid #BBF7D0' }}>
                                                 <p style={{ margin: 0, fontSize: '0.68rem', fontWeight: '800', color: '#166534', textTransform: 'uppercase' }}>Total Contributed</p>
                                                 <h3 style={{ margin: '0.317rem 0 0 0', fontSize: '1.269rem', fontWeight: '900', color: '#065F46' }}>
@@ -3796,7 +3819,7 @@ const BusinessPeople = () => {
                                         <h4 style={{ fontSize: '0.906rem', fontWeight: '850', color: '#0F172A', marginBottom: '0.906rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                             <ShieldCheck size={18} style={{ color: '#064E3B' }} /> Member Financial Positions & Net Dues
                                         </h4>
-                                        <div className="cliks-table-scroll" style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                        <div className="cliks-table-scroll people-data-scroll" role="region" aria-label="Member balances" tabIndex={0} style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
                                             <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                                 <thead>
                                                     <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
@@ -3904,9 +3927,9 @@ const BusinessPeople = () => {
                                     <div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                                             <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '850', color: '#0F172A' }}>Shared Financial Entries</h4>
-                                            <button 
+                                            <button
                                                 onClick={() => setIsAddGroupTxModalOpen(true)}
-                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: 'var(--primary)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                             >
                                                 <Plus size={14} /> Record Entry
                                             </button>
@@ -3917,7 +3940,7 @@ const BusinessPeople = () => {
                                                 <p style={{ margin: 0, color: '#64748B', fontSize: '0.77rem' }}>No financial transactions logged yet. Click "Record Entry" to log contributions, expenditures, or settlements.</p>
                                             </div>
                                         ) : (
-                                            <div className="cliks-table-scroll" style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
+                                            <div className="cliks-table-scroll people-data-scroll" role="region" aria-label="Group ledger" tabIndex={0} style={{ background: 'white', borderRadius: '14px', border: '1px solid #E2E8F0' }}>
                                                 <table className="cliks-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                                                     <thead>
                                                         <tr style={{ background: '#F8FAFC', borderBottom: '1px solid #E2E8F0' }}>
@@ -3985,15 +4008,15 @@ const BusinessPeople = () => {
                                     <div>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.906rem' }}>
                                             <h4 style={{ margin: 0, fontSize: '0.906rem', fontWeight: '850', color: '#0F172A' }}>Group Governance & Participants</h4>
-                                            <button 
+                                            <button
                                                 onClick={() => setIsInviteMemberModalOpen(true)}
-                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: '#064E3B', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                                style={{ padding: '0.498rem 0.861rem', borderRadius: '10px', background: 'var(--primary)', color: 'white', border: 'none', fontWeight: '800', fontSize: '0.707rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
                                             >
                                                 <UserPlus size={14} /> Invite Partner
                                             </button>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '0.906rem' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '0.906rem' }}>
                                             {selectedGroupDetails.members?.map(m => (
                                                 <div key={m.id} style={{ padding: '1.133rem', background: '#F8FAFC', borderRadius: '16px', border: '1px solid #E2E8F0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.77rem' }}>
                                                     <div>
@@ -4101,9 +4124,9 @@ const BusinessPeople = () => {
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Entry Type</label>
-                                        <select 
-                                            value={groupTxForm.type} 
-                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, type: e.target.value })} 
+                                        <select
+                                            value={groupTxForm.type}
+                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, type: e.target.value })}
                                             style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                         >
                                             <option value="expense">Group Expense</option>
@@ -4114,61 +4137,61 @@ const BusinessPeople = () => {
                                     </div>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Amount <span style={{ color: '#EF4444' }}>*</span></label>
-                                        <input 
-                                            required 
-                                            type="number" 
-                                            placeholder="0.00" 
-                                            value={groupTxForm.amount} 
-                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, amount: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }} 
+                                        <input
+                                            required
+                                            type="number"
+                                            placeholder="0.00"
+                                            value={groupTxForm.amount}
+                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, amount: e.target.value })}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.816rem' }}
                                         />
                                     </div>
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Title / Description <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <input 
-                                        required 
-                                        placeholder="e.g. Supplier Batch Payment or Initial Capital" 
-                                        value={groupTxForm.title} 
-                                        onChange={(e) => setGroupTxForm({ ...groupTxForm, title: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                    <input
+                                        required
+                                        placeholder="e.g. Supplier Batch Payment or Initial Capital"
+                                        value={groupTxForm.title}
+                                        onChange={(e) => setGroupTxForm({ ...groupTxForm, title: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                     />
                                 </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.68rem' }}>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Category</label>
-                                        <input 
-                                            placeholder="Inventory, Rent, Equipment..." 
-                                            value={groupTxForm.category} 
-                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, category: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                        <input
+                                            placeholder="Inventory, Rent, Equipment..."
+                                            value={groupTxForm.category}
+                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, category: e.target.value })}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                         />
                                     </div>
                                     <div>
                                         <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Date</label>
-                                        <input 
-                                            type="date" 
-                                            value={groupTxForm.date} 
-                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, date: e.target.value })} 
-                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                        <input
+                                            type="date"
+                                            value={groupTxForm.date}
+                                            onChange={(e) => setGroupTxForm({ ...groupTxForm, date: e.target.value })}
+                                            style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                         />
                                     </div>
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setIsAddGroupTxModalOpen(false)} 
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddGroupTxModalOpen(false)}
                                         style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         disabled={addGroupTxMutation.isPending}
-                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {addGroupTxMutation.isPending ? 'Logging...' : 'Save Entry'}
                                     </button>
@@ -4211,25 +4234,25 @@ const BusinessPeople = () => {
                             }} style={{ display: 'flex', flexDirection: 'column', gap: '0.906rem' }}>
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Partner Name</label>
-                                    <input 
-                                        placeholder="e.g. Ramesh Patel" 
-                                        value={inviteMemberForm.name} 
-                                        onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, name: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                    <input
+                                        placeholder="e.g. Ramesh Patel"
+                                        value={inviteMemberForm.name}
+                                        onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, name: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                     />
                                 </div>
 
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Partner @bnxmail.com Email <span style={{ color: '#EF4444' }}>*</span></label>
-                                    <input 
-                                        required 
-                                        placeholder="partner@bnxmail.com" 
-                                        value={inviteMemberForm.email} 
+                                    <input
+                                        required
+                                        placeholder="partner@bnxmail.com"
+                                        value={inviteMemberForm.email}
                                         onChange={(e) => {
                                             setInviteMemberForm({ ...inviteMemberForm, email: e.target.value });
                                             setInviteMemberEmailError('');
-                                        }} 
-                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: inviteMemberEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                        }}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: inviteMemberEmailError ? '1.5px solid #EF4444' : '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                     />
                                     {inviteMemberEmailError ? (
                                         <p style={{ margin: '0.317rem 0 0 0', fontSize: '0.652rem', color: '#EF4444', fontWeight: '700' }}>{inviteMemberEmailError}</p>
@@ -4240,9 +4263,9 @@ const BusinessPeople = () => {
 
                                 <div>
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>Assigned Access Role</label>
-                                    <select 
-                                        value={inviteMemberForm.role} 
-                                        onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, role: e.target.value })} 
+                                    <select
+                                        value={inviteMemberForm.role}
+                                        onChange={(e) => setInviteMemberForm({ ...inviteMemberForm, role: e.target.value })}
                                         style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', background: 'white', fontSize: '0.77rem', fontWeight: '700' }}
                                     >
                                         <option value="member">Member (Can view ledger & contribute)</option>
@@ -4252,17 +4275,17 @@ const BusinessPeople = () => {
                                 </div>
 
                                 <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setIsInviteMemberModalOpen(false)} 
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsInviteMemberModalOpen(false)}
                                         style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         disabled={inviteMemberMutation.isPending}
-                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {inviteMemberMutation.isPending ? 'Sending...' : 'Dispatch Invitation'}
                                     </button>
@@ -4311,13 +4334,13 @@ const BusinessPeople = () => {
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>
                                         How much money will you give? <span style={{ color: '#EF4444' }}>*</span>
                                     </label>
-                                    <input 
-                                        required 
-                                        type="number" 
-                                        placeholder="e.g. 5000" 
-                                        value={privateNoteForm.amount} 
-                                        onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, amount: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.861rem', fontWeight: '750' }} 
+                                    <input
+                                        required
+                                        type="number"
+                                        placeholder="e.g. 5000"
+                                        value={privateNoteForm.amount}
+                                        onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, amount: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.861rem', fontWeight: '750' }}
                                     />
                                 </div>
 
@@ -4325,12 +4348,12 @@ const BusinessPeople = () => {
                                     <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: '800', color: '#64748B', marginBottom: '0.317rem' }}>
                                         Private Memo / Reason (Optional)
                                     </label>
-                                    <textarea 
-                                        rows={2} 
-                                        placeholder="e.g. For raw materials share, to be settled next Tuesday..." 
-                                        value={privateNoteForm.notes} 
-                                        onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, notes: e.target.value })} 
-                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }} 
+                                    <textarea
+                                        rows={2}
+                                        placeholder="e.g. For raw materials share, to be settled next Tuesday..."
+                                        value={privateNoteForm.notes}
+                                        onChange={(e) => setPrivateNoteForm({ ...privateNoteForm, notes: e.target.value })}
+                                        style={{ width: '100%', padding: '0.68rem', borderRadius: '12px', border: '1px solid #E2E8F0', outline: 'none', fontSize: '0.77rem' }}
                                     />
                                 </div>
 
@@ -4343,30 +4366,30 @@ const BusinessPeople = () => {
 
                                 <div style={{ display: 'flex', gap: '0.68rem', marginTop: '0.453rem' }}>
                                     {selectedGroupDetails?.members?.find(m => m.id === privateNoteModalData.member_id)?.private_note && (
-                                        <button 
-                                            type="button" 
+                                        <button
+                                            type="button"
                                             onClick={() => {
                                                 if (window.confirm('Remove this private note?')) {
                                                     deletePrivateNoteMutation.mutate(privateNoteModalData.member_id);
                                                 }
-                                            }} 
+                                            }}
                                             disabled={deletePrivateNoteMutation.isPending}
                                             style={{ padding: '0.68rem 0.906rem', borderRadius: '12px', border: '1.5px solid #FECACA', background: '#FFFFFF', color: '#EF4444', fontWeight: '800', fontSize: '0.743rem', cursor: 'pointer' }}
                                         >
                                             Remove
                                         </button>
                                     )}
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setPrivateNoteModalData(null)} 
+                                    <button
+                                        type="button"
+                                        onClick={() => setPrivateNoteModalData(null)}
                                         style={{ flex: 1, padding: '0.68rem', borderRadius: '12px', border: '1px solid #CBD5E1', background: 'white', fontWeight: '750', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         Cancel
                                     </button>
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         disabled={setPrivateNoteMutation.isPending}
-                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: '#064E3B', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
+                                        style={{ flex: 2, padding: '0.68rem', borderRadius: '12px', border: 'none', background: 'var(--primary)', color: 'white', fontWeight: '800', fontSize: '0.77rem', cursor: 'pointer' }}
                                     >
                                         {setPrivateNoteMutation.isPending ? 'Saving...' : 'Save Private Note'}
                                     </button>

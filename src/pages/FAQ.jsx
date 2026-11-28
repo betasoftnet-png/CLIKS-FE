@@ -130,8 +130,43 @@ const FAQ = () => {
     };
 
     return (
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.812rem 1.359rem', minHeight: '100vh', paddingBottom: '4.531rem' }}>
-            <div style={{ marginBottom: '2.266rem' }}>
+        <div className="faq-page-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '1.812rem 1.359rem', minHeight: '100vh', paddingBottom: '5.5rem', boxSizing: 'border-box' }}>
+            <style>{`
+                @media (max-width: 768px) {
+                    .faq-page-container {
+                        padding: 1rem 0.85rem 5.5rem 0.85rem !important;
+                    }
+                    .faq-header-wrapper {
+                        margin-bottom: 1.25rem !important;
+                    }
+                    .faq-header-wrapper h1 {
+                        font-size: 1.45rem !important;
+                        line-height: 1.25 !important;
+                    }
+                    .faq-header-wrapper p {
+                        font-size: 0.77rem !important;
+                        line-height: 1.4 !important;
+                    }
+                    .faq-main-grid {
+                        grid-template-columns: 1fr !important;
+                        gap: 1.133rem !important;
+                    }
+                    .faq-card-container {
+                        padding: 1.133rem 1rem !important;
+                    }
+                    .faq-card-container input,
+                    .faq-card-container select,
+                    .faq-card-container textarea {
+                        box-sizing: border-box !important;
+                        max-width: 100% !important;
+                    }
+                    .faq-card-container button[type="submit"] {
+                        width: 100% !important;
+                        box-sizing: border-box !important;
+                    }
+                }
+            `}</style>
+            <div className="faq-header-wrapper" style={{ marginBottom: '2.266rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '0.453rem', marginTop: '0.453rem' }}>
                     <span style={{ background: 'linear-gradient(135deg, #059669, #064E3B)', color: 'white', padding: '4px 10px', borderRadius: '8px', fontSize: '0.589rem', fontWeight: 900, letterSpacing: '1px' }}>HELP CENTER</span>
                 </div>
@@ -139,13 +174,13 @@ const FAQ = () => {
                 <p style={{ color: '#64748B', margin: '0.453rem 0 0 0', fontWeight: 500 }}>Access common guides or log direct tickets to our dedicated customer support squad.</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.812rem', alignItems: 'start' }}>
+            <div className="faq-main-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.812rem', alignItems: 'start' }}>
                 
                 {/* Left Column: Ticketing & Active Tickets */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.812rem' }}>
                     
                     {/* Log New Ticket Form */}
-                    <div style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                    <div className="faq-card-container" style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '1.359rem' }}>
                             <div style={{ padding: '8px', background: '#F0FDF4', color: '#16A34A', borderRadius: '10px' }}>
                                 <MessageSquare size={20} />
@@ -216,7 +251,7 @@ const FAQ = () => {
                     </div>
 
                     {/* Active Tickets List */}
-                    <div style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                    <div className="faq-card-container" style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.359rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem' }}>
                                 <div style={{ padding: '8px', background: '#F8FAFC', color: '#64748B', borderRadius: '10px' }}>
@@ -281,7 +316,7 @@ const FAQ = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.812rem' }}>
                     
                     {/* Frequently Asked Questions */}
-                    <div style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+                    <div className="faq-card-container" style={{ background: 'white', padding: '2.039rem', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.68rem', marginBottom: '1.586rem' }}>
                             <div style={{ padding: '8px', background: '#ECFDF5', color: '#059669', borderRadius: '10px' }}>
                                 <HelpCircle size={20} />
@@ -302,7 +337,7 @@ const FAQ = () => {
                     </div>
 
                     {/* Cliks Direct Support Card */}
-                    <div style={{ 
+                    <div className="faq-card-container" style={{
                         background: 'linear-gradient(135deg, #1B6B3A 0%, #064E3B 100%)', 
                         padding: '2.039rem', 
                         borderRadius: '16px', 
@@ -414,7 +449,7 @@ const FAQ = () => {
                                     </p>
                                 </div>
                             </div>
-                            <button
+                            {import.meta.env.DEV && <button
                                 type="button"
                                 onClick={() => {
                                     resetOnboarding();
@@ -436,7 +471,7 @@ const FAQ = () => {
                                 }}
                             >
                                 <RotateCcw size={13} /> Reset Progress
-                            </button>
+                            </button>}
                         </div>
 
                         {tourNotice && (
